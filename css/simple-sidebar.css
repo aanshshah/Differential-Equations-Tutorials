@@ -7,7 +7,15 @@
  body {
     overflow-x: hidden;
  }
-
+.navbar{
+    display: block;
+}
+.vanish{
+    display: none;
+}
+.page-title{
+    padding-top: 18px;
+}
 /* Toggle Styles */
 
 #wrapper {
@@ -101,6 +109,15 @@
 }
 
 @media(min-width:768px) {
+    .vanish{
+        display: block;
+    }
+    .navbar{
+    display: none;
+}
+.page-title{
+    padding-top: 0;
+}
     #wrapper {
         padding-left: 250px;
     }
