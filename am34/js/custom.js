@@ -24,7 +24,23 @@
    $("#link-20").toggle();
    $("#link-21").toggle();
 });
-
+    $(".disappear-0").click(function(){
+   $("#link-111").toggle();
+   $("#link-112").toggle();
+   $("#link-113").toggle();
+   $("#link-114").toggle();
+   $("#link-115").toggle();
+   $("#link-116").toggle();
+   $("#link-117").toggle();
+   $("#link-118").toggle();
+   $("#link-119").toggle();
+   $("#link-210").toggle();
+   $("#link-211").toggle();
+   $("#link-212").toggle();
+   $("#link-213").toggle();
+   $("#link-214").toggle();
+   $("#link-215").toggle();
+});
     $(".disappear-3").click(function(){
    $("#link-31").toggle();
    $("#link-32").toggle();
