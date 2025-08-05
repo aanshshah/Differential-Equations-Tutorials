@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 2: First Order ODEs - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+
+
+           
+                        <section id="2">
+                            <h2>II. First Order ODEs</h2>
+                            <br>
+                            <span id="2-1">
+                                <h3>1. Solving ODEs</h3>
+                                    <p>Python provides powerful tools for solving ordinary differential equations. Let's start with a simple first-order ODE:</p>
+                                    <p><strong>Example 1:</strong> Solve dy/dt = -y + t with initial condition y(0) = 0</p>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Define the differential equation dy/dt = -y + t
+def dydt(y, t):
+    return -y + t
+
+# Initial condition
+y0 = 0
+
+# Time points
+t = np.linspace(0, 5, 100)
+
+# Solve ODE
+y = odeint(dydt, y0, t)
+
+# Plot the solution
+plt.figure(figsize=(8, 5))
+plt.plot(t, y)
+plt.xlabel('Time t')
+plt.ylabel('y(t)')
+plt.title('Solution of dy/dt = -y + t')
+plt.grid(True)
+plt.show()
+
+# Print the analytical solution for comparison
+print("Numerical solution at t=5:", y[-1][0])
+print("Analytical solution at t=5:", 5 - 1 + np.exp(-5))</code></pre>   
+                                </span>
+                                <span id="2-2">
+                                    <h3>2. Direction Fields</h3>
+                                    <p>Direction fields (slope fields) help visualize the behavior of differential equations without solving them explicitly.</p>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Create a grid of points
+x = np.linspace(-3, 3, 20)
+y = np.linspace(-3, 3, 20)
+X, Y = np.meshgrid(x, y)
+
+# Define the differential equation dy/dx = x - y
+def dydx(x, y):
+    return x - y
+
+# Calculate the slope at each point
+U = np.ones_like(X)
+V = dydx(X, Y)
+
+# Normalize the arrows
+N = np.sqrt(U**2 + V**2)
+U, V = U/N, V/N
+
+# Create the direction field plot
+plt.figure(figsize=(8, 6))
+plt.quiver(X, Y, U, V, alpha=0.5)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Direction Field for dy/dx = x - y')
+plt.grid(True)
+plt.axis('equal')
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="2-3">
+                                    <h3>3. Separable Equations</h3>
+                                    <p>A separable equation can be written as dy/dx = f(x)g(y). Here's how to solve them numerically:</p>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx = y*cos(x), which separates to dy/y = cos(x)dx
+def dydx(y, x):
+    return y * np.cos(x)
+
+# Initial condition: y(0) = 1
+y0 = 1
+x = np.linspace(0, 2*np.pi, 100)
+
+# Numerical solution
+y_numerical = odeint(dydx, y0, x)
+
+# Analytical solution: y = e^(sin(x))
+y_analytical = np.exp(np.sin(x))
+
+# Plot both solutions
+plt.figure(figsize=(10, 6))
+plt.plot(x, y_numerical, 'b-', label='Numerical Solution', linewidth=2)
+plt.plot(x, y_analytical, 'r--', label='Analytical Solution', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Separable Equation: dy/dx = y*cos(x)')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print("Max error:", np.max(np.abs(y_numerical.flatten() - y_analytical)))</code></pre>
+                                    </span>
+                                    <span id="2-4">
+                                    <h3>4. Equations Reducible to the Separable Equations</h3>
+                                    <p>Some equations that aren't initially separable can be transformed into separable form using substitutions.</p>
+                                    
+                                    <button class="collapsible">Homogeneous Equations</button>
+                                    <div class="collapsible-content">
+                                        <p>An equation dy/dx = f(y/x) is homogeneous. Use the substitution v = y/x to make it separable.</p>
+                                    </div>
+                                    
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx = (x + y)/(x - y)
+# This is homogeneous since it can be written as dy/dx = (1 + y/x)/(1 - y/x)
+
+# Using substitution v = y/x, we get x*dv/dx = (1 + v)/(1 - v) - v
+def dvdx(v, x):
+    return ((1 + v)/(1 - v) - v)/x
+
+# Initial condition: y(1) = 0, so v(1) = 0
+v0 = 0
+x = np.linspace(1, 5, 100)
+
+# Solve for v
+v = odeint(dvdx, v0, x)
+
+# Convert back to y
+y = v * x.reshape(-1, 1)
+
+# Also solve the original equation directly for comparison
+def dydx_original(y, x):
+    return (x + y)/(x - y + 1e-10)  # Add small value to avoid division by zero
+
+y0_original = 0
+y_direct = odeint(dydx_original, y0_original, x)
+
+# Plot results
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, 'b-', label='Using substitution v = y/x', linewidth=2)
+plt.plot(x, y_direct, 'r--', label='Direct solution', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Homogeneous Equation: dy/dx = (x + y)/(x - y)')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Verify the substitution worked
+print(f"Max difference between methods: {np.max(np.abs(y.flatten() - y_direct.flatten())):.6f}")</code></pre>
+                                    
+                                    <p><strong>Example 2:</strong> Equations of the form dy/dx = f(ax + by + c)</p>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx = (2x + y - 1)²
+# Use substitution u = 2x + y - 1
+
+# From u = 2x + y - 1, we get du/dx = 2 + dy/dx
+# So du/dx = 2 + u², which gives du/(2 + u²) = dx
+
+def dudx(u, x):
+    return 2 + u**2
+
+# Initial condition: y(0) = 1, so u(0) = 2(0) + 1 - 1 = 0
+u0 = 0
+x = np.linspace(0, 1, 100)
+
+# Solve for u
+u = odeint(dudx, u0, x)
+
+# Convert back to y: y = u - 2x + 1
+y = u - 2*x.reshape(-1, 1) + 1
+
+# Plot the solution
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
+plt.plot(x, y, 'b-', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Solution of dy/dx = (2x + y - 1)²')
+plt.grid(True)
+
+# Plot the substitution variable u
+plt.subplot(1, 2, 2)
+plt.plot(x, u, 'r-', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('u = 2x + y - 1')
+plt.title('Substitution Variable')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="2-5">
+                                    <h3>5. Exact Equations</h3>
+                                    <p>An equation M(x,y)dx + N(x,y)dy = 0 is exact if ∂M/∂y = ∂N/∂x. When exact, there exists a function F(x,y) such that dF = M dx + N dy.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+# Example: (2x + 3y)dx + (3x + 4y)dy = 0
+# Check if exact: ∂M/∂y = 3, ∂N/∂x = 3 ✓
+
+# The solution is F(x,y) = x² + 3xy + 2y² = C
+
+# Create contour plot of the solution curves
+x = np.linspace(-3, 3, 100)
+y = np.linspace(-3, 3, 100)
+X, Y = np.meshgrid(x, y)
+
+# Function F(x,y)
+F = X**2 + 3*X*Y + 2*Y**2
+
+# Plot level curves
+plt.figure(figsize=(10, 8))
+contours = plt.contour(X, Y, F, levels=20, colors='blue')
+plt.clabel(contours, inline=True, fontsize=8)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Exact Equation: (2x + 3y)dx + (3x + 4y)dy = 0')
+plt.grid(True)
+plt.axis('equal')
+
+# Add direction field
+x_field = np.linspace(-3, 3, 15)
+y_field = np.linspace(-3, 3, 15)
+X_field, Y_field = np.meshgrid(x_field, y_field)
+
+# From M dx + N dy = 0, we get dy/dx = -M/N
+M = 2*X_field + 3*Y_field
+N = 3*X_field + 4*Y_field
+dydx = -M/(N + 1e-10)
+
+# Normalize for direction field
+U = np.ones_like(X_field)
+V = dydx
+N_norm = np.sqrt(U**2 + V**2)
+U, V = U/N_norm, V/N_norm
+
+plt.quiver(X_field, Y_field, U, V, alpha=0.5, color='red')
+plt.show()
+
+# Verify exactness numerically
+def verify_exact(x, y):
+    h = 1e-6
+    # M = 2x + 3y, N = 3x + 4y
+    dM_dy = ((2*x + 3*(y+h)) - (2*x + 3*y))/h
+    dN_dx = ((3*(x+h) + 4*y) - (3*x + 4*y))/h
+    return dM_dy, dN_dx
+
+x_test, y_test = 1.0, 2.0
+dM_dy, dN_dx = verify_exact(x_test, y_test)
+print(f"At point ({x_test}, {y_test}):")
+print(f"∂M/∂y = {dM_dy:.6f}")
+print(f"∂N/∂x = {dN_dx:.6f}")
+print(f"Difference: {abs(dM_dy - dN_dx):.10f}")</code></pre>
+                                    
+                                    <p><strong>Finding the Solution Function:</strong></p>
+                                    <pre><code>import sympy as sp
+
+# Define symbolic variables
+x, y = sp.symbols('x y')
+
+# Define M and N
+M = 2*x + 3*y
+N = 3*x + 4*y
+
+# Check exactness
+dM_dy = sp.diff(M, y)
+dN_dx = sp.diff(N, x)
+print(f"∂M/∂y = {dM_dy}")
+print(f"∂N/∂x = {dN_dx}")
+print(f"Is exact? {dM_dy == dN_dx}")
+
+# Find F(x,y) by integrating M with respect to x
+F = sp.integrate(M, x)
+print(f"\nF(x,y) = ∫M dx = {F} + g(y)")
+
+# Find g(y) by differentiating F with respect to y and comparing with N
+dF_dy = sp.diff(F, y)
+print(f"∂F/∂y = {dF_dy} + g'(y)")
+print(f"This should equal N = {N}")
+
+# So g'(y) = N - ∂F/∂y
+g_prime = N - dF_dy
+print(f"\ng'(y) = {g_prime}")
+
+# Integrate to find g(y)
+g = sp.integrate(g_prime, y)
+print(f"g(y) = {g}")
+
+# Complete solution
+F_complete = F + g
+print(f"\nComplete solution: F(x,y) = {F_complete} = C")</code></pre>
+                                    </span>
+                                    <span id="2-6">
+                                    <h3>6. Integrating Factors</h3>
+                                    <p>When an equation M dx + N dy = 0 is not exact, we can sometimes find an integrating factor μ(x,y) such that μM dx + μN dy = 0 is exact.</p>
+                                    
+                                    <button class="collapsible">Theory: Finding Integrating Factors</button>
+                                    <div class="collapsible-content">
+                                        <p>Common types of integrating factors:</p>
+                                        <ul>
+                                            <li>μ = μ(x) only: exists if (∂M/∂y - ∂N/∂x)/N is a function of x only</li>
+                                            <li>μ = μ(y) only: exists if (∂N/∂x - ∂M/∂y)/M is a function of y only</li>
+                                            <li>μ = x^a y^b: for certain homogeneous equations</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
+# Example: (3x²y + 2xy)dx + (x³ + x²)dy = 0
+# This is NOT exact, but has an integrating factor μ = 1/x²
+
+# After multiplying by μ = 1/x², we get:
+# (3y + 2y/x)dx + (x + 1)dy = 0
+
+# Verify this is now exact
+def verify_exactness():
+    # M_new = 3y + 2y/x, N_new = x + 1
+    # ∂M_new/∂y = 3 + 2/x
+    # ∂N_new/∂x = 1
+    # Still not exact with this example, let's use a better one
+    pass
+
+# Better example: (y)dx + (2x - ye^y)dy = 0
+# This has integrating factor μ = e^(-y)
+
+# Original equation
+def plot_original():
+    x = np.linspace(0.1, 5, 20)
+    y = np.linspace(0.1, 3, 20)
+    X, Y = np.meshgrid(x, y)
+    
+    # From y dx + (2x - ye^y) dy = 0
+    # dy/dx = -y/(2x - ye^y)
+    dydx = -Y/(2*X - Y*np.exp(Y))
+    
+    # Direction field
+    U = np.ones_like(X)
+    V = dydx
+    N = np.sqrt(U**2 + V**2)
+    U, V = U/N, V/N
+    
+    plt.figure(figsize=(12, 5))
+    
+    plt.subplot(1, 2, 1)
+    plt.quiver(X, Y, U, V, alpha=0.6)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Original (Non-exact) Equation')
+    plt.grid(True)
+    
+    # After multiplying by μ = e^(-y)
+    # We get: ye^(-y)dx + (2xe^(-y) - y)dy = 0
+    # This is exact with solution F = xye^(-y) + ye^(-y) - e^(-y) = C
+    
+    plt.subplot(1, 2, 2)
+    # Plot solution curves
+    F = X*Y*np.exp(-Y) + Y*np.exp(-Y) - np.exp(-Y)
+    contours = plt.contour(X, Y, F, levels=15)
+    plt.clabel(contours, inline=True, fontsize=8)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Solution Curves (After Integrating Factor)')
+    plt.grid(True)
+    
+    plt.tight_layout()
+    plt.show()
+
+plot_original()
+
+# Demonstrate finding an integrating factor
+print("Example: Finding an integrating factor")
+print("Equation: y dx + (2x - ye^y) dy = 0")
+print("M = y, N = 2x - ye^y")
+print("\n∂M/∂y = 1")
+print("∂N/∂x = 2")
+print("Not exact since ∂M/∂y ≠ ∂N/∂x")
+print("\nTrying μ = μ(y):")
+print("(∂N/∂x - ∂M/∂y)/M = (2 - 1)/y = 1/y")
+print("This is a function of y only!")
+print("\nSolving dμ/dy = -μ/y gives μ = e^(-y)")
+print("\nVerification: After multiplying by e^(-y), the equation becomes exact.")</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Exercise: Find the Integrating Factor</h4>
+                                        <p>For the equation (2y² - 3x)dx + 2xy dy = 0, determine if it has an integrating factor of the form μ(x).</p>
+                                        <button class="btn btn-primary" onclick="showHint6()">Show Hint</button>
+                                        <div id="hint6" style="display:none; margin-top:10px; padding:10px; background:#f0f0f0;">
+                                            <p>Calculate (∂M/∂y - ∂N/∂x)/N and check if it's a function of x only.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function showHint6() {
+                                        document.getElementById('hint6').style.display = 'block';
+                                    }
+                                    </script>
+                                    </span>
+                                    <span id="2-7">
+                                    <h3>7. Linear and Bernoulli Equations</h3>
+                                    <p>Linear first-order ODEs have the form dy/dx + P(x)y = Q(x). Bernoulli equations have the form dy/dx + P(x)y = Q(x)y^n.</p>
+                                    
+                                    <h4>Linear Equations</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx + 2y/x = x²
+# This is linear with P(x) = 2/x and Q(x) = x²
+
+# The integrating factor is μ = e^(∫P(x)dx) = e^(2ln|x|) = x²
+
+def solve_linear_ode(x_vals, y0, P_func, Q_func):
+    """Solve linear ODE dy/dx + P(x)y = Q(x)"""
+    def dydx(y, x):
+        return Q_func(x) - P_func(x) * y
+    
+    return odeint(dydx, y0, x_vals)
+
+# Define P(x) and Q(x)
+P = lambda x: 2/x
+Q = lambda x: x**2
+
+# Initial condition
+y0 = 1
+x = np.linspace(0.1, 3, 100)
+
+# Numerical solution
+y_numerical = solve_linear_ode(x, y0, P, Q)
+
+# Analytical solution: y = (x³/5 + C/x²)
+# With y(0.1) = 1, we can find C
+C = (1 - 0.1**3/5) * 0.1**2
+y_analytical = x**3/5 + C/x**2
+
+# Plot comparison
+plt.figure(figsize=(10, 6))
+plt.plot(x, y_numerical, 'b-', label='Numerical Solution', linewidth=2)
+plt.plot(x, y_analytical, 'r--', label='Analytical Solution', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Linear ODE: dy/dx + 2y/x = x²')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print(f"Max error: {np.max(np.abs(y_numerical.flatten() - y_analytical)):.6e}")</code></pre>
+                                    
+                                    <h4>Bernoulli Equations</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx - y/x = x²y²
+# This is Bernoulli with P(x) = -1/x, Q(x) = x², n = 2
+
+# Substitution: v = y^(1-n) = y^(-1)
+# This transforms to: dv/dx + (1-n)P(x)v = (1-n)Q(x)
+# For our example: dv/dx + v/x = -x²
+
+def solve_bernoulli(x_vals, y0, P_func, Q_func, n):
+    """Solve Bernoulli equation dy/dx + P(x)y = Q(x)y^n"""
+    if n == 1:
+        # This is just a linear equation
+        def dydx(y, x):
+            return Q_func(x)*y - P_func(x)*y
+    else:
+        # Transform to linear equation for v = y^(1-n)
+        v0 = y0**(1-n)
+        def dvdx(v, x):
+            return (1-n)*(Q_func(x) - P_func(x)*v)
+        
+        v = odeint(dvdx, v0, x_vals)
+        return v**(1/(1-n))
+    
+    return odeint(dydx, y0, x_vals)
+
+# Original Bernoulli equation
+def dydx_bernoulli(y, x):
+    return y/x + x**2 * y**2
+
+# Solve using transformation
+P = lambda x: -1/x
+Q = lambda x: x**2
+n = 2
+y0 = 0.5
+x = np.linspace(0.5, 3, 100)
+
+# Numerical solution of original equation
+y_direct = odeint(dydx_bernoulli, y0, x)
+
+# Solution using Bernoulli transformation
+y_transformed = solve_bernoulli(x, y0, P, Q, n)
+
+# Plot both solutions
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(x, y_direct, 'b-', label='Direct Numerical Solution', linewidth=2)
+plt.plot(x, y_transformed, 'r--', label='Bernoulli Transformation', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Bernoulli Equation: dy/dx - y/x = x²y²')
+plt.legend()
+plt.grid(True)
+
+# Also plot 1/y to show the linear behavior after transformation
+plt.subplot(1, 2, 2)
+plt.plot(x, 1/y_direct, 'b-', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('v = 1/y')
+plt.title('After Transformation (Linear)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Quick Check</h4>
+                                        <p>What substitution transforms the Bernoulli equation dy/dx + y = xy³ into a linear equation?</p>
+                                        <button class="btn btn-primary" onclick="showAnswer7()">Show Answer</button>
+                                        <div id="answer7" style="display:none; margin-top:10px; padding:10px; background:#e8f5e9;">
+                                            <p>v = y^(-2), since n = 3, so 1-n = -2</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function showAnswer7() {
+                                        document.getElementById('answer7').style.display = 'block';
+                                    }
+                                    </script>
+                                    </span>
+                                    <span id="2-8">
+                                    <h3>8. Riccati Equations</h3>
+                                    <p>A Riccati equation has the form dy/dx = q₀(x) + q₁(x)y + q₂(x)y². If we know one particular solution y₁, we can find the general solution.</p>
+                                    
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Example: dy/dx = 1 + x² - 2xy + y²
+# This can be rewritten as dy/dx = (1 + x²) - 2xy + y²
+# One particular solution is y₁ = x
+
+# If y₁ is a known solution, use substitution y = y₁ + 1/v
+# This transforms the Riccati equation to a linear equation in v
+
+def riccati_ode(y, x):
+    """Riccati equation: dy/dx = 1 + x² - 2xy + y²"""
+    return 1 + x**2 - 2*x*y + y**2
+
+# Verify that y₁ = x is a solution
+x_test = np.linspace(0, 2, 100)
+y1 = x_test
+dy1dx = np.ones_like(x_test)  # d(x)/dx = 1
+riccati_value = riccati_ode(y1, x_test)
+
+print("Verification that y₁ = x is a particular solution:")
+print(f"Max |dy₁/dx - f(x,y₁)|: {np.max(np.abs(dy1dx - riccati_value)):.6e}")
+
+# Now solve using the transformation y = x + 1/v
+# This gives: dv/dx + v(2x - 2x) = -1
+# Simplifying: dv/dx = -1, so v = -x + C
+
+# General solution: y = x + 1/(-x + C)
+def general_solution(x, C):
+    return x + 1/(-x + C)
+
+# Plot several solution curves
+plt.figure(figsize=(10, 8))
+x = np.linspace(-2, 2, 100)
+
+# Different values of C
+C_values = [-3, -2, -1, 0, 1, 2, 3]
+colors = plt.cm.viridis(np.linspace(0, 1, len(C_values)))
+
+for C, color in zip(C_values, colors):
+    # Avoid singularity at x = C
+    x_safe = x[np.abs(x - C) > 0.1]
+    y = general_solution(x_safe, C)
+    plt.plot(x_safe, y, color=color, linewidth=2, label=f'C = {C}')
+
+# Highlight the particular solution y = x
+plt.plot(x, x, 'r--', linewidth=3, label='Particular solution y = x')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Riccati Equation: dy/dx = 1 + x² - 2xy + y²')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.grid(True)
+plt.xlim(-2, 2)
+plt.ylim(-5, 5)
+plt.tight_layout()
+plt.show()
+
+# Solve numerically for comparison
+y0_values = [-2, -1, 0, 1, 2]
+x_num = np.linspace(0, 1.5, 100)
+
+plt.figure(figsize=(10, 6))
+for y0 in y0_values:
+    y_num = odeint(riccati_ode, y0, x_num)
+    plt.plot(x_num, y_num, linewidth=2, label=f'y(0) = {y0}')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Numerical Solutions of the Riccati Equation')
+plt.legend()
+plt.grid(True)
+plt.show()</code></pre>
+                                    
+                                    <button class="collapsible">Method Summary</button>
+                                    <div class="collapsible-content">
+                                        <p>To solve a Riccati equation:</p>
+                                        <ol>
+                                            <li>Find one particular solution y₁ (by inspection or guessing)</li>
+                                            <li>Use the substitution y = y₁ + 1/v</li>
+                                            <li>This transforms the Riccati equation into a linear equation in v</li>
+                                            <li>Solve the linear equation for v</li>
+                                            <li>Transform back: y = y₁ + 1/v</li>
+                                        </ol>
+                                    </div>
+                                    </span>
+                                    <span id="2-9">
+                                    <h3>9. Existence and Uniqueness</h3>
+                                    <p>The existence and uniqueness theorem tells us when an initial value problem dy/dx = f(x,y), y(x₀) = y₀ has a unique solution.</p>
+                                    
+                                    <button class="collapsible">Theorem Statement</button>
+                                    <div class="collapsible-content">
+                                        <p><strong>Picard-Lindelöf Theorem:</strong> If f(x,y) and ∂f/∂y are continuous in a rectangle containing (x₀,y₀), then the IVP has a unique solution in some interval around x₀.</p>
+                                    </div>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
+# Example 1: Unique solution
+# dy/dx = y²/³, y(0) = 0
+# Here f(x,y) = y²/³ is not Lipschitz continuous at y = 0
+
+def example_non_unique():
+    # This IVP has multiple solutions:
+    # y = 0 (trivial solution)
+    # y = (x/3)³ for x ≥ 0
+    # y = -(|x|/3)³ for x < 0
+    # And infinitely many others!
+    
+    x = np.linspace(-2, 2, 200)
+    
+    plt.figure(figsize=(12, 8))
+    
+    # Plot some of the non-unique solutions
+    plt.plot(x, np.zeros_like(x), 'b-', linewidth=2, label='y = 0')
+    
+    # Solution that "turns on" at x = 0
+    y1 = np.where(x >= 0, (x/3)**3, 0)
+    plt.plot(x, y1, 'r-', linewidth=2, label='Turns on at x=0')
+    
+    # Solution that "turns on" at x = 0.5
+    y2 = np.where(x >= 0.5, ((x-0.5)/3)**3, 0)
+    plt.plot(x, y2, 'g-', linewidth=2, label='Turns on at x=0.5')
+    
+    # Solution that "turns on" at x = -0.5
+    y3 = np.where(x >= -0.5, ((x+0.5)/3)**3, 0)
+    plt.plot(x, y3, 'm-', linewidth=2, label='Turns on at x=-0.5')
+    
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Non-Unique Solutions: dy/dx = y²/³, y(0) = 0')
+    plt.legend()
+    plt.grid(True)
+    plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+    plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+    
+example_non_unique()
+plt.show()
+
+# Example 2: Finite-time blow-up
+# dy/dx = y², y(0) = 1
+def example_blow_up():
+    # Analytical solution: y = 1/(1-x)
+    # Solution blows up at x = 1
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    # Left plot: solution near blow-up
+    x1 = np.linspace(0, 0.99, 100)
+    y1 = 1/(1 - x1)
+    
+    ax1.plot(x1, y1, 'b-', linewidth=2)
+    ax1.axvline(x=1, color='r', linestyle='--', label='Singularity at x=1')
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
+    ax1.set_title('Solution of dy/dx = y²')
+    ax1.set_ylim(0, 50)
+    ax1.grid(True)
+    ax1.legend()
+    
+    # Right plot: direction field
+    x = np.linspace(-0.5, 1.5, 20)
+    y = np.linspace(-2, 10, 20)
+    X, Y = np.meshgrid(x, y)
+    
+    U = np.ones_like(X)
+    V = Y**2
+    N = np.sqrt(U**2 + V**2)
+    U, V = U/N, V/N
+    
+    ax2.quiver(X, Y, U, V, alpha=0.6)
+    
+    # Plot several solution curves
+    for y0 in [0.5, 1, 2, -1, -2]:
+        if y0 > 0:
+            x_sol = np.linspace(0, 1-1/y0-0.01, 100)
+        else:
+            x_sol = np.linspace(0, 2, 100)
+        y_sol = odeint(lambda y, x: y**2, y0, x_sol)
+        ax2.plot(x_sol, y_sol, linewidth=2)
+    
+    ax2.set_xlabel('x')
+    ax2.set_ylabel('y')
+    ax2.set_title('Direction Field and Solution Curves')
+    ax2.set_xlim(-0.5, 1.5)
+    ax2.set_ylim(-2, 10)
+    ax2.grid(True)
+    
+    plt.tight_layout()
+    
+example_blow_up()
+plt.show()
+
+# Interactive demonstration of Lipschitz condition
+print("\nLipschitz Condition Check:")
+print("For dy/dx = f(x,y) to have unique solution, f must satisfy:")
+print("|f(x,y₁) - f(x,y₂)| ≤ L|y₁ - y₂| for some constant L")
+print("\nExample: f(x,y) = 3y + sin(x)")
+print("|∂f/∂y| = |3| = 3, so L = 3")
+print("This guarantees unique solution!")
+print("\nCounter-example: f(x,y) = y²/³")
+print("∂f/∂y = (2/3)y^(-1/3) → ∞ as y → 0")
+print("Not Lipschitz at y = 0, so uniqueness fails!")</code></pre>
+                                    </span>
+                                    <span id="2-10">
+                                    <h3>10. Applications</h3>
+                                    <p>First-order ODEs model many real-world phenomena. Let's explore some practical applications.</p>
+                                    
+                                    <h4>Population Growth Models</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Logistic growth model: dP/dt = rP(1 - P/K)
+# r = growth rate, K = carrying capacity
+
+def logistic_growth(P, t, r, K):
+    return r * P * (1 - P/K)
+
+# Parameters
+r = 0.5  # growth rate
+K = 1000  # carrying capacity
+P0_values = [50, 200, 500, 1500]  # different initial populations
+t = np.linspace(0, 20, 100)
+
+plt.figure(figsize=(12, 5))
+
+# Left plot: solution curves
+plt.subplot(1, 2, 1)
+for P0 in P0_values:
+    P = odeint(logistic_growth, P0, t, args=(r, K))
+    plt.plot(t, P, linewidth=2, label=f'P₀ = {P0}')
+
+plt.axhline(y=K, color='r', linestyle='--', label=f'Carrying capacity K = {K}')
+plt.xlabel('Time')
+plt.ylabel('Population')
+plt.title('Logistic Growth Model')
+plt.legend()
+plt.grid(True)
+
+# Right plot: phase line
+plt.subplot(1, 2, 2)
+P = np.linspace(0, 1500, 100)
+dPdt = logistic_growth(P, 0, r, K)
+
+plt.plot(P, dPdt, 'b-', linewidth=2)
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=K, color='r', linestyle='--', label=f'K = {K}')
+plt.xlabel('Population P')
+plt.ylabel('dP/dt')
+plt.title('Phase Line Analysis')
+plt.grid(True)
+plt.legend()
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Chemical Reactions</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# First-order reaction: A → B
+# Rate equation: dA/dt = -kA
+
+def reaction_rate(A, t, k):
+    return -k * A
+
+# Parameters
+k_values = [0.1, 0.5, 1.0, 2.0]  # reaction rate constants
+A0 = 100  # initial concentration
+t = np.linspace(0, 10, 100)
+
+plt.figure(figsize=(10, 6))
+
+for k in k_values:
+    A = odeint(reaction_rate, A0, t, args=(k,))
+    plt.plot(t, A, linewidth=2, label=f'k = {k}')
+    
+    # Plot half-life marker
+    t_half = np.log(2)/k
+    plt.plot(t_half, A0/2, 'o', markersize=8)
+    plt.text(t_half, A0/2 + 5, f't½={t_half:.2f}', ha='center')
+
+plt.xlabel('Time')
+plt.ylabel('Concentration of A')
+plt.title('First-Order Chemical Reaction A → B')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Temperature-dependent reaction (Arrhenius equation)
+def arrhenius_reaction():
+    # k(T) = A * exp(-Ea/RT)
+    A = 1e10  # pre-exponential factor
+    Ea = 50000  # activation energy (J/mol)
+    R = 8.314  # gas constant
+    
+    T = np.linspace(273, 373, 100)  # temperature range (K)
+    k = A * np.exp(-Ea/(R*T))
+    
+    plt.figure(figsize=(10, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot(T - 273.15, k, 'b-', linewidth=2)
+    plt.xlabel('Temperature (°C)')
+    plt.ylabel('Rate constant k')
+    plt.title('Arrhenius Equation')
+    plt.grid(True)
+    
+    plt.subplot(1, 2, 2)
+    plt.plot(1000/T, np.log(k), 'r-', linewidth=2)
+    plt.xlabel('1000/T (K⁻¹)')
+    plt.ylabel('ln(k)')
+    plt.title('Arrhenius Plot')
+    plt.grid(True)
+    
+    plt.tight_layout()
+    plt.show()
+
+arrhenius_reaction()</code></pre>
+                                    
+                                    <h4>Newton's Law of Cooling</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Newton's law of cooling: dT/dt = -k(T - T_env)
+# T = temperature, T_env = environment temperature
+
+def cooling_law(T, t, k, T_env):
+    return -k * (T - T_env)
+
+# Coffee cooling example
+T0 = 90  # initial temperature (°C)
+T_env = 20  # room temperature (°C)
+k_values = [0.05, 0.1, 0.2]  # cooling constants
+t = np.linspace(0, 60, 200)  # time in minutes
+
+plt.figure(figsize=(12, 5))
+
+# Left plot: temperature over time
+plt.subplot(1, 2, 1)
+for k in k_values:
+    T = odeint(cooling_law, T0, t, args=(k, T_env))
+    plt.plot(t, T, linewidth=2, label=f'k = {k}')
+
+plt.axhline(y=T_env, color='r', linestyle='--', label='Room temp')
+plt.axhline(y=50, color='g', linestyle=':', label='Drinkable temp')
+plt.xlabel('Time (minutes)')
+plt.ylabel('Temperature (°C)')
+plt.title("Newton's Law of Cooling - Coffee Example")
+plt.legend()
+plt.grid(True)
+
+# Right plot: with variable environment temperature
+plt.subplot(1, 2, 2)
+
+# Environment temperature changes (e.g., taking coffee outside)
+def T_env_variable(t):
+    if t < 20:
+        return 20  # indoors
+    elif t < 40:
+        return 5  # outside in winter
+    else:
+        return 20  # back indoors
+
+def cooling_variable_env(T, t):
+    return -0.1 * (T - T_env_variable(t))
+
+T_var = odeint(cooling_variable_env, T0, t)
+
+# Plot environment temperature
+t_env = t
+T_env_plot = [T_env_variable(ti) for ti in t_env]
+
+plt.plot(t, T_var, 'b-', linewidth=2, label='Coffee temperature')
+plt.plot(t_env, T_env_plot, 'r--', linewidth=2, label='Environment temperature')
+plt.xlabel('Time (minutes)')
+plt.ylabel('Temperature (°C)')
+plt.title('Cooling with Variable Environment')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Try It Yourself</h4>
+                                        <p>Modify the population growth model to include harvesting at a constant rate h. The equation becomes: dP/dt = rP(1-P/K) - h</p>
+                                    </div>
+                                    </span>
+                                    <span id="2-11">
+                                    <h3>11. Self-Assessment Quiz</h3>
+                                    <div class="quiz-container">
+                                        <div class="quiz-question">What type of differential equation is dy/dx = y²sin(x)?</div>
+                                        <ul class="quiz-options">
+                                            <li><input type="radio" name="q2" value="a"> Linear equation</li>
+                                            <li><input type="radio" name="q2" value="b"> Separable equation</li>
+                                            <li><input type="radio" name="q2" value="c"> Exact equation</li>
+                                            <li><input type="radio" name="q2" value="d"> Homogeneous equation</li>
+                                        </ul>
+                                        <button class="btn btn-primary quiz-submit" onclick="checkQuiz2()">Check Answer</button>
+                                        <div class="quiz-feedback" id="quiz2-feedback"></div>
+                                    </div>
+                                    
+                                    <script>
+                                    function checkQuiz2() {
+                                        const selected = document.querySelector('input[name="q2"]:checked');
+                                        const feedback = document.getElementById('quiz2-feedback');
+                                        
+                                        if (!selected) {
+                                            feedback.textContent = 'Please select an answer.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                            feedback.style.display = 'block';
+                                            return;
+                                        }
+                                        
+                                        if (selected.value === 'b') {
+                                            feedback.textContent = 'Correct! This is a separable equation because it can be written as dy/y² = sin(x)dx.';
+                                            feedback.className = 'quiz-feedback correct';
+                                        } else {
+                                            feedback.textContent = 'Not quite. This equation can be separated into dy/y² = sin(x)dx, making it a separable equation.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                        }
+                                        feedback.style.display = 'block';
+                                    }
+                                    </script>
+                                    </span>
+                                    <span id="2-12">
+                                    <h3>12. References</h3>
+                                    </span>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+    
+    // Initialize collapsible sections
+    document.addEventListener('DOMContentLoaded', function() {
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight){
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    });
+
+    </script>
+
+</body>
+
+</html>

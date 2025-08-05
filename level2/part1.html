@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 1: Matrix Algebra - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Matrix Algebra</a>
+                    <a id="link-1" href="#1-1" style="display: block">1. How to define Matrices</a>
+                    <a id="link-2" href="#1-2" style="display: block">2. Basic Operations with Matrices</a>
+                    <a id="link-3" href="#1-3" style="display: block">3. Determinants and Inverses</a>
+                    <a id="link-4" href="#1-4" style="display: block">4. Eigenvalues and Eigenvectors</a>
+                    <a id="link-5" href="#1-5" style="display: block">5. Linear Systems of of Algebraic Equations</a>
+                    <a id="link-6" href="#1-6" style="display: block">6. Diagonalization Procedure</a>
+                    <a id="link-7" href="#1-7" style="display: block">7. Sylvestor Formula</a>
+                    <a id="link-8" href="#1-8" style="display: block">8. The Residue Formula</a>
+                    <a id="link-9" href="#1-9" style="display: block">9. Spectrum Decomposition Formula</a>
+                    <a id="link-10" href="#1-10" style="display: block">10. Positive Matrices</a>
+                    <!--<a id="link-10.1" href="part1.html#1-10.1" style="display: visible">11. Miscellaneous</a>-->
+                </li>
+                <li>
+                    <a class="disappear-0" href="linalg.html">Part 2: Linear Systems of Algebraic Equations</a>
+                    <a id="link-111" href="linalg.html#2-1" style="display: none">1. Matrices and Vectors</a>
+                    <a id="link-112" href="linalg.html#2-2" style="display: none">2. Python solves linear systems</a>
+                    <a id="link-113" href="linalg.html#2-3" style="display: none">3. Elementary Row Operations</a>
+                    <a id="link-114" href="linalg.html#2-4" style="display: none">4. Row Echelon Forms</a>
+                    <a id="link-115" href="linalg.html#2-5" style="display: none">5. LU-factorization</a>
+                    <a id="link-116" href="linalg.html#2-6" style="display: none">6. Row Space and Column Space</a>
+                    <a id="link-117" href="linalg.html#2-7" style="display: none">7. Null Space or Kernel</a>
+                    <a id="link-118" href="linalg.html#2-8" style="display: none">8. Rank and Nullity</a>
+                    <a id="link-119" href="linalg.html#2-9" style="display: none">9. Square Matrices</a>
+                    <a id="link-210" href="linalg.html#2-10" style="display: none">10. Projection Operators</a>
+                    <a id="link-211" href="linalg.html#2-11" style="display: none">11. Least Square Approximation</a>
+                    <a id="link-212" href="linalg.html#2-12" style="display: none">11. SVD factorization</a>
+                    <a id="link-213" href="linalg.html#2-13" style="display: none">12. Numerical Methods</a>
+                    <a id="link-214" href="linalg.html#2-14" style="display: none">13. Inequalities</a>
+                    <a id="link-215" href="linalg.html#2-15" style="display: none">14. Applications</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="part2.html">Part 3: Linear Systems of Ordinary Differential Equations</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Systems of ordinary differential equations</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Constant coefficient equations</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Direction Fields</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Exponential matrix</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Planar Phase Portraits</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Variation of parameters</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Method of Undetermined Coefficients</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Linear and Bernoulli Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. The Laplace transform</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Applications</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="part3.html">Part 4: Non-linear Systems of Ordinary Differential Equations</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Planar case</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Autonomous systems of ODEs</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Linearization</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Euler systems of ODEs</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Conservative systems</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Lyapunov second method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Periodic solutions</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. Applications</a>
+                    <a id="link-39" href="part3.html#3-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="part4.html">Part 5: Numerical Methods</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. General numerical methods</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. Euler algorithms</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Polynomial approximations</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Runge--Kutta methods</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Multistep methods</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Finite element method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="part5.html">Part 6: Fourier Series</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Sturm--Liouville Problems</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Singular Sturm--Liouville Problems</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Orthogonal Expansions</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Fourier Series</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Cosine and Sine Fourier Series</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Cesaro Summation</a>
+                    <a id="link-57" href="part5.html#5.7" style="display: none">7. Gibbs Phenomenon</a>
+                    <a id="link-58" href="part5.html#5.8" style="display: none">8. Applications</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="part6.html">Part 7: Partial Differential Equations</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Heat Conduction Problems</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Other Heat transfer equations</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Wave equations</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Transverse Vibrations of Beams</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Laplace Equation</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Laplace Equation in Polar Coordinates</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Applications</a>
+                    <a id="link-68" href="part6.html#6.8" style="display: none">8. References</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+  
+                        <section id="1">
+                            <h2>I. Matrix Algebra</h2>
+                            <br>
+                                <span id="1-1">
+                                    <h3> 1. How to define Matrices</h3>
+                                    <p>NumPy provides powerful tools for matrix operations. Let's explore how to create and manipulate matrices:</p>
+                                    <pre><code>import numpy as np
+
+# Define matrices in different ways
+# Method 1: From a list of lists
+A = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])
+
+# Method 2: Using special matrix constructors
+I = np.eye(3)  # Identity matrix
+Z = np.zeros((3, 3))  # Zero matrix
+O = np.ones((3, 3))  # Matrix of ones
+
+# Method 3: Random matrices
+R = np.random.rand(3, 3)  # Random values between 0 and 1
+
+# Display the matrices
+print("Matrix A:")
+print(A)
+print("\nIdentity Matrix:")
+print(I)
+print("\nRandom Matrix:")
+print(R)
+
+# Matrix properties
+print("\nShape of A:", A.shape)
+print("Transpose of A:")
+print(A.T)
+print("Determinant of A:", np.linalg.det(A))</code></pre>
+                                </span>
+                                <span id="1-2">
+                                    <h3> 2. Basic Operations with Matrices </h3>
+                                    <p>Let's explore fundamental matrix operations including addition, multiplication, and element-wise operations:</p>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Define two matrices
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+# Basic operations
+print("Matrix A:")
+print(A)
+print("\nMatrix B:")
+print(B)
+
+# Addition and subtraction
+print("\nA + B:")
+print(A + B)
+
+print("\nA - B:")
+print(A - B)
+
+# Matrix multiplication
+print("\nA @ B (matrix multiplication):")
+print(A @ B)
+
+# Element-wise multiplication
+print("\nA * B (element-wise):")
+print(A * B)
+
+# Scalar operations
+print("\n2 * A:")
+print(2 * A)
+
+# Visualize matrix multiplication
+fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+
+# Plot A
+axes[0].imshow(A, cmap='Blues')
+axes[0].set_title('Matrix A')
+for i in range(2):
+    for j in range(2):
+        axes[0].text(j, i, str(A[i, j]), ha='center', va='center')
+
+# Plot B
+axes[1].imshow(B, cmap='Greens')
+axes[1].set_title('Matrix B')
+for i in range(2):
+    for j in range(2):
+        axes[1].text(j, i, str(B[i, j]), ha='center', va='center')
+
+# Plot A @ B
+C = A @ B
+axes[2].imshow(C, cmap='Reds')
+axes[2].set_title('A @ B')
+for i in range(2):
+    for j in range(2):
+        axes[2].text(j, i, str(C[i, j]), ha='center', va='center')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-3">
+                                        <h3> 3. Determinants and Inverses</h3>
+                                        <p>Understanding determinants and matrix inverses is crucial for solving linear systems.</p>
+                                        
+                                        <button class="collapsible">Theory: What is a Determinant?</button>
+                                        <div class="collapsible-content">
+                                            <p>The determinant is a scalar value that provides important information about a matrix:</p>
+                                            <ul>
+                                                <li>If det(A) = 0, the matrix is singular (not invertible)</li>
+                                                <li>If det(A) ≠ 0, the matrix is invertible</li>
+                                                <li>The absolute value of det(A) represents the volume scaling factor</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Create sample matrices
+A = np.array([[3, 1], [4, 2]])
+B = np.array([[1, 2], [2, 4]])  # Singular matrix
+
+# Calculate determinants
+det_A = np.linalg.det(A)
+det_B = np.linalg.det(B)
+
+print("Matrix A:")
+print(A)
+print(f"Determinant of A: {det_A:.4f}")
+print(f"Is A invertible? {det_A != 0}")
+
+print("\nMatrix B:")
+print(B)
+print(f"Determinant of B: {det_B:.4f}")
+print(f"Is B invertible? {abs(det_B) > 1e-10}")
+
+# Calculate inverse of A (if it exists)
+if abs(det_A) > 1e-10:
+    A_inv = np.linalg.inv(A)
+    print("\nInverse of A:")
+    print(A_inv)
+    
+    # Verify: A @ A_inv should equal identity
+    print("\nA @ A_inv:")
+    print(A @ A_inv)
+    print("\nShould be close to identity matrix:")
+    print(np.eye(2))
+
+# Visualize the geometric interpretation
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Original unit square
+unit_square = np.array([[0, 1, 1, 0, 0],
+                       [0, 0, 1, 1, 0]])
+
+# Transform by matrix A
+transformed_A = A @ unit_square
+
+ax1.plot(unit_square[0], unit_square[1], 'b-', linewidth=2, label='Original')
+ax1.plot(transformed_A[0], transformed_A[1], 'r-', linewidth=2, label='Transformed by A')
+ax1.set_aspect('equal')
+ax1.grid(True)
+ax1.set_title(f'Matrix A (det = {det_A:.2f})')
+ax1.legend()
+ax1.set_xlim(-1, 5)
+ax1.set_ylim(-1, 5)
+
+# Transform by matrix B (singular)
+transformed_B = B @ unit_square
+
+ax2.plot(unit_square[0], unit_square[1], 'b-', linewidth=2, label='Original')
+ax2.plot(transformed_B[0], transformed_B[1], 'r-', linewidth=2, label='Transformed by B')
+ax2.set_aspect('equal')
+ax2.grid(True)
+ax2.set_title(f'Matrix B (det = {det_B:.2f}, singular)')
+ax2.legend()
+ax2.set_xlim(-1, 5)
+ax2.set_ylim(-1, 5)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                        
+                                        <script>
+                                        // Initialize collapsible sections for this page
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var coll = document.getElementsByClassName("collapsible");
+                                            for (var i = 0; i < coll.length; i++) {
+                                                coll[i].addEventListener("click", function() {
+                                                    this.classList.toggle("active");
+                                                    var content = this.nextElementSibling;
+                                                    if (content.style.maxHeight){
+                                                        content.style.maxHeight = null;
+                                                    } else {
+                                                        content.style.maxHeight = content.scrollHeight + "px";
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        </script>
+                                    </span>
+                            <span id="1-4">
+                                        <h3> 4. Eigenvalues and Eigenvectors</h3>
+                                        <p>Eigenvalues and eigenvectors are fundamental to understanding matrix transformations and solving differential equations.</p>
+                                        
+                                        <button class="collapsible">Theory: What are Eigenvalues?</button>
+                                        <div class="collapsible-content">
+                                            <p>For a matrix A, if Av = λv for some non-zero vector v, then:</p>
+                                            <ul>
+                                                <li>λ is an eigenvalue of A</li>
+                                                <li>v is the corresponding eigenvector</li>
+                                                <li>The eigenvector v points in a direction that is unchanged by the transformation A</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyArrowPatch
+
+# Example matrix
+A = np.array([[3, 1],
+              [1, 3]])
+
+# Calculate eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+print("Matrix A:")
+print(A)
+print("\nEigenvalues:", eigenvalues)
+print("\nEigenvectors:")
+for i in range(len(eigenvalues)):
+    print(f"λ{i+1} = {eigenvalues[i]:.4f}, v{i+1} = {eigenvectors[:, i]}")
+
+# Visualize the transformation
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Original vectors (eigenvectors)
+for i in range(2):
+    v = eigenvectors[:, i]
+    ax1.arrow(0, 0, v[0], v[1], head_width=0.1, head_length=0.1, 
+              fc=f'C{i}', ec=f'C{i}', linewidth=2)
+    ax1.text(v[0]*1.2, v[1]*1.2, f'v{i+1}', fontsize=12)
+
+# Add some random vectors to show general transformation
+np.random.seed(42)
+for j in range(3):
+    v_random = np.random.randn(2)
+    v_random = v_random / np.linalg.norm(v_random)
+    ax1.arrow(0, 0, v_random[0], v_random[1], head_width=0.05, 
+              head_length=0.05, fc='gray', ec='gray', alpha=0.5)
+
+ax1.set_xlim(-1.5, 1.5)
+ax1.set_ylim(-1.5, 1.5)
+ax1.set_aspect('equal')
+ax1.grid(True)
+ax1.set_title('Original Vectors')
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+
+# Transformed vectors
+for i in range(2):
+    v = eigenvectors[:, i]
+    Av = A @ v
+    ax2.arrow(0, 0, Av[0], Av[1], head_width=0.2, head_length=0.2, 
+              fc=f'C{i}', ec=f'C{i}', linewidth=2)
+    ax2.text(Av[0]*1.1, Av[1]*1.1, f'Av{i+1} = λ{i+1}v{i+1}', fontsize=12)
+
+# Transform the random vectors
+for j in range(3):
+    v_random = np.random.randn(2)
+    v_random = v_random / np.linalg.norm(v_random)
+    Av_random = A @ v_random
+    ax2.arrow(0, 0, Av_random[0], Av_random[1], head_width=0.1, 
+              head_length=0.1, fc='gray', ec='gray', alpha=0.5)
+
+ax2.set_xlim(-5, 5)
+ax2.set_ylim(-5, 5)
+ax2.set_aspect('equal')
+ax2.grid(True)
+ax2.set_title('After Transformation by A')
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+
+plt.tight_layout()
+plt.show()
+
+# Verify the eigenvalue equation
+print("\nVerification:")
+for i in range(len(eigenvalues)):
+    v = eigenvectors[:, i]
+    Av = A @ v
+    lambda_v = eigenvalues[i] * v
+    print(f"\nFor eigenvalue λ{i+1} = {eigenvalues[i]:.4f}:")
+    print(f"Av{i+1} = {Av}")
+    print(f"λ{i+1}v{i+1} = {lambda_v}")
+    print(f"Difference: {np.linalg.norm(Av - lambda_v):.10f}")</code></pre>
+                                        
+                                        <h4>Applications: Principal Component Analysis</h4>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# Generate correlated 2D data
+np.random.seed(42)
+n_points = 200
+
+# Create correlated data
+x = np.random.randn(n_points)
+y = 0.5 * x + 0.3 * np.random.randn(n_points)
+data = np.column_stack([x, y])
+
+# Rotate the data
+theta = np.pi/6
+rotation = np.array([[np.cos(theta), -np.sin(theta)],
+                     [np.sin(theta), np.cos(theta)]])
+data_rotated = data @ rotation.T
+
+# Perform PCA
+pca = PCA(n_components=2)
+pca.fit(data_rotated)
+
+# The principal components are the eigenvectors of the covariance matrix
+cov_matrix = np.cov(data_rotated.T)
+eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+
+# Plot the data and principal components
+plt.figure(figsize=(10, 8))
+plt.scatter(data_rotated[:, 0], data_rotated[:, 1], alpha=0.5, s=30)
+
+# Plot principal component directions
+mean = np.mean(data_rotated, axis=0)
+for i in range(2):
+    # Scale by sqrt of eigenvalue (std dev)
+    scale = 3 * np.sqrt(eigenvalues[i])
+    v = eigenvectors[:, i] * scale
+    plt.arrow(mean[0], mean[1], v[0], v[1], 
+              head_width=0.2, head_length=0.2, 
+              fc=f'C{i+2}', ec=f'C{i+2}', linewidth=3,
+              label=f'PC{i+1} (λ={eigenvalues[i]:.2f})')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Principal Component Analysis')
+plt.legend()
+plt.grid(True)
+plt.axis('equal')
+plt.show()
+
+print("Eigenvalues (variance along each PC):", eigenvalues)
+print("\nExplained variance ratio:")
+for i, val in enumerate(eigenvalues):
+    ratio = val / np.sum(eigenvalues)
+    print(f"PC{i+1}: {ratio:.1%}")</code></pre>
+                                    </span>
+                                    <span id="1-5">
+                                        <h3> 5. Linear Systems of Algebraic Equations</h3>
+                                        <p>Solving systems of linear equations Ax = b is a fundamental problem in linear algebra.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Example: Solve the system
+# 2x + 3y - z = 1
+# x - y + 2z = 3
+# 3x + y + z = 4
+
+A = np.array([[2, 3, -1],
+              [1, -1, 2],
+              [3, 1, 1]])
+b = np.array([1, 3, 4])
+
+# Method 1: Using numpy's solve function
+x_solve = np.linalg.solve(A, b)
+print("Solution using np.linalg.solve:")
+print(f"x = {x_solve[0]:.4f}")
+print(f"y = {x_solve[1]:.4f}")
+print(f"z = {x_solve[2]:.4f}")
+
+# Method 2: Using matrix inverse (for square, non-singular matrices)
+if np.linalg.det(A) != 0:
+    A_inv = np.linalg.inv(A)
+    x_inv = A_inv @ b
+    print("\nSolution using matrix inverse:")
+    print(f"x = {x_inv[0]:.4f}")
+    print(f"y = {x_inv[1]:.4f}")
+    print(f"z = {x_inv[2]:.4f}")
+
+# Method 3: Using least squares (works for over/under-determined systems)
+x_lstsq, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+print("\nSolution using least squares:")
+print(f"x = {x_lstsq[0]:.4f}")
+print(f"y = {x_lstsq[1]:.4f}")
+print(f"z = {x_lstsq[2]:.4f}")
+
+# Verify the solution
+print("\nVerification: A @ x = b")
+print("A @ x =", A @ x_solve)
+print("b     =", b)
+print("Error:", np.linalg.norm(A @ x_solve - b))
+
+# Visualize the system as planes intersecting
+fig = plt.figure(figsize=(12, 10))
+ax = fig.add_subplot(111, projection='3d')
+
+# Create a grid for the planes
+x_range = np.linspace(-2, 2, 20)
+y_range = np.linspace(-2, 2, 20)
+X, Y = np.meshgrid(x_range, y_range)
+
+# Plot each plane
+# From 2x + 3y - z = 1, we get z = 2x + 3y - 1
+Z1 = 2*X + 3*Y - 1
+ax.plot_surface(X, Y, Z1, alpha=0.3, color='blue', label='2x + 3y - z = 1')
+
+# From x - y + 2z = 3, we get z = (3 - x + y)/2
+Z2 = (3 - X + Y) / 2
+ax.plot_surface(X, Y, Z2, alpha=0.3, color='green', label='x - y + 2z = 3')
+
+# From 3x + y + z = 4, we get z = 4 - 3x - y
+Z3 = 4 - 3*X - Y
+ax.plot_surface(X, Y, Z3, alpha=0.3, color='red', label='3x + y + z = 4')
+
+# Plot the solution point
+ax.scatter([x_solve[0]], [x_solve[1]], [x_solve[2]], 
+           color='black', s=100, label='Solution')
+
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z')
+ax.set_title('Linear System: Three Planes Intersecting at a Point')
+ax.legend()
+
+plt.show()
+
+# Analyze the condition number
+cond = np.linalg.cond(A)
+print(f"\nCondition number of A: {cond:.4f}")
+if cond > 1000:
+    print("Warning: The system is ill-conditioned!")
+else:
+    print("The system is well-conditioned.")</code></pre>
+                                        
+                                        <h4>Interactive: Effect of Matrix Conditioning</h4>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Create increasingly ill-conditioned matrices
+condition_numbers = []
+errors = []
+epsilons = np.logspace(-3, 1, 20)
+
+for eps in epsilons:
+    # Create a matrix that becomes ill-conditioned as eps increases
+    A = np.array([[1, 1],
+                  [1, 1 + eps]])
+    b = np.array([2, 2 + eps])
+    
+    # True solution is x = y = 1
+    x_true = np.array([1, 1])
+    
+    # Solve the system
+    x_computed = np.linalg.solve(A, b)
+    
+    # Calculate condition number and error
+    cond = np.linalg.cond(A)
+    error = np.linalg.norm(x_computed - x_true)
+    
+    condition_numbers.append(cond)
+    errors.append(error)
+
+# Plot the results
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+ax1.loglog(epsilons, condition_numbers, 'b-', linewidth=2)
+ax1.set_xlabel('ε')
+ax1.set_ylabel('Condition Number')
+ax1.set_title('Matrix Conditioning vs. Parameter ε')
+ax1.grid(True)
+
+ax2.loglog(epsilons, errors, 'r-', linewidth=2)
+ax2.set_xlabel('ε')
+ax2.set_ylabel('Solution Error')
+ax2.set_title('Solution Error vs. Parameter ε')
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print("As ε approaches 0, the matrix becomes singular and the condition number explodes!")</code></pre>
+                                    </span>
+                                    <span id="1-6">
+                                        <h3> 6. Diagonalization Procedure</h3>
+                                        <p>A matrix A is diagonalizable if it can be written as A = PDP⁻¹, where D is diagonal and P contains the eigenvectors.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Example: Diagonalize a matrix
+A = np.array([[4, -2],
+              [1, 1]])
+
+print("Original matrix A:")
+print(A)
+
+# Step 1: Find eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+print("\nStep 1: Find eigenvalues and eigenvectors")
+print(f"Eigenvalues: {eigenvalues}")
+print(f"\nEigenvectors (columns of P):\n{eigenvectors}")
+
+# Step 2: Form the matrices P and D
+P = eigenvectors
+D = np.diag(eigenvalues)
+
+print("\nStep 2: Form matrices P and D")
+print(f"\nP = \n{P}")
+print(f"\nD = \n{D}")
+
+# Step 3: Verify A = PDP⁻¹
+P_inv = np.linalg.inv(P)
+A_reconstructed = P @ D @ P_inv
+
+print("\nStep 3: Verify A = PDP⁻¹")
+print(f"\nP⁻¹ = \n{P_inv}")
+print(f"\nPDP⁻¹ = \n{A_reconstructed}")
+print(f"\nDifference from original A: {np.linalg.norm(A - A_reconstructed):.10f}")
+
+# Application: Computing matrix powers
+def matrix_power_diagonalization(A, n):
+    """Compute A^n using diagonalization"""
+    eigenvalues, eigenvectors = np.linalg.eig(A)
+    P = eigenvectors
+    D = np.diag(eigenvalues)
+    P_inv = np.linalg.inv(P)
+    
+    # A^n = P D^n P⁻¹
+    D_n = np.diag(eigenvalues**n)
+    return P @ D_n @ P_inv
+
+# Compare with direct computation
+n = 10
+A_n_direct = np.linalg.matrix_power(A, n)
+A_n_diag = matrix_power_diagonalization(A, n)
+
+print(f"\n\nApplication: Computing A^{n}")
+print(f"\nDirect computation:\n{A_n_direct}")
+print(f"\nUsing diagonalization:\n{A_n_diag}")
+print(f"\nDifference: {np.linalg.norm(A_n_direct - A_n_diag):.10f}")
+
+# Visualize the transformation
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+# Create a unit circle
+theta = np.linspace(0, 2*np.pi, 100)
+circle = np.array([np.cos(theta), np.sin(theta)])
+
+# Plot transformations
+for i, n in enumerate([0, 1, 2, 5, 10, 20]):
+    ax = axes[i//3, i%3]
+    
+    if n == 0:
+        # Identity transformation
+        transformed = circle
+    else:
+        # Apply A^n
+        A_n = matrix_power_diagonalization(A, n)
+        transformed = A_n @ circle
+    
+    ax.plot(circle[0], circle[1], 'b-', alpha=0.5, label='Original')
+    ax.plot(transformed[0], transformed[1], 'r-', linewidth=2, label=f'A^{n}')
+    ax.set_aspect('equal')
+    ax.grid(True)
+    ax.set_title(f'n = {n}')
+    ax.legend()
+    
+    # Set reasonable axis limits
+    if n > 5:
+        ax.set_xlim(-50, 50)
+        ax.set_ylim(-50, 50)
+    else:
+        ax.set_xlim(-10, 10)
+        ax.set_ylim(-10, 10)
+
+plt.suptitle('Effect of Matrix Powers on Unit Circle', fontsize=16)
+plt.tight_layout()
+plt.show()</code></pre>
+                                        
+                                        <button class="collapsible">When is a matrix diagonalizable?</button>
+                                        <div class="collapsible-content">
+                                            <p>A matrix is diagonalizable if and only if:</p>
+                                            <ul>
+                                                <li>It has n linearly independent eigenvectors (where n is the matrix size)</li>
+                                                <li>The geometric multiplicity equals the algebraic multiplicity for each eigenvalue</li>
+                                                <li>Symmetric matrices are always diagonalizable</li>
+                                            </ul>
+                                        </div>
+                                    </span>
+                                    <span id="1-7">
+                                        <h3> 7. Sylvester Formula</h3>
+                                        <p>The Sylvester formula expresses functions of matrices in terms of eigenvalues and projection matrices.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# For a 2x2 matrix with distinct eigenvalues, f(A) = f(λ₁)P₁ + f(λ₂)P₂
+# where P₁ and P₂ are projection matrices
+
+# Example matrix
+A = np.array([[3, 1],
+              [2, 2]])
+
+print("Matrix A:")
+print(A)
+
+# Find eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(A)
+lambda1, lambda2 = eigenvalues
+print(f"\nEigenvalues: λ₁ = {lambda1:.4f}, λ₂ = {lambda2:.4f}")
+
+# Calculate projection matrices using Sylvester formula
+# P₁ = (A - λ₂I)/(λ₁ - λ₂)
+# P₂ = (A - λ₁I)/(λ₂ - λ₁)
+I = np.eye(2)
+P1 = (A - lambda2 * I) / (lambda1 - lambda2)
+P2 = (A - lambda1 * I) / (lambda2 - lambda1)
+
+print("\nProjection matrices:")
+print(f"\nP₁ = \n{P1}")
+print(f"\nP₂ = \n{P2}")
+
+# Verify properties of projection matrices
+print("\nVerifying projection properties:")
+print(f"P₁² - P₁ = \n{P1 @ P1 - P1}")
+print(f"\nP₂² - P₂ = \n{P2 @ P2 - P2}")
+print(f"\nP₁P₂ = \n{P1 @ P2}")
+print(f"\nP₁ + P₂ = \n{P1 + P2}")
+
+# Use Sylvester formula to compute matrix functions
+def sylvester_formula(func, A, eigenvalues, projections):
+    """Compute f(A) using Sylvester formula"""
+    result = np.zeros_like(A)
+    for i, (lam, P) in enumerate(zip(eigenvalues, projections)):
+        result += func(lam) * P
+    return result
+
+# Example 1: Compute e^A
+import scipy.linalg
+t = 1.0
+exp_A_direct = scipy.linalg.expm(t * A)
+exp_A_sylvester = sylvester_formula(lambda x: np.exp(t * x), A, 
+                                    [lambda1, lambda2], [P1, P2])
+
+print(f"\n\nExample 1: Computing e^{t}A")
+print(f"\nDirect computation:\n{exp_A_direct}")
+print(f"\nUsing Sylvester formula:\n{exp_A_sylvester}")
+print(f"\nDifference: {np.linalg.norm(exp_A_direct - exp_A_sylvester):.10f}")
+
+# Example 2: Compute A^(1/2) (matrix square root)
+def matrix_sqrt(x):
+    return np.sqrt(x) if x > 0 else np.sqrt(x + 0j)
+
+A_sqrt = sylvester_formula(matrix_sqrt, A, [lambda1, lambda2], [P1, P2])
+print("\n\nExample 2: Computing √A")
+print(f"\n√A = \n{A_sqrt.real}")
+print(f"\nVerification: (√A)² = \n{(A_sqrt @ A_sqrt).real}")
+print(f"\nOriginal A = \n{A}")
+
+# Visualize the action of different matrix functions
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Create test points
+theta = np.linspace(0, 2*np.pi, 100)
+circle = np.array([np.cos(theta), np.sin(theta)])
+
+# Functions to visualize
+functions = [
+    (lambda x: x, "A (Identity)"),
+    (lambda x: x**2, "A²"),
+    (lambda x: np.exp(x), "e^A"),
+    (lambda x: 1/x if x != 0 else 0, "A⁻¹")
+]
+
+for idx, (func, title) in enumerate(functions):
+    ax = axes[idx//2, idx%2]
+    
+    # Apply matrix function
+    f_A = sylvester_formula(func, A, [lambda1, lambda2], [P1, P2])
+    transformed = f_A @ circle
+    
+    # Plot
+    ax.plot(circle[0], circle[1], 'b-', alpha=0.5, linewidth=2, label='Original')
+    ax.plot(transformed[0], transformed[1], 'r-', linewidth=2, label=title)
+    ax.set_aspect('equal')
+    ax.grid(True)
+    ax.set_title(f'Transformation by {title}')
+    ax.legend()
+    
+    # Set appropriate limits
+    all_points = np.concatenate([circle, transformed], axis=1)
+    margin = 0.5
+    ax.set_xlim(np.min(all_points[0]) - margin, np.max(all_points[0]) + margin)
+    ax.set_ylim(np.min(all_points[1]) - margin, np.max(all_points[1]) + margin)
+
+plt.suptitle('Matrix Functions via Sylvester Formula', fontsize=16)
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-8">
+                                        <h3> 8. The Residue Method</h3>
+                                        <p>The residue method uses complex analysis to compute functions of matrices, especially useful for matrix exponentials in solving differential equations.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import expm
+
+# Example: Compute e^(tA) using the residue method
+# For a matrix with eigenvalues λᵢ, we have:
+# e^(tA) = Σᵢ Res(e^(tz)(zI - A)⁻¹, z = λᵢ)
+
+# Define a matrix
+A = np.array([[0, 1, 0],
+              [0, 0, 1],
+              [-6, -11, -6]])
+
+print("Matrix A (companion matrix for characteristic polynomial):")
+print(A)
+
+# Find eigenvalues
+eigenvalues = np.linalg.eigvals(A)
+print(f"\nEigenvalues: {eigenvalues}")
+
+# Function to compute residue at simple pole
+def compute_residue_simple(A, eigenvalue, t):
+    """Compute residue of e^(tz)(zI - A)^(-1) at z = eigenvalue"""
+    n = A.shape[0]
+    I = np.eye(n)
+    
+    # For simple eigenvalue: Res = e^(t*λ) * lim_{z→λ} (z-λ)(zI-A)^(-1)
+    # This equals e^(t*λ) times the projection onto the eigenspace
+    
+    # Compute the projection matrix
+    # Find eigenvector for this eigenvalue
+    eigvals, eigvecs = np.linalg.eig(A)
+    idx = np.argmin(np.abs(eigvals - eigenvalue))
+    v = eigvecs[:, idx]
+    
+    # Find left eigenvector
+    eigvals_left, eigvecs_left = np.linalg.eig(A.T)
+    idx_left = np.argmin(np.abs(eigvals_left - eigenvalue))
+    w = eigvecs_left[:, idx_left]
+    
+    # Normalize so w^T v = 1
+    w = w / (w.conj() @ v)
+    
+    # Projection matrix
+    P = np.outer(v, w.conj())
+    
+    return np.exp(t * eigenvalue) * P
+
+# Compute e^(tA) using residue method
+t = 0.5
+exp_tA_residue = np.zeros_like(A, dtype=complex)
+
+for eigenval in eigenvalues:
+    if np.isreal(eigenval):
+        exp_tA_residue += compute_residue_simple(A, eigenval, t).real
+    else:
+        exp_tA_residue += compute_residue_simple(A, eigenval, t)
+
+exp_tA_residue = exp_tA_residue.real
+
+# Compare with direct computation
+exp_tA_direct = expm(t * A)
+
+print(f"\ne^({t}A) using residue method:")
+print(exp_tA_residue)
+print(f"\ne^({t}A) using scipy.linalg.expm:")
+print(exp_tA_direct)
+print(f"\nDifference: {np.linalg.norm(exp_tA_direct - exp_tA_residue):.10f}")
+
+# Application: Solve the system of ODEs dx/dt = Ax
+# Solution: x(t) = e^(tA) x(0)
+
+# Initial condition
+x0 = np.array([1, 0, 0])
+
+# Time points
+t_vals = np.linspace(0, 2, 100)
+
+# Compute solution at each time
+solutions = np.zeros((len(t_vals), 3))
+for i, t in enumerate(t_vals):
+    exp_tA = expm(t * A)
+    solutions[i] = exp_tA @ x0
+
+# Plot the solution
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Time series
+for i in range(3):
+    ax1.plot(t_vals, solutions[:, i], linewidth=2, label=f'x_{i+1}(t)')
+ax1.set_xlabel('Time t')
+ax1.set_ylabel('Solution components')
+ax1.set_title('Solution of dx/dt = Ax')
+ax1.legend()
+ax1.grid(True)
+
+# Phase portrait (3D projection to 2D)
+ax2.plot(solutions[:, 0], solutions[:, 1], 'b-', linewidth=2)
+ax2.plot(solutions[0, 0], solutions[0, 1], 'go', markersize=10, label='Start')
+ax2.plot(solutions[-1, 0], solutions[-1, 1], 'ro', markersize=10, label='End')
+ax2.set_xlabel('x₁')
+ax2.set_ylabel('x₂')
+ax2.set_title('Phase Portrait (x₁ vs x₂)')
+ax2.legend()
+ax2.grid(True)
+ax2.axis('equal')
+
+plt.tight_layout()
+plt.show()
+
+# Visualize the eigenvalue contributions
+fig, ax = plt.subplots(figsize=(10, 6))
+
+t_vals_fine = np.linspace(0, 2, 200)
+for i, eigenval in enumerate(eigenvalues):
+    contribution = np.exp(t_vals_fine * eigenval.real)
+    if np.isreal(eigenval):
+        ax.plot(t_vals_fine, contribution, linewidth=2, 
+                label=f'e^({eigenval.real:.2f}t)')
+    else:
+        ax.plot(t_vals_fine, contribution * np.cos(t_vals_fine * eigenval.imag), 
+                linewidth=2, label=f'e^({eigenval.real:.2f}t)cos({eigenval.imag:.2f}t)')
+
+ax.set_xlabel('Time t')
+ax.set_ylabel('Contribution')
+ax.set_title('Eigenvalue Contributions to e^(tA)')
+ax.legend()
+ax.grid(True)
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-9">
+                                        <h3> 9. Spectral Decomposition Method</h3>
+                                        <p>For symmetric matrices, the spectral decomposition provides a powerful way to understand and compute with matrices.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
+import matplotlib.transforms as transforms
+
+# Create a symmetric matrix
+A = np.array([[3, 1, 0],
+              [1, 2, 1],
+              [0, 1, 3]])
+
+print("Symmetric matrix A:")
+print(A)
+print(f"\nIs A symmetric? {np.allclose(A, A.T)}")
+
+# Spectral decomposition: A = QΛQ^T
+# Q contains eigenvectors (orthonormal for symmetric matrices)
+# Λ is diagonal with eigenvalues
+
+eigenvalues, Q = np.linalg.eigh(A)  # eigh for symmetric matrices
+Lambda = np.diag(eigenvalues)
+
+print("\nSpectral Decomposition: A = QΛQ^T")
+print(f"\nEigenvalues: {eigenvalues}")
+print(f"\nQ (eigenvector matrix):\n{Q}")
+print(f"\nΛ (diagonal eigenvalue matrix):\n{Lambda}")
+
+# Verify orthogonality of Q
+print(f"\nQ^T Q = \n{Q.T @ Q}")
+print(f"Is Q orthogonal? {np.allclose(Q.T @ Q, np.eye(3))}")
+
+# Reconstruct A
+A_reconstructed = Q @ Lambda @ Q.T
+print(f"\nReconstructed A = QΛQ^T:\n{A_reconstructed}")
+print(f"Error: {np.linalg.norm(A - A_reconstructed):.10f}")
+
+# Spectral decomposition as sum of rank-1 matrices
+print("\n\nSpectral decomposition as sum of rank-1 matrices:")
+print("A = λ₁q₁q₁^T + λ₂q₂q₂^T + λ₃q₃q₃^T")
+
+A_spectral_sum = np.zeros_like(A)
+for i in range(len(eigenvalues)):
+    q_i = Q[:, i].reshape(-1, 1)
+    rank1_matrix = eigenvalues[i] * (q_i @ q_i.T)
+    A_spectral_sum += rank1_matrix
+    print(f"\nλ_{i+1} = {eigenvalues[i]:.4f}")
+    print(f"q_{i+1}q_{i+1}^T =\n{q_i @ q_i.T}")
+
+print(f"\nSum verification: {np.allclose(A, A_spectral_sum)}")
+
+# Visualize the quadratic form x^T A x = c
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+# For 2D visualization, use the 2x2 submatrix
+A_2d = A[:2, :2]
+eigenvalues_2d, Q_2d = np.linalg.eigh(A_2d)
+
+# Create ellipses for different values of c
+x = np.linspace(-3, 3, 1000)
+y = np.linspace(-3, 3, 1000)
+X, Y = np.meshgrid(x, y)
+
+for idx, c in enumerate([1, 4, 9]):
+    ax = axes[idx]
+    
+    # Quadratic form: x^T A x = c
+    Z = A_2d[0,0]*X**2 + 2*A_2d[0,1]*X*Y + A_2d[1,1]*Y**2
+    
+    # Plot level curves
+    contour = ax.contour(X, Y, Z, levels=[c], colors='blue', linewidths=2)
+    ax.clabel(contour, inline=True, fontsize=10)
+    
+    # Plot eigenvector directions
+    for i in range(2):
+        v = Q_2d[:, i]
+        scale = np.sqrt(c / eigenvalues_2d[i])
+        ax.arrow(0, 0, scale*v[0], scale*v[1], 
+                head_width=0.2, head_length=0.2, 
+                fc=f'C{i+1}', ec=f'C{i+1}', linewidth=2)
+        ax.arrow(0, 0, -scale*v[0], -scale*v[1], 
+                head_width=0.2, head_length=0.2, 
+                fc=f'C{i+1}', ec=f'C{i+1}', linewidth=2)
+    
+    ax.set_xlim(-3, 3)
+    ax.set_ylim(-3, 3)
+    ax.set_aspect('equal')
+    ax.grid(True)
+    ax.set_title(f'x^T A x = {c}')
+    ax.set_xlabel('x₁')
+    ax.set_ylabel('x₂')
+
+plt.suptitle('Quadratic Forms and Spectral Decomposition', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+# Application: Principal axes transformation
+print("\n\nApplication: Principal Axes Transformation")
+print("In the eigenvector basis, the quadratic form becomes:")
+print("x^T A x = y^T Λ y = λ₁y₁² + λ₂y₂² + λ₃y₃²")
+print("where y = Q^T x")
+
+# Function optimization using spectral decomposition
+def rayleigh_quotient(x, A):
+    """Compute the Rayleigh quotient x^T A x / x^T x"""
+    return (x.T @ A @ x) / (x.T @ x)
+
+# The minimum and maximum values are the smallest and largest eigenvalues
+print(f"\nMinimum of Rayleigh quotient: {np.min(eigenvalues):.4f}")
+print(f"Maximum of Rayleigh quotient: {np.max(eigenvalues):.4f}")
+
+# Verify with random vectors
+n_tests = 1000
+rayleigh_values = []
+for _ in range(n_tests):
+    x = np.random.randn(3)
+    rayleigh_values.append(rayleigh_quotient(x, A))
+
+print(f"\nEmpirical min from {n_tests} random vectors: {np.min(rayleigh_values):.4f}")
+print(f"Empirical max from {n_tests} random vectors: {np.max(rayleigh_values):.4f}")</code></pre>
+                                    </span>
+                                    <span id="1-10">
+                                        <h3> 10. Positive Matrices</h3>
+                                        <p>Positive definite and positive semi-definite matrices have special properties that make them important in optimization and statistics.</p>
+                                        
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Check if a matrix is positive definite
+def is_positive_definite(A):
+    """Check if matrix A is positive definite"""
+    try:
+        # Cholesky decomposition exists iff A is positive definite
+        np.linalg.cholesky(A)
+        return True
+    except np.linalg.LinAlgError:
+        return False
+
+# Create examples of different matrix types
+matrices = {
+    "Positive Definite": np.array([[2, 1], [1, 3]]),
+    "Positive Semi-definite": np.array([[1, 1], [1, 1]]),
+    "Indefinite": np.array([[1, 2], [2, 1]]),
+    "Negative Definite": np.array([[-2, 1], [1, -3]])
+}
+
+print("Matrix Classification:")
+for name, A in matrices.items():
+    eigenvalues = np.linalg.eigvals(A)
+    print(f"\n{name}:")
+    print(f"Matrix:\n{A}")
+    print(f"Eigenvalues: {eigenvalues}")
+    print(f"Is positive definite? {is_positive_definite(A)}")
+
+# Visualize quadratic forms for 2x2 matrices
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.ravel()
+
+x = np.linspace(-2, 2, 100)
+y = np.linspace(-2, 2, 100)
+X, Y = np.meshgrid(x, y)
+
+for idx, (name, A) in enumerate(matrices.items()):
+    ax = axes[idx]
+    
+    # Compute quadratic form z = x^T A x
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            v = np.array([X[i,j], Y[i,j]])
+            Z[i,j] = v.T @ A @ v
+    
+    # Create contour plot
+    levels = np.linspace(-10, 10, 20)
+    if name == "Positive Definite" or name == "Negative Definite":
+        contour = ax.contour(X, Y, Z, levels=levels, cmap='RdBu')
+    else:
+        contour = ax.contour(X, Y, Z, levels=levels, cmap='RdBu')
+    
+    ax.clabel(contour, inline=True, fontsize=8)
+    ax.set_title(name)
+    ax.set_xlabel('x₁')
+    ax.set_ylabel('x₂')
+    ax.grid(True)
+    ax.axhline(y=0, color='k', linewidth=0.5)
+    ax.axvline(x=0, color='k', linewidth=0.5)
+
+plt.suptitle('Quadratic Forms for Different Matrix Types', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+# 3D visualization of positive definite quadratic form
+fig = plt.figure(figsize=(12, 5))
+
+# Positive definite example
+A_pd = matrices["Positive Definite"]
+
+ax1 = fig.add_subplot(121, projection='3d')
+Z_pd = np.zeros_like(X)
+for i in range(X.shape[0]):
+    for j in range(X.shape[1]):
+        v = np.array([X[i,j], Y[i,j]])
+        Z_pd[i,j] = v.T @ A_pd @ v
+
+surf = ax1.plot_surface(X, Y, Z_pd, cmap='viridis', alpha=0.8)
+ax1.set_xlabel('x₁')
+ax1.set_ylabel('x₂')
+ax1.set_zlabel('x^T A x')
+ax1.set_title('Positive Definite: Bowl Shape')
+
+# Indefinite example
+A_ind = matrices["Indefinite"]
+ax2 = fig.add_subplot(122, projection='3d')
+Z_ind = np.zeros_like(X)
+for i in range(X.shape[0]):
+    for j in range(X.shape[1]):
+        v = np.array([X[i,j], Y[i,j]])
+        Z_ind[i,j] = v.T @ A_ind @ v
+
+surf = ax2.plot_surface(X, Y, Z_ind, cmap='RdBu', alpha=0.8)
+ax2.set_xlabel('x₁')
+ax2.set_ylabel('x₂')
+ax2.set_zlabel('x^T A x')
+ax2.set_title('Indefinite: Saddle Shape')
+
+plt.tight_layout()
+plt.show()
+
+# Application: Covariance matrices
+print("\n\nApplication: Covariance Matrices")
+
+# Generate correlated data
+np.random.seed(42)
+n_samples = 1000
+mean = [2, 3]
+cov = [[2, 1.5], [1.5, 3]]  # Must be positive semi-definite
+
+data = np.random.multivariate_normal(mean, cov, n_samples)
+
+# Compute sample covariance
+sample_cov = np.cov(data.T)
+print(f"True covariance:\n{cov}")
+print(f"\nSample covariance:\n{sample_cov}")
+print(f"\nIs sample covariance positive definite? {is_positive_definite(sample_cov)}")
+
+# Eigendecomposition of covariance
+eigenvalues, eigenvectors = np.linalg.eigh(sample_cov)
+print(f"\nEigenvalues: {eigenvalues}")
+print(f"All eigenvalues positive? {np.all(eigenvalues > 0)}")
+
+# Plot data with principal axes
+plt.figure(figsize=(8, 8))
+plt.scatter(data[:, 0], data[:, 1], alpha=0.5, s=10)
+
+# Plot principal axes
+for i in range(2):
+    # Scale by sqrt of eigenvalue (standard deviation)
+    scale = 2 * np.sqrt(eigenvalues[i])
+    v = eigenvectors[:, i] * scale
+    plt.arrow(mean[0], mean[1], v[0], v[1], 
+              head_width=0.2, head_length=0.2, 
+              fc=f'C{i+2}', ec=f'C{i+2}', linewidth=3,
+              label=f'PC{i+1} (λ={eigenvalues[i]:.2f})')
+
+plt.xlabel('x₁')
+plt.ylabel('x₂')
+plt.title('Bivariate Normal Data with Principal Components')
+plt.legend()
+plt.grid(True)
+plt.axis('equal')
+plt.show()</code></pre>
+                                        
+                                        <div class="quiz-container">
+                                            <div class="quiz-question">Which of the following guarantees that a matrix is positive definite?</div>
+                                            <ul class="quiz-options">
+                                                <li><input type="radio" name="q1" value="a"> All diagonal elements are positive</li>
+                                                <li><input type="radio" name="q1" value="b"> All eigenvalues are positive</li>
+                                                <li><input type="radio" name="q1" value="c"> The determinant is positive</li>
+                                                <li><input type="radio" name="q1" value="d"> The matrix is symmetric</li>
+                                            </ul>
+                                            <button class="btn btn-primary quiz-submit" onclick="checkQuiz1()">Check Answer</button>
+                                            <div class="quiz-feedback" id="quiz1-feedback"></div>
+                                        </div>
+                                        
+                                        <script>
+                                        function checkQuiz1() {
+                                            const selected = document.querySelector('input[name="q1"]:checked');
+                                            const feedback = document.getElementById('quiz1-feedback');
+                                            
+                                            if (!selected) {
+                                                feedback.textContent = 'Please select an answer.';
+                                                feedback.className = 'quiz-feedback incorrect';
+                                                feedback.style.display = 'block';
+                                                return;
+                                            }
+                                            
+                                            if (selected.value === 'b') {
+                                                feedback.textContent = 'Correct! A symmetric matrix is positive definite if and only if all its eigenvalues are positive.';
+                                                feedback.className = 'quiz-feedback correct';
+                                            } else {
+                                                feedback.textContent = 'Not quite. While positive diagonal elements and positive determinant are necessary, only all positive eigenvalues guarantee positive definiteness.';
+                                                feedback.className = 'quiz-feedback incorrect';
+                                            }
+                                            feedback.style.display = 'block';
+                                        }
+                                        </script>
+                                    </span>
+                                    <span id="1-10.1">
+                                        <h3> 9. Miscellaneous</h3>
+                                    </span>
+                        </p>
+                        </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+    
+    // Initialize collapsible sections
+    document.addEventListener('DOMContentLoaded', function() {
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight){
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    });
+
+    </script>
+
+</body>
+
+</html>

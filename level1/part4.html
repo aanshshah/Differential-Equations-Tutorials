@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 4: Second and Higher Order Differential Equations - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+                        
+
+                            <section id="4">
+                                <h2>IV. Numerical Methods and Applications</h2>
+                                <br>
+                                <span id="4-1">
+                                    <h3>1. Fundamental Set of Solutions</h3>
+                                    <p>A fundamental set of solutions forms the basis for the general solution of linear differential equations. Let's explore how to find and verify these solutions.</p>
+                                    
+                                    <h4>Linear Independence and the Wronskian</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+import sympy as sp
+
+# Example: Verify linear independence of solutions
+# For y'' - 2y' - 3y = 0
+# Solutions are y1 = e^(3x) and y2 = e^(-x)
+
+x = sp.Symbol('x')
+y1 = sp.exp(3*x)
+y2 = sp.exp(-x)
+
+# Calculate the Wronskian
+W = sp.Matrix([[y1, y2], 
+               [sp.diff(y1, x), sp.diff(y2, x)]])
+wronskian = W.det()
+
+print("y1 =", y1)
+print("y2 =", y2)
+print("\nWronskian W(y1, y2) =", wronskian)
+print("Simplified:", sp.simplify(wronskian))
+print("\nSince W ≠ 0, y1 and y2 are linearly independent.")
+
+# Numerical verification
+x_vals = np.linspace(-2, 2, 100)
+y1_vals = np.exp(3*x_vals)
+y2_vals = np.exp(-x_vals)
+
+plt.figure(figsize=(12, 5))
+
+# Plot the solutions
+plt.subplot(1, 2, 1)
+plt.plot(x_vals, y1_vals, 'b-', linewidth=2, label='$y_1 = e^{3x}$')
+plt.plot(x_vals, y2_vals, 'r-', linewidth=2, label='$y_2 = e^{-x}$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Fundamental Solutions')
+plt.legend()
+plt.grid(True)
+plt.ylim(-5, 20)
+
+# Plot the Wronskian
+plt.subplot(1, 2, 2)
+W_vals = np.exp(3*x_vals) * (-np.exp(-x_vals)) - 3*np.exp(3*x_vals) * np.exp(-x_vals)
+W_vals = -4 * np.exp(2*x_vals)  # Simplified
+plt.plot(x_vals, W_vals, 'g-', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('W(x)')
+plt.title('Wronskian')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Finding Fundamental Sets for Constant Coefficient Equations</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from numpy.polynomial import polynomial as P
+
+def find_fundamental_set(coeffs):
+    """
+    Find fundamental set for ay'' + by' + cy = 0
+    coeffs = [c, b, a] (ascending powers)
+    """
+    # Characteristic equation: ar² + br + c = 0
+    char_roots = np.roots(coeffs[::-1])
+    
+    print(f"Characteristic equation: {coeffs[2]}r² + {coeffs[1]}r + {coeffs[0]} = 0")
+    print(f"Roots: r1 = {char_roots[0]:.3f}, r2 = {char_roots[1]:.3f}")
+    
+    # Determine the type of roots
+    if np.isreal(char_roots[0]) and np.isreal(char_roots[1]):
+        if abs(char_roots[0] - char_roots[1]) > 1e-10:
+            print("Case: Two distinct real roots")
+            fund_type = "distinct_real"
+        else:
+            print("Case: Repeated real root")
+            fund_type = "repeated_real"
+    else:
+        print("Case: Complex conjugate roots")
+        fund_type = "complex"
+    
+    return char_roots, fund_type
+
+# Example cases
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+# Case 1: Distinct real roots
+coeffs1 = [6, -5, 1]  # y'' - 5y' + 6y = 0
+r1, type1 = find_fundamental_set(coeffs1)
+x = np.linspace(0, 2, 100)
+
+if type1 == "distinct_real":
+    y1 = np.exp(r1[0].real * x)
+    y2 = np.exp(r1[1].real * x)
+    axes[0].plot(x, y1, 'b-', label=f'$y_1 = e^{{{r1[0].real:.1f}x}}$')
+    axes[0].plot(x, y2, 'r-', label=f'$y_2 = e^{{{r1[1].real:.1f}x}}$')
+    axes[0].set_title('Distinct Real Roots')
+    axes[0].legend()
+    axes[0].grid(True)
+
+# Case 2: Repeated real root
+coeffs2 = [1, -2, 1]  # y'' - 2y' + y = 0
+r2, type2 = find_fundamental_set(coeffs2)
+
+if type2 == "repeated_real":
+    r = r2[0].real
+    y1 = np.exp(r * x)
+    y2 = x * np.exp(r * x)
+    axes[1].plot(x, y1, 'b-', label=f'$y_1 = e^{{{r:.1f}x}}$')
+    axes[1].plot(x, y2, 'r-', label=f'$y_2 = xe^{{{r:.1f}x}}$')
+    axes[1].set_title('Repeated Real Root')
+    axes[1].legend()
+    axes[1].grid(True)
+
+# Case 3: Complex roots
+coeffs3 = [5, -4, 1]  # y'' - 4y' + 5y = 0
+r3, type3 = find_fundamental_set(coeffs3)
+
+if type3 == "complex":
+    alpha = r3[0].real
+    beta = abs(r3[0].imag)
+    y1 = np.exp(alpha * x) * np.cos(beta * x)
+    y2 = np.exp(alpha * x) * np.sin(beta * x)
+    axes[2].plot(x, y1, 'b-', label=f'$y_1 = e^{{{alpha:.1f}x}}\cos({beta:.1f}x)$')
+    axes[2].plot(x, y2, 'r-', label=f'$y_2 = e^{{{alpha:.1f}x}}\sin({beta:.1f}x)$')
+    axes[2].set_title('Complex Conjugate Roots')
+    axes[2].legend()
+    axes[2].grid(True)
+
+# Case 4: Pure imaginary roots (oscillatory)
+coeffs4 = [4, 0, 1]  # y'' + 4y = 0
+r4, type4 = find_fundamental_set(coeffs4)
+x4 = np.linspace(0, 2*np.pi, 100)
+
+beta = abs(r4[0].imag)
+y1 = np.cos(beta * x4)
+y2 = np.sin(beta * x4)
+axes[3].plot(x4, y1, 'b-', label=f'$y_1 = \cos({beta:.1f}x)$')
+axes[3].plot(x4, y2, 'r-', label=f'$y_2 = \sin({beta:.1f}x)$')
+axes[3].set_title('Pure Imaginary Roots (Harmonic Oscillator)')
+axes[3].legend()
+axes[3].grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Interactive: Explore Fundamental Solutions</h4>
+                                        <p>Adjust the coefficients to see how the fundamental solutions change!</p>
+                                        <div class="plot-container">
+                                            <canvas id="fundamentalPlot" width="600" height="400"></canvas>
+                                            <div class="plot-controls">
+                                                <label>a (y'' coefficient): <span class="plot-value" id="a-fund-value">1</span></label>
+                                                <input type="range" id="a-fund-slider" min="0.5" max="2" step="0.1" value="1" oninput="updateFundamental()">
+                                                <br>
+                                                <label>b (y' coefficient): <span class="plot-value" id="b-fund-value">-2</span></label>
+                                                <input type="range" id="b-fund-slider" min="-5" max="5" step="0.5" value="-2" oninput="updateFundamental()">
+                                                <br>
+                                                <label>c (y coefficient): <span class="plot-value" id="c-fund-value">1</span></label>
+                                                <input type="range" id="c-fund-slider" min="-5" max="5" step="0.5" value="1" oninput="updateFundamental()">
+                                                <br>
+                                                <span id="root-info"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateFundamental() {
+                                        const a = parseFloat(document.getElementById('a-fund-slider').value);
+                                        const b = parseFloat(document.getElementById('b-fund-slider').value);
+                                        const c = parseFloat(document.getElementById('c-fund-slider').value);
+                                        
+                                        document.getElementById('a-fund-value').textContent = a.toFixed(1);
+                                        document.getElementById('b-fund-value').textContent = b.toFixed(1);
+                                        document.getElementById('c-fund-value').textContent = c.toFixed(1);
+                                        
+                                        // Solve characteristic equation ar² + br + c = 0
+                                        const discriminant = b*b - 4*a*c;
+                                        let r1, r2, rootType;
+                                        
+                                        if (discriminant > 0) {
+                                            r1 = (-b + Math.sqrt(discriminant)) / (2*a);
+                                            r2 = (-b - Math.sqrt(discriminant)) / (2*a);
+                                            rootType = 'distinct';
+                                        } else if (discriminant === 0) {
+                                            r1 = r2 = -b / (2*a);
+                                            rootType = 'repeated';
+                                        } else {
+                                            const alpha = -b / (2*a);
+                                            const beta = Math.sqrt(-discriminant) / (2*a);
+                                            rootType = 'complex';
+                                        }
+                                        
+                                        // Update root info
+                                        const rootInfo = document.getElementById('root-info');
+                                        if (rootType === 'distinct') {
+                                            rootInfo.textContent = `Distinct real roots: r₁ = ${r1.toFixed(2)}, r₂ = ${r2.toFixed(2)}`;
+                                        } else if (rootType === 'repeated') {
+                                            rootInfo.textContent = `Repeated root: r = ${r1.toFixed(2)}`;
+                                        } else {
+                                            const alpha = -b / (2*a);
+                                            const beta = Math.sqrt(-discriminant) / (2*a);
+                                            rootInfo.textContent = `Complex roots: ${alpha.toFixed(2)} ± ${beta.toFixed(2)}i`;
+                                        }
+                                        
+                                        // Plot solutions
+                                        const canvas = document.getElementById('fundamentalPlot');
+                                        const ctx = canvas.getContext('2d');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height/2);
+                                        ctx.lineTo(canvas.width - 50, canvas.height/2);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Plot fundamental solutions
+                                        const xMin = 0, xMax = 5;
+                                        const steps = 200;
+                                        
+                                        ctx.lineWidth = 2;
+                                        
+                                        // Solution 1
+                                        ctx.strokeStyle = '#337ab7';
+                                        ctx.beginPath();
+                                        for (let i = 0; i <= steps; i++) {
+                                            const x = xMin + (xMax - xMin) * i / steps;
+                                            let y;
+                                            
+                                            if (rootType === 'distinct') {
+                                                y = Math.exp(r1 * x);
+                                            } else if (rootType === 'repeated') {
+                                                y = Math.exp(r1 * x);
+                                            } else {
+                                                const alpha = -b / (2*a);
+                                                const beta = Math.sqrt(-discriminant) / (2*a);
+                                                y = Math.exp(alpha * x) * Math.cos(beta * x);
+                                            }
+                                            
+                                            const px = 50 + (canvas.width - 100) * i / steps;
+                                            const py = canvas.height/2 - y * 50;
+                                            
+                                            if (i === 0) ctx.moveTo(px, py);
+                                            else ctx.lineTo(px, py);
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Solution 2
+                                        ctx.strokeStyle = '#d9534f';
+                                        ctx.beginPath();
+                                        for (let i = 0; i <= steps; i++) {
+                                            const x = xMin + (xMax - xMin) * i / steps;
+                                            let y;
+                                            
+                                            if (rootType === 'distinct') {
+                                                y = Math.exp(r2 * x);
+                                            } else if (rootType === 'repeated') {
+                                                y = x * Math.exp(r1 * x);
+                                            } else {
+                                                const alpha = -b / (2*a);
+                                                const beta = Math.sqrt(-discriminant) / (2*a);
+                                                y = Math.exp(alpha * x) * Math.sin(beta * x);
+                                            }
+                                            
+                                            const px = 50 + (canvas.width - 100) * i / steps;
+                                            const py = canvas.height/2 - y * 50;
+                                            
+                                            if (i === 0) ctx.moveTo(px, py);
+                                            else ctx.lineTo(px, py);
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Labels
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '12px Arial';
+                                        ctx.fillText('x', canvas.width - 40, canvas.height/2 + 20);
+                                        ctx.fillText('y', 30, 40);
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateFundamental, 100);
+                                    </script>
+                                    </span>
+                                    <span id="4-2">
+                                    <h3>2. General Solutions of Homogenous Equations</h3>
+                                    <p>The general solution of a homogeneous linear differential equation is a linear combination of the fundamental solutions.</p>
+                                    
+                                    <h4>Constructing General Solutions</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+def solve_second_order_ode(a, b, c, y0, yp0, t_span):
+    """
+    Solve ay'' + by' + cy = 0 with initial conditions y(0) = y0, y'(0) = yp0
+    """
+    # Convert to first-order system
+    def system(t, state):
+        y, yp = state
+        ypp = -(b*yp + c*y) / a
+        return [yp, ypp]
+    
+    # Solve
+    sol = solve_ivp(system, t_span, [y0, yp0], dense_output=True)
+    return sol
+
+# Example: Mass-spring-damper system
+# m*y'' + c*y' + k*y = 0
+m = 1.0    # mass
+c = 0.5    # damping coefficient
+k = 4.0    # spring constant
+
+# Different initial conditions
+initial_conditions = [
+    (1, 0),    # Released from rest
+    (0, 2),    # Initial velocity only
+    (1, -1),   # Released with downward velocity
+    (-0.5, 1)  # Different combination
+]
+
+t = np.linspace(0, 10, 500)
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Plot solutions for different initial conditions
+for i, (y0, yp0) in enumerate(initial_conditions):
+    sol = solve_second_order_ode(m, c, k, y0, yp0, (0, 10))
+    y = sol.sol(t)[0]
+    
+    ax1.plot(t, y, linewidth=2, 
+             label=f'y(0)={y0}, y\'(0)={yp0}')
+
+ax1.set_xlabel('Time')
+ax1.set_ylabel('Displacement')
+ax1.set_title('General Solutions with Different Initial Conditions')
+ax1.legend()
+ax1.grid(True)
+ax1.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+
+# Phase portrait
+for i, (y0, yp0) in enumerate(initial_conditions):
+    sol = solve_second_order_ode(m, c, k, y0, yp0, (0, 10))
+    y = sol.y[0]
+    yp = sol.y[1]
+    
+    ax2.plot(y, yp, linewidth=2)
+    ax2.plot(y0, yp0, 'o', markersize=8)  # Initial point
+
+ax2.set_xlabel('y (displacement)')
+ax2.set_ylabel("y' (velocity)")
+ax2.set_title('Phase Portrait')
+ax2.grid(True)
+ax2.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+ax2.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Verify superposition principle
+print("\nVerifying Superposition Principle:")
+print("If y1 and y2 are solutions, then c1*y1 + c2*y2 is also a solution")
+
+# Two particular solutions
+sol1 = solve_second_order_ode(m, c, k, 1, 0, (0, 10))
+sol2 = solve_second_order_ode(m, c, k, 0, 1, (0, 10))
+
+# Linear combination
+c1, c2 = 2, -1
+y_combined_ic = c1 * 1 + c2 * 0  # Initial y
+yp_combined_ic = c1 * 0 + c2 * 1  # Initial y'
+
+sol_combined = solve_second_order_ode(m, c, k, y_combined_ic, yp_combined_ic, (0, 10))
+
+# Check if c1*y1 + c2*y2 equals the combined solution
+t_check = np.linspace(0, 10, 100)
+y1_vals = sol1.sol(t_check)[0]
+y2_vals = sol2.sol(t_check)[0]
+y_combined_vals = sol_combined.sol(t_check)[0]
+y_superposition = c1 * y1_vals + c2 * y2_vals
+
+error = np.max(np.abs(y_combined_vals - y_superposition))
+print(f"Maximum error in superposition: {error:.2e}")</code></pre>
+                                    
+                                    <h4>Boundary Value Problems</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_bvp
+
+# Example: y'' + 4y = 0 with y(0) = 0, y(π/2) = 1
+def ode_system(x, y):
+    """Convert y'' + 4y = 0 to first-order system"""
+    return np.vstack((y[1], -4 * y[0]))
+
+def bc(ya, yb):
+    """Boundary conditions: y(0) = 0, y(π/2) = 1"""
+    return np.array([ya[0] - 0, yb[0] - 1])
+
+# Initial guess
+x = np.linspace(0, np.pi/2, 100)
+y_guess = np.zeros((2, x.size))
+y_guess[0] = x * 2 / np.pi  # Linear interpolation as initial guess
+
+# Solve boundary value problem
+sol = solve_bvp(ode_system, bc, x, y_guess)
+
+# Analytical solution: y = sin(2x)
+x_plot = np.linspace(0, np.pi/2, 200)
+y_analytical = np.sin(2 * x_plot)
+
+plt.figure(figsize=(10, 6))
+plt.plot(sol.x, sol.y[0], 'bo', markersize=4, label='Numerical solution')
+plt.plot(x_plot, y_analytical, 'r-', linewidth=2, label='Analytical: y = sin(2x)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Boundary Value Problem: y\'\' + 4y = 0')
+plt.legend()
+plt.grid(True)
+
+# Mark boundary conditions
+plt.plot(0, 0, 'go', markersize=10, label='y(0) = 0')
+plt.plot(np.pi/2, 1, 'mo', markersize=10, label='y(π/2) = 1')
+plt.legend()
+
+plt.show()
+
+# Example 2: Buckling of a column
+print("\nEigenvalue Problem: Column Buckling")
+print("y'' + λy = 0, y(0) = y(L) = 0")
+print("Critical buckling loads: λn = (nπ/L)²")
+
+L = 1.0  # Column length
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+# First four buckling modes
+for n in range(1, 5):
+    lambda_n = (n * np.pi / L) ** 2
+    x = np.linspace(0, L, 200)
+    y = np.sin(n * np.pi * x / L)
+    
+    axes[n-1].plot(x, y, 'b-', linewidth=2)
+    axes[n-1].fill_between(x, 0, y, alpha=0.3)
+    axes[n-1].set_xlabel('x/L')
+    axes[n-1].set_ylabel('Deflection')
+    axes[n-1].set_title(f'Mode {n}: λ = {lambda_n:.2f}')
+    axes[n-1].grid(True)
+    axes[n-1].axhline(y=0, color='k', linestyle='-', alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="4-3">
+                                    <h3>3. Reduction of Order</h3>
+                                    <p>When we know one solution of a second-order linear ODE, we can find another linearly independent solution using reduction of order.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+
+# Reduction of Order Method
+print("Reduction of Order Method")
+print("Given: y'' + p(x)y' + q(x)y = 0")
+print("Known solution: y1(x)")
+print("Find: y2(x) = v(x)y1(x)\n")
+
+# Example 1: x²y'' - 2xy' + 2y = 0 (Euler equation)
+# Known solution: y1 = x
+x = sp.Symbol('x')
+y1 = x
+
+# Verify y1 is a solution
+y1_p = sp.diff(y1, x)
+y1_pp = sp.diff(y1_p, x)
+result = x**2 * y1_pp - 2*x * y1_p + 2*y1
+print(f"Verification: x²y1'' - 2xy1' + 2y1 = {sp.simplify(result)}")
+
+# Apply reduction of order: y2 = v(x) * y1
+# This leads to: v'' = 0 for this example
+v = sp.Symbol('A') * x + sp.Symbol('B')
+y2 = x**2  # Taking v = x gives y2 = x²
+
+# Verify y2 is also a solution
+y2_p = sp.diff(y2, x)
+y2_pp = sp.diff(y2_p, x)
+result2 = x**2 * y2_pp - 2*x * y2_p + 2*y2
+print(f"Verification: x²y2'' - 2xy2' + 2y2 = {sp.simplify(result2)}")
+
+# Calculate Wronskian to verify linear independence
+W = y1 * sp.diff(y2, x) - y2 * sp.diff(y1, x)
+print(f"\nWronskian W(y1, y2) = {W} = {sp.simplify(W)}")
+print("Since W ≠ 0, y1 and y2 are linearly independent.")
+
+# Numerical example
+x_vals = np.linspace(0.1, 3, 100)
+y1_vals = x_vals
+y2_vals = x_vals**2
+
+plt.figure(figsize=(12, 5))
+
+# Plot the two solutions
+plt.subplot(1, 2, 1)
+plt.plot(x_vals, y1_vals, 'b-', linewidth=2, label='$y_1 = x$')
+plt.plot(x_vals, y2_vals, 'r-', linewidth=2, label='$y_2 = x^2$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Two Linearly Independent Solutions')
+plt.legend()
+plt.grid(True)
+
+# General solution
+C1, C2 = 2, -0.5
+y_general = C1 * y1_vals + C2 * y2_vals
+plt.subplot(1, 2, 2)
+plt.plot(x_vals, y_general, 'g-', linewidth=2, 
+         label=f'$y = {C1}y_1 + {C2}y_2$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('General Solution')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Example 2: More complex case
+print("\n" + "="*50)
+print("Example 2: (1-x²)y'' - 2xy' + 2y = 0 (Legendre equation n=1)")
+print("Known solution: y1 = x")
+
+# For this equation, reduction of order gives:
+# v'' - 2x/(1-x²) v' = 0
+# Solution: v = ∫(1/(1-x²)) dx = (1/2)ln|(1+x)/(1-x)| + C
+
+x_num = np.linspace(-0.99, 0.99, 200)
+y1_num = x_num
+y2_num = x_num * 0.5 * np.log(np.abs((1 + x_num)/(1 - x_num)))
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_num, y1_num, 'b-', linewidth=2, label='$y_1 = x$')
+plt.plot(x_num, y2_num, 'r-', linewidth=2, 
+         label='$y_2 = x \cdot \\frac{1}{2}\ln\\left|\\frac{1+x}{1-x}\\right|$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Legendre Equation Solutions (n=1)')
+plt.legend()
+plt.grid(True)
+plt.xlim(-0.99, 0.99)
+plt.ylim(-3, 3)
+
+# Show singularities at x = ±1
+plt.axvline(x=-1, color='gray', linestyle='--', alpha=0.5)
+plt.axvline(x=1, color='gray', linestyle='--', alpha=0.5)
+plt.text(-1, 2.5, 'x = -1', ha='center')
+plt.text(1, 2.5, 'x = 1', ha='center')
+
+plt.show()</code></pre>
+                                    
+                                    <button class="collapsible">Step-by-Step Procedure</button>
+                                    <div class="collapsible-content">
+                                        <p><strong>Reduction of Order Method:</strong></p>
+                                        <ol>
+                                            <li>Given: y'' + p(x)y' + q(x)y = 0 with known solution y₁(x)</li>
+                                            <li>Assume second solution: y₂(x) = v(x)y₁(x)</li>
+                                            <li>Calculate derivatives:
+                                                <ul>
+                                                    <li>y₂' = v'y₁ + vy₁'</li>
+                                                    <li>y₂'' = v''y₁ + 2v'y₁' + vy₁''</li>
+                                                </ul>
+                                            </li>
+                                            <li>Substitute into the ODE and simplify</li>
+                                            <li>This reduces to a first-order ODE in v'</li>
+                                            <li>Solve for v, then y₂ = vy₁</li>
+                                        </ol>
+                                    </div>
+                                    </span>
+                                    <span id="4-4">
+                                    <h3>4. Variation of Parameters/Lagrange</h3>
+                                    <p>Variation of parameters is a powerful method for solving non-homogeneous linear differential equations when we know the fundamental set of the homogeneous equation.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint, quad
+import sympy as sp
+
+# Variation of Parameters for y'' + p(x)y' + q(x)y = f(x)
+# Given fundamental set {y1, y2} of homogeneous equation
+
+def variation_of_parameters(y1_func, y2_func, f_func, x_vals):
+    """
+    Solve non-homogeneous ODE using variation of parameters.
+    y_p = u1*y1 + u2*y2 where:
+    u1' = -y2*f/W, u2' = y1*f/W
+    W = Wronskian(y1, y2)
+    """
+    # Calculate derivatives numerically
+    dx = x_vals[1] - x_vals[0]
+    y1 = y1_func(x_vals)
+    y2 = y2_func(x_vals)
+    
+    # Approximate derivatives
+    y1_prime = np.gradient(y1, dx)
+    y2_prime = np.gradient(y2, dx)
+    
+    # Wronskian
+    W = y1 * y2_prime - y2 * y1_prime
+    
+    # Calculate u1 and u2 by integration
+    f_vals = f_func(x_vals)
+    integrand1 = -y2 * f_vals / W
+    integrand2 = y1 * f_vals / W
+    
+    # Cumulative integration
+    u1 = np.zeros_like(x_vals)
+    u2 = np.zeros_like(x_vals)
+    
+    for i in range(1, len(x_vals)):
+        u1[i] = u1[i-1] + integrand1[i-1] * dx
+        u2[i] = u2[i-1] + integrand2[i-1] * dx
+    
+    # Particular solution
+    y_p = u1 * y1 + u2 * y2
+    
+    return y_p, u1, u2
+
+# Example 1: y'' - y = x
+# Homogeneous solutions: y1 = e^x, y2 = e^(-x)
+# Non-homogeneous term: f(x) = x
+
+x = np.linspace(0, 3, 200)
+y1_func = lambda x: np.exp(x)
+y2_func = lambda x: np.exp(-x)
+f_func = lambda x: x
+
+y_p, u1, u2 = variation_of_parameters(y1_func, y2_func, f_func, x)
+
+# Verify by solving numerically
+def system(y, x):
+    return [y[1], y[0] + x]
+
+y_numerical = odeint(system, [0, 0], x)
+
+plt.figure(figsize=(14, 6))
+
+# Plot homogeneous solutions
+plt.subplot(1, 3, 1)
+plt.plot(x, y1_func(x), 'b-', label='$y_1 = e^x$')
+plt.plot(x, y2_func(x), 'r-', label='$y_2 = e^{-x}$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Homogeneous Solutions')
+plt.legend()
+plt.grid(True)
+
+# Plot particular solution
+plt.subplot(1, 3, 2)
+plt.plot(x, y_p, 'g-', linewidth=2, label='Variation of Parameters')
+plt.plot(x, -x, 'k--', linewidth=2, label='Exact: $y_p = -x$')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Particular Solution')
+plt.legend()
+plt.grid(True)
+
+# Plot general solution with initial conditions
+plt.subplot(1, 3, 3)
+C1, C2 = 0.5, -0.5
+y_general = C1 * y1_func(x) + C2 * y2_func(x) + y_p
+plt.plot(x, y_general, 'm-', linewidth=2, label='General solution')
+plt.plot(x, y_numerical[:, 0], 'k--', label='Numerical check')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('General Solution: $y = C_1y_1 + C_2y_2 + y_p$')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Example 2: y'' + y = sec(x)
+print("\nExample 2: y'' + y = sec(x)")
+print("Homogeneous solutions: y1 = cos(x), y2 = sin(x)")
+
+x2 = np.linspace(-1.4, 1.4, 200)  # Avoid singularities of sec(x)
+y1_func2 = lambda x: np.cos(x)
+y2_func2 = lambda x: np.sin(x)
+f_func2 = lambda x: 1/np.cos(x)  # sec(x)
+
+y_p2, _, _ = variation_of_parameters(y1_func2, y2_func2, f_func2, x2)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x2, y_p2, 'b-', linewidth=2, label='Particular solution')
+plt.plot(x2, 1/np.cos(x2), 'r--', linewidth=2, label='f(x) = sec(x)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Variation of Parameters: y\'\' + y = sec(x)')
+plt.legend()
+plt.grid(True)
+plt.ylim(-10, 10)
+
+# Mark singularities
+plt.axvline(x=-np.pi/2, color='gray', linestyle='--', alpha=0.5)
+plt.axvline(x=np.pi/2, color='gray', linestyle='--', alpha=0.5)
+
+plt.show()
+
+# Symbolic verification
+print("\nSymbolic Verification:")
+x_sym = sp.Symbol('x')
+y_p_exact = x_sym * sp.sin(x_sym) + sp.cos(x_sym) * sp.log(sp.cos(x_sym))
+print(f"Exact particular solution: y_p = {y_p_exact}")</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Practice: Variation of Parameters</h4>
+                                        <p>For the equation y'' + 4y = f(x), find the particular solution for different forcing functions.</p>
+                                        <button class="btn btn-primary" onclick="showVPHint()">Show Hint</button>
+                                        <div id="vp-hint" style="display:none; margin-top:10px; padding:10px; background:#f0f0f0;">
+                                            <p>The homogeneous solutions are y₁ = cos(2x) and y₂ = sin(2x).</p>
+                                            <p>The Wronskian is W = 2.</p>
+                                            <p>Use the formulas: u₁' = -y₂f/W and u₂' = y₁f/W</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function showVPHint() {
+                                        document.getElementById('vp-hint').style.display = 'block';
+                                    }
+                                    </script>
+                                    </span>
+                                    <span id="4-5">
+                                    <h3>5. Method of Undetermined Coefficients</h3>
+                                    <p>The method of undetermined coefficients provides a systematic approach for finding particular solutions when the non-homogeneous term has a special form.</p>
+                                    
+                                    <h4>Basic Forms and Their Particular Solutions</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+import sympy as sp
+
+# Method of Undetermined Coefficients
+print("Method of Undetermined Coefficients")
+print("For y'' + ay' + by = f(x)\n")
+
+# Example 1: Polynomial forcing
+print("Example 1: y'' - 3y' + 2y = 4x²")
+
+# Characteristic equation: r² - 3r + 2 = 0
+# Roots: r = 1, 2
+# Homogeneous solution: yh = C1*e^x + C2*e^(2x)
+# For f(x) = 4x², try yp = Ax² + Bx + C
+
+x = sp.Symbol('x')
+A, B, C = sp.symbols('A B C')
+yp = A*x**2 + B*x + C
+yp_prime = sp.diff(yp, x)
+yp_double_prime = sp.diff(yp_prime, x)
+
+# Substitute into ODE
+lhs = yp_double_prime - 3*yp_prime + 2*yp
+rhs = 4*x**2
+
+# Expand and collect coefficients
+lhs_expanded = sp.expand(lhs)
+print(f"LHS = {lhs_expanded}")
+print(f"RHS = {rhs}")
+
+# Solve for coefficients
+coeffs_eq = sp.Poly(lhs_expanded - rhs, x)
+equations = [coeffs_eq.nth(i) for i in range(3)]
+
+solution = sp.solve(equations, [A, B, C])
+print(f"\nCoefficients: A = {solution[A]}, B = {solution[B]}, C = {solution[C]}")
+print(f"Particular solution: yp = {solution[A]}x² + {solution[B]}x + {solution[C]}")
+
+# Numerical verification
+x_num = np.linspace(0, 3, 100)
+yp_num = 2*x_num**2 + 6*x_num + 7
+
+# Solve ODE numerically
+def ode_system(y, x):
+    return [y[1], 3*y[1] - 2*y[0] + 4*x**2]
+
+y0 = [7, 6]  # Match particular solution at x=0
+y_numerical = odeint(ode_system, y0, x_num)
+
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(x_num, yp_num, 'b-', linewidth=2, label='Particular solution')
+plt.plot(x_num, 4*x_num**2, 'r--', linewidth=2, label='Forcing function')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Polynomial Forcing')
+plt.legend()
+plt.grid(True)
+
+# Example 2: Exponential forcing
+print("\nExample 2: y'' - 3y' + 2y = 5e^(3x)")
+
+# Since 3 is not a root of characteristic equation, try yp = Ae^(3x)
+A = sp.Symbol('A')
+yp2 = A * sp.exp(3*x)
+yp2_prime = sp.diff(yp2, x)
+yp2_double_prime = sp.diff(yp2_prime, x)
+
+lhs2 = yp2_double_prime - 3*yp2_prime + 2*yp2
+eq2 = sp.Eq(lhs2, 5*sp.exp(3*x))
+A_value = sp.solve(eq2, A)[0]
+
+print(f"Particular solution: yp = {A_value}e^(3x)")
+
+x_num2 = np.linspace(0, 1.5, 100)
+yp_num2 = 2.5 * np.exp(3*x_num2)
+
+plt.subplot(1, 2, 2)
+plt.plot(x_num2, yp_num2, 'b-', linewidth=2, label='Particular solution')
+plt.plot(x_num2, 5*np.exp(3*x_num2), 'r--', linewidth=2, label='Forcing function')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Exponential Forcing')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Table of standard forms
+print("\n" + "="*60)
+print("Standard Forms for Method of Undetermined Coefficients:")
+print("="*60)
+
+forms_table = [
+    ("Polynomial", "P_n(x)", "Q_n(x)"),
+    ("Exponential", "ce^(ax)", "Ae^(ax)"),
+    ("Sine/Cosine", "c₁cos(bx) + c₂sin(bx)", "Acos(bx) + Bsin(bx)"),
+    ("Product", "P_n(x)e^(ax)", "Q_n(x)e^(ax)"),
+    ("Product", "P_n(x)cos(bx)", "Q_n(x)cos(bx) + R_n(x)sin(bx)")
+]
+
+for form_type, f_form, yp_form in forms_table:
+    print(f"{form_type:12} | f(x) = {f_form:20} | Try: yp = {yp_form}")
+
+# Example 3: Trigonometric forcing with resonance
+print("\n" + "="*60)
+print("Example 3: Resonance Case")
+print("y'' + 4y = 3sin(2x)")
+print("Note: ±2i are roots of characteristic equation!")
+print("Must multiply standard form by x: yp = x(Acos(2x) + Bsin(2x))")
+
+x_num3 = np.linspace(0, 4*np.pi, 500)
+# Particular solution for resonance case
+yp_resonance = (3/4) * x_num3 * np.cos(2*x_num3)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_num3, yp_resonance, 'b-', linewidth=2, label='Resonant particular solution')
+plt.plot(x_num3, 3*np.sin(2*x_num3), 'r--', alpha=0.7, label='Forcing function')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Resonance: Amplitude grows linearly with time')
+plt.legend()
+plt.grid(True)
+plt.show()</code></pre>
+                                    
+                                    <h4>Interactive Method Selection</h4>
+                                    <div class="plot-container">
+                                        <h5>Select the appropriate form for yp:</h5>
+                                        <p><strong>ODE:</strong> y'' + 2y' + 5y = <span id="forcing-function">3e^x</span></p>
+                                        <div class="plot-controls">
+                                            <label>Forcing function:</label>
+                                            <select id="forcing-select" onchange="updateForcing()">
+                                                <option value="exp">3e^x</option>
+                                                <option value="poly">2x² + x</option>
+                                                <option value="trig">4cos(3x)</option>
+                                                <option value="combo">xe^(-x)</option>
+                                            </select>
+                                            <br><br>
+                                            <button class="btn btn-primary" onclick="checkForm()">Check Form</button>
+                                            <div id="form-feedback" style="margin-top:10px;"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateForcing() {
+                                        const select = document.getElementById('forcing-select');
+                                        const span = document.getElementById('forcing-function');
+                                        const forcingMap = {
+                                            'exp': '3e^x',
+                                            'poly': '2x² + x',
+                                            'trig': '4cos(3x)',
+                                            'combo': 'xe^(-x)'
+                                        };
+                                        span.textContent = forcingMap[select.value];
+                                    }
+                                    
+                                    function checkForm() {
+                                        const select = document.getElementById('forcing-select');
+                                        const feedback = document.getElementById('form-feedback');
+                                        
+                                        const forms = {
+                                            'exp': 'yp = Ae^x',
+                                            'poly': 'yp = Ax² + Bx + C',
+                                            'trig': 'yp = Acos(3x) + Bsin(3x)',
+                                            'combo': 'yp = (Ax + B)e^(-x)'
+                                        };
+                                        
+                                        feedback.innerHTML = `<div class="alert alert-info">
+                                            <strong>Correct form:</strong> ${forms[select.value]}<br>
+                                            <em>Note: Check if any terms match the homogeneous solution!</em>
+                                        </div>`;
+                                    }
+                                    </script>
+                                    </span>
+                                    <span id="4-6">
+                                    <h3>6. Operator Method</h3>
+                                    <p>The operator method uses differential operators to solve linear ODEs algebraically, particularly useful for constant coefficient equations.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+
+# Differential Operator D = d/dx
+print("Operator Method for Linear ODEs")
+print("Define D = d/dx, then D² = d²/dx², etc.\n")
+
+# Example 1: (D² - 3D + 2)y = e^x
+print("Example 1: (D² - 3D + 2)y = e^x")
+print("Factoring: (D - 1)(D - 2)y = e^x")
+
+# Symbolic approach
+x = sp.Symbol('x')
+D = lambda f: sp.diff(f, x)
+
+# Verify operator factorization
+y_test = sp.Function('y')(x)
+op1 = D(D(y_test)) - 3*D(y_test) + 2*y_test
+print(f"Original operator: {op1}")
+
+# Particular solution using operator method
+# Since e^x corresponds to D = 1, and (1 - 1)(1 - 2) = 0, we have a problem
+# Use the formula: yp = x*e^x / ((D-1)(D-2)) evaluated at D=1
+print("\nFor e^x term, D → 1:")
+print("(D-1)(D-2) at D=1 gives 0, so we differentiate w.r.t. D:")
+print("d/dD[(D-1)(D-2)] = 2D - 3")
+print("At D=1: 2(1) - 3 = -1")
+print("Therefore: yp = -e^x")
+
+# Numerical verification
+x_num = np.linspace(0, 3, 100)
+yp = -np.exp(x_num)
+
+# Check by substitution
+yp_prime = -np.exp(x_num)
+yp_double_prime = -np.exp(x_num)
+lhs = yp_double_prime - 3*yp_prime + 2*yp
+rhs = np.exp(x_num)
+
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(x_num, lhs, 'b-', linewidth=2, label='LHS')
+plt.plot(x_num, rhs, 'r--', linewidth=2, label='RHS = e^x')
+plt.xlabel('x')
+plt.ylabel('Value')
+plt.title('Verification: (D² - 3D + 2)yp = e^x')
+plt.legend()
+plt.grid(True)
+
+# Example 2: Inverse operator for sine/cosine
+print("\n" + "="*50)
+print("Example 2: (D² + 4)y = sin(3x)")
+print("Using 1/(D² + 4) on sin(3x)")
+print("Since D²(sin(3x)) = -9sin(3x), we have:")
+print("1/(D² + 4)[sin(3x)] = 1/(-9 + 4)[sin(3x)] = -1/5 sin(3x)")
+
+x_num2 = np.linspace(0, 2*np.pi, 200)
+yp2 = -np.sin(3*x_num2) / 5
+
+plt.subplot(1, 2, 2)
+plt.plot(x_num2, yp2, 'b-', linewidth=2, label='yp = -sin(3x)/5')
+plt.plot(x_num2, np.sin(3*x_num2), 'r--', linewidth=2, label='f(x) = sin(3x)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Operator Method for Trigonometric Functions')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Table of operator formulas
+print("\n" + "="*60)
+print("Useful Operator Formulas:")
+print("="*60)
+
+formulas = [
+    ("e^(ax)", "1/(D-a) if D ≠ a"),
+    ("x^n", "1/D^(n+1) [integrate n+1 times]"),
+    ("sin(bx)", "1/(D²+b²) = -1/b² * 1/(1-D²/b²)"),
+    ("cos(bx)", "1/(D²+b²) = -1/b² * 1/(1-D²/b²)"),
+    ("x*e^(ax)", "d/da[1/(D-a)] at D=a")
+]
+
+for func, formula in formulas:
+    print(f"1/P(D)[{func:8}] = {formula}")
+
+# Example 3: Annihilator method
+print("\n" + "="*60)
+print("Example 3: Annihilator Method")
+print("Find operator that annihilates given function")
+
+# Demonstrate annihilators
+functions = [
+    ("e^(2x)", "D - 2"),
+    ("x²", "D³"),
+    ("sin(3x)", "D² + 9"),
+    ("xe^(-x)", "(D + 1)²")
+]
+
+print("\nFunction     | Annihilator")
+print("-" * 30)
+for func, ann in functions:
+    print(f"{func:12} | {ann}")
+
+# Visual demonstration of annihilation
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+x_demo = np.linspace(0, 3, 100)
+
+# Annihilate e^(2x)
+f1 = np.exp(2*x_demo)
+f1_prime = 2*np.exp(2*x_demo)
+annihilated1 = f1_prime - 2*f1
+axes[0].plot(x_demo, f1, 'b-', label='$e^{2x}$')
+axes[0].plot(x_demo, annihilated1, 'r--', linewidth=3, label='$(D-2)e^{2x} = 0$')
+axes[0].set_title('Annihilating $e^{2x}$')
+axes[0].legend()
+axes[0].grid(True)
+
+# Annihilate x²
+f2 = x_demo**2
+f2_d3 = np.zeros_like(x_demo)  # Third derivative of x² is 0
+axes[1].plot(x_demo, f2, 'b-', label='$x^2$')
+axes[1].plot(x_demo, f2_d3, 'r--', linewidth=3, label='$D^3(x^2) = 0$')
+axes[1].set_title('Annihilating $x^2$')
+axes[1].legend()
+axes[1].grid(True)
+
+# Annihilate sin(3x)
+f3 = np.sin(3*x_demo)
+f3_d2 = -9*np.sin(3*x_demo)
+annihilated3 = f3_d2 + 9*f3
+axes[2].plot(x_demo, f3, 'b-', label='$\sin(3x)$')
+axes[2].plot(x_demo, annihilated3, 'r--', linewidth=3, label='$(D^2+9)\sin(3x) = 0$')
+axes[2].set_title('Annihilating $\sin(3x)$')
+axes[2].legend()
+axes[2].grid(True)
+
+# Annihilate xe^(-x)
+f4 = x_demo * np.exp(-x_demo)
+f4_d1 = np.exp(-x_demo) - x_demo*np.exp(-x_demo)
+f4_d2 = -2*np.exp(-x_demo) + x_demo*np.exp(-x_demo)
+annihilated4 = f4_d2 + 2*f4_d1 + f4
+axes[3].plot(x_demo, f4, 'b-', label='$xe^{-x}$')
+axes[3].plot(x_demo, annihilated4, 'r--', linewidth=3, label='$(D+1)^2(xe^{-x}) = 0$')
+axes[3].set_title('Annihilating $xe^{-x}$')
+axes[3].legend()
+axes[3].grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="4-7">
+                                    <h3>7. Applications</h3>
+                                    <p>Second-order differential equations model many physical systems including mechanical vibrations, electrical circuits, and wave phenomena.</p>
+                                    
+                                    <h4>Application 1: Mass-Spring-Damper System</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+import ipywidgets as widgets
+from IPython.display import display
+
+# Mass-spring-damper system: mx'' + cx' + kx = F(t)
+def mass_spring_damper(t, y, m, c, k, F_func):
+    x, v = y
+    F = F_func(t)
+    a = (F - c*v - k*x) / m
+    return [v, a]
+
+# System parameters
+m = 1.0  # mass (kg)
+k = 10.0  # spring constant (N/m)
+
+# Different damping cases
+damping_cases = [
+    (0, "Undamped"),
+    (2*np.sqrt(m*k)*0.1, "Underdamped (ζ=0.1)"),
+    (2*np.sqrt(m*k), "Critically damped (ζ=1)"),
+    (2*np.sqrt(m*k)*2, "Overdamped (ζ=2)")
+]
+
+# No external force initially
+F_zero = lambda t: 0
+
+# Initial conditions: x(0) = 1, v(0) = 0
+y0 = [1, 0]
+t_span = (0, 5)
+t_eval = np.linspace(0, 5, 500)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Plot free response for different damping
+for c, label in damping_cases:
+    sol = solve_ivp(mass_spring_damper, t_span, y0, t_eval=t_eval,
+                    args=(m, c, k, F_zero))
+    ax1.plot(sol.t, sol.y[0], linewidth=2, label=label)
+
+ax1.set_xlabel('Time (s)')
+ax1.set_ylabel('Displacement (m)')
+ax1.set_title('Free Response: Different Damping Cases')
+ax1.legend()
+ax1.grid(True)
+ax1.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+
+# Forced response with resonance
+c_forced = 2*np.sqrt(m*k)*0.1  # Light damping
+omega_n = np.sqrt(k/m)  # Natural frequency
+
+# Different forcing frequencies
+forcing_frequencies = [0.5, 0.9, 1.0, 1.1]
+colors = ['blue', 'green', 'red', 'orange']
+
+for omega_ratio, color in zip(forcing_frequencies, colors):
+    omega = omega_ratio * omega_n
+    F_sin = lambda t: np.sin(omega * t)
+    
+    sol = solve_ivp(mass_spring_damper, (0, 20), [0, 0], 
+                    t_eval=np.linspace(0, 20, 1000),
+                    args=(m, c_forced, k, F_sin))
+    
+    # Plot steady-state response (last portion)
+    ax2.plot(sol.t[-500:], sol.y[0, -500:], color=color, 
+             label=f'ω/ωₙ = {omega_ratio}')
+
+ax2.set_xlabel('Time (s)')
+ax2.set_ylabel('Displacement (m)')
+ax2.set_title('Forced Response: Resonance Effects')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Frequency response plot
+omega_range = np.logspace(-1, 1, 200) * omega_n
+magnitude = np.zeros_like(omega_range)
+phase = np.zeros_like(omega_range)
+
+for i, omega in enumerate(omega_range):
+    # Steady-state amplitude for sinusoidal forcing
+    H = 1 / np.sqrt((k - m*omega**2)**2 + (c_forced*omega)**2)
+    magnitude[i] = H
+    phase[i] = -np.arctan2(c_forced*omega, k - m*omega**2)
+
+fig, (ax3, ax4) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+ax3.loglog(omega_range/omega_n, magnitude*k)
+ax3.set_ylabel('Magnitude |X/F|')
+ax3.set_title('Frequency Response of Mass-Spring-Damper')
+ax3.grid(True, which="both", alpha=0.3)
+ax3.axvline(x=1, color='r', linestyle='--', alpha=0.5, label='Natural frequency')
+ax3.legend()
+
+ax4.semilogx(omega_range/omega_n, np.degrees(phase))
+ax4.set_xlabel('Frequency ratio ω/ωₙ')
+ax4.set_ylabel('Phase (degrees)')
+ax4.grid(True, which="both", alpha=0.3)
+ax4.axvline(x=1, color='r', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Application 2: RLC Circuit</h4>
+                                    <pre><code># RLC Circuit: L*q'' + R*q' + q/C = V(t)
+# where q is charge, L is inductance, R is resistance, C is capacitance
+
+def rlc_circuit(t, y, L, R, C, V_func):
+    q, i = y  # charge and current
+    V = V_func(t)
+    di_dt = (V - R*i - q/C) / L
+    return [i, di_dt]
+
+# Circuit parameters
+L = 0.1   # Inductance (H)
+C = 1e-6  # Capacitance (F)
+R_values = [10, 100, 1000]  # Different resistances (Ω)
+
+# Step voltage input
+V_step = lambda t: 10 if t > 0 else 0
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+t_eval = np.linspace(0, 0.01, 1000)
+
+# Different R values
+for i, R in enumerate(R_values[:3]):
+    sol = solve_ivp(rlc_circuit, (0, 0.01), [0, 0], t_eval=t_eval,
+                    args=(L, R, C, V_step))
+    
+    axes[i].plot(sol.t*1000, sol.y[0]*1e6, 'b-', linewidth=2, label='Charge')
+    axes[i].set_xlabel('Time (ms)')
+    axes[i].set_ylabel('Charge (μC)')
+    axes[i].set_title(f'RLC Circuit: R = {R} Ω')
+    axes[i].grid(True)
+    
+    # Calculate damping ratio
+    omega_0 = 1/np.sqrt(L*C)
+    zeta = R/(2*np.sqrt(L/C))
+    axes[i].text(0.6, 0.8, f'ζ = {zeta:.2f}', transform=axes[i].transAxes,
+                 bbox=dict(boxstyle='round', facecolor='wheat'))
+
+# AC response
+f = 1000  # Frequency (Hz)
+V_ac = lambda t: 10*np.sin(2*np.pi*f*t)
+
+t_ac = np.linspace(0, 0.005, 1000)
+sol_ac = solve_ivp(rlc_circuit, (0, 0.005), [0, 0], t_eval=t_ac,
+                   args=(L, 100, C, V_ac))
+
+axes[3].plot(t_ac*1000, V_ac(t_ac), 'r--', alpha=0.7, label='Input voltage')
+axes[3].plot(t_ac*1000, sol_ac.y[1]*100, 'b-', linewidth=2, label='Current × 100')
+axes[3].set_xlabel('Time (ms)')
+axes[3].set_ylabel('Voltage (V) / Current × 100 (A)')
+axes[3].set_title('AC Response')
+axes[3].legend()
+axes[3].grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Application 3: Beam Vibration</h4>
+                                    <pre><code># Euler-Bernoulli beam equation (simplified)
+# For transverse vibrations: EI*y'''' + ρA*y'' = 0
+# We'll solve the modal equation: y'' + λ²y = 0
+
+# Cantilever beam boundary conditions
+# y(0) = 0, y'(0) = 0 (fixed end)
+# y''(L) = 0, y'''(L) = 0 (free end)
+
+L = 1.0  # Beam length
+n_modes = 4
+
+# Approximate eigenvalues for cantilever beam
+lambda_values = [1.875, 4.694, 7.855, 10.996]
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+x = np.linspace(0, L, 200)
+
+for n, (ax, lambda_n) in enumerate(zip(axes, lambda_values)):
+    # Mode shape for cantilever beam
+    mode_shape = (np.cosh(lambda_n*x) - np.cos(lambda_n*x) - 
+                  (np.sinh(lambda_n) - np.sin(lambda_n))/(np.cosh(lambda_n) + np.cos(lambda_n)) *
+                  (np.sinh(lambda_n*x) - np.sin(lambda_n*x)))
+    
+    # Normalize
+    mode_shape = mode_shape / np.max(np.abs(mode_shape))
+    
+    ax.plot(x/L, mode_shape, 'b-', linewidth=3)
+    ax.fill_between(x/L, 0, mode_shape, alpha=0.3)
+    ax.set_xlabel('Position x/L')
+    ax.set_ylabel('Normalized deflection')
+    ax.set_title(f'Mode {n+1}: λ = {lambda_n:.3f}')
+    ax.grid(True)
+    ax.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+    
+    # Add frequency info
+    freq_ratio = lambda_n**2 / lambda_values[0]**2
+    ax.text(0.6, 0.8, f'f/f₁ = {freq_ratio:.2f}', 
+            transform=ax.transAxes,
+            bbox=dict(boxstyle='round', facecolor='yellow'))
+
+plt.suptitle('Cantilever Beam Vibration Modes', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+# Interactive beam animation
+print("\nInteractive Beam Vibration:")
+print("The beam vibrates as a combination of its natural modes")</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Interactive: Damped Oscillator</h4>
+                                        <p>Explore how damping affects oscillation behavior!</p>
+                                        <div class="plot-container">
+                                            <canvas id="dampedOscillator" width="600" height="400"></canvas>
+                                            <div class="plot-controls">
+                                                <label>Damping ratio ζ: <span class="plot-value" id="zeta-value">0.1</span></label>
+                                                <input type="range" id="zeta-slider" min="0" max="2" step="0.05" value="0.1" oninput="updateDamping()">
+                                                <br>
+                                                <span id="damping-type">Underdamped</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateDamping() {
+                                        const zeta = parseFloat(document.getElementById('zeta-slider').value);
+                                        document.getElementById('zeta-value').textContent = zeta.toFixed(2);
+                                        
+                                        // Determine damping type
+                                        const typeSpan = document.getElementById('damping-type');
+                                        if (zeta === 0) {
+                                            typeSpan.textContent = 'Undamped';
+                                        } else if (zeta < 1) {
+                                            typeSpan.textContent = 'Underdamped';
+                                        } else if (zeta === 1) {
+                                            typeSpan.textContent = 'Critically damped';
+                                        } else {
+                                            typeSpan.textContent = 'Overdamped';
+                                        }
+                                        
+                                        const canvas = document.getElementById('dampedOscillator');
+                                        const ctx = canvas.getContext('2d');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height/2);
+                                        ctx.lineTo(canvas.width - 50, canvas.height/2);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Plot solution
+                                        ctx.strokeStyle = '#337ab7';
+                                        ctx.lineWidth = 2;
+                                        ctx.beginPath();
+                                        
+                                        const omega_n = 2 * Math.PI; // Natural frequency
+                                        const tMax = 3;
+                                        const steps = 300;
+                                        
+                                        for (let i = 0; i <= steps; i++) {
+                                            const t = tMax * i / steps;
+                                            let x;
+                                            
+                                            if (zeta === 0) {
+                                                // Undamped
+                                                x = Math.cos(omega_n * t);
+                                            } else if (zeta < 1) {
+                                                // Underdamped
+                                                const omega_d = omega_n * Math.sqrt(1 - zeta*zeta);
+                                                x = Math.exp(-zeta * omega_n * t) * 
+                                                    (Math.cos(omega_d * t) + (zeta * omega_n / omega_d) * Math.sin(omega_d * t));
+                                            } else if (zeta === 1) {
+                                                // Critically damped
+                                                x = Math.exp(-omega_n * t) * (1 + omega_n * t);
+                                            } else {
+                                                // Overdamped
+                                                const r1 = -omega_n * (zeta + Math.sqrt(zeta*zeta - 1));
+                                                const r2 = -omega_n * (zeta - Math.sqrt(zeta*zeta - 1));
+                                                x = (r2/(r2-r1)) * Math.exp(r1 * t) - (r1/(r2-r1)) * Math.exp(r2 * t);
+                                            }
+                                            
+                                            const px = 50 + (canvas.width - 100) * i / steps;
+                                            const py = canvas.height/2 - x * 150;
+                                            
+                                            if (i === 0) {
+                                                ctx.moveTo(px, py);
+                                            } else {
+                                                ctx.lineTo(px, py);
+                                            }
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Add envelope for underdamped case
+                                        if (zeta > 0 && zeta < 1) {
+                                            ctx.strokeStyle = '#d9534f';
+                                            ctx.lineWidth = 1;
+                                            ctx.setLineDash([5, 5]);
+                                            
+                                            // Upper envelope
+                                            ctx.beginPath();
+                                            for (let i = 0; i <= steps; i++) {
+                                                const t = tMax * i / steps;
+                                                const env = Math.exp(-zeta * omega_n * t);
+                                                const px = 50 + (canvas.width - 100) * i / steps;
+                                                const py = canvas.height/2 - env * 150;
+                                                if (i === 0) ctx.moveTo(px, py);
+                                                else ctx.lineTo(px, py);
+                                            }
+                                            ctx.stroke();
+                                            
+                                            // Lower envelope
+                                            ctx.beginPath();
+                                            for (let i = 0; i <= steps; i++) {
+                                                const t = tMax * i / steps;
+                                                const env = -Math.exp(-zeta * omega_n * t);
+                                                const px = 50 + (canvas.width - 100) * i / steps;
+                                                const py = canvas.height/2 - env * 150;
+                                                if (i === 0) ctx.moveTo(px, py);
+                                                else ctx.lineTo(px, py);
+                                            }
+                                            ctx.stroke();
+                                            ctx.setLineDash([]);
+                                        }
+                                        
+                                        // Labels
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '12px Arial';
+                                        ctx.fillText('Time', canvas.width/2, canvas.height - 20);
+                                        ctx.save();
+                                        ctx.translate(20, canvas.height/2);
+                                        ctx.rotate(-Math.PI/2);
+                                        ctx.fillText('Displacement', 0, 0);
+                                        ctx.restore();
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateDamping, 100);
+                                    </script>
+                                    </span>
+                                    <span id="4-8">
+                                    <h3>8. References</h3>
+                                    <p>For further reading on second and higher order differential equations:</p>
+                                    <ul>
+                                        <li>Boyce, W.E. & DiPrima, R.C. (2012). <em>Elementary Differential Equations and Boundary Value Problems</em>. John Wiley & Sons.</li>
+                                        <li>Zill, D.G. (2017). <em>A First Course in Differential Equations with Modeling Applications</em>. Cengage Learning.</li>
+                                        <li>Nagle, R.K., Saff, E.B., & Snider, A.D. (2017). <em>Fundamentals of Differential Equations</em>. Pearson.</li>
+                                        <li>Kreyszig, E. (2011). <em>Advanced Engineering Mathematics</em>. John Wiley & Sons.</li>
+                                    </ul>
+                                    
+                                    <div class="quiz-container">
+                                        <h4>Self-Assessment Quiz</h4>
+                                        <div class="quiz-question">For the equation y'' - 6y' + 9y = 0, what type of solution do you expect?</div>
+                                        <ul class="quiz-options">
+                                            <li><input type="radio" name="q4" value="a"> Two distinct exponential functions</li>
+                                            <li><input type="radio" name="q4" value="b"> Exponential times polynomial</li>
+                                            <li><input type="radio" name="q4" value="c"> Trigonometric functions</li>
+                                            <li><input type="radio" name="q4" value="d"> Hyperbolic functions</li>
+                                        </ul>
+                                        <button class="btn btn-primary quiz-submit" onclick="checkQuiz4()">Check Answer</button>
+                                        <div class="quiz-feedback" id="quiz4-feedback"></div>
+                                    </div>
+                                    
+                                    <script>
+                                    function checkQuiz4() {
+                                        const selected = document.querySelector('input[name="q4"]:checked');
+                                        const feedback = document.getElementById('quiz4-feedback');
+                                        
+                                        if (!selected) {
+                                            feedback.textContent = 'Please select an answer.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                            feedback.style.display = 'block';
+                                            return;
+                                        }
+                                        
+                                        if (selected.value === 'b') {
+                                            feedback.textContent = 'Correct! The characteristic equation r² - 6r + 9 = (r-3)² = 0 has a repeated root r = 3, giving solutions y₁ = e³ˣ and y₂ = xe³ˣ.';
+                                            feedback.className = 'quiz-feedback correct';
+                                        } else {
+                                            feedback.textContent = 'Not quite. Check the discriminant of the characteristic equation: b² - 4ac = 36 - 36 = 0, indicating a repeated real root.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                        }
+                                        feedback.style.display = 'block';
+                                    }
+                                    
+                                    // Initialize collapsible sections
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        var coll = document.getElementsByClassName("collapsible");
+                                        for (var i = 0; i < coll.length; i++) {
+                                            coll[i].addEventListener("click", function() {
+                                                this.classList.toggle("active");
+                                                var content = this.nextElementSibling;
+                                                if (content.style.maxHeight){
+                                                    content.style.maxHeight = null;
+                                                } else {
+                                                    content.style.maxHeight = content.scrollHeight + "px";
+                                                }
+                                            });
+                                        }
+                                    });
+                                    </script>
+                                    </span>
+                            </section>
+                
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+
+    </script>
+
+</body>
+
+</html>

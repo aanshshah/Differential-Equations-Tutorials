@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 1: Plotting - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+  
+                        <section id="1">
+                            <h2>I. Plotting</h2>
+                            <br>
+                                <span id="1-1">
+                                    <h3> 1. Plotting Functions</h3>
+                                    <p>Matplotlib is Python's primary plotting library. Let's explore how to create various types of plots:</p>
+                                    
+                                    <h4>Basic Function Plotting</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Define x values
+x = np.linspace(-2*np.pi, 2*np.pi, 1000)
+
+# Define multiple functions
+y1 = np.sin(x)
+y2 = np.cos(x)
+y3 = np.sin(x) * np.exp(-0.1 * np.abs(x))  # Damped sine wave
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, y1, 'b-', label='sin(x)', linewidth=2)
+plt.plot(x, y2, 'r--', label='cos(x)', linewidth=2)
+plt.plot(x, y3, 'g-.', label='sin(x)·exp(-0.1|x|)', linewidth=2)
+
+# Customize the plot
+plt.xlabel('x', fontsize=12)
+plt.ylabel('y', fontsize=12)
+plt.title('Trigonometric Functions', fontsize=14)
+plt.grid(True, alpha=0.3)
+plt.legend(loc='upper right')
+plt.axhline(y=0, color='k', linewidth=0.5)
+plt.axvline(x=0, color='k', linewidth=0.5)
+
+# Set axis limits
+plt.xlim(-2*np.pi, 2*np.pi)
+plt.ylim(-1.5, 1.5)
+
+# Add pi markers on x-axis
+pi_ticks = [-2*np.pi, -np.pi, 0, np.pi, 2*np.pi]
+pi_labels = ['-2π', '-π', '0', 'π', '2π']
+plt.xticks(pi_ticks, pi_labels)
+
+plt.show()</code></pre>
+                                    
+                                    <h4>Interactive Parameter Explorer</h4>
+                                    <p>Explore how parameters affect function behavior:</p>
+                                    <div class="plot-container">
+                                        <canvas id="paramPlot1" width="600" height="400"></canvas>
+                                        <div class="plot-controls">
+                                            <label>Amplitude A: <span class="plot-value" id="A-value">1.0</span></label>
+                                            <input type="range" id="A-slider" min="0.1" max="3" step="0.1" value="1.0" oninput="updateSinePlot()">
+                                            <br>
+                                            <label>Frequency ω: <span class="plot-value" id="omega-value">1.0</span></label>
+                                            <input type="range" id="omega-slider" min="0.5" max="5" step="0.1" value="1.0" oninput="updateSinePlot()">
+                                            <br>
+                                            <label>Phase φ: <span class="plot-value" id="phi-value">0.0</span></label>
+                                            <input type="range" id="phi-slider" min="0" max="6.28" step="0.1" value="0" oninput="updateSinePlot()">
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateSinePlot() {
+                                        const A = parseFloat(document.getElementById('A-slider').value);
+                                        const omega = parseFloat(document.getElementById('omega-slider').value);
+                                        const phi = parseFloat(document.getElementById('phi-slider').value);
+                                        
+                                        document.getElementById('A-value').textContent = A.toFixed(1);
+                                        document.getElementById('omega-value').textContent = omega.toFixed(1);
+                                        document.getElementById('phi-value').textContent = phi.toFixed(1);
+                                        
+                                        const canvas = document.getElementById('paramPlot1');
+                                        const ctx = canvas.getContext('2d');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height/2);
+                                        ctx.lineTo(canvas.width - 50, canvas.height/2);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Draw function
+                                        ctx.strokeStyle = '#337ab7';
+                                        ctx.lineWidth = 2;
+                                        ctx.beginPath();
+                                        
+                                        for (let px = 50; px < canvas.width - 50; px++) {
+                                            const x = (px - 50) / 50 - 5;
+                                            const y = A * Math.sin(omega * x + phi);
+                                            const py = canvas.height/2 - y * 50;
+                                            
+                                            if (px === 50) {
+                                                ctx.moveTo(px, py);
+                                            } else {
+                                                ctx.lineTo(px, py);
+                                            }
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Add equation
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '16px Arial';
+                                        ctx.fillText(`y = ${A.toFixed(1)} sin(${omega.toFixed(1)}x + ${phi.toFixed(1)})`, 60, 30);
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateSinePlot, 100);
+                                    </script>
+                                </span>
+                                <span id="1-2">
+                                    <h3> 2. Implicit Plot </h3>
+                                    <p>Implicit plots are useful for visualizing equations of the form f(x,y) = 0. Here's how to create them:</p>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+
+# Create a grid of x and y values
+x = np.linspace(-3, 3, 400)
+y = np.linspace(-3, 3, 400)
+X, Y = np.meshgrid(x, y)
+
+# Define implicit functions
+# Circle: x² + y² = 4
+F1 = X**2 + Y**2 - 4
+
+# Ellipse: x²/4 + y²/1 = 1
+F2 = X**2/4 + Y**2/1 - 1
+
+# Hyperbola: x²/4 - y²/1 = 1
+F3 = X**2/4 - Y**2/1 - 1
+
+# Lemniscate: (x² + y²)² = 2²(x² - y²)
+F4 = (X**2 + Y**2)**2 - 4*(X**2 - Y**2)
+
+# Create subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 12))
+
+# Plot 1: Circle
+ax1 = axes[0, 0]
+contour1 = ax1.contour(X, Y, F1, levels=[0], colors='blue', linewidths=2)
+ax1.set_title('Circle: x² + y² = 4')
+ax1.grid(True, alpha=0.3)
+ax1.set_aspect('equal')
+ax1.set_xlim(-3, 3)
+ax1.set_ylim(-3, 3)
+
+# Plot 2: Ellipse
+ax2 = axes[0, 1]
+contour2 = ax2.contour(X, Y, F2, levels=[0], colors='red', linewidths=2)
+ax2.set_title('Ellipse: x²/4 + y² = 1')
+ax2.grid(True, alpha=0.3)
+ax2.set_aspect('equal')
+ax2.set_xlim(-3, 3)
+ax2.set_ylim(-3, 3)
+
+# Plot 3: Hyperbola
+ax3 = axes[1, 0]
+contour3 = ax3.contour(X, Y, F3, levels=[0], colors='green', linewidths=2)
+ax3.set_title('Hyperbola: x²/4 - y² = 1')
+ax3.grid(True, alpha=0.3)
+ax3.set_aspect('equal')
+ax3.set_xlim(-3, 3)
+ax3.set_ylim(-3, 3)
+
+# Plot 4: Lemniscate
+ax4 = axes[1, 1]
+contour4 = ax4.contour(X, Y, F4, levels=[0], colors='purple', linewidths=2)
+ax4.set_title('Lemniscate: (x² + y²)² = 4(x² - y²)')
+ax4.grid(True, alpha=0.3)
+ax4.set_aspect('equal')
+ax4.set_xlim(-3, 3)
+ax4.set_ylim(-3, 3)
+
+plt.tight_layout()
+plt.show()
+
+# Advanced example: Multiple level curves
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# Function: x²y - x²/2 - y²/2 = c
+F = X**2 * Y - X**2/2 - Y**2/2
+
+# Plot multiple level curves
+levels = np.linspace(-2, 2, 15)
+contour = ax.contour(X, Y, F, levels=levels, cmap='viridis')
+ax.clabel(contour, inline=True, fontsize=8)
+
+ax.set_title('Level Curves: x²y - x²/2 - y²/2 = c')
+ax.grid(True, alpha=0.3)
+ax.set_aspect('equal')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-3">
+                                        <h3> 3. Vertical and Horizontal Lines</h3>
+                                        <p>Adding reference lines helps highlight important features in plots:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Create data
+x = np.linspace(0, 10, 100)
+y = 2 * np.sin(x) + 1
+
+# Create the plot
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Left plot: Basic vertical and horizontal lines
+ax1.plot(x, y, 'b-', linewidth=2, label='2sin(x) + 1')
+
+# Add horizontal lines
+ax1.axhline(y=1, color='r', linestyle='--', label='y = 1 (mean)')
+ax1.axhline(y=3, color='g', linestyle=':', label='y = 3 (max)')
+ax1.axhline(y=-1, color='g', linestyle=':', label='y = -1 (min)')
+
+# Add vertical lines at specific x values
+ax1.axvline(x=np.pi/2, color='orange', linestyle='-', alpha=0.7, label='x = π/2')
+ax1.axvline(x=3*np.pi/2, color='orange', linestyle='-', alpha=0.7, label='x = 3π/2')
+
+# Customize
+ax1.set_title('Vertical and Horizontal Reference Lines')
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right')
+ax1.set_xlim(0, 10)
+
+# Right plot: Creating a coordinate system with asymptotes
+ax2.set_title('Function with Asymptotes: y = 1/(x-2) + 1')
+
+# Plot function with discontinuity
+x1 = np.linspace(0, 1.98, 100)
+x2 = np.linspace(2.02, 5, 100)
+y1 = 1/(x1 - 2) + 1
+y2 = 1/(x2 - 2) + 1
+
+ax2.plot(x1, y1, 'b-', linewidth=2)
+ax2.plot(x2, y2, 'b-', linewidth=2, label='y = 1/(x-2) + 1')
+
+# Add asymptotes
+ax2.axvline(x=2, color='red', linestyle='--', linewidth=2, label='Vertical asymptote: x = 2')
+ax2.axhline(y=1, color='green', linestyle='--', linewidth=2, label='Horizontal asymptote: y = 1')
+
+# Fill regions
+ax2.axvspan(1.9, 2.1, alpha=0.2, color='red', label='Undefined region')
+
+# Customize
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper right')
+ax2.set_xlim(0, 5)
+ax2.set_ylim(-10, 10)
+
+plt.tight_layout()
+plt.show()
+
+# Interactive example: Click to add lines
+print("""Interactive example:
+Run this code and click on the plot to add vertical lines at clicked positions!""")
+
+fig, ax = plt.subplots(figsize=(10, 6))
+x = np.linspace(0, 10, 1000)
+y = np.sin(2*x) * np.exp(-0.1*x)
+ax.plot(x, y, 'b-', linewidth=2)
+ax.set_title('Click to add vertical lines!')
+ax.grid(True, alpha=0.3)
+
+# Store line references
+vertical_lines = []
+
+def on_click(event):
+    if event.inaxes == ax:
+        # Add vertical line at click position
+        line = ax.axvline(x=event.xdata, color='red', linestyle='--', alpha=0.7)
+        vertical_lines.append(line)
+        
+        # Print coordinates
+        y_val = np.sin(2*event.xdata) * np.exp(-0.1*event.xdata)
+        ax.text(event.xdata, y_val, f'({event.xdata:.2f}, {y_val:.2f})', 
+                ha='left', va='bottom', fontsize=8)
+        
+        fig.canvas.draw()
+
+# Connect the click event
+fig.canvas.mpl_connect('button_press_event', on_click)
+
+plt.show()</code></pre>
+                                    </span>
+                            <span id="1-4">
+                                        <h3> 4. Figures with Arrows</h3>
+                                        <p>Arrows are essential for annotating plots and showing vectors or directions:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+# Create figure with subplots
+fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+
+# Subplot 1: Basic arrows for annotation
+ax1 = axes[0, 0]
+x = np.linspace(0, 2*np.pi, 100)
+y = np.sin(x)
+ax1.plot(x, y, 'b-', linewidth=2)
+ax1.set_title('Annotating with Arrows')
+
+# Add arrows pointing to specific features
+ax1.annotate('Maximum', xy=(np.pi/2, 1), xytext=(np.pi/2 + 1, 1.3),
+             arrowprops=dict(arrowstyle='->', color='red', lw=2),
+             fontsize=12, ha='center')
+
+ax1.annotate('Zero crossing', xy=(np.pi, 0), xytext=(np.pi + 0.5, -0.5),
+             arrowprops=dict(arrowstyle='->', color='green', lw=2),
+             fontsize=12)
+
+ax1.grid(True, alpha=0.3)
+ax1.set_xlabel('x')
+ax1.set_ylabel('sin(x)')
+
+# Subplot 2: Vector field
+ax2 = axes[0, 1]
+ax2.set_title('Vector Field: F(x,y) = (-y, x)')
+
+# Create grid for vector field
+x = np.linspace(-2, 2, 10)
+y = np.linspace(-2, 2, 10)
+X, Y = np.meshgrid(x, y)
+
+# Define vector components
+U = -Y  # dx/dt = -y
+V = X   # dy/dt = x
+
+# Normalize vectors for better visualization
+M = np.sqrt(U**2 + V**2)
+U_norm = U / M
+V_norm = V / M
+
+# Plot vector field
+ax2.quiver(X, Y, U_norm, V_norm, M, cmap='viridis', scale=20)
+ax2.set_aspect('equal')
+ax2.grid(True, alpha=0.3)
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+
+# Add a sample trajectory
+theta = np.linspace(0, 4*np.pi, 100)
+r = 1.5
+traj_x = r * np.cos(theta) * np.exp(-0.1*theta)
+traj_y = r * np.sin(theta) * np.exp(-0.1*theta)
+ax2.plot(traj_x, traj_y, 'r-', linewidth=2, label='Sample trajectory')
+ax2.legend()
+
+# Subplot 3: Custom arrow styles
+ax3 = axes[1, 0]
+ax3.set_title('Different Arrow Styles')
+ax3.set_xlim(0, 10)
+ax3.set_ylim(0, 10)
+
+# Different arrow styles
+arrow_styles = ['->', '-|>', '<->', '<|-|>', 'fancy', 'simple', 'wedge']
+colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'pink']
+
+for i, (style, color) in enumerate(zip(arrow_styles, colors)):
+    y_pos = 9 - i * 1.2
+    ax3.annotate('', xy=(8, y_pos), xytext=(2, y_pos),
+                 arrowprops=dict(arrowstyle=style, color=color, lw=2))
+    ax3.text(0.5, y_pos, f'Style: {style}', va='center', fontsize=10)
+
+ax3.set_xticks([])
+ax3.set_yticks([])
+
+# Subplot 4: Phase portrait with arrows
+ax4 = axes[1, 1]
+ax4.set_title('Phase Portrait of a Dynamical System')
+
+# Create a denser grid for phase portrait
+x = np.linspace(-3, 3, 20)
+y = np.linspace(-3, 3, 20)
+X, Y = np.meshgrid(x, y)
+
+# Nonlinear system: dx/dt = y, dy/dt = -x - 0.5*y
+U = Y
+V = -X - 0.5*Y
+
+# Normalize
+N = np.sqrt(U**2 + V**2)
+U_norm = U / (N + 0.001)  # Avoid division by zero
+V_norm = V / (N + 0.001)
+
+# Plot phase portrait
+ax4.quiver(X, Y, U_norm, V_norm, N, cmap='coolwarm', scale=25, alpha=0.8)
+
+# Add some trajectories
+for x0, y0 in [(1, 0), (-1, 0), (0, 2), (0, -2)]:
+    t = np.linspace(0, 10, 1000)
+    # Solve using simple Euler method
+    x_traj = [x0]
+    y_traj = [y0]
+    dt = t[1] - t[0]
+    for i in range(len(t)-1):
+        x_new = x_traj[-1] + y_traj[-1] * dt
+        y_new = y_traj[-1] + (-x_traj[-1] - 0.5*y_traj[-1]) * dt
+        x_traj.append(x_new)
+        y_traj.append(y_new)
+    
+    ax4.plot(x_traj, y_traj, linewidth=2, alpha=0.7)
+    ax4.plot(x0, y0, 'o', markersize=8)  # Initial condition
+
+ax4.set_aspect('equal')
+ax4.grid(True, alpha=0.3)
+ax4.set_xlabel('x')
+ax4.set_ylabel('y')
+ax4.set_xlim(-3, 3)
+ax4.set_ylim(-3, 3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-5">
+                                        <h3> 5. Electronic Circuits</h3>
+                                        <p>Visualizing electronic circuits and their behavior using Python:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.patches import Rectangle, Circle, FancyBboxPatch
+
+# RC Circuit Analysis
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Left plot: Draw RC circuit
+ax1.set_title('RC Circuit Diagram')
+ax1.set_xlim(0, 10)
+ax1.set_ylim(0, 8)
+ax1.axis('off')
+
+# Draw circuit components
+# Voltage source
+ax1.add_patch(Circle((2, 4), 0.5, fill=False, linewidth=2))
+ax1.text(2, 4, 'V', ha='center', va='center', fontsize=14, weight='bold')
+ax1.plot([2, 2], [3.5, 2], 'k-', linewidth=2)  # Bottom connection
+ax1.plot([2, 2], [4.5, 6], 'k-', linewidth=2)  # Top connection
+
+# Top horizontal line
+ax1.plot([2, 5], [6, 6], 'k-', linewidth=2)
+
+# Resistor (zigzag)
+resistor_x = np.linspace(5, 6.5, 7)
+resistor_y = [6, 6.3, 5.7, 6.3, 5.7, 6.3, 6]
+ax1.plot(resistor_x, resistor_y, 'k-', linewidth=2)
+ax1.text(5.75, 6.7, 'R', ha='center', fontsize=12)
+
+# Vertical line
+ax1.plot([6.5, 8], [6, 6], 'k-', linewidth=2)
+ax1.plot([8, 8], [6, 4], 'k-', linewidth=2)
+
+# Capacitor
+ax1.plot([7.7, 7.7], [4.3, 3.7], 'k-', linewidth=3)  # Top plate
+ax1.plot([8.3, 8.3], [4.3, 3.7], 'k-', linewidth=3)  # Bottom plate
+ax1.text(8.8, 4, 'C', ha='center', fontsize=12)
+
+# Bottom line
+ax1.plot([8, 8], [4, 2], 'k-', linewidth=2)
+ax1.plot([8, 2], [2, 2], 'k-', linewidth=2)
+
+# Add labels
+ax1.text(1, 6.5, 'V₀ = 10V', fontsize=11)
+ax1.text(4.5, 7, 'R = 1kΩ', fontsize=11)
+ax1.text(9, 4, 'C = 1μF', fontsize=11)
+
+# Right plot: Voltage across capacitor over time
+ax2.set_title('Capacitor Charging: Voltage vs Time')
+
+# Circuit parameters
+V0 = 10  # Voltage source (V)
+R = 1000  # Resistance (Ohms)
+C = 1e-6  # Capacitance (F)
+tau = R * C  # Time constant
+
+# Time array
+t = np.linspace(0, 5*tau, 1000)
+
+# Voltage across capacitor: V_C(t) = V0(1 - e^(-t/tau))
+V_C = V0 * (1 - np.exp(-t/tau))
+
+# Current through circuit: I(t) = (V0/R) * e^(-t/tau)
+I = (V0/R) * np.exp(-t/tau)
+
+# Plot voltage
+ax2.plot(t*1000, V_C, 'b-', linewidth=2, label='V_C(t)')
+ax2.axhline(y=V0, color='r', linestyle='--', alpha=0.7, label=f'V₀ = {V0}V')
+ax2.axhline(y=0.632*V0, color='g', linestyle=':', alpha=0.7)
+ax2.axvline(x=tau*1000, color='g', linestyle=':', alpha=0.7)
+
+# Mark time constant
+ax2.plot(tau*1000, 0.632*V0, 'go', markersize=8)
+ax2.annotate(f'τ = RC = {tau*1000:.1f}ms\nV = 0.632V₀', 
+             xy=(tau*1000, 0.632*V0), xytext=(tau*1000 + 0.5, 0.632*V0 - 1),
+             arrowprops=dict(arrowstyle='->', color='green'))
+
+ax2.set_xlabel('Time (ms)')
+ax2.set_ylabel('Voltage (V)')
+ax2.grid(True, alpha=0.3)
+ax2.legend()
+ax2.set_xlim(0, 5*tau*1000)
+ax2.set_ylim(0, 12)
+
+# Add secondary y-axis for current
+ax2_twin = ax2.twinx()
+ax2_twin.plot(t*1000, I*1000, 'orange', linewidth=2, alpha=0.7, label='I(t)')
+ax2_twin.set_ylabel('Current (mA)', color='orange')
+ax2_twin.tick_params(axis='y', labelcolor='orange')
+ax2_twin.legend(loc='upper right')
+
+plt.tight_layout()
+plt.show()
+
+# Interactive RLC circuit response
+print("\nRLC Circuit Analysis:")
+
+# RLC parameters
+L = 0.1  # Inductance (H)
+R_rlc = 100  # Resistance (Ohms)
+C_rlc = 1e-6  # Capacitance (F)
+
+# Natural frequency and damping
+omega_0 = 1/np.sqrt(L*C_rlc)
+zeta = R_rlc/(2*np.sqrt(L/C_rlc))  # Damping ratio
+
+print(f"Natural frequency: ω₀ = {omega_0:.1f} rad/s")
+print(f"Damping ratio: ζ = {zeta:.3f}")
+
+if zeta < 1:
+    print("System is underdamped - will oscillate")
+elif zeta == 1:
+    print("System is critically damped")
+else:
+    print("System is overdamped")
+
+# Plot RLC response
+fig, ax = plt.subplots(figsize=(10, 6))
+t = np.linspace(0, 0.001, 1000)
+
+if zeta < 1:  # Underdamped
+    omega_d = omega_0 * np.sqrt(1 - zeta**2)
+    v_out = V0 * np.exp(-zeta*omega_0*t) * (np.cos(omega_d*t) + 
+             (zeta*omega_0/omega_d)*np.sin(omega_d*t))
+    ax.set_title(f'Underdamped RLC Response (ζ = {zeta:.3f})')
+else:  # Overdamped
+    r1 = -omega_0 * (zeta + np.sqrt(zeta**2 - 1))
+    r2 = -omega_0 * (zeta - np.sqrt(zeta**2 - 1))
+    A = V0 * r2 / (r2 - r1)
+    B = -V0 * r1 / (r2 - r1)
+    v_out = A * np.exp(r1*t) + B * np.exp(r2*t)
+    ax.set_title(f'Overdamped RLC Response (ζ = {zeta:.3f})')
+
+ax.plot(t*1000, v_out, 'b-', linewidth=2)
+ax.axhline(y=0, color='k', linewidth=0.5)
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('Voltage (V)')
+ax.grid(True, alpha=0.3)
+
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-6">
+                                        <h3> 6. Labeling Figures</h3>
+                                        <p>Proper labeling makes plots professional and informative:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import matplotlib.patches as mpatches
+
+# Create a comprehensive labeled figure
+fig = plt.figure(figsize=(14, 10))
+
+# Create a grid of subplots
+gs = fig.add_gridspec(3, 2, height_ratios=[2, 2, 1], hspace=0.3, wspace=0.3)
+
+# Subplot 1: Multiple curves with legend
+ax1 = fig.add_subplot(gs[0, 0])
+x = np.linspace(0, 2*np.pi, 100)
+
+# Plot multiple functions
+ax1.plot(x, np.sin(x), 'b-', linewidth=2, label='sin(x)')
+ax1.plot(x, np.cos(x), 'r--', linewidth=2, label='cos(x)')
+ax1.plot(x, 0.5*np.sin(2*x), 'g-.', linewidth=2, label='0.5·sin(2x)')
+
+# Comprehensive labeling
+ax1.set_title('Trigonometric Functions', fontsize=14, fontweight='bold', pad=10)
+ax1.set_xlabel('Angle (radians)', fontsize=12)
+ax1.set_ylabel('Amplitude', fontsize=12)
+
+# Custom legend
+ax1.legend(loc='upper right', frameon=True, fancybox=True, shadow=True)
+
+# Grid
+ax1.grid(True, linestyle=':', alpha=0.6)
+
+# Custom tick labels
+ax1.set_xticks([0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi])
+ax1.set_xticklabels(['0', 'π/2', 'π', '3π/2', '2π'])
+
+# Add text annotations
+ax1.text(np.pi/2, 1, 'Peak', ha='center', va='bottom', 
+         bbox=dict(boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.7))
+
+# Subplot 2: Bar chart with value labels
+ax2 = fig.add_subplot(gs[0, 1])
+categories = ['A', 'B', 'C', 'D', 'E']
+values = [23, 45, 56, 78, 32]
+errors = [5, 7, 3, 9, 4]
+
+bars = ax2.bar(categories, values, yerr=errors, capsize=5, 
+                color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'],
+                edgecolor='black', linewidth=1.5)
+
+# Add value labels on bars
+for bar, value, error in zip(bars, values, errors):
+    height = bar.get_height()
+    ax2.text(bar.get_x() + bar.get_width()/2., height + error + 1,
+             f'{value}±{error}', ha='center', va='bottom', fontsize=10)
+
+ax2.set_title('Measurements with Error Bars', fontsize=14, fontweight='bold')
+ax2.set_xlabel('Categories', fontsize=12)
+ax2.set_ylabel('Values', fontsize=12)
+ax2.set_ylim(0, 100)
+
+# Add horizontal reference line
+ax2.axhline(y=50, color='red', linestyle='--', alpha=0.7, label='Threshold')
+ax2.legend()
+
+# Subplot 3: Scatter plot with colorbar
+ax3 = fig.add_subplot(gs[1, :])
+
+# Generate data
+np.random.seed(42)
+x_scatter = np.random.randn(200)
+y_scatter = 2*x_scatter + np.random.randn(200)
+colors = x_scatter + y_scatter
+
+scatter = ax3.scatter(x_scatter, y_scatter, c=colors, cmap='viridis', 
+                      s=50, alpha=0.6, edgecolors='black', linewidth=0.5)
+
+# Labels and title
+ax3.set_title('Scatter Plot with Color Mapping', fontsize=14, fontweight='bold')
+ax3.set_xlabel('X Variable', fontsize=12)
+ax3.set_ylabel('Y Variable', fontsize=12)
+
+# Colorbar with label
+cbar = plt.colorbar(scatter, ax=ax3)
+cbar.set_label('X + Y Value', fontsize=11)
+
+# Add regression line
+z = np.polyfit(x_scatter, y_scatter, 1)
+p = np.poly1d(z)
+x_line = np.linspace(-3, 3, 100)
+ax3.plot(x_line, p(x_line), 'r--', linewidth=2, 
+         label=f'y = {z[0]:.2f}x + {z[1]:.2f}')
+ax3.legend(loc='upper left')
+
+# Subplot 4: Text and annotations example
+ax4 = fig.add_subplot(gs[2, :])
+ax4.set_xlim(0, 10)
+ax4.set_ylim(0, 5)
+ax4.axis('off')
+
+# Title
+ax4.text(5, 4.5, 'Text Styling and Positioning Examples', 
+         fontsize=16, fontweight='bold', ha='center')
+
+# Different text styles
+styles = [
+    {'text': 'Normal text', 'props': {}},
+    {'text': 'Bold text', 'props': {'fontweight': 'bold'}},
+    {'text': 'Italic text', 'props': {'fontstyle': 'italic'}},
+    {'text': 'Colored text', 'props': {'color': 'red'}},
+    {'text': 'Large text', 'props': {'fontsize': 14}},
+    {'text': 'Boxed text', 'props': {'bbox': dict(boxstyle='round', 
+                                                   facecolor='lightblue')}},
+]
+
+y_pos = 3.5
+for i, style in enumerate(styles):
+    x_pos = 1.5 + (i % 3) * 3
+    if i == 3:
+        y_pos = 2
+    ax4.text(x_pos, y_pos, style['text'], **style['props'], ha='center')
+
+# Mathematical expressions
+ax4.text(5, 1, r'Mathematical: $\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$', 
+         fontsize=12, ha='center',
+         bbox=dict(boxstyle='round', facecolor='lightyellow'))
+
+# Add figure label
+fig.text(0.02, 0.98, '(a)', fontsize=16, fontweight='bold', 
+         transform=fig.transFigure, va='top')
+
+# Overall figure title
+fig.suptitle('Comprehensive Figure Labeling Examples', 
+             fontsize=18, fontweight='bold', y=0.98)
+
+plt.tight_layout()
+plt.show()
+
+# Interactive labeling example
+print("\nClick on the plot below to add labels at clicked positions!")
+
+fig, ax = plt.subplots(figsize=(10, 8))
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 10)
+ax.set_title('Interactive Labeling - Click to Add Labels', fontsize=14)
+ax.grid(True, alpha=0.3)
+
+label_count = 0
+
+def on_click(event):
+    global label_count
+    if event.inaxes == ax:
+        label_count += 1
+        ax.plot(event.xdata, event.ydata, 'ro', markersize=8)
+        ax.text(event.xdata, event.ydata, f'Point {label_count}\n({event.xdata:.1f}, {event.ydata:.1f})', 
+                ha='left', va='bottom', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.7))
+        fig.canvas.draw()
+
+fig.canvas.mpl_connect('button_press_event', on_click)
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-7">
+                                        <h3> 7. Polar Plot</h3>
+                                        <p>Polar plots are perfect for displaying data with angular components:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Create figure with polar subplots
+fig = plt.figure(figsize=(15, 10))
+
+# Subplot 1: Basic polar plot
+ax1 = plt.subplot(2, 3, 1, projection='polar')
+theta = np.linspace(0, 2*np.pi, 100)
+r = 1 + np.cos(theta)
+ax1.plot(theta, r, 'b-', linewidth=2)
+ax1.set_title('Cardioid: r = 1 + cos(θ)', pad=20)
+ax1.grid(True)
+
+# Subplot 2: Rose curve
+ax2 = plt.subplot(2, 3, 2, projection='polar')
+theta = np.linspace(0, 2*np.pi, 1000)
+n = 5  # Number of petals
+r = np.cos(n*theta)
+ax2.plot(theta, r, 'r-', linewidth=2)
+ax2.fill(theta, r, alpha=0.3, color='red')
+ax2.set_title(f'Rose Curve: r = cos({n}θ)', pad=20)
+
+# Subplot 3: Spiral
+ax3 = plt.subplot(2, 3, 3, projection='polar')
+theta = np.linspace(0, 4*np.pi, 1000)
+r = theta/10
+ax3.plot(theta, r, 'g-', linewidth=2)
+ax3.set_title('Archimedean Spiral: r = θ/10', pad=20)
+
+# Subplot 4: Butterfly curve
+ax4 = plt.subplot(2, 3, 4, projection='polar')
+theta = np.linspace(0, 12*np.pi, 10000)
+r = np.exp(np.sin(theta)) - 2*np.cos(4*theta) + np.sin((2*theta - np.pi)/24)**5
+ax4.plot(theta, r, 'purple', linewidth=1, alpha=0.8)
+ax4.set_title('Butterfly Curve', pad=20)
+ax4.set_ylim(-2, 4)
+
+# Subplot 5: Polar bar chart
+ax5 = plt.subplot(2, 3, 5, projection='polar')
+# Data for wind direction
+directions = np.array([0, 45, 90, 135, 180, 225, 270, 315]) * np.pi/180
+wind_speed = [5, 10, 8, 12, 3, 6, 9, 7]
+width = np.pi/8
+
+bars = ax5.bar(directions, wind_speed, width=width, bottom=0.0)
+# Color bars by speed
+for bar, speed in zip(bars, wind_speed):
+    bar.set_facecolor(plt.cm.viridis(speed/max(wind_speed)))
+ax5.set_title('Wind Speed by Direction', pad=20)
+ax5.set_theta_zero_location('N')
+ax5.set_theta_direction(-1)
+
+# Subplot 6: Interactive parametric curve
+ax6 = plt.subplot(2, 3, 6, projection='polar')
+
+# Lissajous-like curve in polar
+t = np.linspace(0, 2*np.pi, 1000)
+a, b = 3, 4
+delta = np.pi/2
+x = np.sin(a*t + delta)
+y = np.sin(b*t)
+r = np.sqrt(x**2 + y**2)
+theta = np.arctan2(y, x)
+
+ax6.plot(theta, r, 'orange', linewidth=2)
+ax6.set_title('Lissajous in Polar', pad=20)
+ax6.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Advanced example: Animated polar plot
+print("\nCreating animated polar plot...")
+
+fig, ax = plt.subplots(subplot_kw=dict(projection='polar'), figsize=(8, 8))
+ax.set_title('Animated Rose Curve\n(Different petal patterns)', pad=20)
+
+# Function to create rose curves with different parameters
+def rose_curve(n):
+    theta = np.linspace(0, 2*np.pi, 1000)
+    if n % 2 == 0:
+        # Even n: 2n petals
+        r = np.cos(n*theta/2)
+    else:
+        # Odd n: n petals
+        r = np.cos(n*theta)
+    return theta, r
+
+# Create multiple rose curves
+for n in range(2, 8):
+    theta, r = rose_curve(n)
+    ax.plot(theta, r, linewidth=2, alpha=0.7, label=f'n={n}')
+
+ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
+ax.grid(True)
+
+plt.show()
+
+# Polar scatter plot with color mapping
+fig, ax = plt.subplots(subplot_kw=dict(projection='polar'), figsize=(10, 10))
+
+# Generate random data
+np.random.seed(42)
+n_points = 200
+theta_scatter = np.random.uniform(0, 2*np.pi, n_points)
+r_scatter = np.random.uniform(0, 5, n_points)
+colors = theta_scatter
+
+scatter = ax.scatter(theta_scatter, r_scatter, c=colors, cmap='hsv', 
+                     s=100, alpha=0.8, edgecolors='black', linewidth=0.5)
+
+ax.set_title('Polar Scatter Plot with Angular Color Mapping', pad=20)
+cbar = plt.colorbar(scatter, ax=ax, pad=0.1)
+cbar.set_label('Angle (radians)', fontsize=11)
+
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="1-8">
+                                        <h3> 8. Some Famous Curves</h3>
+                                        <p>Explore mathematical curves that have fascinated mathematicians for centuries:</p>
+                                        <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+
+# Create a figure with famous curves
+fig = plt.figure(figsize=(16, 12))
+
+# 1. Lemniscate of Bernoulli
+ax1 = plt.subplot(3, 3, 1)
+t = np.linspace(0, 2*np.pi, 1000)
+a = 2
+x = a * np.sqrt(2) * np.cos(t) / (np.sin(t)**2 + 1)
+y = a * np.sqrt(2) * np.cos(t) * np.sin(t) / (np.sin(t)**2 + 1)
+ax1.plot(x, y, 'b-', linewidth=2)
+ax1.set_title('Lemniscate of Bernoulli\n(x² + y²)² = a²(x² - y²)')
+ax1.grid(True, alpha=0.3)
+ax1.set_aspect('equal')
+ax1.set_xlim(-3, 3)
+ax1.set_ylim(-2, 2)
+
+# 2. Cycloid
+ax2 = plt.subplot(3, 3, 2)
+t = np.linspace(0, 4*np.pi, 1000)
+r = 1
+x = r * (t - np.sin(t))
+y = r * (1 - np.cos(t))
+ax2.plot(x, y, 'r-', linewidth=2)
+ax2.set_title('Cycloid\nx = r(t - sin(t)), y = r(1 - cos(t))')
+ax2.grid(True, alpha=0.3)
+ax2.set_aspect('equal')
+ax2.set_ylim(-0.5, 2.5)
+
+# 3. Astroid
+ax3 = plt.subplot(3, 3, 3)
+t = np.linspace(0, 2*np.pi, 1000)
+a = 3
+x = a * np.cos(t)**3
+y = a * np.sin(t)**3
+ax3.plot(x, y, 'g-', linewidth=2)
+ax3.fill(x, y, alpha=0.3, color='green')
+ax3.set_title('Astroid\nx = a·cos³(t), y = a·sin³(t)')
+ax3.grid(True, alpha=0.3)
+ax3.set_aspect('equal')
+
+# 4. Cardioid (Heart shape)
+ax4 = plt.subplot(3, 3, 4)
+t = np.linspace(0, 2*np.pi, 1000)
+a = 1
+x = a * (2*np.cos(t) - np.cos(2*t))
+y = a * (2*np.sin(t) - np.sin(2*t))
+ax4.plot(x, y, 'red', linewidth=3)
+ax4.fill(x, y, alpha=0.3, color='pink')
+ax4.set_title('Cardioid (Heart Curve)\nx = a(2cos(t) - cos(2t))')
+ax4.grid(True, alpha=0.3)
+ax4.set_aspect('equal')
+
+# 5. Lissajous Curves
+ax5 = plt.subplot(3, 3, 5)
+t = np.linspace(0, 2*np.pi, 1000)
+# Multiple Lissajous curves
+for a, b, delta in [(3, 2, 0), (3, 4, np.pi/2), (5, 4, np.pi/4)]:
+    x = np.sin(a*t + delta)
+    y = np.sin(b*t)
+    ax5.plot(x, y, linewidth=2, alpha=0.7, 
+             label=f'a={a}, b={b}, δ={delta:.2f}')
+ax5.set_title('Lissajous Curves\nx = sin(at + δ), y = sin(bt)')
+ax5.grid(True, alpha=0.3)
+ax5.set_aspect('equal')
+ax5.legend(fontsize=8)
+
+# 6. Logarithmic Spiral
+ax6 = plt.subplot(3, 3, 6, projection='polar')
+theta = np.linspace(0, 6*np.pi, 1000)
+a = 0.1
+b = 0.2
+r = a * np.exp(b * theta)
+ax6.plot(theta, r, 'purple', linewidth=2)
+ax6.set_title('Logarithmic Spiral\nr = ae^(bθ)', pad=20)
+ax6.grid(True)
+
+# 7. Folium of Descartes
+ax7 = plt.subplot(3, 3, 7)
+t = np.linspace(-10, 10, 1000)
+t = t[np.abs(t**3 + 1) > 0.01]  # Avoid singularity
+a = 3
+x = 3*a*t / (1 + t**3)
+y = 3*a*t**2 / (1 + t**3)
+ax7.plot(x, y, 'm-', linewidth=2)
+ax7.set_title('Folium of Descartes\nx³ + y³ = 3axy')
+ax7.grid(True, alpha=0.3)
+ax7.set_xlim(-5, 5)
+ax7.set_ylim(-5, 5)
+ax7.set_aspect('equal')
+
+# 8. Witch of Agnesi
+ax8 = plt.subplot(3, 3, 8)
+t = np.linspace(-3, 3, 1000)
+a = 2
+x = t
+y = 8*a**3 / (x**2 + 4*a**2)
+ax8.plot(x, y, 'brown', linewidth=2)
+ax8.fill_between(x, 0, y, alpha=0.3, color='brown')
+ax8.set_title('Witch of Agnesi\ny = 8a³/(x² + 4a²)')
+ax8.grid(True, alpha=0.3)
+ax8.set_xlim(-4, 4)
+ax8.set_ylim(0, 3)
+
+# 9. Catenary (Shape of hanging chain)
+ax9 = plt.subplot(3, 3, 9)
+x = np.linspace(-3, 3, 1000)
+a = 1
+y = a * np.cosh(x/a)
+ax9.plot(x, y, 'navy', linewidth=3)
+# Add comparison with parabola
+y_parabola = 1 + x**2/(2*a)
+ax9.plot(x, y_parabola, 'gray', linewidth=2, linestyle='--', 
+         label='Parabola (comparison)')
+ax9.set_title('Catenary\ny = a·cosh(x/a)')
+ax9.grid(True, alpha=0.3)
+ax9.set_ylim(0, 5)
+ax9.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Interactive curve explorer
+print("\nInteractive Curve Explorer:")
+print("Adjust parameters to see how curves change!")
+
+fig, ax = plt.subplots(figsize=(10, 8))
+
+# Example: Interactive epicycloid
+def plot_epicycloid(R=3, r=1):
+    ax.clear()
+    t = np.linspace(0, 2*np.pi*r, 1000)
+    x = (R + r) * np.cos(t) - r * np.cos((R + r) * t / r)
+    y = (R + r) * np.sin(t) - r * np.sin((R + r) * t / r)
+    
+    ax.plot(x, y, 'b-', linewidth=2)
+    ax.set_title(f'Epicycloid: R={R}, r={r}\n' + 
+                 f'(Rolling circle of radius {r} around circle of radius {R})')
+    ax.grid(True, alpha=0.3)
+    ax.set_aspect('equal')
+    
+    # Draw the base circle
+    circle = Circle((0, 0), R, fill=False, color='gray', linestyle='--')
+    ax.add_patch(circle)
+    
+    # Set limits
+    lim = R + 2*r + 1
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-lim, lim)
+
+# Initial plot
+plot_epicycloid()
+
+plt.show()</code></pre>
+                                        
+                                        <div class="quiz-container">
+                                            <div class="quiz-question">Which curve is formed by a point on a circle rolling along a straight line?</div>
+                                            <ul class="quiz-options">
+                                                <li><input type="radio" name="q1" value="a"> Cardioid</li>
+                                                <li><input type="radio" name="q1" value="b"> Cycloid</li>
+                                                <li><input type="radio" name="q1" value="c"> Astroid</li>
+                                                <li><input type="radio" name="q1" value="d"> Lemniscate</li>
+                                            </ul>
+                                            <button class="btn btn-primary quiz-submit" onclick="checkCurveQuiz()">Check Answer</button>
+                                            <div class="quiz-feedback" id="curve-quiz-feedback"></div>
+                                        </div>
+                                        
+                                        <script>
+                                        function checkCurveQuiz() {
+                                            const selected = document.querySelector('input[name="q1"]:checked');
+                                            const feedback = document.getElementById('curve-quiz-feedback');
+                                            
+                                            if (!selected) {
+                                                feedback.textContent = 'Please select an answer.';
+                                                feedback.className = 'quiz-feedback incorrect';
+                                                feedback.style.display = 'block';
+                                                return;
+                                            }
+                                            
+                                            if (selected.value === 'b') {
+                                                feedback.textContent = 'Correct! A cycloid is the curve traced by a point on the rim of a circular wheel as the wheel rolls along a straight line.';
+                                                feedback.className = 'quiz-feedback correct';
+                                            } else {
+                                                feedback.textContent = 'Not quite. A cycloid is formed by a point on a circle rolling along a straight line. Try visualizing a point on a bicycle wheel!';
+                                                feedback.className = 'quiz-feedback incorrect';
+                                            }
+                                            feedback.style.display = 'block';
+                                        }
+                                        </script>
+                                    </span>
+                                    <span id="1-9">
+                                        <h3> 9. References</h3>
+                                    </span>
+                        </p>
+                        </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+
+    </script>
+
+</body>
+
+</html>

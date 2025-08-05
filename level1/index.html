@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Differential Equations I - Python Tutorial</title>
+    
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/modern-style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Modern Header -->
+    <header class="modern-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">∂</div>
+                <div>
+                    <h1 class="course-title">Differential Equations I</h1>
+                    <p class="course-subtitle">Interactive Python Tutorial</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+                <a href="../index.html" class="btn-modern btn-secondary">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Modern Sidebar -->
+    <nav class="modern-sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Getting Started</div>
+            <div class="nav-item">
+                <a href="#preface" class="nav-link active">
+                    <span class="nav-icon">📖</span>
+                    Preface
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="interactive_demo.html" class="nav-link">
+                    <span class="nav-icon">🎮</span>
+                    Interactive Demo
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Course Modules</div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part1-nav', event)">
+                    <span class="nav-icon">📊</span>
+                    Part 1: Plotting
+                    <span class="nav-badge">9</span>
+                </a>
+                <div class="sub-nav" id="part1-nav">
+                    <a href="part1.html#1-1" class="sub-nav-link">1. Plotting Functions</a>
+                    <a href="part1.html#1-2" class="sub-nav-link">2. Implicit Plot</a>
+                    <a href="part1.html#1-3" class="sub-nav-link">3. Vertical and Horizontal Lines</a>
+                    <a href="part1.html#1-4" class="sub-nav-link">4. Figures with Arrows</a>
+                    <a href="part1.html#1-5" class="sub-nav-link">5. Electronic Circuits</a>
+                    <a href="part1.html#1-6" class="sub-nav-link">6. Labeling Figures</a>
+                    <a href="part1.html#1-7" class="sub-nav-link">7. Polar Plot</a>
+                    <a href="part1.html#1-8" class="sub-nav-link">8. Some Famous Curves</a>
+                    <a href="part1.html#1-9" class="sub-nav-link">9. References</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part2-nav', event)">
+                    <span class="nav-icon">🔄</span>
+                    Part 2: First Order ODEs
+                    <span class="nav-badge">12</span>
+                </a>
+                <div class="sub-nav" id="part2-nav">
+                    <a href="part2.html#2-1" class="sub-nav-link">1. Solving ODEs</a>
+                    <a href="part2.html#2-2" class="sub-nav-link">2. Direction Fields</a>
+                    <a href="part2.html#2-3" class="sub-nav-link">3. Separable Equations</a>
+                    <a href="part2.html#2-4" class="sub-nav-link">4. Equations Reducible to Separable</a>
+                    <a href="part2.html#2-5" class="sub-nav-link">5. Exact Equations</a>
+                    <a href="part2.html#2-6" class="sub-nav-link">6. Integrating Factors</a>
+                    <a href="part2.html#2-7" class="sub-nav-link">7. Linear and Bernoulli Equations</a>
+                    <a href="part2.html#2-8" class="sub-nav-link">8. Riccati Equations</a>
+                    <a href="part2.html#2-9" class="sub-nav-link">9. Existence and Uniqueness</a>
+                    <a href="part2.html#2-10" class="sub-nav-link">10. Qualitative Analysis</a>
+                    <a href="part2.html#2-11" class="sub-nav-link">11. Applications</a>
+                    <a href="part2.html#2-12" class="sub-nav-link">12. References</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part3-nav', event)">
+                    <span class="nav-icon">🔢</span>
+                    Part 3: Numerical Methods
+                    <span class="nav-badge">8</span>
+                </a>
+                <div class="sub-nav" id="part3-nav">
+                    <a href="part3.html#3-1" class="sub-nav-link">1. Numerical Solutions</a>
+                    <a href="part3.html#3-2" class="sub-nav-link">2. Euler's Methods</a>
+                    <a href="part3.html#3-3" class="sub-nav-link">3. Polynomial Approximations</a>
+                    <a href="part3.html#3-4" class="sub-nav-link">4. Runge-Kutta Methods</a>
+                    <a href="part3.html#3-5" class="sub-nav-link">5. Multistep Methods</a>
+                    <a href="part3.html#3-6" class="sub-nav-link">6. Numerov Method</a>
+                    <a href="part3.html#3-7" class="sub-nav-link">7. Applications</a>
+                    <a href="part3.html#3-8" class="sub-nav-link">8. References</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part4-nav', event)">
+                    <span class="nav-icon">📈</span>
+                    Part 4: Higher Order ODEs
+                    <span class="nav-badge">8</span>
+                </a>
+                <div class="sub-nav" id="part4-nav">
+                    <a href="part4.html#4-1" class="sub-nav-link">1. Fundamental Solutions</a>
+                    <a href="part4.html#4-2" class="sub-nav-link">2. General Solutions</a>
+                    <a href="part4.html#4-3" class="sub-nav-link">3. Reduction of Order</a>
+                    <a href="part4.html#4-4" class="sub-nav-link">4. Variation of Parameters</a>
+                    <a href="part4.html#4-5" class="sub-nav-link">5. Undetermined Coefficients</a>
+                    <a href="part4.html#4-6" class="sub-nav-link">6. Operator Method</a>
+                    <a href="part4.html#4-7" class="sub-nav-link">7. Applications</a>
+                    <a href="part4.html#4-8" class="sub-nav-link">8. References</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part5-nav', event)">
+                    <span class="nav-icon">∑</span>
+                    Part 5: Series & Recurrences
+                    <span class="nav-badge">6</span>
+                </a>
+                <div class="sub-nav" id="part5-nav">
+                    <a href="part5.html#5.1" class="sub-nav-link">1. Recurrences</a>
+                    <a href="part5.html#5.2" class="sub-nav-link">2. Generating Functions</a>
+                    <a href="part5.html#5.3" class="sub-nav-link">3. Series Solutions (First Order)</a>
+                    <a href="part5.html#5.4" class="sub-nav-link">4. Series Solutions (Second Order)</a>
+                    <a href="part5.html#5.5" class="sub-nav-link">5. Series Solutions</a>
+                    <a href="part5.html#5.6" class="sub-nav-link">6. Musical Applications</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="toggleSubNav('part6-nav', event)">
+                    <span class="nav-icon">ℒ</span>
+                    Part 6: Laplace Transform
+                    <span class="nav-badge">7</span>
+                </a>
+                <div class="sub-nav" id="part6-nav">
+                    <a href="part6.html#6.1" class="sub-nav-link">1. Laplace Transform</a>
+                    <a href="part6.html#6.2" class="sub-nav-link">2. Heaviside Function</a>
+                    <a href="part6.html#6.3" class="sub-nav-link">3. Discontinuous Functions</a>
+                    <a href="part6.html#6.4" class="sub-nav-link">4. Inverse Laplace</a>
+                    <a href="part6.html#6.5" class="sub-nav-link">5. Differential Equations</a>
+                    <a href="part6.html#6.6" class="sub-nav-link">6. Applications</a>
+                    <a href="part6.html#6.7" class="sub-nav-link">7. References</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="modern-content">
+        <div class="content-wrapper">
+            <!-- Welcome Section -->
+            <section class="hero-section fade-in" id="preface">
+                <h1 class="hero-title">Welcome to Differential Equations I</h1>
+                <p class="hero-description">
+                    This interactive tutorial combines mathematical theory with hands-on Python programming 
+                    to help you master ordinary differential equations. Learn by doing with immediate feedback 
+                    and visual understanding.
+                </p>
+                <div class="hero-buttons">
+                    <a href="part1.html" class="btn-modern btn-primary">Start Learning</a>
+                    <a href="interactive_demo.html" class="btn-modern btn-secondary">Try Demo</a>
+                </div>
+            </section>
+
+            <!-- Course Overview -->
+            <section class="objectives-box">
+                <h3 class="objectives-title">🎯 Learning Objectives</h3>
+                <ul class="objectives-list">
+                    <li>Master fundamental concepts of ordinary differential equations</li>
+                    <li>Solve first-order and higher-order differential equations</li>
+                    <li>Implement numerical methods for complex problems</li>
+                    <li>Visualize solutions using Python and matplotlib</li>
+                    <li>Apply Laplace transforms to solve initial value problems</li>
+                    <li>Understand series solutions and their applications</li>
+                </ul>
+            </section>
+
+            <!-- Module Grid -->
+            <section class="interactive-section">
+                <div class="section-header">
+                    <div class="section-icon">📚</div>
+                    <h2 class="section-title">Course Modules</h2>
+                </div>
+                
+                <div class="learning-grid">
+                    <a href="part1.html" class="learning-card">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Part 1: Plotting Fundamentals</h3>
+                        <p class="card-description">
+                            Learn to visualize mathematical functions and differential equations using Python. 
+                            Master plotting techniques essential for understanding solution behaviors.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                            <span class="estimated-time">⏱ 2-3 hours</span>
+                        </div>
+                    </a>
+
+                    <a href="part2.html" class="learning-card">
+                        <div class="card-icon">🔄</div>
+                        <h3 class="card-title">Part 2: First Order ODEs</h3>
+                        <p class="card-description">
+                            Explore various types of first-order differential equations including separable, 
+                            exact, linear, and special forms. Learn analytical solution techniques.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                            <span class="estimated-time">⏱ 4-5 hours</span>
+                        </div>
+                    </a>
+
+                    <a href="part3.html" class="learning-card">
+                        <div class="card-icon">🔢</div>
+                        <h3 class="card-title">Part 3: Numerical Methods</h3>
+                        <p class="card-description">
+                            Implement computational techniques including Euler's method, Runge-Kutta methods, 
+                            and multistep methods for solving differential equations numerically.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                            <span class="estimated-time">⏱ 3-4 hours</span>
+                        </div>
+                    </a>
+
+                    <a href="part4.html" class="learning-card">
+                        <div class="card-icon">📈</div>
+                        <h3 class="card-title">Part 4: Higher Order ODEs</h3>
+                        <p class="card-description">
+                            Study second and higher-order linear differential equations. Learn methods like 
+                            variation of parameters and undetermined coefficients.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                            <span class="estimated-time">⏱ 3-4 hours</span>
+                        </div>
+                    </a>
+
+                    <a href="part5.html" class="learning-card">
+                        <div class="card-icon">∑</div>
+                        <h3 class="card-title">Part 5: Series & Recurrences</h3>
+                        <p class="card-description">
+                            Understand power series solutions, recurrence relations, and generating functions. 
+                            Apply these techniques to solve differential equations.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-advanced">Advanced</span>
+                            <span class="estimated-time">⏱ 3-4 hours</span>
+                        </div>
+                    </a>
+
+                    <a href="part6.html" class="learning-card">
+                        <div class="card-icon">ℒ</div>
+                        <h3 class="card-title">Part 6: Laplace Transform</h3>
+                        <p class="card-description">
+                            Master the Laplace transform method for solving linear differential equations 
+                            with discontinuous forcing functions and initial conditions.
+                        </p>
+                        <div class="card-meta">
+                            <span class="difficulty-badge difficulty-advanced">Advanced</span>
+                            <span class="estimated-time">⏱ 3-4 hours</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Prerequisites -->
+            <section class="prerequisites-box">
+                <h3 class="prerequisites-title">📝 Prerequisites</h3>
+                <ul class="prerequisites-list">
+                    <li>Calculus I & II (derivatives, integrals, series)</li>
+                    <li>Basic linear algebra (matrices, eigenvalues)</li>
+                    <li>Elementary programming concepts</li>
+                    <li>Mathematical reasoning and proof techniques</li>
+                </ul>
+            </section>
+
+            <!-- How to Use -->
+            <section class="interactive-section">
+                <div class="section-header">
+                    <div class="section-icon">🚀</div>
+                    <h2 class="section-title">How to Use This Tutorial</h2>
+                </div>
+                
+                <div style="padding: 1rem;">
+                    <h4>Interactive Features:</h4>
+                    <ul style="line-height: 2;">
+                        <li><strong>Live Code Execution:</strong> Click "Run" on any code block to execute Python code directly in your browser</li>
+                        <li><strong>Editable Examples:</strong> Modify parameters and code to experiment with different scenarios</li>
+                        <li><strong>Visual Feedback:</strong> See plots and graphs generated in real-time</li>
+                        <li><strong>Progress Tracking:</strong> Check off completed sections to track your learning journey</li>
+                        <li><strong>Self-Paced Learning:</strong> Work through modules at your own speed</li>
+                    </ul>
+                    
+                    <h4>Study Tips:</h4>
+                    <ul style="line-height: 2;">
+                        <li>Start with Part 1 to build visualization skills</li>
+                        <li>Run and modify every code example</li>
+                        <li>Complete exercises before moving to the next section</li>
+                        <li>Use the interactive demo to explore concepts</li>
+                        <li>Review mathematical theory alongside coding examples</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Progress Tracker -->
+            <section class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">Your Progress</span>
+                    <span class="progress-percentage">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; color: var(--text-light);">
+                    Progress is saved locally in your browser
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Toggle sub-navigation
+        function toggleSubNav(id, event) {
+            event.preventDefault();
+            const subNav = document.getElementById(id);
+            const allSubNavs = document.querySelectorAll('.sub-nav');
+            
+            // Close all other sub-navs
+            allSubNavs.forEach(nav => {
+                if (nav.id !== id) {
+                    nav.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle current sub-nav
+            subNav.classList.toggle('expanded');
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const totalSections = 48; // Total number of sections across all parts
+            const completed = JSON.parse(localStorage.getItem('diffEqProgress') || '{}');
+            const completedCount = Object.values(completed).filter(v => v).length;
+            const percentage = Math.round((completedCount / totalSections) * 100);
+            
+            document.querySelector('.progress-percentage').textContent = percentage + '%';
+            document.querySelector('.progress-bar-fill').style.width = percentage + '%';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProgress();
+            
+            // Set active nav item based on current page
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#preface') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

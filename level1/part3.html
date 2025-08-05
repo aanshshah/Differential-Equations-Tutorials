@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 3: Numerical Methods and Applications - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+                        
+                            <section id="3">
+                                <h2>III. Numerical Methods and Applications</h2>
+                                <br>
+                                <span id="3-1">
+                                    <h3>1. Numerical Solution using DSolve and NDSolve</h3>
+                                    <p>Python provides powerful numerical solvers for differential equations through SciPy's integrate module. Let's explore how to solve ODEs numerically.</p>
+                                    
+                                    <h4>Basic ODE Solving with odeint</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import odeint, solve_ivp
+import matplotlib.pyplot as plt
+
+# Example 1: Simple exponential decay
+# dy/dt = -ky, where k = 0.5
+def exponential_decay(y, t, k):
+    return -k * y
+
+# Initial condition
+y0 = 10
+k = 0.5
+t = np.linspace(0, 10, 100)
+
+# Solve using odeint
+solution = odeint(exponential_decay, y0, t, args=(k,))
+
+# Plot the solution
+plt.figure(figsize=(10, 6))
+plt.plot(t, solution, 'b-', linewidth=2, label='Numerical solution')
+plt.plot(t, y0 * np.exp(-k * t), 'r--', linewidth=2, label='Analytical solution')
+plt.xlabel('Time')
+plt.ylabel('y(t)')
+plt.title('Exponential Decay: dy/dt = -0.5y')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print(f"Maximum error: {np.max(np.abs(solution.flatten() - y0 * np.exp(-k * t))):.6e}")</code></pre>
+                                    
+                                    <h4>Using solve_ivp for More Control</h4>
+                                    <pre><code>from scipy.integrate import solve_ivp
+
+# Example 2: Logistic growth with solve_ivp
+def logistic_growth(t, y, r, K):
+    return r * y * (1 - y/K)
+
+# Parameters
+r = 0.5  # growth rate
+K = 100  # carrying capacity
+y0 = [10]  # initial population (must be array for solve_ivp)
+t_span = (0, 20)
+t_eval = np.linspace(0, 20, 200)
+
+# Solve with different methods
+methods = ['RK45', 'RK23', 'DOP853', 'BDF']
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes = axes.flatten()
+
+for i, method in enumerate(methods):
+    sol = solve_ivp(logistic_growth, t_span, y0, method=method, 
+                    t_eval=t_eval, args=(r, K))
+    
+    axes[i].plot(sol.t, sol.y[0], 'b-', linewidth=2)
+    axes[i].axhline(y=K, color='r', linestyle='--', label=f'K={K}')
+    axes[i].set_xlabel('Time')
+    axes[i].set_ylabel('Population')
+    axes[i].set_title(f'Method: {method}')
+    axes[i].grid(True)
+    axes[i].legend()
+    
+    # Print solver statistics
+    print(f"{method}: {sol.nfev} function evaluations, success: {sol.success}")
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Systems of ODEs</h4>
+                                    <pre><code>import numpy as np
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# Predator-Prey (Lotka-Volterra) system
+# dx/dt = ax - bxy (prey)
+# dy/dt = -cy + dxy (predator)
+
+def lotka_volterra(t, state, a, b, c, d):
+    x, y = state
+    dxdt = a*x - b*x*y
+    dydt = -c*y + d*x*y
+    return [dxdt, dydt]
+
+# Parameters
+a = 1.0   # prey growth rate
+b = 0.1   # predation rate
+c = 1.5   # predator death rate
+d = 0.075 # predator efficiency
+
+# Initial conditions: [prey, predator]
+y0 = [10, 5]
+t_span = (0, 50)
+t_eval = np.linspace(0, 50, 1000)
+
+# Solve the system
+sol = solve_ivp(lotka_volterra, t_span, y0, t_eval=t_eval, 
+                args=(a, b, c, d), method='RK45')
+
+# Plotting
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Time series
+ax1.plot(sol.t, sol.y[0], 'b-', label='Prey', linewidth=2)
+ax1.plot(sol.t, sol.y[1], 'r-', label='Predator', linewidth=2)
+ax1.set_xlabel('Time')
+ax1.set_ylabel('Population')
+ax1.set_title('Predator-Prey Dynamics')
+ax1.legend()
+ax1.grid(True)
+
+# Phase portrait
+ax2.plot(sol.y[0], sol.y[1], 'g-', linewidth=2)
+ax2.plot(sol.y[0][0], sol.y[1][0], 'go', markersize=10, label='Start')
+ax2.plot(sol.y[0][-1], sol.y[1][-1], 'ro', markersize=10, label='End')
+ax2.set_xlabel('Prey Population')
+ax2.set_ylabel('Predator Population')
+ax2.set_title('Phase Portrait')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Interactive ODE Solver</h4>
+                                        <p>Try modifying the parameters in the predator-prey model to see how it affects the dynamics!</p>
+                                        <div class="plot-container">
+                                            <canvas id="odeSolver" width="600" height="400"></canvas>
+                                            <div class="plot-controls">
+                                                <label>Prey growth rate (a): <span class="plot-value" id="a-ode-value">1.0</span></label>
+                                                <input type="range" id="a-ode-slider" min="0.5" max="2.0" step="0.1" value="1.0" oninput="updateODESolver()">
+                                                <br>
+                                                <label>Predation rate (b): <span class="plot-value" id="b-ode-value">0.1</span></label>
+                                                <input type="range" id="b-ode-slider" min="0.05" max="0.2" step="0.01" value="0.1" oninput="updateODESolver()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateODESolver() {
+                                        const a = parseFloat(document.getElementById('a-ode-slider').value);
+                                        const b = parseFloat(document.getElementById('b-ode-slider').value);
+                                        
+                                        document.getElementById('a-ode-value').textContent = a.toFixed(1);
+                                        document.getElementById('b-ode-value').textContent = b.toFixed(2);
+                                        
+                                        // Simple visualization - in practice, you'd solve the ODE numerically
+                                        const canvas = document.getElementById('odeSolver');
+                                        const ctx = canvas.getContext('2d');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height - 50);
+                                        ctx.lineTo(canvas.width - 50, canvas.height - 50);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Simulate a simple oscillation based on parameters
+                                        ctx.strokeStyle = '#337ab7';
+                                        ctx.lineWidth = 2;
+                                        ctx.beginPath();
+                                        
+                                        for (let t = 0; t < 100; t++) {
+                                            const x = 50 + t * 5;
+                                            const y = canvas.height/2 - 100 * Math.sin(a * t * 0.1) * Math.exp(-b * t * 0.1);
+                                            
+                                            if (t === 0) {
+                                                ctx.moveTo(x, y);
+                                            } else {
+                                                ctx.lineTo(x, y);
+                                            }
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Labels
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '12px Arial';
+                                        ctx.fillText('Time', canvas.width/2, canvas.height - 20);
+                                        ctx.save();
+                                        ctx.translate(20, canvas.height/2);
+                                        ctx.rotate(-Math.PI/2);
+                                        ctx.fillText('Population', 0, 0);
+                                        ctx.restore();
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateODESolver, 100);
+                                    </script>
+                                    </span>
+                                    <span id="3-2">
+                                    <h3>2. Euler's Methods</h3>
+                                    <p>Euler's method is the simplest numerical method for solving ODEs. While not the most accurate, it's foundational for understanding more advanced methods.</p>
+                                    
+                                    <h4>Forward Euler Method</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+def forward_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Forward Euler method.
+    
+    Parameters:
+    f: function defining the ODE
+    y0: initial condition
+    t0: initial time
+    tf: final time
+    h: step size
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        y[i + 1] = y[i] + h * f(t[i], y[i])
+    
+    return t, y
+
+# Example: dy/dt = -2y + sin(t)
+def f(t, y):
+    return -2*y + np.sin(t)
+
+# Solve with different step sizes
+y0 = 1
+t0, tf = 0, 5
+step_sizes = [0.5, 0.1, 0.01]
+
+plt.figure(figsize=(12, 8))
+
+for h in step_sizes:
+    t, y = forward_euler(f, y0, t0, tf, h)
+    plt.plot(t, y, 'o-', label=f'h = {h}', markersize=4)
+
+# Analytical solution for comparison
+t_exact = np.linspace(t0, tf, 1000)
+y_exact = np.exp(-2*t_exact) * (1 + 2*np.sin(t_exact) - np.cos(t_exact))/5
+plt.plot(t_exact, y_exact, 'k--', linewidth=2, label='Exact solution')
+
+plt.xlabel('Time')
+plt.ylabel('y(t)')
+plt.title('Forward Euler Method with Different Step Sizes')
+plt.legend()
+plt.grid(True)
+plt.show()</code></pre>
+                                    
+                                    <h4>Backward Euler Method (Implicit)</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+# First define forward_euler for comparison
+def forward_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Forward Euler method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        y[i + 1] = y[i] + h * f(t[i], y[i])
+    
+    return t, y
+
+def backward_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Backward Euler method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        # Solve implicit equation: y_{n+1} = y_n + h*f(t_{n+1}, y_{n+1})
+        def equation(y_next):
+            return y_next - y[i] - h * f(t[i + 1], y_next)
+        
+        y[i + 1] = fsolve(equation, y[i])[0]
+    
+    return t, y
+
+# Compare Forward and Backward Euler for a stiff equation
+# dy/dt = -15y
+def stiff_f(t, y):
+    return -15 * y
+
+y0 = 1
+t0, tf = 0, 1
+h = 0.1
+
+# Forward Euler
+t_forward, y_forward = forward_euler(stiff_f, y0, t0, tf, h)
+
+# Backward Euler
+t_backward, y_backward = backward_euler(stiff_f, y0, t0, tf, h)
+
+# Exact solution
+t_exact = np.linspace(t0, tf, 1000)
+y_exact = y0 * np.exp(-15 * t_exact)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_forward, y_forward, 'ro-', label='Forward Euler', markersize=8)
+plt.plot(t_backward, y_backward, 'bs-', label='Backward Euler', markersize=8)
+plt.plot(t_exact, y_exact, 'k--', linewidth=2, label='Exact solution')
+plt.xlabel('Time')
+plt.ylabel('y(t)')
+plt.title('Stiff ODE: Forward vs Backward Euler (h = 0.1)')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print(f"Forward Euler becomes unstable for this stiff equation with h = {h}")
+print(f"Backward Euler remains stable despite the large step size")</code></pre>
+                                    
+                                    <h4>Modified Euler Method (Heun's Method)</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+# Define all three Euler methods for comparison
+def forward_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Forward Euler method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        y[i + 1] = y[i] + h * f(t[i], y[i])
+    
+    return t, y
+
+def backward_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Backward Euler method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        # Solve implicit equation: y_{n+1} = y_n + h*f(t_{n+1}, y_{n+1})
+        def equation(y_next):
+            return y_next - y[i] - h * f(t[i + 1], y_next)
+        
+        y[i + 1] = fsolve(equation, y[i])[0]
+    
+    return t, y
+
+def modified_euler(f, y0, t0, tf, h):
+    """
+    Solve dy/dt = f(t, y) using Modified Euler (Heun's) method.
+    This is a predictor-corrector method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        # Predictor step (Forward Euler)
+        y_pred = y[i] + h * f(t[i], y[i])
+        
+        # Corrector step (average of slopes)
+        y[i + 1] = y[i] + h/2 * (f(t[i], y[i]) + f(t[i + 1], y_pred))
+    
+    return t, y
+
+# Compare all three methods
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Test function: dy/dt = y - t^2 + 1
+def test_f(t, y):
+    return y - t**2 + 1
+
+y0 = 0.5
+t0, tf = 0, 2
+h = 0.2
+
+# Solve with each method
+t_fe, y_fe = forward_euler(test_f, y0, t0, tf, h)
+t_be, y_be = backward_euler(test_f, y0, t0, tf, h)
+t_me, y_me = modified_euler(test_f, y0, t0, tf, h)
+
+# Exact solution: y = (t+1)^2 - 0.5*e^t
+t_exact = np.linspace(t0, tf, 1000)
+y_exact = (t_exact + 1)**2 - 0.5 * np.exp(t_exact)
+
+# Plot solutions
+ax1.plot(t_fe, y_fe, 'ro-', label='Forward Euler', markersize=8)
+ax1.plot(t_be, y_be, 'bs-', label='Backward Euler', markersize=8)
+ax1.plot(t_me, y_me, 'g^-', label='Modified Euler', markersize=8)
+ax1.plot(t_exact, y_exact, 'k--', linewidth=2, label='Exact')
+ax1.set_xlabel('Time')
+ax1.set_ylabel('y(t)')
+ax1.set_title('Comparison of Euler Methods')
+ax1.legend()
+ax1.grid(True)
+
+# Plot errors
+ax2.semilogy(t_fe, np.abs(y_fe - y_exact[::int(len(y_exact)/len(t_fe))]), 'ro-', label='Forward Euler')
+ax2.semilogy(t_be, np.abs(y_be - y_exact[::int(len(y_exact)/len(t_be))]), 'bs-', label='Backward Euler')
+ax2.semilogy(t_me, np.abs(y_me - y_exact[::int(len(y_exact)/len(t_me))]), 'g^-', label='Modified Euler')
+ax2.set_xlabel('Time')
+ax2.set_ylabel('Absolute Error')
+ax2.set_title('Error Comparison')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="3-3">
+                                    <h3>3. Polynomial Approximations</h3>
+                                    <p>Polynomial approximations provide an alternative approach to solving differential equations by expressing the solution as a polynomial series.</p>
+                                    
+                                    <h4>Taylor Series Method</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from math import factorial
+
+def taylor_series_ode(f, y0, t0, order, t_eval):
+    """
+    Solve ODE using Taylor series expansion.
+    f should return [y', y'', y''', ...] up to desired order
+    """
+    h = t_eval - t0
+    y_taylor = y0
+    
+    # Get derivatives at t0
+    derivatives = f(t0, y0, order)
+    
+    # Build Taylor series
+    for n in range(1, order + 1):
+        y_taylor += derivatives[n-1] * (h**n) / factorial(n)
+    
+    return y_taylor
+
+# Example: y' = y with y(0) = 1
+# Derivatives: y' = y, y'' = y, y''' = y, ...
+def exp_derivatives(t, y, order):
+    return [y] * order  # All derivatives equal y
+
+# Compute Taylor approximations of different orders
+t0, y0 = 0, 1
+t_eval = np.linspace(0, 3, 100)
+orders = [1, 3, 5, 7, 9]
+
+plt.figure(figsize=(10, 6))
+
+for order in orders:
+    y_approx = []
+    for t in t_eval:
+        y_approx.append(taylor_series_ode(exp_derivatives, y0, t0, order, t))
+    plt.plot(t_eval, y_approx, label=f'Order {order}')
+
+# Exact solution
+y_exact = np.exp(t_eval)
+plt.plot(t_eval, y_exact, 'k--', linewidth=2, label='Exact: e^t')
+
+plt.xlabel('t')
+plt.ylabel('y(t)')
+plt.title('Taylor Series Approximation of y\' = y')
+plt.legend()
+plt.grid(True)
+plt.xlim(0, 3)
+plt.ylim(0, 20)
+plt.show()</code></pre>
+                                    
+                                    <h4>Chebyshev Polynomial Approximation</h4>
+                                    <pre><code>import numpy as np
+from numpy.polynomial import chebyshev as cheb
+import matplotlib.pyplot as plt
+
+def chebyshev_ode_solve(f, y0, interval, n_terms):
+    """
+    Approximate ODE solution using Chebyshev polynomials.
+    """
+    a, b = interval
+    
+    # Chebyshev points in [-1, 1]
+    k = np.arange(n_terms)
+    x_cheb = np.cos((2*k + 1) * np.pi / (2*n_terms))
+    
+    # Map to interval [a, b]
+    t_cheb = 0.5 * (b - a) * x_cheb + 0.5 * (b + a)
+    
+    # Initial guess for solution at Chebyshev points
+    y_cheb = np.ones(n_terms) * y0
+    
+    # Simple collocation (for demonstration)
+    # In practice, you'd solve a system of equations
+    for _ in range(10):  # Simple iteration
+        f_vals = [f(t, y) for t, y in zip(t_cheb, y_cheb)]
+        # Update using simple integration
+        y_cheb = y0 + np.array(f_vals) * (t_cheb - a)
+    
+    # Fit Chebyshev polynomial
+    coeffs = cheb.chebfit(x_cheb, y_cheb, n_terms - 1)
+    
+    return coeffs
+
+# Example: y' = -y + sin(t)
+def f(t, y):
+    return -y + np.sin(t)
+
+y0 = 0
+interval = (0, 5)
+n_terms = 15
+
+# Get Chebyshev coefficients
+coeffs = chebyshev_ode_solve(f, y0, interval, n_terms)
+
+# Evaluate on fine grid
+t_fine = np.linspace(*interval, 200)
+x_fine = 2 * (t_fine - interval[0]) / (interval[1] - interval[0]) - 1
+y_cheb = cheb.chebval(x_fine, coeffs)
+
+# Compare with numerical solution
+from scipy.integrate import odeint
+y_numerical = odeint(f, y0, t_fine)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_fine, y_cheb, 'b-', linewidth=2, label='Chebyshev approximation')
+plt.plot(t_fine, y_numerical, 'r--', linewidth=2, label='Numerical solution')
+plt.xlabel('t')
+plt.ylabel('y(t)')
+plt.title('Chebyshev Polynomial Approximation of ODE')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Show Chebyshev coefficients
+plt.figure(figsize=(10, 6))
+plt.semilogy(np.abs(coeffs), 'bo-')
+plt.xlabel('Coefficient index')
+plt.ylabel('|Coefficient|')
+plt.title('Chebyshev Coefficients (Spectral Convergence)')
+plt.grid(True)
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="3-4">
+                                    <h3>4. Runge-Kutta Methods</h3>
+                                    <p>Runge-Kutta methods are among the most popular numerical methods for solving ODEs due to their good balance between accuracy and computational cost.</p>
+                                    
+                                    <h4>Classical RK4 Method</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+def rk4(f, y0, t0, tf, h):
+    """
+    Fourth-order Runge-Kutta method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        k1 = h * f(t[i], y[i])
+        k2 = h * f(t[i] + h/2, y[i] + k1/2)
+        k3 = h * f(t[i] + h/2, y[i] + k2/2)
+        k4 = h * f(t[i] + h, y[i] + k3)
+        
+        y[i + 1] = y[i] + (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    return t, y
+
+# Test on a challenging problem: Van der Pol oscillator
+# Convert to first-order system: y1' = y2, y2' = mu(1-y1^2)y2 - y1
+def vanderpol(t, state, mu=1.0):
+    y1, y2 = state
+    return np.array([y2, mu * (1 - y1**2) * y2 - y1])
+
+# RK4 for systems
+def rk4_system(f, y0, t0, tf, h, *args):
+    t = np.arange(t0, tf + h, h)
+    n = len(y0)
+    y = np.zeros((len(t), n))
+    y[0] = y0
+    
+    for i in range(len(t) - 1):
+        k1 = h * f(t[i], y[i], *args)
+        k2 = h * f(t[i] + h/2, y[i] + k1/2, *args)
+        k3 = h * f(t[i] + h/2, y[i] + k2/2, *args)
+        k4 = h * f(t[i] + h, y[i] + k3, *args)
+        
+        y[i + 1] = y[i] + (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    return t, y
+
+# Solve Van der Pol oscillator
+y0 = [2.0, 0.0]
+t0, tf = 0, 30
+h = 0.01
+mu = 1.0
+
+t, y = rk4_system(vanderpol, y0, t0, tf, h, mu)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Time series
+ax1.plot(t, y[:, 0], 'b-', label='y1 (position)')
+ax1.plot(t, y[:, 1], 'r-', label='y2 (velocity)')
+ax1.set_xlabel('Time')
+ax1.set_ylabel('Value')
+ax1.set_title('Van der Pol Oscillator - Time Series')
+ax1.legend()
+ax1.grid(True)
+
+# Phase portrait
+ax2.plot(y[:, 0], y[:, 1], 'g-')
+ax2.plot(y[0, 0], y[0, 1], 'go', markersize=10, label='Start')
+ax2.plot(y[-1, 0], y[-1, 1], 'ro', markersize=10, label='End')
+ax2.set_xlabel('y1 (position)')
+ax2.set_ylabel('y2 (velocity)')
+ax2.set_title('Van der Pol Oscillator - Phase Portrait')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Adaptive Step Size RK45</h4>
+                                    <pre><code>def rk45_adaptive(f, y0, t0, tf, h0=0.1, tol=1e-6):
+    """
+    Runge-Kutta 4(5) with adaptive step size control.
+    """
+    t = [t0]
+    y = [y0]
+    h = h0
+    
+    while t[-1] < tf:
+        # RK4 step
+        k1 = f(t[-1], y[-1])
+        k2 = f(t[-1] + h/2, y[-1] + h*k1/2)
+        k3 = f(t[-1] + h/2, y[-1] + h*k2/2)
+        k4 = f(t[-1] + h, y[-1] + h*k3)
+        y4 = y[-1] + h * (k1 + 2*k2 + 2*k3 + k4) / 6
+        
+        # RK5 step (for error estimation)
+        k5 = f(t[-1] + h, y4)
+        y5 = y[-1] + h * (16*k1 + 6656*k2 + 28561*k3 - 9*k4 + 2*k5) / 11025
+        
+        # Error estimate
+        error = abs(y5 - y4)
+        
+        if error < tol:
+            # Accept step
+            t.append(t[-1] + h)
+            y.append(y4)
+            
+            # Increase step size if error is very small
+            if error < tol / 10:
+                h = min(h * 1.5, tf - t[-1])
+        else:
+            # Reject step and decrease step size
+            h = h * 0.5
+        
+        # Ensure we don't overshoot
+        if t[-1] + h > tf:
+            h = tf - t[-1]
+    
+    return np.array(t), np.array(y)
+
+# Test on stiff problem
+def stiff_problem(t, y):
+    return -15 * y + np.exp(-t)
+
+y0 = 1
+t0, tf = 0, 5
+
+# Fixed step RK4
+t_fixed, y_fixed = rk4(stiff_problem, y0, t0, tf, h=0.1)
+
+# Adaptive RK45
+t_adaptive, y_adaptive = rk45_adaptive(stiff_problem, y0, t0, tf, h0=0.5, tol=1e-6)
+
+# Exact solution (for comparison)
+t_exact = np.linspace(t0, tf, 1000)
+y_exact = np.exp(-15*t_exact) + (np.exp(-t_exact) - np.exp(-15*t_exact))/14
+
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(t_fixed, y_fixed, 'bo-', label=f'Fixed RK4 ({len(t_fixed)} steps)')
+plt.plot(t_adaptive, y_adaptive, 'rs-', label=f'Adaptive RK45 ({len(t_adaptive)} steps)')
+plt.plot(t_exact, y_exact, 'k--', linewidth=2, label='Exact')
+plt.xlabel('Time')
+plt.ylabel('y(t)')
+plt.title('Fixed vs Adaptive Step Size')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.plot(t_adaptive[:-1], np.diff(t_adaptive), 'g-')
+plt.xlabel('Time')
+plt.ylabel('Step size')
+plt.title('Adaptive Step Sizes Used')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print(f"Fixed step method: {len(t_fixed)} steps")
+print(f"Adaptive method: {len(t_adaptive)} steps")</code></pre>
+                                    </span>
+                                    <span id="3-5">
+                                    <h3>5. Multistep Methods</h3>
+                                    <p>Multistep methods use information from several previous steps to compute the next value, potentially achieving higher accuracy with fewer function evaluations.</p>
+                                    
+                                    <h4>Adams-Bashforth Methods (Explicit)</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
+def adams_bashforth_2(f, y0, t0, tf, h):
+    """
+    2-step Adams-Bashforth method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    # Use RK4 for the first step
+    k1 = f(t[0], y[0])
+    k2 = f(t[0] + h/2, y[0] + h*k1/2)
+    k3 = f(t[0] + h/2, y[0] + h*k2/2)
+    k4 = f(t[0] + h, y[0] + h*k3)
+    y[1] = y[0] + h * (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    # Adams-Bashforth for remaining steps
+    for i in range(1, len(t) - 1):
+        y[i + 1] = y[i] + h/2 * (3*f(t[i], y[i]) - f(t[i-1], y[i-1]))
+    
+    return t, y
+
+def adams_bashforth_4(f, y0, t0, tf, h):
+    """
+    4-step Adams-Bashforth method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    # Use RK4 for the first 3 steps
+    for i in range(3):
+        k1 = f(t[i], y[i])
+        k2 = f(t[i] + h/2, y[i] + h*k1/2)
+        k3 = f(t[i] + h/2, y[i] + h*k2/2)
+        k4 = f(t[i] + h, y[i] + h*k3)
+        y[i + 1] = y[i] + h * (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    # Adams-Bashforth 4-step formula
+    for i in range(3, len(t) - 1):
+        y[i + 1] = y[i] + h/24 * (55*f(t[i], y[i]) - 59*f(t[i-1], y[i-1]) + 
+                                  37*f(t[i-2], y[i-2]) - 9*f(t[i-3], y[i-3]))
+    
+    return t, y
+
+# Test function: dy/dt = -y + t + 1
+def test_f(t, y):
+    return -y + t + 1
+
+y0 = 1
+t0, tf = 0, 5
+h = 0.1
+
+# Compare different methods
+t_ab2, y_ab2 = adams_bashforth_2(test_f, y0, t0, tf, h)
+t_ab4, y_ab4 = adams_bashforth_4(test_f, y0, t0, tf, h)
+
+# Exact solution
+t_exact = np.linspace(t0, tf, 1000)
+y_exact = t_exact + np.exp(-t_exact)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_ab2, y_ab2, 'bo-', label='Adams-Bashforth 2', markersize=4)
+plt.plot(t_ab4, y_ab4, 'rs-', label='Adams-Bashforth 4', markersize=4)
+plt.plot(t_exact, y_exact, 'k--', linewidth=2, label='Exact')
+plt.xlabel('Time')
+plt.ylabel('y(t)')
+plt.title('Adams-Bashforth Methods')
+plt.legend()
+plt.grid(True)
+plt.show()</code></pre>
+                                    
+                                    <h4>Adams-Moulton Methods (Implicit)</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+def adams_moulton_2(f, y0, t0, tf, h):
+    """
+    2-step Adams-Moulton method (implicit).
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    # Use RK4 for the first step
+    k1 = f(t[0], y[0])
+    k2 = f(t[0] + h/2, y[0] + h*k1/2)
+    k3 = f(t[0] + h/2, y[0] + h*k2/2)
+    k4 = f(t[0] + h, y[0] + h*k3)
+    y[1] = y[0] + h * (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    # Adams-Moulton for remaining steps
+    for i in range(1, len(t) - 1):
+        # Implicit equation: y_{n+1} = y_n + h/2 * (f_{n+1} + f_n)
+        def equation(y_next):
+            return y_next - y[i] - h/2 * (f(t[i+1], y_next) + f(t[i], y[i]))
+        
+        # Use predictor as initial guess (Adams-Bashforth)
+        y_pred = y[i] + h/2 * (3*f(t[i], y[i]) - f(t[i-1], y[i-1]))
+        y[i + 1] = fsolve(equation, y_pred)[0]
+    
+    return t, y
+
+# Predictor-Corrector Method (PECE)
+def adams_pc4(f, y0, t0, tf, h):
+    """
+    4th-order Adams Predictor-Corrector method.
+    """
+    t = np.arange(t0, tf + h, h)
+    y = np.zeros(len(t))
+    y[0] = y0
+    
+    # RK4 for startup
+    for i in range(3):
+        k1 = f(t[i], y[i])
+        k2 = f(t[i] + h/2, y[i] + h*k1/2)
+        k3 = f(t[i] + h/2, y[i] + h*k2/2)
+        k4 = f(t[i] + h, y[i] + h*k3)
+        y[i + 1] = y[i] + h * (k1 + 2*k2 + 2*k3 + k4) / 6
+    
+    # Adams PC
+    for i in range(3, len(t) - 1):
+        # Predict (Adams-Bashforth 4)
+        y_pred = y[i] + h/24 * (55*f(t[i], y[i]) - 59*f(t[i-1], y[i-1]) + 
+                               37*f(t[i-2], y[i-2]) - 9*f(t[i-3], y[i-3]))
+        
+        # Correct (Adams-Moulton 4)
+        y[i + 1] = y[i] + h/24 * (9*f(t[i+1], y_pred) + 19*f(t[i], y[i]) - 
+                                  5*f(t[i-1], y[i-1]) + f(t[i-2], y[i-2]))
+    
+    return t, y
+
+# Test on oscillatory problem
+def oscillatory(t, y):
+    return -4*y + np.cos(2*t)
+
+y0 = 0
+t_am2, y_am2 = adams_moulton_2(oscillatory, y0, t0, tf, h)
+t_pc4, y_pc4 = adams_pc4(oscillatory, y0, t0, tf, h)
+
+# Reference solution
+t_ref = np.linspace(t0, tf, 1000)
+y_ref = odeint(oscillatory, y0, t_ref).flatten()
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
+
+# Solutions
+ax1.plot(t_am2, y_am2, 'bo-', label='Adams-Moulton 2', markersize=4)
+ax1.plot(t_pc4, y_pc4, 'rs-', label='Adams PC4', markersize=4)
+ax1.plot(t_ref, y_ref, 'k--', linewidth=2, label='Reference')
+ax1.set_xlabel('Time')
+ax1.set_ylabel('y(t)')
+ax1.set_title('Implicit Multistep Methods')
+ax1.legend()
+ax1.grid(True)
+
+# Errors
+ax2.semilogy(t_am2, np.abs(y_am2 - y_ref[::int(len(y_ref)/len(t_am2))]), 'bo-', label='Adams-Moulton 2')
+ax2.semilogy(t_pc4, np.abs(y_pc4 - y_ref[::int(len(y_ref)/len(t_pc4))]), 'rs-', label='Adams PC4')
+ax2.set_xlabel('Time')
+ax2.set_ylabel('Absolute Error')
+ax2.set_title('Error Comparison')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="3-6">
+                                    <h3>6. Numerov Method</h3>
+                                    <p>The Numerov method is a specialized technique for solving second-order ODEs of the form y'' = f(x,y) where the first derivative doesn't appear explicitly.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+def numerov(f, y0, y1, x0, xf, h):
+    """
+    Numerov method for y'' = f(x,y)
+    y0: initial value y(x0)
+    y1: value at second point y(x0+h)
+    """
+    x = np.arange(x0, xf + h, h)
+    n = len(x)
+    y = np.zeros(n)
+    y[0] = y0
+    y[1] = y1
+    
+    # Numerov formula
+    for i in range(1, n - 1):
+        fn_minus = f(x[i-1], y[i-1])
+        fn = f(x[i], y[i])
+        fn_plus = f(x[i+1], y[i])  # Initial guess
+        
+        # Iterate to improve fn_plus estimate
+        for _ in range(3):
+            y[i+1] = (2*y[i]*(1 - 5*h**2*fn/12) - y[i-1]*(1 + h**2*fn_minus/12)) / \
+                     (1 + h**2*fn_plus/12)
+            fn_plus = f(x[i+1], y[i+1])
+    
+    return x, y
+
+# Example 1: Simple Harmonic Oscillator y'' + y = 0
+def harmonic(x, y):
+    return -y
+
+# Initial conditions: y(0) = 0, y'(0) = 1 (gives sin(x))
+y0 = 0
+h = 0.1
+# Use Taylor expansion for y1: y(h) ≈ y(0) + h*y'(0) + h²/2*y''(0)
+# Since y'' = -y, we have y''(0) = 0
+y1 = h  # Approximation of sin(h)
+
+x, y_numerov = numerov(harmonic, y0, y1, 0, 4*np.pi, h)
+
+# Exact solution
+y_exact = np.sin(x)
+
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+plt.plot(x, y_numerov, 'b-', linewidth=2, label='Numerov')
+plt.plot(x, y_exact, 'r--', linewidth=2, label='Exact (sin x)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Simple Harmonic Oscillator')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.semilogy(x, np.abs(y_numerov - y_exact), 'g-')
+plt.xlabel('x')
+plt.ylabel('Absolute Error')
+plt.title('Numerov Method Error')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Example 2: Quantum Harmonic Oscillator
+# -ψ'' + x²ψ = Eψ (in appropriate units)
+def quantum_ho(x, psi, E):
+    return (x**2 - E) * psi
+
+# Shooting method to find eigenvalues
+def shooting_numerov(E_guess, xmax=5, h=0.01):
+    x = np.arange(-xmax, xmax + h, h)
+    n = len(x)
+    psi = np.zeros(n)
+    
+    # Boundary conditions for ground state
+    psi[0] = 0
+    psi[1] = h
+    
+    # Forward integration
+    for i in range(1, n - 1):
+        fn_minus = (x[i-1]**2 - E_guess) * psi[i-1]
+        fn = (x[i]**2 - E_guess) * psi[i]
+        fn_plus = 0  # Initial guess
+        
+        psi[i+1] = (2*psi[i]*(1 - 5*h**2*fn/12) - psi[i-1]*(1 + h**2*fn_minus/12)) / \
+                   (1 + h**2*fn_plus/12)
+    
+    return x, psi
+
+# Find ground state energy (should be E = 1 in these units)
+E_values = np.linspace(0.5, 1.5, 5)
+
+plt.figure(figsize=(10, 6))
+for E in E_values:
+    x, psi = shooting_numerov(E)
+    plt.plot(x, psi/np.max(np.abs(psi)), label=f'E = {E:.2f}')
+
+plt.xlabel('x')
+plt.ylabel('ψ(x) (normalized)')
+plt.title('Quantum Harmonic Oscillator Wavefunctions')
+plt.legend()
+plt.grid(True)
+plt.xlim(-5, 5)
+plt.ylim(-1.5, 1.5)
+plt.show()
+
+print("The ground state energy is E = 1 (in natural units)")
+print("Notice how E = 1.00 gives a wavefunction that approaches 0 at infinity")</code></pre>
+                                    </span>
+                                    <span id="3-7">
+                                    <h3>7. Applications</h3>
+                                    <p>Let's apply numerical methods to solve real-world problems in physics, engineering, and biology.</p>
+                                    
+                                    <h4>Application 1: Projectile Motion with Air Resistance</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+def projectile_with_drag(t, state, g=9.81, c=0.1, m=1.0):
+    """
+    Projectile motion with quadratic air resistance.
+    state = [x, y, vx, vy]
+    """
+    x, y, vx, vy = state
+    v = np.sqrt(vx**2 + vy**2)
+    
+    # Forces
+    Fx = -c * v * vx / m
+    Fy = -g - c * v * vy / m
+    
+    return [vx, vy, Fx, Fy]
+
+# Initial conditions
+v0 = 50  # m/s
+angle = 45 * np.pi/180  # radians
+y0 = [0, 0, v0*np.cos(angle), v0*np.sin(angle)]
+
+# Solve with and without air resistance
+t_span = (0, 10)
+t_eval = np.linspace(0, 10, 1000)
+
+# With air resistance
+sol_drag = solve_ivp(projectile_with_drag, t_span, y0, t_eval=t_eval, 
+                     args=(9.81, 0.1, 1.0), events=lambda t,y: y[1])
+
+# Without air resistance (c=0)
+sol_nodrag = solve_ivp(projectile_with_drag, t_span, y0, t_eval=t_eval, 
+                       args=(9.81, 0, 1.0), events=lambda t,y: y[1])
+
+plt.figure(figsize=(12, 5))
+
+# Trajectory
+plt.subplot(1, 2, 1)
+plt.plot(sol_drag.y[0], sol_drag.y[1], 'b-', linewidth=2, label='With drag')
+plt.plot(sol_nodrag.y[0], sol_nodrag.y[1], 'r--', linewidth=2, label='No drag')
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.title('Projectile Trajectories')
+plt.legend()
+plt.grid(True)
+plt.axis('equal')
+
+# Velocity vs time
+plt.subplot(1, 2, 2)
+v_drag = np.sqrt(sol_drag.y[2]**2 + sol_drag.y[3]**2)
+v_nodrag = np.sqrt(sol_nodrag.y[2]**2 + sol_nodrag.y[3]**2)
+plt.plot(sol_drag.t, v_drag, 'b-', linewidth=2, label='With drag')
+plt.plot(sol_nodrag.t, v_nodrag, 'r--', linewidth=2, label='No drag')
+plt.xlabel('Time (s)')
+plt.ylabel('Speed (m/s)')
+plt.title('Speed vs Time')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print(f"Range with drag: {sol_drag.y[0][-1]:.1f} m")
+print(f"Range without drag: {sol_nodrag.y[0][-1]:.1f} m")
+print(f"Reduction due to drag: {(1 - sol_drag.y[0][-1]/sol_nodrag.y[0][-1])*100:.1f}%")</code></pre>
+                                    
+                                    <h4>Application 2: Chemical Reaction Kinetics</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Brusselator model - an autocatalytic reaction
+def brusselator(t, state, a=1, b=3):
+    """
+    X + A → 2X + Y
+    2X + Y → 3X
+    X → E
+    Y → F
+    """
+    x, y = state
+    dxdt = a + x**2 * y - b * x - x
+    dydt = b * x - x**2 * y
+    return [dxdt, dydt]
+
+# Parameters and initial conditions
+a, b = 1, 3
+x0, y0 = 1, 1
+t_span = (0, 50)
+t_eval = np.linspace(0, 50, 1000)
+
+# Solve
+sol = solve_ivp(brusselator, t_span, [x0, y0], t_eval=t_eval, args=(a, b))
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Time series
+axes[0, 0].plot(sol.t, sol.y[0], 'b-', label='X')
+axes[0, 0].plot(sol.t, sol.y[1], 'r-', label='Y')
+axes[0, 0].set_xlabel('Time')
+axes[0, 0].set_ylabel('Concentration')
+axes[0, 0].set_title('Brusselator Dynamics')
+axes[0, 0].legend()
+axes[0, 0].grid(True)
+
+# Phase portrait
+axes[0, 1].plot(sol.y[0], sol.y[1], 'g-')
+axes[0, 1].plot(x0, y0, 'ro', markersize=8, label='Start')
+axes[0, 1].set_xlabel('X')
+axes[0, 1].set_ylabel('Y')
+axes[0, 1].set_title('Phase Portrait')
+axes[0, 1].legend()
+axes[0, 1].grid(True)
+
+# Parameter study
+b_values = [1.5, 2.5, 3.5, 4.5]
+for b_val in b_values:
+    sol_param = solve_ivp(brusselator, (0, 30), [x0, y0], args=(a, b_val))
+    axes[1, 0].plot(sol_param.t, sol_param.y[0], label=f'b={b_val}')
+
+axes[1, 0].set_xlabel('Time')
+axes[1, 0].set_ylabel('X Concentration')
+axes[1, 0].set_title('Effect of Parameter b')
+axes[1, 0].legend()
+axes[1, 0].grid(True)
+
+# 3D trajectory
+ax = plt.subplot(2, 2, 4, projection='3d')
+ax.plot(sol.y[0], sol.y[1], sol.t)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Time')
+ax.set_title('3D Trajectory')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Application 3: Epidemic Modeling (SIR Model)</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+def sir_model(t, state, beta, gamma):
+    """
+    SIR epidemic model
+    S: Susceptible, I: Infected, R: Recovered
+    beta: infection rate
+    gamma: recovery rate
+    """
+    S, I, R = state
+    N = S + I + R  # Total population
+    
+    dSdt = -beta * S * I / N
+    dIdt = beta * S * I / N - gamma * I
+    dRdt = gamma * I
+    
+    return [dSdt, dIdt, dRdt]
+
+# Parameters
+beta = 0.5   # infection rate
+gamma = 0.1  # recovery rate
+R0 = beta/gamma  # Basic reproduction number
+
+# Initial conditions (population of 1000)
+S0 = 999
+I0 = 1
+R0_init = 0
+
+# Time span
+t_span = (0, 200)
+t_eval = np.linspace(0, 200, 1000)
+
+# Solve
+sol = solve_ivp(sir_model, t_span, [S0, I0, R0_init], 
+                t_eval=t_eval, args=(beta, gamma))
+
+# Plotting
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Time evolution
+ax1.plot(sol.t, sol.y[0], 'b-', linewidth=2, label='Susceptible')
+ax1.plot(sol.t, sol.y[1], 'r-', linewidth=2, label='Infected')
+ax1.plot(sol.t, sol.y[2], 'g-', linewidth=2, label='Recovered')
+ax1.set_xlabel('Time (days)')
+ax1.set_ylabel('Population')
+ax1.set_title(f'SIR Model (R₀ = {R0:.1f})')
+ax1.legend()
+ax1.grid(True)
+
+# Phase portrait in SI plane
+ax2.plot(sol.y[0], sol.y[1], 'purple', linewidth=2)
+ax2.plot(S0, I0, 'ro', markersize=10, label='Start')
+ax2.plot(sol.y[0][-1], sol.y[1][-1], 'ko', markersize=10, label='End')
+ax2.set_xlabel('Susceptible')
+ax2.set_ylabel('Infected')
+ax2.set_title('Phase Portrait (S-I plane)')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Key statistics
+max_infected = np.max(sol.y[1])
+max_infected_time = sol.t[np.argmax(sol.y[1])]
+final_susceptible = sol.y[0][-1]
+final_recovered = sol.y[2][-1]
+
+print(f"Basic reproduction number R₀: {R0:.2f}")
+print(f"Peak infection: {max_infected:.0f} people at day {max_infected_time:.0f}")
+print(f"Final susceptible: {final_susceptible:.0f}")
+print(f"Final recovered: {final_recovered:.0f}")
+print(f"Attack rate: {(1 - final_susceptible/S0)*100:.1f}%")</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Interactive SIR Model</h4>
+                                        <p>Explore how infection and recovery rates affect epidemic dynamics!</p>
+                                        <div class="plot-container">
+                                            <canvas id="sirModel" width="600" height="400"></canvas>
+                                            <div class="plot-controls">
+                                                <label>Infection rate (β): <span class="plot-value" id="beta-value">0.5</span></label>
+                                                <input type="range" id="beta-slider" min="0.1" max="1.0" step="0.05" value="0.5" oninput="updateSIR()">
+                                                <br>
+                                                <label>Recovery rate (γ): <span class="plot-value" id="gamma-value">0.1</span></label>
+                                                <input type="range" id="gamma-slider" min="0.05" max="0.5" step="0.05" value="0.1" oninput="updateSIR()">
+                                                <br>
+                                                <span>R₀ = <span id="r0-value">5.0</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateSIR() {
+                                        const beta = parseFloat(document.getElementById('beta-slider').value);
+                                        const gamma = parseFloat(document.getElementById('gamma-slider').value);
+                                        const R0 = beta / gamma;
+                                        
+                                        document.getElementById('beta-value').textContent = beta.toFixed(2);
+                                        document.getElementById('gamma-value').textContent = gamma.toFixed(2);
+                                        document.getElementById('r0-value').textContent = R0.toFixed(1);
+                                        
+                                        const canvas = document.getElementById('sirModel');
+                                        const ctx = canvas.getContext('2d');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height - 50);
+                                        ctx.lineTo(canvas.width - 50, canvas.height - 50);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Simple SIR simulation
+                                        let S = 999, I = 1, R = 0;
+                                        const N = 1000;
+                                        const dt = 0.5;
+                                        const steps = 400;
+                                        
+                                        const S_data = [S];
+                                        const I_data = [I];
+                                        const R_data = [R];
+                                        
+                                        for (let i = 0; i < steps; i++) {
+                                            const dS = -beta * S * I / N * dt;
+                                            const dI = (beta * S * I / N - gamma * I) * dt;
+                                            const dR = gamma * I * dt;
+                                            
+                                            S += dS;
+                                            I += dI;
+                                            R += dR;
+                                            
+                                            S_data.push(S);
+                                            I_data.push(I);
+                                            R_data.push(R);
+                                        }
+                                        
+                                        // Plot curves
+                                        const xScale = (canvas.width - 100) / steps;
+                                        const yScale = (canvas.height - 100) / N;
+                                        
+                                        // S curve (blue)
+                                        ctx.strokeStyle = '#337ab7';
+                                        ctx.lineWidth = 2;
+                                        ctx.beginPath();
+                                        for (let i = 0; i < S_data.length; i++) {
+                                            const x = 50 + i * xScale;
+                                            const y = canvas.height - 50 - S_data[i] * yScale;
+                                            if (i === 0) ctx.moveTo(x, y);
+                                            else ctx.lineTo(x, y);
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // I curve (red)
+                                        ctx.strokeStyle = '#d9534f';
+                                        ctx.beginPath();
+                                        for (let i = 0; i < I_data.length; i++) {
+                                            const x = 50 + i * xScale;
+                                            const y = canvas.height - 50 - I_data[i] * yScale;
+                                            if (i === 0) ctx.moveTo(x, y);
+                                            else ctx.lineTo(x, y);
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // R curve (green)
+                                        ctx.strokeStyle = '#5cb85c';
+                                        ctx.beginPath();
+                                        for (let i = 0; i < R_data.length; i++) {
+                                            const x = 50 + i * xScale;
+                                            const y = canvas.height - 50 - R_data[i] * yScale;
+                                            if (i === 0) ctx.moveTo(x, y);
+                                            else ctx.lineTo(x, y);
+                                        }
+                                        ctx.stroke();
+                                        
+                                        // Labels
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '12px Arial';
+                                        ctx.fillText('Time', canvas.width/2, canvas.height - 20);
+                                        ctx.save();
+                                        ctx.translate(20, canvas.height/2);
+                                        ctx.rotate(-Math.PI/2);
+                                        ctx.fillText('Population', 0, 0);
+                                        ctx.restore();
+                                        
+                                        // Legend
+                                        ctx.fillStyle = '#337ab7';
+                                        ctx.fillRect(canvas.width - 120, 60, 20, 10);
+                                        ctx.fillStyle = '#333';
+                                        ctx.fillText('Susceptible', canvas.width - 90, 70);
+                                        
+                                        ctx.fillStyle = '#d9534f';
+                                        ctx.fillRect(canvas.width - 120, 80, 20, 10);
+                                        ctx.fillStyle = '#333';
+                                        ctx.fillText('Infected', canvas.width - 90, 90);
+                                        
+                                        ctx.fillStyle = '#5cb85c';
+                                        ctx.fillRect(canvas.width - 120, 100, 20, 10);
+                                        ctx.fillStyle = '#333';
+                                        ctx.fillText('Recovered', canvas.width - 90, 110);
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateSIR, 100);
+                                    </script>
+                                    </span>
+                                    <span id="3-8">
+                                    <h3>8. References</h3>
+                                    <p>For further reading on numerical methods for differential equations:</p>
+                                    <ul>
+                                        <li>Butcher, J.C. (2016). <em>Numerical Methods for Ordinary Differential Equations</em>. John Wiley & Sons.</li>
+                                        <li>Hairer, E., Nørsett, S.P., & Wanner, G. (1993). <em>Solving Ordinary Differential Equations I: Nonstiff Problems</em>. Springer.</li>
+                                        <li>LeVeque, R.J. (2007). <em>Finite Difference Methods for Ordinary and Partial Differential Equations</em>. SIAM.</li>
+                                        <li>Press, W.H., et al. (2007). <em>Numerical Recipes: The Art of Scientific Computing</em>. Cambridge University Press.</li>
+                                    </ul>
+                                    
+                                    <div class="quiz-container">
+                                        <h4>Self-Assessment Quiz</h4>
+                                        <div class="quiz-question">Which numerical method is most suitable for stiff differential equations?</div>
+                                        <ul class="quiz-options">
+                                            <li><input type="radio" name="q3" value="a"> Forward Euler</li>
+                                            <li><input type="radio" name="q3" value="b"> RK4</li>
+                                            <li><input type="radio" name="q3" value="c"> Backward Euler</li>
+                                            <li><input type="radio" name="q3" value="d"> Adams-Bashforth</li>
+                                        </ul>
+                                        <button class="btn btn-primary quiz-submit" onclick="checkQuiz3()">Check Answer</button>
+                                        <div class="quiz-feedback" id="quiz3-feedback"></div>
+                                    </div>
+                                    
+                                    <script>
+                                    function checkQuiz3() {
+                                        const selected = document.querySelector('input[name="q3"]:checked');
+                                        const feedback = document.getElementById('quiz3-feedback');
+                                        
+                                        if (!selected) {
+                                            feedback.textContent = 'Please select an answer.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                            feedback.style.display = 'block';
+                                            return;
+                                        }
+                                        
+                                        if (selected.value === 'c') {
+                                            feedback.textContent = 'Correct! Backward Euler is an implicit method that remains stable for stiff equations, even with larger step sizes.';
+                                            feedback.className = 'quiz-feedback correct';
+                                        } else {
+                                            feedback.textContent = 'Not quite. Stiff equations require implicit methods like Backward Euler or specialized stiff solvers to maintain stability.';
+                                            feedback.className = 'quiz-feedback incorrect';
+                                        }
+                                        feedback.style.display = 'block';
+                                    }
+                                    </script>
+                                    </span>
+                            </section>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+
+    </script>
+
+</body>
+
+</html>

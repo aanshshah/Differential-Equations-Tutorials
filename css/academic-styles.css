@@ -1,0 +1,406 @@
+/* Academic Content Styles */
+
+/* Academic theory boxes */
+.academic-box {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-left: 4px solid var(--primary-color);
+    padding: 2rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.academic-box h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.academic-box h5 {
+    color: var(--text-dark);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.academic-box ul {
+    margin-left: 1.5rem;
+}
+
+.academic-box li {
+    margin-bottom: 0.5rem;
+    line-height: 1.8;
+}
+
+/* Mathematical equations */
+.math-equation {
+    background: white;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-family: 'Computer Modern', 'Times New Roman', serif;
+    font-size: 1.2rem;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Theorem boxes */
+.theorem-box {
+    background: #e8f4fd;
+    border: 2px solid #2196f3;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.theorem-box::before {
+    content: "📐";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: white;
+    padding: 0 10px;
+    font-size: 1.5rem;
+}
+
+/* Proof boxes */
+.proof-box {
+    background: #f9f9f9;
+    border-left: 3px solid #666;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0 2rem 2rem;
+    font-style: italic;
+}
+
+.proof-box::after {
+    content: "□";
+    float: right;
+    font-style: normal;
+    font-size: 1.2rem;
+}
+
+/* Definition boxes */
+.definition-box {
+    background: #fff9e6;
+    border: 2px solid #ffc107;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.definition-box::before {
+    content: "📖";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: #fff9e6;
+    padding: 0 10px;
+    font-size: 1.5rem;
+}
+
+/* Complexity analysis boxes */
+.complexity-box {
+    background: #f0f4f8;
+    border: 1px solid #cbd5e0;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+}
+
+.complexity-box h5 {
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.complexity-box ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.complexity-box li {
+    margin-bottom: 0.25rem;
+}
+
+/* Reference list styling */
+.reference-list {
+    background: #fafafa;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+}
+
+.reference-list li {
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
+    position: relative;
+    list-style: none;
+}
+
+.reference-list li::before {
+    content: "[" counter(reference) "]";
+    counter-increment: reference;
+    position: absolute;
+    left: -1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.reference-list {
+    counter-reset: reference;
+}
+
+/* Algorithm boxes */
+.algorithm-box {
+    background: white;
+    border: 2px solid var(--primary-color);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.algorithm-box h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-family: 'Computer Modern', serif;
+}
+
+.algorithm-steps {
+    counter-reset: step;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.algorithm-steps li {
+    counter-increment: step;
+    margin-bottom: 0.75rem;
+    padding-left: 2rem;
+    position: relative;
+    list-style: none;
+}
+
+.algorithm-steps li::before {
+    content: "Step " counter(step) ":";
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Convergence criteria boxes */
+.convergence-box {
+    background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+    border: 1px solid #1890ff;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+}
+
+.convergence-box h5 {
+    color: #0050b3;
+    margin-bottom: 0.75rem;
+}
+
+/* Error analysis tables */
+.error-table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.error-table thead {
+    background: linear-gradient(135deg, var(--primary-color), #5f7cdb);
+    color: white;
+}
+
+.error-table th,
+.error-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.error-table tbody tr:hover {
+    background: #f5f5f5;
+}
+
+.error-table .method-name {
+    font-weight: 600;
+    text-align: left;
+}
+
+/* Important notes */
+.important-note {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+}
+
+.important-note::before {
+    content: "⚠️ Important: ";
+    font-weight: 600;
+    color: #c62828;
+}
+
+/* Historical notes */
+.historical-note {
+    background: #f3e5f5;
+    border: 1px solid #ba68c8;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    font-style: italic;
+}
+
+.historical-note::before {
+    content: "📜 Historical Note: ";
+    font-weight: 600;
+    font-style: normal;
+    color: #7b1fa2;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Application examples */
+.application-example {
+    background: #e8f5e9;
+    border: 2px solid #4caf50;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+}
+
+.application-example h5 {
+    color: #2e7d32;
+    margin-bottom: 0.75rem;
+}
+
+.application-example::before {
+    content: "🔬 Real-World Application";
+    display: block;
+    font-weight: 600;
+    color: #1b5e20;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Prerequisites alert */
+.prerequisites-alert {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+}
+
+.prerequisites-alert::before {
+    content: "📚 Prerequisites: ";
+    font-weight: 600;
+    color: #856404;
+}
+
+/* Summary boxes */
+.summary-box {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.summary-box h4 {
+    color: #2e7d32;
+    margin-bottom: 1rem;
+}
+
+.summary-box ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.summary-box li {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Key concepts highlighting */
+.key-concept {
+    background: linear-gradient(135deg, rgba(74, 105, 189, 0.1), rgba(243, 156, 18, 0.1));
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Comparison tables */
+.comparison-table {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.comparison-table thead {
+    background: var(--primary-color);
+    color: white;
+}
+
+.comparison-table th {
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.comparison-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+}
+
+.comparison-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.comparison-table .pros {
+    color: #4caf50;
+}
+
+.comparison-table .cons {
+    color: #f44336;
+}
+
+/* Interactive callouts */
+.try-it-yourself {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.try-it-yourself h5 {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.try-it-yourself::before {
+    content: "💡 Try It Yourself!";
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}

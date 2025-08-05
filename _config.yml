@@ -1,0 +1,19 @@
+# GitHub Pages configuration
+theme: jekyll-theme-minimal
+title: Differential Equations Tutorials
+description: Interactive tutorials for differential equations courses
+baseurl: ""
+url: "https://aanshshah.github.io/Differential-Equations-Tutorials"
+
+# Build settings
+markdown: kramdown
+exclude:
+  - README.md
+  - am34.zip
+
+# Collections
+collections:
+  am33:
+    output: true
+  am34:
+    output: true

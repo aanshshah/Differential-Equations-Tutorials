@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 5: Series and Recurrences - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+
+
+                            <section id="5">
+                                <h2>V. Series and Recurrences</h2>
+                                <br>
+                                <span id="5-1">
+                                    <h3>1. Recurrences</h3>
+                                    <p>Recurrence relations are equations that define sequences recursively. They appear naturally in discrete systems and are fundamental to understanding series solutions of differential equations.</p>
+                                    
+                                    <h4>Linear Recurrence Relations</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from sympy import symbols, Function, Eq, rsolve
+
+# Example 1: Fibonacci sequence
+# a_n = a_{n-1} + a_{n-2}, a_0 = 0, a_1 = 1
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(2, n+1):
+        a, b = b, a + b
+    return b
+
+# Generate Fibonacci numbers
+n_terms = 20
+fib_sequence = [fibonacci(i) for i in range(n_terms)]
+
+# Golden ratio appears in the ratio of consecutive terms
+ratios = [fib_sequence[i+1]/fib_sequence[i] for i in range(2, n_terms-1)]
+golden_ratio = (1 + np.sqrt(5)) / 2
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Plot Fibonacci sequence
+ax1.bar(range(n_terms), fib_sequence, color='blue', alpha=0.7)
+ax1.set_xlabel('n')
+ax1.set_ylabel('F(n)')
+ax1.set_title('Fibonacci Sequence')
+ax1.grid(True, alpha=0.3)
+
+# Plot ratio convergence
+ax2.plot(range(2, n_terms-1), ratios, 'bo-', label='F(n+1)/F(n)')
+ax2.axhline(y=golden_ratio, color='r', linestyle='--', label=f'Golden ratio = {golden_ratio:.6f}')
+ax2.set_xlabel('n')
+ax2.set_ylabel('Ratio')
+ax2.set_title('Convergence to Golden Ratio')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Solving recurrences symbolically
+print("\nSolving Recurrences with SymPy:")
+n = symbols('n')
+a = Function('a')
+
+# Example 2: a_n = 3*a_{n-1} - 2*a_{n-2}
+# Initial conditions: a_0 = 1, a_1 = 2
+recurrence_eq = Eq(a(n), 3*a(n-1) - 2*a(n-2))
+print(f"Recurrence: {recurrence_eq}")
+
+# Characteristic equation: r^2 - 3r + 2 = 0
+# Roots: r = 1, 2
+# General solution: a_n = A*1^n + B*2^n = A + B*2^n
+
+# Using initial conditions:
+# a_0 = A + B = 1
+# a_1 = A + 2B = 2
+# Solving: A = 0, B = 1
+# Therefore: a_n = 2^n
+
+n_vals = np.arange(0, 10)
+a_vals = 2**n_vals
+
+plt.figure(figsize=(10, 6))
+plt.plot(n_vals, a_vals, 'ro-', markersize=8, label='$a_n = 2^n$')
+plt.xlabel('n')
+plt.ylabel('$a_n$')
+plt.title('Solution of $a_n = 3a_{n-1} - 2a_{n-2}$')
+plt.grid(True)
+plt.legend()
+plt.yscale('log')
+plt.show()</code></pre>
+                                    
+                                    <h4>Non-homogeneous Recurrences</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Example: Tower of Hanoi
+# T_n = 2*T_{n-1} + 1, T_1 = 1
+# This gives the minimum number of moves to solve n-disk problem
+
+def tower_of_hanoi(n):
+    if n == 1:
+        return 1
+    return 2 * tower_of_hanoi(n-1) + 1
+
+# Direct formula: T_n = 2^n - 1
+n_disks = np.arange(1, 15)
+moves_recursive = [tower_of_hanoi(n) for n in n_disks]
+moves_formula = 2**n_disks - 1
+
+plt.figure(figsize=(10, 6))
+plt.semilogy(n_disks, moves_recursive, 'bo-', markersize=8, label='Recursive calculation')
+plt.semilogy(n_disks, moves_formula, 'r--', linewidth=2, label='Formula: $2^n - 1$')
+plt.xlabel('Number of disks')
+plt.ylabel('Minimum moves required')
+plt.title('Tower of Hanoi Problem')
+plt.grid(True, which="both", alpha=0.3)
+plt.legend()
+plt.show()
+
+print("Moves required for different numbers of disks:")
+for n in [3, 5, 10, 20, 64]:
+    moves = 2**n - 1
+    print(f"n = {n:2d}: {moves:,} moves")
+    if n == 64:
+        seconds = moves / 1  # 1 move per second
+        years = seconds / (365.25 * 24 * 3600)
+        print(f"    At 1 move/second: {years:.1e} years!")
+
+# Example: Compound interest with regular deposits
+# A_n = (1+r)*A_{n-1} + d
+# A_0 = initial amount, d = regular deposit
+
+def compound_interest_sequence(A0, r, d, n_years):
+    A = [A0]
+    for _ in range(n_years):
+        A.append((1 + r) * A[-1] + d)
+    return A
+
+# Parameters
+A0 = 1000  # Initial amount
+r = 0.05   # 5% annual interest
+d = 100    # $100 annual deposit
+years = 20
+
+A_recursive = compound_interest_sequence(A0, r, d, years)
+
+# Closed form solution
+# A_n = A0*(1+r)^n + d*((1+r)^n - 1)/r
+n = np.arange(0, years+1)
+A_formula = A0 * (1+r)**n + d * ((1+r)**n - 1) / r
+
+plt.figure(figsize=(10, 6))
+plt.plot(n, A_recursive, 'bo-', markersize=8, label='Recursive calculation')
+plt.plot(n, A_formula, 'r--', linewidth=2, label='Closed form')
+plt.xlabel('Years')
+plt.ylabel('Account Balance ($)')
+plt.title('Compound Interest with Regular Deposits')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+print(f"\nAfter {years} years: ${A_recursive[-1]:,.2f}")</code></pre>
+                                    
+                                    <h4>Matrix Methods for Recurrences</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Fibonacci using matrix method
+# [F_{n+1}]   [1 1] [F_n  ]
+# [F_n    ] = [1 0] [F_{n-1}]
+
+def fibonacci_matrix(n):
+    if n <= 1:
+        return n
+    
+    # Transition matrix
+    M = np.array([[1, 1], [1, 0]])
+    
+    # Initial state [F_1, F_0] = [1, 0]
+    state = np.array([1, 0])
+    
+    # Matrix power method
+    result = np.linalg.matrix_power(M, n-1) @ state
+    return result[0]
+
+# Compare methods
+n_compare = 40
+print("Comparing Fibonacci calculation methods:")
+print(f"F({n_compare}) using matrix method: {fibonacci_matrix(n_compare)}")
+print(f"F({n_compare}) using recursion: {fibonacci(n_compare)}")
+
+# Visualize the eigenvalues of Fibonacci matrix
+M = np.array([[1, 1], [1, 0]])
+eigenvalues, eigenvectors = np.linalg.eig(M)
+
+print(f"\nEigenvalues: {eigenvalues}")
+print(f"Golden ratio: {(1 + np.sqrt(5))/2}")
+print(f"Conjugate: {(1 - np.sqrt(5))/2}")
+
+# General linear recurrence: a_n = c1*a_{n-1} + c2*a_{n-2} + ... + ck*a_{n-k}
+# Can be written as state vector evolution
+def solve_linear_recurrence(coeffs, initial_conditions, n_terms):
+    """
+    Solve k-th order linear recurrence using matrix method.
+    coeffs: [c1, c2, ..., ck] for a_n = c1*a_{n-1} + ... + ck*a_{n-k}
+    """
+    k = len(coeffs)
+    
+    # Companion matrix
+    M = np.zeros((k, k))
+    M[0, :] = coeffs
+    M[1:, :-1] = np.eye(k-1)
+    
+    # Initial state
+    state = np.array(initial_conditions[::-1])
+    
+    # Generate sequence
+    sequence = list(initial_conditions)
+    current_state = state.copy()
+    
+    for _ in range(n_terms - k):
+        current_state = M @ current_state
+        sequence.append(current_state[0])
+    
+    return sequence, M
+
+# Example: a_n = 4*a_{n-1} - 5*a_{n-2} + 2*a_{n-3}
+coeffs = [4, -5, 2]
+initial = [1, 2, 3]
+n_terms = 15
+
+sequence, M = solve_linear_recurrence(coeffs, initial, n_terms)
+
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(range(n_terms), sequence, 'bo-', markersize=8)
+plt.xlabel('n')
+plt.ylabel('$a_n$')
+plt.title('Third-order Linear Recurrence')
+plt.grid(True)
+plt.yscale('log')
+
+# Plot eigenvalues
+eigenvals = np.linalg.eigvals(M)
+plt.subplot(1, 2, 2)
+plt.plot(eigenvals.real, eigenvals.imag, 'ro', markersize=10)
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+
+# Unit circle
+theta = np.linspace(0, 2*np.pi, 100)
+plt.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.5)
+
+plt.xlabel('Real part')
+plt.ylabel('Imaginary part')
+plt.title('Eigenvalues of Companion Matrix')
+plt.grid(True)
+plt.axis('equal')
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nEigenvalues: {eigenvals}")
+print(f"Largest eigenvalue magnitude: {np.max(np.abs(eigenvals)):.3f}")
+if np.max(np.abs(eigenvals)) > 1:
+    print("The sequence grows exponentially.")
+else:
+    print("The sequence is bounded.")</code></pre>
+                                    </span>
+                                    <span id="5-2">
+                                    <h3>2. Generating Functions</h3>
+                                    <p>Generating functions transform sequences into functions, providing a powerful tool for solving recurrences and analyzing sequences.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+from sympy import symbols, Function, Sum, expand, series, apart
+
+# Generating Functions
+print("Generating Functions: Transform sequences into power series\n")
+
+# Example 1: Geometric series
+# Sequence: 1, 1, 1, 1, ...
+# Generating function: G(x) = 1 + x + x^2 + ... = 1/(1-x)
+
+x = symbols('x')
+n = symbols('n', integer=True, nonnegative=True)
+
+# Geometric series
+geometric_gf = 1/(1-x)
+print(f"Geometric series: {geometric_gf}")
+print(f"Taylor expansion: {series(geometric_gf, x, 0, 10)}")
+
+# Example 2: Fibonacci generating function
+# F(x) = x/(1 - x - x^2)
+fib_gf = x/(1 - x - x**2)
+print(f"\nFibonacci GF: {fib_gf}")
+fib_series = series(fib_gf, x, 0, 15)
+print(f"Series expansion: {fib_series}")
+
+# Extract Fibonacci numbers from coefficients
+fib_coeffs = [fib_series.coeff(x, i) for i in range(15)]
+print(f"\nFibonacci numbers: {fib_coeffs}")
+
+# Visualize generating functions
+x_vals = np.linspace(-0.5, 0.5, 1000)
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Plot 1: Geometric series and partial sums
+ax1 = axes[0, 0]
+for n in [1, 2, 5, 10]:
+    partial_sum = np.sum([x_vals**i for i in range(n)], axis=0)
+    ax1.plot(x_vals, partial_sum, label=f'n={n}')
+
+ax1.plot(x_vals, 1/(1-x_vals), 'k--', linewidth=2, label='1/(1-x)')
+ax1.set_xlabel('x')
+ax1.set_ylabel('Value')
+ax1.set_title('Geometric Series Convergence')
+ax1.legend()
+ax1.grid(True)
+ax1.set_ylim(-5, 5)
+
+# Plot 2: Operations on generating functions
+ax2 = axes[0, 1]
+
+# Multiplication of GFs corresponds to convolution
+# (1 + x + x^2 + ...)(1 + x + x^2 + ...) = 1 + 2x + 3x^2 + ...
+# This gives the triangular numbers!
+convolution_gf = 1/(1-x)**2
+conv_series = series(convolution_gf, x, 0, 10)
+conv_coeffs = [conv_series.coeff(x, i) for i in range(10)]
+
+ax2.bar(range(10), conv_coeffs, alpha=0.7)
+ax2.set_xlabel('n')
+ax2.set_ylabel('Coefficient')
+ax2.set_title('Coefficients of 1/(1-x)²')
+ax2.set_xticks(range(10))
+ax2.grid(True, alpha=0.3)
+
+# Plot 3: Solving recurrences with GFs
+ax3 = axes[1, 0]
+
+# Example: a_n = 2*a_{n-1} + 1, a_0 = 0
+# Let G(x) = sum(a_n * x^n)
+# Then: G(x) = 2xG(x) + x/(1-x)
+# Solving: G(x) = x/((1-x)(1-2x))
+
+recurrence_gf = x/((1-x)*(1-2*x))
+# Partial fractions
+partial = apart(recurrence_gf, x)
+print(f"\nPartial fractions: {partial}")
+
+# This gives a_n = 2^n - 1
+n_vals = np.arange(0, 10)
+a_vals = 2**n_vals - 1
+a_vals[0] = 0  # a_0 = 0
+
+ax3.plot(n_vals, a_vals, 'ro-', markersize=8, label='$a_n = 2^n - 1$')
+ax3.set_xlabel('n')
+ax3.set_ylabel('$a_n$')
+ax3.set_title('Solution via Generating Function')
+ax3.grid(True)
+ax3.legend()
+
+# Plot 4: Catalan numbers
+ax4 = axes[1, 1]
+
+# Catalan generating function: C(x) = (1 - sqrt(1-4x))/(2x)
+catalan_gf = (1 - sp.sqrt(1-4*x))/(2*x)
+catalan_series = series(catalan_gf, x, 0, 10)
+
+# Extract Catalan numbers
+catalan_nums = [catalan_series.coeff(x, i) for i in range(10)]
+catalan_nums = [int(c) for c in catalan_nums if c is not None]
+
+ax4.bar(range(len(catalan_nums)), catalan_nums, color='purple', alpha=0.7)
+ax4.set_xlabel('n')
+ax4.set_ylabel('C_n')
+ax4.set_title('Catalan Numbers')
+ax4.set_xticks(range(len(catalan_nums)))
+ax4.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Applications of generating functions
+print("\n" + "="*50)
+print("Applications of Generating Functions:")
+print("="*50)
+
+# 1. Counting problems
+print("\n1. Counting with restrictions:")
+print("   Number of ways to make change for n cents using pennies, nickels, dimes:")
+print("   GF = 1/((1-x)(1-x^5)(1-x^10))")
+
+# 2. Probability generating functions
+print("\n2. Probability GF for a fair die:")
+print("   P(x) = (x + x^2 + x^3 + x^4 + x^5 + x^6)/6")
+print("   Mean = P'(1) = 3.5")
+print("   Variance = P''(1) + P'(1) - [P'(1)]^2")
+
+# 3. Exponential generating functions
+print("\n3. Exponential GF for n!:")
+print("   E(x) = sum(n! * x^n/n!) = sum(x^n) = 1/(1-x)")
+
+# Interactive example: Build your own generating function
+print("\n" + "="*50)
+print("Build a generating function from a sequence:")
+
+# Example sequence: 1, 3, 5, 7, ... (odd numbers)
+sequence = [2*i + 1 for i in range(10)]
+print(f"Sequence: {sequence}")
+
+# Build GF
+gf_expression = sum(sequence[i] * x**i for i in range(len(sequence)))
+print(f"\nGenerating function (first 10 terms): {gf_expression}")
+
+# Closed form for odd numbers: (1+x)/(1-x)^2
+closed_form = (1+x)/(1-x)**2
+print(f"Closed form: {closed_form}")
+print(f"Verification: {series(closed_form, x, 0, 10)}")</code></pre>
+                                    
+                                    <div class="interactive-exercise">
+                                        <h4>Interactive: Generating Function Explorer</h4>
+                                        <p>See how different generating functions produce sequences!</p>
+                                        <div class="plot-container">
+                                            <canvas id="gfExplorer" width="600" height="400"></canvas>
+                                            <div class="plot-controls">
+                                                <label>Select generating function:</label>
+                                                <select id="gf-select" onchange="updateGF()">
+                                                    <option value="geometric">1/(1-x) - Geometric</option>
+                                                    <option value="triangular">1/(1-x)² - Triangular</option>
+                                                    <option value="fibonacci">x/(1-x-x²) - Fibonacci</option>
+                                                    <option value="catalan">(1-√(1-4x))/(2x) - Catalan</option>
+                                                </select>
+                                                <br><br>
+                                                <div id="gf-info"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                    function updateGF() {
+                                        const select = document.getElementById('gf-select');
+                                        const canvas = document.getElementById('gfExplorer');
+                                        const ctx = canvas.getContext('2d');
+                                        const info = document.getElementById('gf-info');
+                                        
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        
+                                        let sequence = [];
+                                        let description = '';
+                                        
+                                        switch(select.value) {
+                                            case 'geometric':
+                                                sequence = Array(15).fill(1);
+                                                description = 'Each term is 1. Sum of first n terms: n';
+                                                break;
+                                            case 'triangular':
+                                                for (let i = 0; i < 15; i++) sequence.push(i + 1);
+                                                description = 'Triangular numbers: 1, 2, 3, 4, ...';
+                                                break;
+                                            case 'fibonacci':
+                                                sequence = [0, 1];
+                                                for (let i = 2; i < 15; i++) {
+                                                    sequence.push(sequence[i-1] + sequence[i-2]);
+                                                }
+                                                description = 'Fibonacci sequence: each term is sum of previous two';
+                                                break;
+                                            case 'catalan':
+                                                sequence = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796];
+                                                description = 'Catalan numbers: count binary trees, parentheses, paths';
+                                                break;
+                                        }
+                                        
+                                        info.textContent = description;
+                                        
+                                        // Draw axes
+                                        ctx.strokeStyle = '#ddd';
+                                        ctx.beginPath();
+                                        ctx.moveTo(50, canvas.height - 50);
+                                        ctx.lineTo(canvas.width - 50, canvas.height - 50);
+                                        ctx.moveTo(50, 50);
+                                        ctx.lineTo(50, canvas.height - 50);
+                                        ctx.stroke();
+                                        
+                                        // Scale for bars
+                                        const maxVal = Math.max(...sequence);
+                                        const barWidth = (canvas.width - 100) / sequence.length;
+                                        const scale = (canvas.height - 100) / maxVal;
+                                        
+                                        // Draw bars
+                                        ctx.fillStyle = '#337ab7';
+                                        sequence.forEach((val, i) => {
+                                            const x = 50 + i * barWidth + barWidth * 0.1;
+                                            const height = val * scale;
+                                            const y = canvas.height - 50 - height;
+                                            
+                                            ctx.fillRect(x, y, barWidth * 0.8, height);
+                                            
+                                            // Label
+                                            ctx.fillStyle = '#333';
+                                            ctx.font = '10px Arial';
+                                            ctx.fillText(val, x + barWidth * 0.4, y - 5);
+                                            ctx.fillText(i, x + barWidth * 0.4, canvas.height - 35);
+                                            ctx.fillStyle = '#337ab7';
+                                        });
+                                        
+                                        // Labels
+                                        ctx.fillStyle = '#333';
+                                        ctx.font = '12px Arial';
+                                        ctx.fillText('n', canvas.width/2, canvas.height - 10);
+                                        ctx.save();
+                                        ctx.translate(20, canvas.height/2);
+                                        ctx.rotate(-Math.PI/2);
+                                        ctx.fillText('a_n', 0, 0);
+                                        ctx.restore();
+                                    }
+                                    
+                                    // Initialize on load
+                                    setTimeout(updateGF, 100);
+                                    </script>
+                                    </span>
+                                    <span id="5-3">
+                                    <h3>3. Series Solutions for the First Order Equations</h3>
+                                    <p>Many differential equations can be solved by assuming the solution is a power series and finding the coefficients.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+from sympy import symbols, Function, Eq, dsolve, series, factorial
+
+# Power Series Method for First-Order ODEs
+print("Series Solutions for First-Order ODEs\n")
+
+# Example 1: y' = y (exponential equation)
+# Assume y = sum(a_n * x^n)
+x = symbols('x')
+n = symbols('n', integer=True, nonnegative=True)
+
+# If y = sum(a_n * x^n), then y' = sum(n * a_n * x^(n-1))
+# Substituting into y' = y:
+# sum(n * a_n * x^(n-1)) = sum(a_n * x^n)
+# sum((n+1) * a_{n+1} * x^n) = sum(a_n * x^n)
+# Therefore: a_{n+1} = a_n / (n+1)
+# With a_0 = 1, we get a_n = 1/n!
+
+print("Example 1: y' = y with y(0) = 1")
+print("Recurrence: a_{n+1} = a_n / (n+1)")
+print("Solution: a_n = 1/n!")
+print("Therefore: y = sum(x^n/n!) = e^x\n")
+
+# Verify by computing partial sums
+x_vals = np.linspace(-2, 2, 100)
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Plot convergence of series
+ax1 = axes[0, 0]
+for N in [1, 3, 5, 10]:
+    partial_sum = np.sum([x_vals**n/np.math.factorial(n) for n in range(N+1)], axis=0)
+    ax1.plot(x_vals, partial_sum, label=f'N={N}')
+
+ax1.plot(x_vals, np.exp(x_vals), 'k--', linewidth=2, label='$e^x$')
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_title('Convergence to $e^x$')
+ax1.legend()
+ax1.grid(True)
+
+# Example 2: y' = 1 + x*y
+print("Example 2: y' = 1 + xy with y(0) = 1")
+print("Substituting y = sum(a_n * x^n) and y' = sum(n * a_n * x^(n-1)):")
+print("sum((n+1)*a_{n+1}*x^n) = 1 + x*sum(a_n*x^n)")
+print("Comparing coefficients:")
+print("n=0: a_1 = 1")
+print("n>=1: (n+1)*a_{n+1} = a_{n-1}")
+print("Therefore: a_{n+1} = a_{n-1}/(n+1)\n")
+
+# Calculate coefficients
+def calculate_coefficients_ex2(N):
+    a = [1, 1]  # a_0 = 1, a_1 = 1
+    for n in range(2, N+1):
+        if n % 2 == 0:
+            a.append(a[n-2] / n)
+        else:
+            a.append(a[n-2] / n)
+    return a
+
+coeffs = calculate_coefficients_ex2(20)
+
+# Plot the solution
+ax2 = axes[0, 1]
+x_test = np.linspace(-1, 1, 100)
+
+for N in [5, 10, 15, 20]:
+    y_approx = np.sum([coeffs[n] * x_test**n for n in range(min(N+1, len(coeffs)))], axis=0)
+    ax2.plot(x_test, y_approx, label=f'N={N}')
+
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+ax2.set_title("Series Solution of y' = 1 + xy")
+ax2.legend()
+ax2.grid(True)
+ax2.set_ylim(0, 5)
+
+# Example 3: y' = y^2 (nonlinear)
+print("Example 3: y' = y^2 with y(0) = 1 (Nonlinear example)")
+print("This leads to y = 1/(1-x), which has radius of convergence R = 1\n")
+
+# For y' = y^2, if y = sum(a_n * x^n), then y^2 = sum(c_n * x^n)
+# where c_n = sum(a_i * a_{n-i}) (Cauchy product)
+# This gives: a_0 = 1, a_n = sum(a_i * a_{n-1-i}) for n >= 1
+
+def calculate_nonlinear_coeffs(N):
+    a = [1]  # a_0 = 1
+    for n in range(1, N+1):
+        # Calculate c_{n-1} = sum(a_i * a_{n-1-i})
+        c_n_minus_1 = sum(a[i] * a[n-1-i] for i in range(n))
+        a.append(c_n_minus_1)
+    return a
+
+nonlinear_coeffs = calculate_nonlinear_coeffs(15)
+print(f"First few coefficients: {nonlinear_coeffs[:10]}")
+print("These are all 1's, giving y = 1 + x + x^2 + ... = 1/(1-x)")
+
+# Plot nonlinear solution
+ax3 = axes[1, 0]
+x_safe = np.linspace(-0.9, 0.9, 100)
+y_exact = 1 / (1 - x_safe)
+
+for N in [3, 5, 10]:
+    y_series = np.sum([x_safe**n for n in range(N+1)], axis=0)
+    ax3.plot(x_safe, y_series, label=f'N={N}')
+
+ax3.plot(x_safe, y_exact, 'k--', linewidth=2, label='1/(1-x)')
+ax3.set_xlabel('x')
+ax3.set_ylabel('y')
+ax3.set_title("Series Solution of y' = y² (Nonlinear)")
+ax3.legend()
+ax3.grid(True)
+ax3.set_ylim(0, 10)
+ax3.axvline(x=1, color='r', linestyle=':', alpha=0.7, label='Singularity')
+
+# Example 4: Radius of convergence
+ax4 = axes[1, 1]
+
+# Different equations with different convergence radii
+equations = [
+    ("y' = y", "$e^x$", np.inf),
+    ("y' = y²", "1/(1-x)", 1),
+    ("y' = sin(x)y", "$e^{1-\cos(x)}$", np.inf),
+    ("y' = 1/(1+x²)y", "$e^{\\arctan(x)}$", 1)
+]
+
+radii = [eq[2] for eq in equations]
+labels = [eq[0] for eq in equations]
+y_pos = range(len(equations))
+
+colors = ['green' if r == np.inf else 'orange' for r in radii]
+bar_values = [10 if r == np.inf else r for r in radii]  # Cap infinity at 10 for display
+
+ax4.barh(y_pos, bar_values, color=colors, alpha=0.7)
+ax4.set_yticks(y_pos)
+ax4.set_yticklabels(labels)
+ax4.set_xlabel('Radius of Convergence')
+ax4.set_title('Convergence Radii for Different ODEs')
+ax4.grid(True, axis='x')
+
+for i, (eq, sol, r) in enumerate(equations):
+    r_text = '∞' if r == np.inf else str(r)
+    ax4.text(bar_values[i] + 0.1, i, f'R = {r_text}', va='center')
+
+plt.tight_layout()
+plt.show()
+
+# Practical implementation
+print("\n" + "="*50)
+print("Practical Algorithm for Series Solutions:")
+print("="*50)
+print("1. Assume y = sum(a_n * x^n)")
+print("2. Calculate y' = sum(n * a_n * x^(n-1))")
+print("3. Substitute into the ODE")
+print("4. Compare coefficients of like powers")
+print("5. Solve the resulting recurrence relation")
+print("6. Check radius of convergence")</code></pre>
+                                    </span>
+                                    <span id="5-4">
+                                    <h3>4. Series Solutions for the Second Order Equations</h3>
+                                    <p>Second-order differential equations often require series solutions, especially near singular points. The Frobenius method extends the power series approach.</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+from sympy import symbols, factorial, summation, series
+
+# Series Solutions for Second-Order ODEs
+print("Series Solutions for Second-Order ODEs\n")
+
+# Example 1: Airy's equation y'' - xy = 0
+print("Example 1: Airy's Equation y'' - xy = 0")
+print("Assume y = sum(a_n * x^n)")
+print("Then y'' = sum(n(n-1) * a_n * x^(n-2))")
+print("Substituting: sum(n(n-1) * a_n * x^(n-2)) - x * sum(a_n * x^n) = 0")
+print("sum((n+2)(n+1) * a_{n+2} * x^n) - sum(a_n * x^{n+1}) = 0")
+print("Recurrence: a_{n+3} = a_n / ((n+3)(n+2))\n")
+
+# Calculate Airy function coefficients
+def airy_coefficients(N, a0=1, a1=0, a2=0):
+    a = [a0, a1, a2]
+    for n in range(3, N):
+        a.append(a[n-3] / (n * (n-1)))
+    return a
+
+# Two linearly independent solutions
+coeffs_Ai = airy_coefficients(30, a0=1, a1=0, a2=0)  # Ai(x)
+coeffs_Bi = airy_coefficients(30, a0=0, a1=1, a2=0)  # Related to Bi(x)
+
+x_vals = np.linspace(-10, 2, 500)
+
+# Compute series approximations
+def evaluate_series(coeffs, x, N):
+    return np.sum([coeffs[n] * x**n for n in range(min(N, len(coeffs)))], axis=0)
+
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+# Plot Airy functions
+ax1 = axes[0, 0]
+for N in [10, 20, 30]:
+    y_approx = evaluate_series(coeffs_Ai, x_vals, N)
+    ax1.plot(x_vals, y_approx, label=f'N={N}')
+
+ax1.set_xlabel('x')
+ax1.set_ylabel('Ai(x)')
+ax1.set_title('Airy Function Ai(x)')
+ax1.legend()
+ax1.grid(True)
+ax1.set_ylim(-1, 2)
+ax1.set_xlim(-10, 2)
+
+# Example 2: Bessel's equation x²y'' + xy' + (x² - ν²)y = 0
+print("Example 2: Bessel's Equation of order 0")
+print("x²y'' + xy' + x²y = 0")
+print("Using Frobenius method: y = x^r * sum(a_n * x^n)\n")
+
+# For ν = 0, one solution is J_0(x)
+# Recurrence: a_n = -a_{n-2} / (n²)
+def bessel_j0_coeffs(N):
+    a = [1]  # a_0 = 1
+    for n in range(1, N):
+        if n % 2 == 1:
+            a.append(0)  # Odd coefficients are zero
+        else:
+            k = n // 2
+            # a_{2k} = (-1)^k / (2^{2k} * (k!)²)
+            a.append((-1)**k / (2**(2*k) * np.math.factorial(k)**2))
+    return a
+
+bessel_coeffs = bessel_j0_coeffs(30)
+
+# Plot Bessel function J_0
+ax2 = axes[0, 1]
+x_bessel = np.linspace(0, 15, 300)
+
+for N in [10, 20, 30]:
+    # J_0(x) = sum((-1)^k * (x/2)^{2k} / (k!)²)
+    y_bessel = np.zeros_like(x_bessel)
+    for k in range(N//2):
+        y_bessel += (-1)**k * (x_bessel/2)**(2*k) / np.math.factorial(k)**2
+    ax2.plot(x_bessel, y_bessel, label=f'N={N}')
+
+ax2.set_xlabel('x')
+ax2.set_ylabel('$J_0(x)$')
+ax2.set_title('Bessel Function $J_0(x)$')
+ax2.legend()
+ax2.grid(True)
+ax2.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+
+# Example 3: Legendre's equation (1-x²)y'' - 2xy' + n(n+1)y = 0
+print("Example 3: Legendre's Equation for n=2,3,4")
+print("(1-x²)y'' - 2xy' + n(n+1)y = 0\n")
+
+# Legendre polynomials
+def legendre_polynomial(n, x):
+    """Calculate Legendre polynomial P_n(x) using Rodrigues' formula"""
+    if n == 0:
+        return np.ones_like(x)
+    elif n == 1:
+        return x
+    else:
+        # Recurrence relation
+        P_nm1 = np.ones_like(x)  # P_0
+        P_n = x  # P_1
+        for k in range(2, n+1):
+            P_np1 = ((2*k-1)*x*P_n - (k-1)*P_nm1) / k
+            P_nm1, P_n = P_n, P_np1
+        return P_n
+
+ax3 = axes[0, 2]
+x_leg = np.linspace(-1, 1, 200)
+
+for n in range(5):
+    P_n = legendre_polynomial(n, x_leg)
+    ax3.plot(x_leg, P_n, label=f'$P_{n}(x)$', linewidth=2)
+
+ax3.set_xlabel('x')
+ax3.set_ylabel('$P_n(x)$')
+ax3.set_title('Legendre Polynomials')
+ax3.legend()
+ax3.grid(True)
+ax3.set_ylim(-1.5, 1.5)
+ax3.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+ax3.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+
+# Example 4: Regular vs Singular Points
+print("Example 4: Classification of Singular Points")
+
+ax4 = axes[1, 0]
+# Demonstrate behavior near regular and singular points
+x_vals = np.linspace(-2, 2, 1000)
+
+# Regular point: y'' + y = 0 (solution is analytic everywhere)
+y_regular = np.cos(x_vals)
+
+# Regular singular point: x²y'' + xy' - y = 0
+# Solution: y = x (one solution)
+y_reg_singular = x_vals
+
+# Irregular singular point: x³y'' + y = 0
+# Solution has essential singularity at x=0
+
+ax4.plot(x_vals, y_regular, 'b-', label='Regular point (cos x)')
+ax4.plot(x_vals, y_reg_singular, 'r-', label='Regular singular (x)')
+ax4.set_xlabel('x')
+ax4.set_ylabel('y')
+ax4.set_title('Solutions Near Different Points')
+ax4.legend()
+ax4.grid(True)
+ax4.set_ylim(-3, 3)
+
+# Example 5: Frobenius Method
+ax5 = axes[1, 1]
+print("\nExample 5: Frobenius Method")
+print("For x²y'' + xy' + (x² - 1/4)y = 0")
+print("Indicial equation: r² = 1/4, so r = ±1/2")
+
+# Solutions involve x^{1/2} and x^{-1/2}
+x_frob = np.linspace(0.01, 5, 200)
+y1_frob = np.sqrt(x_frob) * np.sin(x_frob)  # ~ x^{1/2} * sin(x)
+y2_frob = np.cos(x_frob) / np.sqrt(x_frob)  # ~ x^{-1/2} * cos(x)
+
+ax5.plot(x_frob, y1_frob, 'b-', label='$x^{1/2}\sin(x)$')
+ax5.plot(x_frob, y2_frob, 'r-', label='$x^{-1/2}\cos(x)$')
+ax5.set_xlabel('x')
+ax5.set_ylabel('y')
+ax5.set_title('Frobenius Solutions')
+ax5.legend()
+ax5.grid(True)
+ax5.set_ylim(-3, 3)
+
+# Example 6: Convergence visualization
+ax6 = axes[1, 2]
+
+# Show convergence of series for different x values
+x_test_values = [0.5, 1.0, 2.0]
+colors = ['blue', 'green', 'red']
+
+for x_test, color in zip(x_test_values, colors):
+    partial_sums = []
+    for N in range(1, 30):
+        # Using Bessel series as example
+        partial_sum = sum((-1)**k * (x_test/2)**(2*k) / np.math.factorial(k)**2 
+                         for k in range(N))
+        partial_sums.append(partial_sum)
+    
+    ax6.plot(range(1, 30), partial_sums, color=color, marker='o', 
+             markersize=4, label=f'x = {x_test}')
+
+ax6.set_xlabel('Number of terms')
+ax6.set_ylabel('Partial sum')
+ax6.set_title('Convergence of Bessel Series')
+ax6.legend()
+ax6.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Summary table
+print("\n" + "="*60)
+print("Summary: Methods for Second-Order ODEs")
+print("="*60)
+print("Method               | When to use")
+print("-"*60)
+print("Power series        | Near ordinary points")
+print("Frobenius method    | Near regular singular points")
+print("Asymptotic methods  | Near irregular singular points")
+print("Special functions   | When ODE matches known form")</code></pre>
+                                    </span>
+                                    <span id="5-5">
+                                    <h3>5. Series Solutions</h3>
+                                    <p>Advanced series methods for solving differential equations, including Frobenius method and asymptotic expansions.</p>
+                                    
+                                    <h4>Frobenius Method</h4>
+                                    <p>The Frobenius method extends power series solutions to handle singular points:</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import jv, yv
+
+# Example: Bessel's equation
+# x²y'' + xy' + (x² - ν²)y = 0
+
+def frobenius_bessel(x, nu, n_terms=10):
+    """
+    Frobenius series solution for Bessel's equation.
+    """
+    # For simplicity, using the series representation of J_ν(x)
+    series = 0
+    for k in range(n_terms):
+        term = ((-1)**k / (np.math.factorial(k) * np.math.gamma(k + nu + 1))) * (x/2)**(2*k + nu)
+        series += term
+    return series
+
+# Compare with exact Bessel function
+x = np.linspace(0.1, 10, 200)
+nu = 0.5
+
+# Frobenius approximation
+y_frobenius = [frobenius_bessel(xi, nu, 15) for xi in x]
+
+# Exact solution
+y_exact = jv(nu, x)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x, y_exact, 'b-', label=f'Exact $J_{{{nu}}}(x)$', linewidth=2)
+plt.plot(x, y_frobenius, 'r--', label='Frobenius approximation', linewidth=2)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Frobenius Method for Bessel\'s Equation')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Error analysis
+error = np.abs(np.array(y_frobenius) - y_exact)
+plt.figure(figsize=(10, 4))
+plt.semilogy(x, error)
+plt.xlabel('x')
+plt.ylabel('Absolute Error')
+plt.title('Error in Frobenius Approximation')
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                                    
+                                    <h4>Regular vs Singular Points</h4>
+                                    <p>Identifying the nature of singular points determines the solution method:</p>
+                                    
+                                    <pre><code>def classify_singular_point(p_coeffs, q_coeffs, x0=0):
+    """
+    Classify singular points for equation: y'' + P(x)y' + Q(x)y = 0
+    p_coeffs, q_coeffs: polynomial coefficients [a0, a1, a2, ...]
+    """
+    # Check if x0 is a singular point
+    # For simplicity, assume x0 = 0
+    
+    # Expand P(x) and Q(x) near x = 0
+    # P(x) = p0/x + p1 + p2*x + ...
+    # Q(x) = q0/x² + q1/x + q2 + ...
+    
+    print(f"Analyzing point x = {x0}")
+    
+    # Check regularity conditions
+    if len(p_coeffs) > 0 and p_coeffs[0] != 0:
+        print("P(x) has a pole of order 1")
+        p_regular = True
+    else:
+        p_regular = False
+    
+    if len(q_coeffs) > 1 and (q_coeffs[0] != 0 or q_coeffs[1] != 0):
+        print("Q(x) has poles")
+        q_regular = q_coeffs[0] == 0  # No pole of order 2
+    else:
+        q_regular = True
+    
+    if p_regular and q_regular:
+        print("Regular singular point - use Frobenius method")
+        return "regular"
+    else:
+        print("Irregular singular point - more complex methods needed")
+        return "irregular"
+
+# Example: Bessel's equation at x = 0
+# y'' + (1/x)y' + (1 - ν²/x²)y = 0
+print("Bessel's equation:")
+classify_singular_point([1], [-1, 0, 1])  # P(x) = 1/x, Q(x) = 1 - ν²/x²</code></pre>
+                                    
+                                    <h4>Asymptotic Series</h4>
+                                    <p>For large values of the independent variable, asymptotic expansions provide accurate approximations:</p>
+                                    
+                                    <pre><code>def stirling_asymptotic(n, terms=5):
+    """
+    Stirling's asymptotic expansion for n!
+    """
+    # ln(n!) ≈ n*ln(n) - n + (1/2)*ln(2πn) + sum of correction terms
+    log_factorial = n * np.log(n) - n + 0.5 * np.log(2 * np.pi * n)
+    
+    # Bernoulli numbers for correction terms
+    B = [1, -1/2, 1/6, 0, -1/30, 0, 1/42]
+    
+    # Add correction terms
+    for k in range(1, min(terms, len(B)//2)):
+        if B[2*k] != 0:
+            log_factorial += B[2*k] / (2*k * (2*k-1) * n**(2*k-1))
+    
+    return np.exp(log_factorial)
+
+# Compare with exact factorial
+n_values = np.arange(10, 51)
+exact = [float(np.math.factorial(n)) for n in n_values]
+asymptotic = [stirling_asymptotic(n, 5) for n in n_values]
+
+plt.figure(figsize=(12, 5))
+
+# Relative error
+plt.subplot(1, 2, 1)
+rel_error = np.abs((np.array(asymptotic) - np.array(exact)) / np.array(exact))
+plt.semilogy(n_values, rel_error, 'b-', linewidth=2)
+plt.xlabel('n')
+plt.ylabel('Relative Error')
+plt.title('Stirling\'s Approximation Error')
+plt.grid(True, alpha=0.3)
+
+# Convergence with number of terms
+plt.subplot(1, 2, 2)
+n = 50
+errors = []
+for terms in range(1, 8):
+    approx = stirling_asymptotic(n, terms)
+    exact_val = float(np.math.factorial(n))
+    errors.append(abs(approx - exact_val) / exact_val)
+
+plt.semilogy(range(1, 8), errors, 'ro-', linewidth=2, markersize=8)
+plt.xlabel('Number of Terms')
+plt.ylabel('Relative Error')
+plt.title(f'Convergence of Asymptotic Series (n={n})')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="5-6">
+                                    <h3>6. Motivated Examples from Music</h3>
+                                    <p>Exploring how differential equations model musical phenomena, from vibrating strings to room acoustics.</p>
+                                    
+                                    <h4>Vibrating String Equation</h4>
+                                    <p>The fundamental equation governing string instruments:</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from IPython.display import HTML
+
+# Wave equation: ∂²u/∂t² = c² ∂²u/∂x²
+def solve_wave_equation(L, c, initial_shape, initial_velocity, T, nx=100, nt=1000):
+    """
+    Solve the 1D wave equation using finite differences.
+    L: string length
+    c: wave speed (related to tension and density)
+    """
+    dx = L / (nx - 1)
+    dt = T / nt
+    
+    # Stability condition
+    if c * dt / dx > 1:
+        dt = 0.9 * dx / c
+        nt = int(T / dt)
+    
+    x = np.linspace(0, L, nx)
+    u = np.zeros((nt, nx))
+    
+    # Initial conditions
+    u[0, :] = initial_shape(x)
+    u[1, :] = u[0, :] + dt * initial_velocity(x)
+    
+    # Time stepping
+    r = (c * dt / dx) ** 2
+    for n in range(1, nt - 1):
+        u[n + 1, 1:-1] = 2 * u[n, 1:-1] - u[n - 1, 1:-1] + \
+                         r * (u[n, 2:] - 2 * u[n, 1:-1] + u[n, :-2])
+        # Fixed endpoints
+        u[n + 1, 0] = 0
+        u[n + 1, -1] = 0
+    
+    return x, u
+
+# Guitar string example
+L = 1.0  # 1 meter string
+c = 343  # wave speed (m/s) - approximately for a guitar string
+
+# Plucked string initial shape
+def plucked_string(x, pluck_pos=0.2):
+    shape = np.zeros_like(x)
+    for i, xi in enumerate(x):
+        if xi < pluck_pos * L:
+            shape[i] = xi / (pluck_pos * L) * 0.01
+        else:
+            shape[i] = (L - xi) / (L - pluck_pos * L) * 0.01
+    return shape
+
+# Solve the equation
+x, u = solve_wave_equation(L, c, lambda x: plucked_string(x), lambda x: 0, T=0.01)
+
+# Visualize the vibration
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+# String shape at different times
+time_indices = [0, 50, 100, 150, 200]
+for idx in time_indices:
+    ax1.plot(x, u[idx, :] + idx * 0.005, label=f't = {idx * 0.01 / 200:.3f}s')
+
+ax1.set_xlabel('Position along string (m)')
+ax1.set_ylabel('Displacement')
+ax1.set_title('Vibrating String at Different Times')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Frequency spectrum at the middle of the string
+middle_point = len(x) // 2
+vibration = u[:, middle_point]
+freqs = np.fft.fftfreq(len(vibration), d=0.01/len(vibration))
+spectrum = np.abs(np.fft.fft(vibration))
+
+ax2.plot(freqs[:len(freqs)//2], spectrum[:len(spectrum)//2])
+ax2.set_xlabel('Frequency (Hz)')
+ax2.set_ylabel('Amplitude')
+ax2.set_title('Frequency Spectrum of String Vibration')
+ax2.set_xlim(0, 2000)
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Fundamental frequency and harmonics
+fundamental = c / (2 * L)
+print(f"Fundamental frequency: {fundamental:.1f} Hz")
+print(f"First 5 harmonics: {[fundamental * n for n in range(1, 6)]}")</code></pre>
+                                    
+                                    <h4>Room Acoustics and Reverberation</h4>
+                                    <p>Differential equations model sound propagation in rooms:</p>
+                                    
+                                    <pre><code># Sabine's reverberation equation
+def sabine_rt60(volume, surface_area, absorption_coeff):
+    """
+    Calculate reverberation time using Sabine's formula.
+    RT60: time for sound to decay by 60 dB
+    """
+    return 0.161 * volume / (surface_area * absorption_coeff)
+
+# Room impulse response simulation
+def room_impulse_response(room_dims, source_pos, mic_pos, c=343, duration=1.0, fs=44100):
+    """
+    Simple image source method for room impulse response.
+    """
+    t = np.arange(0, duration, 1/fs)
+    ir = np.zeros_like(t)
+    
+    # Direct sound
+    dist = np.linalg.norm(np.array(mic_pos) - np.array(source_pos))
+    delay_samples = int(dist / c * fs)
+    if delay_samples < len(ir):
+        ir[delay_samples] = 1 / dist
+    
+    # First-order reflections (simplified)
+    for dim in range(3):
+        for wall in [0, room_dims[dim]]:
+            # Mirror source position
+            mirror_pos = list(source_pos)
+            mirror_pos[dim] = 2 * wall - source_pos[dim]
+            
+            dist = np.linalg.norm(np.array(mic_pos) - np.array(mirror_pos))
+            delay_samples = int(dist / c * fs)
+            if delay_samples < len(ir):
+                ir[delay_samples] += 0.7 / dist  # 0.7 is reflection coefficient
+    
+    return t, ir
+
+# Concert hall simulation
+room_dims = [30, 20, 10]  # meters
+source_pos = [15, 5, 1.5]  # stage
+mic_pos = [15, 15, 1.5]   # audience
+
+t, ir = room_impulse_response(room_dims, source_pos, mic_pos)
+
+plt.figure(figsize=(12, 8))
+
+# Impulse response
+plt.subplot(2, 2, 1)
+plt.plot(t[:2000], ir[:2000])
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.title('Room Impulse Response')
+plt.grid(True, alpha=0.3)
+
+# Frequency response
+plt.subplot(2, 2, 2)
+freq_response = np.fft.fft(ir)
+freqs = np.fft.fftfreq(len(ir), d=1/44100)
+plt.semilogx(freqs[:len(freqs)//2], 20 * np.log10(np.abs(freq_response[:len(freq_response)//2])))
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Magnitude (dB)')
+plt.title('Frequency Response')
+plt.xlim(20, 20000)
+plt.grid(True, alpha=0.3)
+
+# Reverberation time calculation
+volume = np.prod(room_dims)
+surface_area = 2 * (room_dims[0]*room_dims[1] + room_dims[1]*room_dims[2] + room_dims[0]*room_dims[2])
+
+# Different absorption coefficients for different frequencies
+freq_bands = [125, 250, 500, 1000, 2000, 4000]
+absorption_coeffs = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35]  # typical for concert hall
+
+plt.subplot(2, 2, 3)
+rt60_values = [sabine_rt60(volume, surface_area, alpha) for alpha in absorption_coeffs]
+plt.plot(freq_bands, rt60_values, 'bo-', linewidth=2, markersize=8)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('RT60 (seconds)')
+plt.title('Reverberation Time vs Frequency')
+plt.xscale('log')
+plt.grid(True, alpha=0.3)
+
+# Sound decay simulation
+plt.subplot(2, 2, 4)
+t_decay = np.linspace(0, 3, 1000)
+for i, (f, rt) in enumerate(zip(freq_bands[::2], rt60_values[::2])):
+    decay = np.exp(-6.91 * t_decay / rt)  # -60 dB = -6.91 in natural log
+    plt.plot(t_decay, decay, label=f'{f} Hz')
+
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude (normalized)')
+plt.title('Sound Decay at Different Frequencies')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Musical Instrument Synthesis</h4>
+                                    <p>Using differential equations to synthesize instrument sounds:</p>
+                                    
+                                    <pre><code>import scipy.signal as signal
+
+# Physical modeling of a drum using 2D wave equation
+def drum_synthesis(radius, tension, density, duration=1.0, fs=44100):
+    """
+    Synthesize drum sound using circular membrane vibration modes.
+    """
+    t = np.linspace(0, duration, int(duration * fs))
+    sound = np.zeros_like(t)
+    
+    # Bessel function zeros for circular membrane modes
+    # j_mn represents the n-th zero of the m-th Bessel function
+    modes = [
+        (0, 1, 2.405),  # (0,1) mode
+        (1, 1, 3.832),  # (1,1) mode
+        (2, 1, 5.136),  # (2,1) mode
+        (0, 2, 5.520),  # (0,2) mode
+    ]
+    
+    c = np.sqrt(tension / density)  # wave speed
+    
+    for m, n, j_mn in modes:
+        # Frequency of the (m,n) mode
+        f_mn = (j_mn * c) / (2 * np.pi * radius)
+        
+        # Amplitude (decreases with mode number)
+        A_mn = 1.0 / (m + n + 1)
+        
+        # Damping (higher modes decay faster)
+        damping = 0.5 * (m + n + 1)
+        
+        # Add this mode to the sound
+        sound += A_mn * np.exp(-damping * t) * np.sin(2 * np.pi * f_mn * t)
+    
+    # Add attack transient
+    attack_env = 1 - np.exp(-1000 * t)
+    sound = sound * attack_env
+    
+    return t, sound / np.max(np.abs(sound))
+
+# Synthesize different drum sizes
+fig, axes = plt.subplots(3, 2, figsize=(12, 10))
+
+drums = [
+    ('Small Tom', 0.15, 800, 0.3),
+    ('Floor Tom', 0.25, 600, 0.5),
+    ('Bass Drum', 0.35, 400, 0.3),
+]
+
+for idx, (name, radius, tension, density) in enumerate(drums):
+    t, sound = drum_synthesis(radius, tension, density, duration=0.5)
+    
+    # Waveform
+    axes[idx, 0].plot(t[:4410], sound[:4410])  # First 100ms
+    axes[idx, 0].set_xlabel('Time (s)')
+    axes[idx, 0].set_ylabel('Amplitude')
+    axes[idx, 0].set_title(f'{name} Waveform')
+    axes[idx, 0].grid(True, alpha=0.3)
+    
+    # Spectrum
+    freqs, psd = signal.welch(sound, fs=44100, nperseg=4096)
+    axes[idx, 1].semilogy(freqs[:1000], psd[:1000])
+    axes[idx, 1].set_xlabel('Frequency (Hz)')
+    axes[idx, 1].set_ylabel('Power Spectral Density')
+    axes[idx, 1].set_title(f'{name} Spectrum')
+    axes[idx, 1].set_xlim(0, 2000)
+    axes[idx, 1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Interactive audio synthesis (if in Jupyter)
+try:
+    from IPython.display import Audio
+    _, bass_drum = drum_synthesis(0.35, 400, 0.3, duration=1.0)
+    print("Bass drum sound:")
+    display(Audio(bass_drum, rate=44100))
+except:
+    print("Audio playback not available in this environment")</code></pre>
+                                    </span>
+                            </section>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+
+    </script>
+    
+    <script>
+        // Series Convergence Explorer (Section 5)
+        function updateSeriesPlot5() {
+            const canvas = document.getElementById('convergenceCanvas5');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const seriesType = document.getElementById('seriesType5').value;
+            const nTerms = parseInt(document.getElementById('nTerms5').value);
+            document.getElementById('nTermsValue5').textContent = nTerms;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height - 50);
+            ctx.lineTo(canvas.width - 50, canvas.height - 50);
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50, canvas.height - 50);
+            ctx.stroke();
+            
+            // Generate x values
+            const xMin = -0.9;
+            const xMax = 0.9;
+            const nPoints = 200;
+            const xValues = [];
+            const yExact = [];
+            const yApprox = [];
+            
+            for (let i = 0; i < nPoints; i++) {
+                const x = xMin + (xMax - xMin) * i / (nPoints - 1);
+                xValues.push(x);
+                
+                let exact, approx = 0;
+                
+                switch(seriesType) {
+                    case 'taylor':
+                        // e^x
+                        exact = Math.exp(x);
+                        for (let n = 0; n < nTerms; n++) {
+                            approx += Math.pow(x, n) / factorial(n);
+                        }
+                        break;
+                    case 'fourier':
+                        // Square wave
+                        exact = x > 0 ? 1 : -1;
+                        for (let n = 0; n < nTerms; n++) {
+                            const k = 2 * n + 1;
+                            approx += (4 / Math.PI) * Math.sin(k * Math.PI * x) / k;
+                        }
+                        break;
+                    case 'frobenius':
+                        // Bessel J0
+                        exact = besselJ0(x);
+                        for (let n = 0; n < nTerms; n++) {
+                            approx += Math.pow(-1, n) * Math.pow(x/2, 2*n) / Math.pow(factorial(n), 2);
+                        }
+                        break;
+                }
+                
+                yExact.push(exact);
+                yApprox.push(approx);
+            }
+            
+            // Scale and draw
+            const xScale = (canvas.width - 100) / (xMax - xMin);
+            const yMin = Math.min(...yExact, ...yApprox);
+            const yMax = Math.max(...yExact, ...yApprox);
+            const yScale = (canvas.height - 100) / (yMax - yMin);
+            
+            // Draw exact solution
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < nPoints; i++) {
+                const px = 50 + (xValues[i] - xMin) * xScale;
+                const py = canvas.height - 50 - (yExact[i] - yMin) * yScale;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            // Draw approximation
+            ctx.strokeStyle = '#d9534f';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < nPoints; i++) {
+                const px = 50 + (xValues[i] - xMin) * xScale;
+                const py = canvas.height - 50 - (yApprox[i] - yMin) * yScale;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText('x', canvas.width - 40, canvas.height - 35);
+            ctx.fillText('y', 35, 45);
+            
+            // Legend
+            ctx.fillStyle = '#337ab7';
+            ctx.fillRect(canvas.width - 150, 20, 20, 10);
+            ctx.fillStyle = '#333';
+            ctx.fillText('Exact', canvas.width - 120, 29);
+            
+            ctx.fillStyle = '#d9534f';
+            ctx.fillRect(canvas.width - 150, 40, 20, 10);
+            ctx.fillStyle = '#333';
+            ctx.fillText('Approximation', canvas.width - 120, 49);
+        }
+        
+        function factorial(n) {
+            if (n <= 1) return 1;
+            return n * factorial(n - 1);
+        }
+        
+        function besselJ0(x) {
+            // Approximation for Bessel J0
+            const ax = Math.abs(x);
+            if (ax < 8) {
+                const y = x * x;
+                const ans1 = 57568490574.0 + y * (-13362590354.0 + y * (651619640.7
+                    + y * (-11214424.18 + y * (77392.33017 + y * (-184.9052456)))));
+                const ans2 = 57568490411.0 + y * (1029532985.0 + y * (9494680.718
+                    + y * (59272.64853 + y * (267.8532712 + y * 1.0))));
+                return ans1 / ans2;
+            } else {
+                const z = 8 / ax;
+                const y = z * z;
+                const xx = ax - 0.785398164;
+                const ans1 = 1.0 + y * (-0.1098628627e-2 + y * (0.2734510407e-4
+                    + y * (-0.2073370639e-5 + y * 0.2093887211e-6)));
+                const ans2 = -0.1562499995e-1 + y * (0.1430488765e-3
+                    + y * (-0.6911147651e-5 + y * (0.7621095161e-6 - y * 0.934945152e-7)));
+                return Math.sqrt(0.636619772 / ax) * (Math.cos(xx) * ans1 - z * Math.sin(xx) * ans2);
+            }
+        }
+        
+        // String Harmonics Visualizer (Section 6)
+        function updateHarmonics() {
+            const canvas = document.getElementById('harmonicsCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const harmonic = parseInt(document.getElementById('harmonicSlider').value);
+            document.getElementById('harmonicValue').textContent = harmonic;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw string at rest
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height / 2);
+            ctx.lineTo(canvas.width - 50, canvas.height / 2);
+            ctx.stroke();
+            
+            // Draw harmonic
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            const L = canvas.width - 100;
+            const amplitude = 50;
+            
+            for (let x = 0; x <= L; x++) {
+                const y = amplitude * Math.sin(harmonic * Math.PI * x / L);
+                const px = 50 + x;
+                const py = canvas.height / 2 - y;
+                
+                if (x === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            // Draw nodes
+            ctx.fillStyle = '#d9534f';
+            for (let i = 0; i <= harmonic; i++) {
+                const x = 50 + i * L / harmonic;
+                ctx.beginPath();
+                ctx.arc(x, canvas.height / 2, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            // Label
+            ctx.fillStyle = '#333';
+            ctx.font = '16px Arial';
+            ctx.fillText(`Mode ${harmonic}: f = ${harmonic}f₀`, canvas.width / 2 - 50, 30);
+        }
+        
+        function playHarmonic() {
+            const harmonic = parseInt(document.getElementById('harmonicSlider').value);
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.frequency.value = 110 * harmonic; // A2 fundamental
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+        
+        // Quiz functions
+        function checkAnswer5_6() {
+            const selected = document.querySelector('input[name="q5-6"]:checked');
+            const feedback = document.getElementById('feedback5-6');
+            
+            if (!selected) {
+                feedback.textContent = 'Please select an answer.';
+                feedback.className = 'quiz-feedback incorrect';
+                return;
+            }
+            
+            if (selected.value === 'a') {
+                feedback.textContent = 'Correct! f = c/(2L) = 400/(2×0.65) = 307.7 Hz';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = 'Not quite. Use the formula f = c/(2L) where c is wave speed and L is string length.';
+                feedback.className = 'quiz-feedback incorrect';
+            }
+        }
+        
+        function toggleSolution(id) {
+            const element = document.getElementById(id);
+            if (element.style.display === 'none') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', function() {
+            if (document.getElementById('convergenceCanvas5')) {
+                updateSeriesPlot5();
+            }
+            if (document.getElementById('harmonicsCanvas')) {
+                updateHarmonics();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

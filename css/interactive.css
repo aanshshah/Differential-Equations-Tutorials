@@ -1,0 +1,239 @@
+/* Interactive Code Editor Styles */
+.code-editor-container {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    resize: vertical;
+}
+
+.code-buttons {
+    padding: 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    gap: 10px;
+}
+
+.code-output {
+    padding: 10px;
+    background-color: #fff;
+    min-height: 50px;
+    border-top: 1px solid #ddd;
+}
+
+.output-success {
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 0;
+}
+
+.output-error {
+    color: #d9534f;
+    background-color: #fdf7f7;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 0;
+}
+
+.output-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.loading {
+    color: #777;
+    font-style: italic;
+}
+
+/* Progress Tracking */
+.progress-container {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: 200px;
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.section-complete {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Enhanced Navigation */
+.sidebar-nav a.active {
+    background-color: #e9ecef;
+    border-left: 3px solid #337ab7;
+    padding-left: 22px;
+}
+
+.sidebar-nav a {
+    transition: all 0.3s ease;
+}
+
+/* Interactive Visualizations */
+.plot-container {
+    position: relative;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.plot-controls {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+.plot-controls label {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.plot-controls input[type="range"] {
+    width: 200px;
+    vertical-align: middle;
+}
+
+.plot-value {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: #337ab7;
+}
+
+/* Collapsible Sections */
+.collapsible {
+    background-color: #f1f1f1;
+    color: #444;
+    cursor: pointer;
+    padding: 10px 15px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 16px;
+    transition: 0.4s;
+    margin-top: 10px;
+}
+
+.collapsible:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.collapsible.active:after {
+    content: "\2212";
+}
+
+.collapsible:hover {
+    background-color: #e1e1e1;
+}
+
+.collapsible-content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f9f9f9;
+}
+
+/* Interactive Quiz */
+.quiz-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.quiz-question {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.quiz-options {
+    list-style: none;
+    padding: 0;
+}
+
+.quiz-options li {
+    margin-bottom: 10px;
+}
+
+.quiz-options input[type="radio"] {
+    margin-right: 10px;
+}
+
+.quiz-submit {
+    margin-top: 15px;
+}
+
+.quiz-feedback {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.quiz-feedback.correct {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.quiz-feedback.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .progress-container {
+        position: static;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .code-editor {
+        font-size: 12px;
+    }
+    
+    .plot-controls input[type="range"] {
+        width: 150px;
+    }
+}

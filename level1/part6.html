@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Part 6: Laplace Transformation - Python Tutorial</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<style>
+h1 {
+  margin: 0;
+    display: inline-block;
+}
+button {
+  float: right;
+}
+</style>
+    <div id="wrapper">
+        	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Python Tutorial</a>
+    	</div>
+       </div>
+    </div>
+<div class="row row-offcanvas row-offcanvas-left">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Python Tutorial
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="index.html">Preface</a>
+                </li>
+                <li>
+                    <a class="disappear-1" href="#">Part I: Plotting</a>
+                    <a id="link-1" href="part1.html#1-1" style="display: none">1. Plotting Functions</a>
+                    <a id="link-2" href="part1.html#1-2" style="display: none">2. Implicit Plot</a>
+                    <a id="link-3" href="part1.html#1-3" style="display: none">3. Vertical and Horizontal Lines</a>
+                    <a id="link-4" href="part1.html#1-4" style="display: none">4. Figures with Arrows</a>
+                    <a id="link-5" href="part1.html#1-5" style="display: none">5. Electronic Circuits</a>
+                    <a id="link-6" href="part1.html#1-6" style="display: none">6. Labeling Figures</a>
+                    <a id="link-7" href="part1.html#1-7" style="display: none">7. Polar Plot</a>
+                    <a id="link-8" href="part1.html#1-8" style="display: none">8. Some Famous Curves</a>
+                    <a id="link-9" href="part1.html#1-9" style="display: none">9. References</a>
+                </li>
+                <li>
+                    <a class="disappear-2" href="#">Part 2: First Order ODEs</a>
+                    <a id="link-11" href="part2.html#2-1" style="display: none">1. Solving ODEs</a>
+                    <a id="link-12" href="part2.html#2-2" style="display: none">2. Direction Fields</a>
+                    <a id="link-13" href="part2.html#2-3" style="display: none">3. Separable Equations</a>
+                    <a id="link-14" href="part2.html#2-4" style="display: none">4. Equations Reducible to the Separable Equations</a>
+                    <a id="link-15" href="part2.html#2-5" style="display: none">5. Exact Equations</a>
+                    <a id="link-16" href="part2.html#2-6" style="display: none">6. Integrating Factors</a>
+                    <a id="link-17" href="part2.html#2-7" style="display: none">7. Linear and Bernoulli Equations</a>
+                    <a id="link-18" href="part2.html#2-8" style="display: none">8. Riccati Equations</a>
+                    <a id="link-19" href="part2.html#2-9" style="display: none">9. Existence and Uniqueness</a>
+                    <a id="link-20" href="part2.html#2-10" style="display: none">10. Qualitative Analysis</a>
+                    <a id="link-21" href="part2.html#2-11" style="display: none">11. Applications</a>
+                    <a id="link-22" href="part2.html#2-12" style="display: none">12. References</a>
+                </li>
+                <li>
+                    <a class="disappear-3" href="#">Part 3: Numerical Methods and Applications</a>
+                    <a id="link-31" href="part3.html#3-1" style="display: none">1. Numerical Solution using DSolve and NDSolve</a>
+                    <a id="link-32" href="part3.html#3-2" style="display: none">2. Euler's Methods</a>
+                    <a id="link-33" href="part3.html#3-3" style="display: none">3. Polynomial Approximations</a>
+                    <a id="link-34" href="part3.html#3-4" style="display: none">4. Runge-Kutta Methods</a>
+                    <a id="link-35" href="part3.html#3-5" style="display: none">5. Multistep Methods</a>
+                    <a id="link-36" href="part3.html#3-6" style="display: none">6. Numerov Method</a>
+                    <a id="link-37" href="part3.html#3-7" style="display: none">7. Applications</a>
+                    <a id="link-38" href="part3.html#3-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-4" href="#">Part 4: Second and Higher Order Differential Equations</a>
+                    <a id="link-41" href="part4.html#4-1" style="display: none">1. Fundamental Set of Solutions</a>
+                    <a id="link-42" href="part4.html#4-2" style="display: none">2. General Solutions of Homogenous Equations</a>
+                    <a id="link-43" href="part4.html#4-3" style="display: none">3. Reduction of Order</a>
+                    <a id="link-44" href="part4.html#4-4" style="display: none">4. Variation of Parameters/Lagrange</a>
+                    <a id="link-45" href="part4.html#4-5" style="display: none">5. Method of Undetermined Coefficients</a>
+                    <a id="link-46" href="part4.html#4-6" style="display: none">6. Operator Method</a>
+                    <a id="link-47" href="part4.html#4-7" style="display: none">7. Applications</a>
+                    <a id="link-48" href="part4.html#4-8" style="display: none">8. References</a>
+                </li>
+                <li>
+                    <a class="disappear-5" href="#">Part 5: Series and Recurrences</a>
+                    <a id="link-51" href="part5.html#5.1" style="display: none">1. Recurrences</a>
+                    <a id="link-52" href="part5.html#5.2" style="display: none">2. Generating Functions</a>
+                    <a id="link-53" href="part5.html#5.3" style="display: none">3. Series Solutions for the first Order Equations</a>
+                    <a id="link-54" href="part5.html#5.4" style="display: none">4. Series Solutions for the second Order Equations</a>
+                    <a id="link-55" href="part5.html#5.5" style="display: none">5. Series Solutions</a>
+                    <a id="link-56" href="part5.html#5.6" style="display: none">6. Motivated Examples from Music</a>
+                </li>
+                <li>
+                    <a class="disappear-6" href="#">Part 6: Laplace Transformation</a>
+                    <a id="link-61" href="part6.html#6.1" style="display: none">1. Laplace Transform</a>
+                    <a id="link-62" href="part6.html#6.2" style="display: none">2. Heavyside Function</a>
+                    <a id="link-63" href="part6.html#6.3" style="display: none">3. Laplace Transform of Discontinuous Functions</a>
+                    <a id="link-64" href="part6.html#6.4" style="display: none">4. Inverse Laplace Transforms</a>
+                    <a id="link-65" href="part6.html#6.5" style="display: none">5. Differential Equations</a>
+                    <a id="link-66" href="part6.html#6.6" style="display: none">6. Mechanical and Electrical Applications</a>
+                    <a id="link-67" href="part6.html#6.7" style="display: none">7. Reference</a>
+                </li>
+                <li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="page-title">
+                        <h1 >Python Tutorial</h1> 
+                        
+                        
+                        </div>
+
+
+
+                            <section id="6">
+                                <h2>VI. Laplace Transformation</h2>
+                                <br>
+                                <span id="5-1">
+                                    <h3>1. Laplace Transform</h3>
+                                    <p>The Laplace transform is a powerful tool for solving differential equations by converting them to algebraic equations.</p>
+                                    
+                                    <h4>Definition and Basic Properties</h4>
+                                    <p>The Laplace transform of a function f(t) is defined as:</p>
+                                    <p style="text-align: center;">$\mathcal{L}\{f(t)\} = F(s) = \int_0^{\infty} e^{-st} f(t) dt$</p>
+                                    
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+import sympy as sp
+
+# Symbolic Laplace transforms using SymPy
+t, s = sp.symbols('t s', positive=True)
+
+# Common Laplace transforms
+print("Common Laplace Transform Pairs:")
+print("================================")
+
+# 1. Constant
+f1 = 1
+F1 = sp.laplace_transform(f1, t, s)
+print(f"L{{1}} = {F1[0]}")
+
+# 2. Exponential
+a = sp.Symbol('a', real=True)
+f2 = sp.exp(a*t)
+F2 = sp.laplace_transform(f2, t, s)
+print(f"L{{e^(at)}} = {F2[0]}")
+
+# 3. Sine and Cosine
+omega = sp.Symbol('omega', positive=True)
+f3 = sp.sin(omega*t)
+F3 = sp.laplace_transform(f3, t, s)
+print(f"L{{sin(ωt)}} = {F3[0]}")
+
+f4 = sp.cos(omega*t)
+F4 = sp.laplace_transform(f4, t, s)
+print(f"L{{cos(ωt)}} = {F4[0]}")
+
+# 4. Power functions
+n = sp.Symbol('n', positive=True, integer=True)
+f5 = t**n
+F5 = sp.laplace_transform(f5, t, s)
+print(f"L{{t^n}} = {F5[0]}")
+
+# Numerical Laplace transform visualization
+def numerical_laplace(f, s_val, t_max=10):
+    """Compute Laplace transform numerically at s = s_val"""
+    def integrand(t):
+        return np.exp(-s_val * t) * f(t)
+    
+    result, _ = integrate.quad(integrand, 0, t_max)
+    return result
+
+# Example: Laplace transform of unit step function
+t_vals = np.linspace(0, 5, 1000)
+s_vals = np.linspace(0.1, 5, 100)
+
+# Unit step function
+def unit_step(t):
+    return np.ones_like(t)
+
+# Compute transform for different s values
+F_vals = [numerical_laplace(unit_step, s) for s in s_vals]
+
+plt.figure(figsize=(12, 5))
+
+# Plot original function
+plt.subplot(1, 2, 1)
+plt.plot(t_vals, unit_step(t_vals), 'b-', linewidth=2)
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Unit Step Function')
+plt.grid(True, alpha=0.3)
+plt.ylim(-0.1, 1.5)
+
+# Plot Laplace transform
+plt.subplot(1, 2, 2)
+plt.plot(s_vals, F_vals, 'r-', linewidth=2, label='Numerical')
+plt.plot(s_vals, 1/s_vals, 'k--', linewidth=2, label='Exact: 1/s')
+plt.xlabel('s')
+plt.ylabel('F(s)')
+plt.title('Laplace Transform F(s)')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.ylim(0, 10)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Properties of Laplace Transform</h4>
+                                    <pre><code># Demonstrate key properties
+print("\nLaplace Transform Properties:")
+print("=============================")
+
+# 1. Linearity
+f = 3*sp.sin(2*t) + 5*sp.cos(3*t)
+F = sp.laplace_transform(f, t, s)
+print(f"1. Linearity: L{{3sin(2t) + 5cos(3t)}} = {F[0]}")
+
+# 2. First derivative
+f = sp.Function('f')
+derivative_property = sp.laplace_transform(sp.diff(f(t), t), t, s)
+print(f"\n2. First derivative: L{{f'(t)}} = sF(s) - f(0)")
+
+# 3. Second derivative
+print(f"   Second derivative: L{{f''(t)}} = s²F(s) - sf(0) - f'(0)")
+
+# 4. Shifting theorem
+a_val = 3
+f = sp.exp(-a_val*t) * sp.sin(2*t)
+F = sp.laplace_transform(f, t, s)
+print(f"\n3. Shifting: L{{e^(-3t)sin(2t)}} = {F[0]}")
+
+# 5. Convolution theorem
+print(f"\n4. Convolution: L{{f*g}} = F(s)G(s)")
+
+# Visualization of shifting property
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Original function and its transform
+t_vals = np.linspace(0, 5, 1000)
+f_original = np.sin(2*np.pi*t_vals)
+
+axes[0, 0].plot(t_vals, f_original, 'b-', linewidth=2)
+axes[0, 0].set_xlabel('t')
+axes[0, 0].set_ylabel('f(t)')
+axes[0, 0].set_title('Original: sin(2πt)')
+axes[0, 0].grid(True, alpha=0.3)
+
+# Shifted function
+for a in [0.5, 1, 2]:
+    f_shifted = np.exp(-a*t_vals) * f_original
+    axes[0, 1].plot(t_vals, f_shifted, linewidth=2, label=f'a={a}')
+
+axes[0, 1].set_xlabel('t')
+axes[0, 1].set_ylabel('f(t)')
+axes[0, 1].set_title('Shifted: e^(-at)sin(2πt)')
+axes[0, 1].legend()
+axes[0, 1].grid(True, alpha=0.3)
+
+# Time scaling property
+scales = [0.5, 1, 2]
+for idx, scale in enumerate(scales):
+    f_scaled = np.sin(2*np.pi*scale*t_vals)
+    axes[1, 0].plot(t_vals, f_scaled, linewidth=2, label=f'k={scale}')
+
+axes[1, 0].set_xlabel('t')
+axes[1, 0].set_ylabel('f(t)')
+axes[1, 0].set_title('Time Scaling: sin(2πkt)')
+axes[1, 0].legend()
+axes[1, 0].grid(True, alpha=0.3)
+
+# Derivative property illustration
+f = t_vals**2 * np.exp(-t_vals)
+f_prime = 2*t_vals*np.exp(-t_vals) - t_vals**2*np.exp(-t_vals)
+
+axes[1, 1].plot(t_vals, f, 'b-', linewidth=2, label='f(t) = t²e^(-t)')
+axes[1, 1].plot(t_vals, f_prime, 'r--', linewidth=2, label="f'(t)")
+axes[1, 1].set_xlabel('t')
+axes[1, 1].set_ylabel('f(t)')
+axes[1, 1].set_title('Function and its Derivative')
+axes[1, 1].legend()
+axes[1, 1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <div class="interactive-element">
+                                        <h4>Interactive: Laplace Transform Visualizer</h4>
+                                        <div id="laplace-viz-6-1" style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+                                            <canvas id="laplaceCanvas" width="600" height="400"></canvas>
+                                            <div style="margin-top: 10px;">
+                                                <label>Function: 
+                                                    <select id="functionSelect" onchange="updateLaplaceViz()">
+                                                        <option value="step">Unit Step</option>
+                                                        <option value="exp">Exponential e^(-at)</option>
+                                                        <option value="sin">Sine</option>
+                                                        <option value="ramp">Ramp (t)</option>
+                                                    </select>
+                                                </label>
+                                                <label style="margin-left: 20px;">Parameter a: <span id="paramValue">1</span>
+                                                    <input type="range" id="paramSlider" min="0.1" max="5" step="0.1" value="1" oninput="updateLaplaceViz()">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </span>
+                                    <span id="5-2">
+                                    <h3>2. Heavyside Function</h3>
+                                    <p>The Heaviside (unit step) function is fundamental for modeling switched systems and discontinuous inputs.</p>
+                                    
+                                    <h4>Definition and Properties</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+
+# Define Heaviside function
+def heaviside(t, t0=0):
+    """Heaviside step function H(t - t0)"""
+    return np.where(t >= t0, 1, 0)
+
+# Symbolic Heaviside
+t, s, a = sp.symbols('t s a', real=True)
+H = sp.Heaviside(t)
+
+print("Heaviside Function Properties:")
+print("=============================")
+print(f"H(t) = 0 for t < 0")
+print(f"H(t) = 1 for t > 0")
+print(f"H(0) = 1/2 (by convention)")
+print(f"\nLaplace transform: L{{H(t)}} = 1/s")
+
+# Shifted Heaviside
+H_shifted = sp.Heaviside(t - a)
+L_H_shifted = sp.laplace_transform(H_shifted, t, s)
+print(f"L{{H(t-a)}} = e^(-as)/s")
+
+# Visualization
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+
+# Basic Heaviside function
+t_vals = np.linspace(-2, 5, 1000)
+y_vals = heaviside(t_vals)
+
+axes[0, 0].plot(t_vals, y_vals, 'b-', linewidth=2)
+axes[0, 0].axhline(y=0, color='k', linestyle='-', alpha=0.3)
+axes[0, 0].axvline(x=0, color='k', linestyle='-', alpha=0.3)
+axes[0, 0].set_xlabel('t')
+axes[0, 0].set_ylabel('H(t)')
+axes[0, 0].set_title('Unit Step Function H(t)')
+axes[0, 0].grid(True, alpha=0.3)
+axes[0, 0].set_ylim(-0.2, 1.2)
+
+# Shifted Heaviside functions
+shifts = [1, 2, 3]
+for shift in shifts:
+    y_shifted = heaviside(t_vals, shift)
+    axes[0, 1].plot(t_vals, y_shifted, linewidth=2, label=f'H(t-{shift})')
+
+axes[0, 1].set_xlabel('t')
+axes[0, 1].set_ylabel('H(t-a)')
+axes[0, 1].set_title('Shifted Step Functions')
+axes[0, 1].legend()
+axes[0, 1].grid(True, alpha=0.3)
+axes[0, 1].set_ylim(-0.2, 1.2)
+
+# Rectangular pulse
+def rect_pulse(t, a, b):
+    """Rectangular pulse from a to b"""
+    return heaviside(t, a) - heaviside(t, b)
+
+y_rect = rect_pulse(t_vals, 1, 3)
+axes[0, 2].plot(t_vals, y_rect, 'g-', linewidth=2)
+axes[0, 2].fill_between(t_vals, 0, y_rect, alpha=0.3, color='green')
+axes[0, 2].set_xlabel('t')
+axes[0, 2].set_ylabel('f(t)')
+axes[0, 2].set_title('Rectangular Pulse: H(t-1) - H(t-3)')
+axes[0, 2].grid(True, alpha=0.3)
+axes[0, 2].set_ylim(-0.2, 1.2)
+
+# Piecewise functions using Heaviside
+# f(t) = t for 0<t<2, 2 for t>2
+f_piecewise = t_vals * heaviside(t_vals) - (t_vals - 2) * heaviside(t_vals, 2)
+axes[1, 0].plot(t_vals, f_piecewise, 'r-', linewidth=2)
+axes[1, 0].set_xlabel('t')
+axes[1, 0].set_ylabel('f(t)')
+axes[1, 0].set_title('Piecewise: f(t) = t·H(t) - (t-2)·H(t-2)')
+axes[1, 0].grid(True, alpha=0.3)
+axes[1, 0].set_ylim(-0.5, 3)
+
+# Staircase function
+staircase = np.zeros_like(t_vals)
+for i in range(5):
+    staircase += heaviside(t_vals, i)
+
+axes[1, 1].plot(t_vals, staircase, 'b-', linewidth=2)
+axes[1, 1].set_xlabel('t')
+axes[1, 1].set_ylabel('f(t)')
+axes[1, 1].set_title('Staircase Function')
+axes[1, 1].grid(True, alpha=0.3)
+axes[1, 1].set_ylim(-0.5, 5.5)
+
+# Switching function
+# Turn on at t=1, off at t=3, on again at t=4
+switching = heaviside(t_vals, 1) - heaviside(t_vals, 3) + heaviside(t_vals, 4)
+axes[1, 2].plot(t_vals, switching, 'm-', linewidth=2)
+axes[1, 2].fill_between(t_vals, 0, switching, alpha=0.3, color='magenta')
+axes[1, 2].set_xlabel('t')
+axes[1, 2].set_ylabel('f(t)')
+axes[1, 2].set_title('Switching Function')
+axes[1, 2].grid(True, alpha=0.3)
+axes[1, 2].set_ylim(-0.2, 1.2)
+
+plt.tight_layout()
+plt.show()
+
+# Applications with differential equations
+print("\nApplication: Solving ODEs with discontinuous forcing")
+print("=================================================")
+print("Consider: y' + 2y = H(t-1), y(0) = 0")
+print("This models a system with input turned on at t=1")
+
+# Numerical solution
+from scipy.integrate import odeint
+
+def system_ode(y, t):
+    """y' + 2y = H(t-1)"""
+    forcing = heaviside(t, 1)
+    return -2*y + forcing
+
+t_span = np.linspace(0, 5, 1000)
+y0 = [0]
+solution = odeint(system_ode, y0, t_span)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_span, solution[:, 0], 'b-', linewidth=2, label='System response')
+plt.plot(t_span, heaviside(t_span, 1), 'r--', linewidth=2, label='Input H(t-1)')
+plt.axvline(x=1, color='gray', linestyle=':', alpha=0.7, label='Switch on')
+plt.xlabel('Time t')
+plt.ylabel('y(t)')
+plt.title('Response to Step Input')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                                    
+                                    <h4>Second Shifting Theorem</h4>
+                                    <pre><code># Demonstrate the second shifting theorem
+print("\nSecond Shifting Theorem:")
+print("======================")
+print("If L{f(t)} = F(s), then:")
+print("L{H(t-a)·f(t-a)} = e^(-as)·F(s)")
+
+# Example: Delayed exponential decay
+t_vals = np.linspace(0, 10, 1000)
+a = 2  # delay
+
+# Original function: e^(-t)
+f_original = np.exp(-t_vals)
+
+# Delayed function: H(t-2)·e^(-(t-2))
+f_delayed = heaviside(t_vals, a) * np.exp(-(t_vals - a))
+
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(t_vals, f_original, 'b-', linewidth=2, label='e^(-t)')
+plt.plot(t_vals, f_delayed, 'r--', linewidth=2, label='H(t-2)·e^(-(t-2))')
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Original and Delayed Functions')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Multiple delays
+plt.subplot(1, 2, 2)
+delays = [0, 1, 2, 3]
+for delay in delays:
+    f_multi = heaviside(t_vals, delay) * np.exp(-(t_vals - delay))
+    plt.plot(t_vals, f_multi, linewidth=2, label=f'Delay = {delay}')
+
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Multiple Delayed Exponentials')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="5-3">
+                                    <h3>3. Laplace Transform of Discontinuous Functions</h3>
+                                    <p>Real-world systems often involve discontinuous inputs like switches, pulses, and periodic signals.</p>
+                                    
+                                    <h4>Piecewise Functions</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+import sympy as sp
+
+# Example 1: Square wave
+def square_wave(t, period=2*np.pi, duty=0.5):
+    """Generate square wave with given period and duty cycle"""
+    phase = (t % period) / period
+    return np.where(phase < duty, 1, -1)
+
+# Example 2: Sawtooth wave
+def sawtooth_wave(t, period=2*np.pi):
+    """Generate sawtooth wave"""
+    return 2 * ((t % period) / period) - 1
+
+# Example 3: Triangular wave
+def triangular_wave(t, period=2*np.pi):
+    """Generate triangular wave"""
+    phase = (t % period) / period
+    return np.where(phase < 0.5, 4*phase - 1, 3 - 4*phase)
+
+# Visualization
+t = np.linspace(0, 6*np.pi, 1000)
+
+fig, axes = plt.subplots(3, 2, figsize=(12, 10))
+
+# Square wave
+y_square = square_wave(t)
+axes[0, 0].plot(t, y_square, 'b-', linewidth=2)
+axes[0, 0].set_xlabel('t')
+axes[0, 0].set_ylabel('f(t)')
+axes[0, 0].set_title('Square Wave')
+axes[0, 0].grid(True, alpha=0.3)
+axes[0, 0].set_ylim(-1.5, 1.5)
+
+# Fourier series approximation of square wave
+fourier_approx = np.zeros_like(t)
+for n in range(1, 20, 2):
+    fourier_approx += (4/np.pi) * np.sin(n*t) / n
+
+axes[0, 1].plot(t, y_square, 'b-', linewidth=2, alpha=0.5, label='Square wave')
+axes[0, 1].plot(t, fourier_approx, 'r--', linewidth=2, label='Fourier approx')
+axes[0, 1].set_xlabel('t')
+axes[0, 1].set_ylabel('f(t)')
+axes[0, 1].set_title('Fourier Series Approximation')
+axes[0, 1].legend()
+axes[0, 1].grid(True, alpha=0.3)
+
+# Sawtooth wave
+y_sawtooth = sawtooth_wave(t)
+axes[1, 0].plot(t, y_sawtooth, 'g-', linewidth=2)
+axes[1, 0].set_xlabel('t')
+axes[1, 0].set_ylabel('f(t)')
+axes[1, 0].set_title('Sawtooth Wave')
+axes[1, 0].grid(True, alpha=0.3)
+
+# Triangular wave
+y_triangular = triangular_wave(t)
+axes[1, 1].plot(t, y_triangular, 'm-', linewidth=2)
+axes[1, 1].set_xlabel('t')
+axes[1, 1].set_ylabel('f(t)')
+axes[1, 1].set_title('Triangular Wave')
+axes[1, 1].grid(True, alpha=0.3)
+
+# Pulse train
+def pulse_train(t, width=0.1, period=1):
+    """Generate pulse train"""
+    result = np.zeros_like(t)
+    for n in range(int(t[-1] / period) + 1):
+        result += (heaviside(t, n*period) - heaviside(t, n*period + width))
+    return result
+
+def heaviside(t, t0):
+    return np.where(t >= t0, 1, 0)
+
+y_pulse = pulse_train(t/np.pi, width=0.2, period=2)
+axes[2, 0].plot(t, y_pulse, 'r-', linewidth=2)
+axes[2, 0].set_xlabel('t')
+axes[2, 0].set_ylabel('f(t)')
+axes[2, 0].set_title('Pulse Train')
+axes[2, 0].grid(True, alpha=0.3)
+axes[2, 0].set_ylim(-0.2, 1.2)
+
+# Rectified sine wave
+y_rectified = np.abs(np.sin(t))
+axes[2, 1].plot(t, y_rectified, 'c-', linewidth=2)
+axes[2, 1].set_xlabel('t')
+axes[2, 1].set_ylabel('f(t)')
+axes[2, 1].set_title('Rectified Sine Wave')
+axes[2, 1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Laplace transform of periodic functions
+print("Laplace Transform of Periodic Functions")
+print("======================================")
+print("For a periodic function f(t) with period T:")
+print("L{f(t)} = (1/(1-e^(-sT))) * ∫[0 to T] e^(-st)f(t)dt")
+
+# Example: Laplace transform of square wave
+t_sym, s_sym = sp.symbols('t s', positive=True)
+T = sp.Symbol('T', positive=True)
+
+# Square wave from 0 to T/2 is 1, from T/2 to T is 0
+print("\nSquare wave (0 to T/2: 1, T/2 to T: 0):")
+print("L{f(t)} = (1-e^(-sT/2))/(s(1-e^(-sT)))")
+
+# Numerical example
+def laplace_square_wave(s_val, T=2*np.pi):
+    """Laplace transform of square wave"""
+    if s_val == 0:
+        return np.inf
+    return (1 - np.exp(-s_val*T/2)) / (s_val * (1 - np.exp(-s_val*T)))
+
+s_vals = np.linspace(0.1, 5, 100)
+F_vals = [laplace_square_wave(s) for s in s_vals]
+
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
+plt.plot(s_vals, np.real(F_vals), 'b-', linewidth=2)
+plt.xlabel('s')
+plt.ylabel('Re[F(s)]')
+plt.title('Laplace Transform of Square Wave (Real Part)')
+plt.grid(True, alpha=0.3)
+
+# Phase plot
+plt.subplot(1, 2, 2)
+poles = [2*np.pi*n*1j for n in range(-5, 6) if n != 0]
+plt.scatter([0], [0], color='red', s=100, marker='x', label='Pole at s=0')
+for pole in poles:
+    plt.scatter([0], [pole.imag], color='red', s=50, marker='x')
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+plt.xlabel('Real(s)')
+plt.ylabel('Imag(s)')
+plt.title('Poles of F(s)')
+plt.grid(True, alpha=0.3)
+plt.xlim(-2, 2)
+plt.ylim(-20, 20)
+plt.legend()
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Window Functions and Pulses</h4>
+                                    <pre><code># Common window functions
+t = np.linspace(-1, 5, 1000)
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+
+# Rectangular window
+rect = heaviside(t, 0) - heaviside(t, 2)
+axes[0, 0].plot(t, rect, 'b-', linewidth=2)
+axes[0, 0].fill_between(t, 0, rect, alpha=0.3)
+axes[0, 0].set_title('Rectangular Window')
+axes[0, 0].set_xlabel('t')
+axes[0, 0].set_ylabel('f(t)')
+axes[0, 0].grid(True, alpha=0.3)
+
+# Exponential window
+exp_window = heaviside(t, 0) * np.exp(-t) * (1 - heaviside(t, 3))
+axes[0, 1].plot(t, exp_window, 'g-', linewidth=2)
+axes[0, 1].fill_between(t, 0, exp_window, alpha=0.3, color='green')
+axes[0, 1].set_title('Exponential Window')
+axes[0, 1].set_xlabel('t')
+axes[0, 1].set_ylabel('f(t)')
+axes[0, 1].grid(True, alpha=0.3)
+
+# Gaussian-like pulse
+gaussian_pulse = heaviside(t, 0) * np.exp(-2*(t-1)**2) * (1 - heaviside(t, 3))
+axes[1, 0].plot(t, gaussian_pulse, 'r-', linewidth=2)
+axes[1, 0].fill_between(t, 0, gaussian_pulse, alpha=0.3, color='red')
+axes[1, 0].set_title('Gaussian-like Pulse')
+axes[1, 0].set_xlabel('t')
+axes[1, 0].set_ylabel('f(t)')
+axes[1, 0].grid(True, alpha=0.3)
+
+# Ramp window
+ramp = t * heaviside(t, 0) - t * heaviside(t, 1) + heaviside(t, 1) - heaviside(t, 2)
+axes[1, 1].plot(t, ramp, 'm-', linewidth=2)
+axes[1, 1].fill_between(t, 0, ramp, alpha=0.3, color='magenta')
+axes[1, 1].set_title('Ramp Window')
+axes[1, 1].set_xlabel('t')
+axes[1, 1].set_ylabel('f(t)')
+axes[1, 1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Application: RC circuit with pulse input
+print("\nApplication: RC Circuit with Pulse Input")
+print("======================================")
+from scipy.integrate import odeint
+
+# RC circuit: RC*dv/dt + v = V_in(t)
+R = 1.0  # Resistance
+C = 0.5  # Capacitance
+RC = R * C
+
+def rc_circuit(v, t):
+    # Pulse input from t=1 to t=3
+    V_in = heaviside(t, 1) - heaviside(t, 3)
+    return (V_in - v) / RC
+
+t_span = np.linspace(0, 6, 1000)
+v0 = [0]  # Initial voltage
+
+solution = odeint(rc_circuit, v0, t_span)
+V_in = heaviside(t_span, 1) - heaviside(t_span, 3)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_span, V_in, 'r--', linewidth=2, label='Input voltage')
+plt.plot(t_span, solution[:, 0], 'b-', linewidth=2, label='Capacitor voltage')
+plt.xlabel('Time (s)')
+plt.ylabel('Voltage (V)')
+plt.title('RC Circuit Response to Pulse Input')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.axvline(x=1, color='gray', linestyle=':', alpha=0.5)
+plt.axvline(x=3, color='gray', linestyle=':', alpha=0.5)
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="5-4">
+                                    <h3>4. Inverse Laplace Transforms</h3>
+                                    <p>Converting from the s-domain back to the time domain using partial fractions and standard transforms.</p>
+                                    
+                                    <h4>Partial Fraction Decomposition</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import sympy as sp
+from sympy import symbols, apart, inverse_laplace_transform, exp, sin, cos
+
+# Define symbols
+s, t = symbols('s t', real=True)
+
+print("Inverse Laplace Transform Examples")
+print("=================================\n")
+
+# Example 1: Simple poles
+F1 = 1 / ((s + 1) * (s + 2))
+print("Example 1: F(s) = 1/((s+1)(s+2))")
+print(f"Partial fractions: {apart(F1, s)}")
+f1 = inverse_laplace_transform(F1, s, t)
+print(f"f(t) = {f1}\n")
+
+# Example 2: Repeated poles
+F2 = 1 / (s * (s + 1)**2)
+print("Example 2: F(s) = 1/(s(s+1)²)")
+print(f"Partial fractions: {apart(F2, s)}")
+f2 = inverse_laplace_transform(F2, s, t)
+print(f"f(t) = {f2}\n")
+
+# Example 3: Complex poles
+F3 = (s + 1) / (s**2 + 2*s + 5)
+print("Example 3: F(s) = (s+1)/(s²+2s+5)")
+f3 = inverse_laplace_transform(F3, s, t)
+print(f"f(t) = {f3}\n")
+
+# Numerical evaluation and plotting
+t_vals = np.linspace(0, 5, 1000)
+
+# Convert symbolic expressions to numerical functions
+f1_num = sp.lambdify(t, f1 * sp.Heaviside(t), 'numpy')
+f2_num = sp.lambdify(t, f2 * sp.Heaviside(t), 'numpy')
+f3_num = sp.lambdify(t, f3 * sp.Heaviside(t), 'numpy')
+
+plt.figure(figsize=(12, 8))
+
+# Plot Example 1
+plt.subplot(2, 2, 1)
+y1 = f1_num(t_vals)
+plt.plot(t_vals, y1, 'b-', linewidth=2)
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Example 1: Simple Poles')
+plt.grid(True, alpha=0.3)
+
+# Plot Example 2
+plt.subplot(2, 2, 2)
+y2 = f2_num(t_vals)
+plt.plot(t_vals, y2, 'g-', linewidth=2)
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Example 2: Repeated Poles')
+plt.grid(True, alpha=0.3)
+
+# Plot Example 3
+plt.subplot(2, 2, 3)
+y3 = f3_num(t_vals)
+plt.plot(t_vals, y3, 'r-', linewidth=2)
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Example 3: Complex Poles (Damped Oscillation)')
+plt.grid(True, alpha=0.3)
+
+# Example 4: Step response of second-order system
+F4 = 1 / (s * (s**2 + 2*s + 2))
+f4 = inverse_laplace_transform(F4, s, t)
+f4_num = sp.lambdify(t, f4 * sp.Heaviside(t), 'numpy')
+
+plt.subplot(2, 2, 4)
+y4 = f4_num(t_vals)
+plt.plot(t_vals, y4, 'm-', linewidth=2)
+plt.xlabel('t')
+plt.ylabel('f(t)')
+plt.title('Example 4: Second-Order Step Response')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Common Techniques</h4>
+                                    <pre><code># Demonstrate various inverse Laplace techniques
+print("\nInverse Laplace Transform Techniques")
+print("===================================")
+
+# 1. Completing the square
+print("\n1. Completing the Square:")
+F = 1 / (s**2 + 4*s + 13)
+print(f"   F(s) = {F}")
+print(f"   Rewrite as: 1/((s+2)² + 9)")
+f = inverse_laplace_transform(F, s, t)
+print(f"   f(t) = {f}")
+
+# 2. First Shifting Theorem
+print("\n2. First Shifting Theorem:")
+print("   If L{f(t)} = F(s), then L{e^(at)f(t)} = F(s-a)")
+F_shifted = 1 / ((s - 2)**2 + 4)
+f_shifted = inverse_laplace_transform(F_shifted, s, t)
+print(f"   F(s) = 1/((s-2)² + 4)")
+print(f"   f(t) = {f_shifted}")
+
+# 3. Differentiation in s-domain
+print("\n3. Differentiation in s-domain:")
+print("   If L{f(t)} = F(s), then L{t·f(t)} = -dF/ds")
+F_base = 1 / (s + 3)
+F_diff = sp.diff(F_base, s)
+print(f"   F(s) = 1/(s+3), -dF/ds = {-F_diff}")
+f_mult = inverse_laplace_transform(-F_diff, s, t)
+print(f"   f(t) = {f_mult}")
+
+# Visualization of transform pairs
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+
+# Common transform pairs
+transform_pairs = [
+    (1/s, "1", "Unit step"),
+    (1/s**2, "t", "Ramp"),
+    (1/(s**2 + 4), "(1/2)sin(2t)", "Sine"),
+    (s/(s**2 + 4), "cos(2t)", "Cosine"),
+    (1/(s + 2), "e^(-2t)", "Exponential"),
+    (1/(s + 1)**2, "t·e^(-t)", "t×exponential")
+]
+
+t_vals = np.linspace(0, 5, 500)
+
+for idx, (F_expr, f_str, title) in enumerate(transform_pairs):
+    row = idx // 3
+    col = idx % 3
+    
+    # Get inverse transform
+    f_expr = inverse_laplace_transform(F_expr, s, t)
+    f_num = sp.lambdify(t, f_expr * sp.Heaviside(t), 'numpy')
+    
+    y_vals = f_num(t_vals)
+    axes[row, col].plot(t_vals, y_vals, linewidth=2)
+    axes[row, col].set_xlabel('t')
+    axes[row, col].set_ylabel('f(t)')
+    axes[row, col].set_title(f'{title}\nF(s) = {F_expr}')
+    axes[row, col].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Table of common transforms
+print("\nCommon Laplace Transform Pairs:")
+print("==============================")
+print("f(t)                  | F(s)")
+print("--------------------- | ---------------------")
+print("1                     | 1/s")
+print("t^n                   | n!/s^(n+1)")
+print("e^(at)                | 1/(s-a)")
+print("sin(ωt)               | ω/(s²+ω²)")
+print("cos(ωt)               | s/(s²+ω²)")
+print("e^(at)sin(ωt)         | ω/((s-a)²+ω²)")
+print("e^(at)cos(ωt)         | (s-a)/((s-a)²+ω²)")
+print("t^n·e^(at)            | n!/(s-a)^(n+1)")
+print("H(t-a)                | e^(-as)/s")
+print("δ(t-a)                | e^(-as)")</code></pre>
+                                    
+                                    <div class="interactive-element">
+                                        <h4>Interactive: Inverse Transform Calculator</h4>
+                                        <div id="inverse-calc-6-4" style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+                                            <p>Enter coefficients for F(s) = (as + b) / (s² + cs + d):</p>
+                                            <div>
+                                                <label>a: <input type="number" id="coeff-a" value="1" step="0.1" style="width: 60px;"></label>
+                                                <label>b: <input type="number" id="coeff-b" value="0" step="0.1" style="width: 60px;"></label>
+                                                <label>c: <input type="number" id="coeff-c" value="2" step="0.1" style="width: 60px;"></label>
+                                                <label>d: <input type="number" id="coeff-d" value="5" step="0.1" style="width: 60px;"></label>
+                                                <button onclick="calculateInverse()">Calculate</button>
+                                            </div>
+                                            <canvas id="inverseCanvas" width="600" height="300" style="margin-top: 20px;"></canvas>
+                                            <div id="inverseResult" style="margin-top: 10px; font-family: monospace;"></div>
+                                        </div>
+                                    </div>
+                                    </span>
+                                    <span id="5-5">
+                                    <h3>5. Mechanical and Electrical Applications</h3>
+                                    <p>Applying Laplace transforms to solve real-world engineering problems in mechanical and electrical systems.</p>
+                                    
+                                    <h4>Mechanical Systems</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+import sympy as sp
+
+# Mass-Spring-Damper System
+print("Mass-Spring-Damper System")
+print("========================")
+print("Equation: m·x'' + c·x' + k·x = F(t)")
+print("where m = mass, c = damping, k = spring constant\n")
+
+# System parameters
+m = 1.0    # mass (kg)
+c = 0.5    # damping coefficient (N·s/m)
+k = 4.0    # spring constant (N/m)
+
+# Natural frequency and damping ratio
+omega_n = np.sqrt(k/m)
+zeta = c / (2 * np.sqrt(k * m))
+print(f"Natural frequency ωn = {omega_n:.2f} rad/s")
+print(f"Damping ratio ζ = {zeta:.2f}")
+
+if zeta < 1:
+    print("System is underdamped")
+elif zeta == 1:
+    print("System is critically damped")
+else:
+    print("System is overdamped")
+
+# Symbolic Laplace analysis
+s, t = sp.symbols('s t', real=True)
+
+# Transfer function H(s) = X(s)/F(s) = 1/(ms² + cs + k)
+H_s = 1 / (m*s**2 + c*s + k)
+print(f"\nTransfer function: H(s) = {H_s}")
+
+# Step response (F(t) = 1 for t > 0)
+X_s = H_s / s  # Step input has Laplace transform 1/s
+x_step = sp.inverse_laplace_transform(X_s, s, t)
+print(f"Step response: x(t) = {x_step}")
+
+# Numerical simulation
+def mass_spring_damper(state, t, F_func):
+    x, v = state
+    F = F_func(t)
+    x_dot = v
+    v_dot = (F - c*v - k*x) / m
+    return [x_dot, v_dot]
+
+t_vals = np.linspace(0, 10, 1000)
+
+# Different forcing functions
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+
+# 1. Step input
+F_step = lambda t: 1.0
+y0 = [0, 0]  # Initial position and velocity
+sol_step = odeint(mass_spring_damper, y0, t_vals, args=(F_step,))
+
+axes[0, 0].plot(t_vals, sol_step[:, 0], 'b-', linewidth=2)
+axes[0, 0].axhline(y=1/k, color='r', linestyle='--', label=f'Steady state = {1/k:.3f}')
+axes[0, 0].set_xlabel('Time (s)')
+axes[0, 0].set_ylabel('Position (m)')
+axes[0, 0].set_title('Step Response')
+axes[0, 0].legend()
+axes[0, 0].grid(True, alpha=0.3)
+
+# 2. Impulse input
+F_impulse = lambda t: 10.0 if t < 0.1 else 0
+sol_impulse = odeint(mass_spring_damper, y0, t_vals, args=(F_impulse,))
+
+axes[0, 1].plot(t_vals, sol_impulse[:, 0], 'g-', linewidth=2)
+axes[0, 1].set_xlabel('Time (s)')
+axes[0, 1].set_ylabel('Position (m)')
+axes[0, 1].set_title('Impulse Response')
+axes[0, 1].grid(True, alpha=0.3)
+
+# 3. Sinusoidal input
+omega_force = 2.0  # Forcing frequency
+F_sin = lambda t: np.sin(omega_force * t)
+sol_sin = odeint(mass_spring_damper, y0, t_vals, args=(F_sin,))
+
+axes[0, 2].plot(t_vals, sol_sin[:, 0], 'r-', linewidth=2, label='Response')
+axes[0, 2].plot(t_vals, F_sin(t_vals)/k, 'k--', alpha=0.5, label='Input/k')
+axes[0, 2].set_xlabel('Time (s)')
+axes[0, 2].set_ylabel('Position (m)')
+axes[0, 2].set_title('Sinusoidal Response')
+axes[0, 2].legend()
+axes[0, 2].grid(True, alpha=0.3)
+
+# Frequency response (Bode plot)
+omega_range = np.logspace(-1, 1, 200)
+H_mag = np.zeros_like(omega_range)
+H_phase = np.zeros_like(omega_range)
+
+for i, omega in enumerate(omega_range):
+    H_jw = 1 / (k - m*omega**2 + 1j*c*omega)
+    H_mag[i] = np.abs(H_jw)
+    H_phase[i] = np.angle(H_jw)
+
+axes[1, 0].loglog(omega_range, H_mag, 'b-', linewidth=2)
+axes[1, 0].axvline(x=omega_n, color='r', linestyle='--', label='ωn')
+axes[1, 0].set_xlabel('Frequency (rad/s)')
+axes[1, 0].set_ylabel('|H(jω)|')
+axes[1, 0].set_title('Magnitude Response')
+axes[1, 0].legend()
+axes[1, 0].grid(True, alpha=0.3)
+
+axes[1, 1].semilogx(omega_range, np.degrees(H_phase), 'g-', linewidth=2)
+axes[1, 1].axvline(x=omega_n, color='r', linestyle='--', label='ωn')
+axes[1, 1].set_xlabel('Frequency (rad/s)')
+axes[1, 1].set_ylabel('Phase (degrees)')
+axes[1, 1].set_title('Phase Response')
+axes[1, 1].legend()
+axes[1, 1].grid(True, alpha=0.3)
+
+# Different damping ratios
+zeta_values = [0.1, 0.5, 1.0, 2.0]
+for zeta_val in zeta_values:
+    c_val = 2 * zeta_val * np.sqrt(k * m)
+    sol = odeint(mass_spring_damper, y0, t_vals, args=(F_step,))
+    # Recompute with new damping
+    def temp_system(state, t):
+        x, v = state
+        return [v, (1 - c_val*v - k*x) / m]
+    sol = odeint(temp_system, y0, t_vals)
+    axes[1, 2].plot(t_vals, sol[:, 0], linewidth=2, label=f'ζ={zeta_val}')
+
+axes[1, 2].set_xlabel('Time (s)')
+axes[1, 2].set_ylabel('Position (m)')
+axes[1, 2].set_title('Effect of Damping Ratio')
+axes[1, 2].legend()
+axes[1, 2].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Electrical Circuits</h4>
+                                    <pre><code># RLC Circuit Analysis
+print("\nRLC Circuit Analysis")
+print("===================")
+print("Series RLC: L·i'' + R·i' + (1/C)·i = v'(t)")
+print("Parallel RLC: C·v'' + (1/R)·v' + (1/L)·v = i(t)\n")
+
+# Series RLC parameters
+R = 10.0    # Resistance (Ω)
+L = 0.1     # Inductance (H)
+C = 1e-3    # Capacitance (F)
+
+# Characteristic parameters
+omega_0 = 1 / np.sqrt(L * C)  # Resonant frequency
+alpha = R / (2 * L)           # Damping factor
+Q = omega_0 / (2 * alpha)     # Quality factor
+
+print(f"Resonant frequency f0 = {omega_0/(2*np.pi):.1f} Hz")
+print(f"Damping factor α = {alpha:.1f} s^-1")
+print(f"Quality factor Q = {Q:.2f}")
+
+# Transfer function for voltage across capacitor
+# H(s) = V_C(s)/V_in(s) = 1/(LCs² + RCs + 1)
+H_rlc = 1 / (L*C*s**2 + R*C*s + 1)
+print(f"\nTransfer function: H(s) = {H_rlc}")
+
+# Different circuit configurations
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+
+# 1. Step response of RLC circuit
+def rlc_circuit(state, t, V_func):
+    i, v_c = state  # Current and capacitor voltage
+    v_in = V_func(t)
+    di_dt = (v_in - R*i - v_c) / L
+    dv_c_dt = i / C
+    return [di_dt, dv_c_dt]
+
+t_vals = np.linspace(0, 0.01, 1000)  # 10 ms
+V_step = lambda t: 1.0  # 1V step
+y0 = [0, 0]  # Initial current and capacitor voltage
+
+sol_rlc = odeint(rlc_circuit, y0, t_vals, args=(V_step,))
+
+axes[0, 0].plot(t_vals*1000, sol_rlc[:, 1], 'b-', linewidth=2)
+axes[0, 0].set_xlabel('Time (ms)')
+axes[0, 0].set_ylabel('V_C (V)')
+axes[0, 0].set_title('RLC Step Response')
+axes[0, 0].grid(True, alpha=0.3)
+
+# 2. Current through inductor
+axes[0, 1].plot(t_vals*1000, sol_rlc[:, 0]*1000, 'g-', linewidth=2)
+axes[0, 1].set_xlabel('Time (ms)')
+axes[0, 1].set_ylabel('Current (mA)')
+axes[0, 1].set_title('Inductor Current')
+axes[0, 1].grid(True, alpha=0.3)
+
+# 3. AC steady-state response
+freq_range = np.logspace(1, 5, 200)  # 10 Hz to 100 kHz
+H_mag = np.zeros_like(freq_range)
+H_phase = np.zeros_like(freq_range)
+
+for i, f in enumerate(freq_range):
+    omega = 2 * np.pi * f
+    H_jw = 1 / (1 - L*C*omega**2 + 1j*R*C*omega)
+    H_mag[i] = 20 * np.log10(np.abs(H_jw))  # Convert to dB
+    H_phase[i] = np.degrees(np.angle(H_jw))
+
+axes[0, 2].semilogx(freq_range, H_mag, 'r-', linewidth=2)
+axes[0, 2].axvline(x=omega_0/(2*np.pi), color='k', linestyle='--', label='f0')
+axes[0, 2].set_xlabel('Frequency (Hz)')
+axes[0, 2].set_ylabel('Magnitude (dB)')
+axes[0, 2].set_title('Frequency Response')
+axes[0, 2].legend()
+axes[0, 2].grid(True, alpha=0.3)
+
+# 4. Op-amp active filter
+print("\nActive Filter (Sallen-Key Low-pass)")
+print("===================================")
+
+# Sallen-Key parameters
+R1 = R2 = 10e3  # 10 kΩ
+C1 = C2 = 10e-9  # 10 nF
+fc = 1 / (2 * np.pi * np.sqrt(R1*R2*C1*C2))
+print(f"Cutoff frequency: {fc:.1f} Hz")
+
+# Butterworth response
+H_butter = 1 / (1 + np.sqrt(2)*s/(2*np.pi*fc) + (s/(2*np.pi*fc))**2)
+
+# Plot filter responses
+filter_types = [
+    ("Butterworth", 1, np.sqrt(2)),
+    ("Chebyshev", 1, 1.0),
+    ("Bessel", 1, 2.0)
+]
+
+for idx, (name, gain, damping) in enumerate(filter_types):
+    H_filter = gain / (1 + damping*s/(2*np.pi*fc) + (s/(2*np.pi*fc))**2)
+    
+    # Evaluate frequency response
+    H_vals = []
+    for f in freq_range:
+        s_val = 2j * np.pi * f
+        H_val = gain / (1 + damping*s_val/(2*np.pi*fc) + (s_val/(2*np.pi*fc))**2)
+        H_vals.append(20 * np.log10(np.abs(H_val)))
+    
+    axes[1, 0].semilogx(freq_range, H_vals, linewidth=2, label=name)
+
+axes[1, 0].axvline(x=fc, color='k', linestyle='--', alpha=0.5)
+axes[1, 0].axhline(y=-3, color='k', linestyle=':', alpha=0.5)
+axes[1, 0].set_xlabel('Frequency (Hz)')
+axes[1, 0].set_ylabel('Magnitude (dB)')
+axes[1, 0].set_title('Active Filter Comparison')
+axes[1, 0].legend()
+axes[1, 0].grid(True, alpha=0.3)
+axes[1, 0].set_ylim(-40, 5)
+
+# 5. Transmission line (telegraphers equation)
+print("\nTransmission Line Model")
+print("======================")
+
+# Distributed parameters (per unit length)
+R_line = 0.1    # Ω/m
+L_line = 1e-6   # H/m
+C_line = 100e-12 # F/m
+G_line = 1e-6   # S/m
+
+# Characteristic impedance and propagation constant
+Z0 = np.sqrt((R_line + 1j*2*np.pi*1e6*L_line) / (G_line + 1j*2*np.pi*1e6*C_line))
+gamma = np.sqrt((R_line + 1j*2*np.pi*1e6*L_line) * (G_line + 1j*2*np.pi*1e6*C_line))
+
+print(f"Characteristic impedance Z0 = {np.abs(Z0):.1f} Ω")
+print(f"Attenuation constant α = {np.real(gamma):.3f} Np/m")
+print(f"Phase constant β = {np.imag(gamma):.3f} rad/m")
+
+# Plot transmission line response
+length = 100  # meters
+position = np.linspace(0, length, 200)
+
+# Voltage along line for matched load
+V_in = 1.0
+V_line = V_in * np.exp(-gamma * position)
+
+axes[1, 1].plot(position, np.abs(V_line), 'b-', linewidth=2, label='Magnitude')
+axes[1, 1].set_xlabel('Position (m)')
+axes[1, 1].set_ylabel('|V(x)| / V_in')
+axes[1, 1].set_title('Voltage Along Transmission Line')
+axes[1, 1].grid(True, alpha=0.3)
+
+# 6. Switch-mode power supply model
+t_switch = np.linspace(0, 0.1, 1000)
+duty_cycle = 0.3
+V_in_switch = 12  # Input voltage
+
+# PWM signal
+pwm = np.where((t_switch % 0.001) < duty_cycle * 0.001, V_in_switch, 0)
+
+# Low-pass filter output (simplified)
+V_out = duty_cycle * V_in_switch * np.ones_like(t_switch)
+ripple = 0.5 * np.sin(2*np.pi*1000*t_switch) * np.exp(-100*t_switch)
+
+axes[1, 2].plot(t_switch*1000, pwm, 'r-', alpha=0.5, label='PWM input')
+axes[1, 2].plot(t_switch*1000, V_out + ripple, 'b-', linewidth=2, label='Filtered output')
+axes[1, 2].set_xlabel('Time (ms)')
+axes[1, 2].set_ylabel('Voltage (V)')
+axes[1, 2].set_title('Switch-Mode Power Supply')
+axes[1, 2].legend()
+axes[1, 2].grid(True, alpha=0.3)
+axes[1, 2].set_xlim(0, 10)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    </span>
+                                    <span id="5-6">
+                                    <h3>6. Motivated Examples from Music</h3>
+                                    <p>Exploring how Laplace transforms help analyze and design audio systems and musical instruments.</p>
+                                    
+                                    <h4>Audio Filter Design</h4>
+                                    <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+import sympy as sp
+
+# Audio equalizer design using Laplace transforms
+print("Audio Equalizer Design")
+print("=====================\n")
+
+# Standard audio frequency bands
+freq_bands = {
+    'Sub-bass': (20, 60),
+    'Bass': (60, 250),
+    'Low-mid': (250, 500),
+    'Mid': (500, 2000),
+    'High-mid': (2000, 4000),
+    'Presence': (4000, 6000),
+    'Brilliance': (6000, 20000)
+}
+
+# Design filters for each band
+fs = 44100  # Sampling frequency (Hz)
+
+fig, axes = plt.subplots(3, 2, figsize=(12, 10))
+
+# 1. Parametric EQ filter
+print("Parametric EQ Design:")
+fc = 1000  # Center frequency
+Q = 2      # Quality factor
+gain_db = 6  # Gain in dB
+
+# Convert to angular frequency
+omega_c = 2 * np.pi * fc
+
+# Transfer function for peaking filter
+s = sp.Symbol('s')
+A = 10**(gain_db/40)
+H_peak = (s**2 + (A/Q)*omega_c*s + omega_c**2) / (s**2 + (omega_c/Q)*s + omega_c**2)
+
+print(f"Center frequency: {fc} Hz")
+print(f"Q factor: {Q}")
+print(f"Gain: {gain_db} dB")
+
+# Frequency response
+w = np.logspace(1, 4.3, 1000) * 2 * np.pi
+H_vals = []
+for omega in w:
+    H_val = complex(H_peak.subs(s, 1j*omega))
+    H_vals.append(H_val)
+
+H_mag = 20 * np.log10(np.abs(H_vals))
+H_phase = np.degrees(np.angle(H_vals))
+
+axes[0, 0].semilogx(w/(2*np.pi), H_mag, 'b-', linewidth=2)
+axes[0, 0].axvline(x=fc, color='r', linestyle='--', alpha=0.5, label='fc')
+axes[0, 0].axhline(y=gain_db, color='g', linestyle=':', alpha=0.5, label=f'{gain_db} dB')
+axes[0, 0].set_xlabel('Frequency (Hz)')
+axes[0, 0].set_ylabel('Magnitude (dB)')
+axes[0, 0].set_title('Parametric EQ Response')
+axes[0, 0].legend()
+axes[0, 0].grid(True, alpha=0.3)
+axes[0, 0].set_ylim(-3, gain_db+3)
+
+# 2. Crossover network design
+print("\nCrossover Network Design:")
+fc_low = 800   # Crossover frequency for woofer/midrange
+fc_high = 5000 # Crossover frequency for midrange/tweeter
+
+# Linkwitz-Riley 4th order filters
+omega_low = 2 * np.pi * fc_low
+omega_high = 2 * np.pi * fc_high
+
+# Low-pass for woofer
+H_lp = omega_low**4 / ((s**2 + np.sqrt(2)*omega_low*s + omega_low**2)**2)
+
+# Band-pass for midrange
+H_bp_num = (omega_high**2 - omega_low**2)**2 * s**4
+H_bp_den = ((s**2 + np.sqrt(2)*omega_low*s + omega_low**2) * 
+            (s**2 + np.sqrt(2)*omega_high*s + omega_high**2))**2
+H_bp = H_bp_num / H_bp_den
+
+# High-pass for tweeter
+H_hp = s**4 / ((s**2 + np.sqrt(2)*omega_high*s + omega_high**2)**2)
+
+# Plot crossover responses
+for H, label, color in [(H_lp, 'Woofer', 'r'), 
+                         (H_bp, 'Midrange', 'g'), 
+                         (H_hp, 'Tweeter', 'b')]:
+    H_cross = []
+    for omega in w:
+        try:
+            H_val = complex(H.subs(s, 1j*omega))
+            H_cross.append(H_val)
+        except:
+            H_cross.append(0)
+    
+    H_mag = 20 * np.log10(np.abs(H_cross) + 1e-10)
+    axes[0, 1].semilogx(w/(2*np.pi), H_mag, color=color, linewidth=2, label=label)
+
+axes[0, 1].axvline(x=fc_low, color='k', linestyle='--', alpha=0.3)
+axes[0, 1].axvline(x=fc_high, color='k', linestyle='--', alpha=0.3)
+axes[0, 1].set_xlabel('Frequency (Hz)')
+axes[0, 1].set_ylabel('Magnitude (dB)')
+axes[0, 1].set_title('3-Way Crossover Network')
+axes[0, 1].legend()
+axes[0, 1].grid(True, alpha=0.3)
+axes[0, 1].set_ylim(-60, 5)
+axes[0, 1].set_xlim(10, 20000)
+
+# 3. Guitar amplifier tone stack
+print("\nGuitar Amp Tone Stack:")
+# Fender-style tone stack simulation
+R1, R2, R3 = 250e3, 1e6, 25e3
+C1, C2, C3 = 250e-12, 20e-9, 20e-9
+
+# Simplified transfer function (treble at 50%)
+H_tone = (R2*C2*s + 1) / ((R1+R2)*C1*s + R2*C2*s + 1)
+
+# Different tone settings
+tone_settings = [
+    ("Flat", 1.0),
+    ("Scooped", 0.5),
+    ("Bright", 1.5)
+]
+
+for setting, factor in tone_settings:
+    H_mod = H_tone * factor
+    H_tone_vals = []
+    for omega in w:
+        H_val = complex(H_mod.subs(s, 1j*omega))
+        H_tone_vals.append(H_val)
+    
+    H_mag = 20 * np.log10(np.abs(H_tone_vals))
+    axes[1, 0].semilogx(w/(2*np.pi), H_mag, linewidth=2, label=setting)
+
+axes[1, 0].set_xlabel('Frequency (Hz)')
+axes[1, 0].set_ylabel('Magnitude (dB)')
+axes[1, 0].set_title('Guitar Amp Tone Stack')
+axes[1, 0].legend()
+axes[1, 0].grid(True, alpha=0.3)
+axes[1, 0].set_xlim(20, 20000)
+
+# 4. Room acoustics modeling
+print("\nRoom Acoustics Transfer Function:")
+# Simple room model with reflections
+room_length = 10  # meters
+c_sound = 343     # m/s
+
+# Direct path and first reflection
+t_direct = room_length / c_sound
+t_reflect = 3 * room_length / c_sound
+
+# Transfer function with direct sound and reflection
+# H(s) = 1 + 0.7*e^(-s*t_reflect)
+H_room = 1 + 0.7 * sp.exp(-s * t_reflect)
+
+# Magnitude response showing comb filtering
+H_room_vals = []
+for omega in w:
+    H_val = 1 + 0.7 * np.exp(-1j * omega * t_reflect)
+    H_room_vals.append(H_val)
+
+H_mag = 20 * np.log10(np.abs(H_room_vals))
+axes[1, 1].semilogx(w/(2*np.pi), H_mag, 'purple', linewidth=2)
+axes[1, 1].set_xlabel('Frequency (Hz)')
+axes[1, 1].set_ylabel('Magnitude (dB)')
+axes[1, 1].set_title('Room Transfer Function (Comb Filtering)')
+axes[1, 1].grid(True, alpha=0.3)
+axes[1, 1].set_ylim(-10, 10)
+
+# 5. Dynamic range compression
+print("\nDynamic Range Compressor:")
+# Attack and release time constants
+tau_attack = 0.001   # 1 ms
+tau_release = 0.1    # 100 ms
+
+# Time response simulation
+t_comp = np.linspace(0, 0.5, 5000)
+
+# Input signal: sudden loud transient
+input_signal = np.zeros_like(t_comp)
+input_signal[1000:1500] = 2.0  # Loud section
+input_signal[2500:3000] = 1.5  # Another loud section
+
+# Envelope follower
+envelope = np.zeros_like(t_comp)
+for i in range(1, len(t_comp)):
+    dt = t_comp[i] - t_comp[i-1]
+    if np.abs(input_signal[i]) > envelope[i-1]:
+        # Attack
+        envelope[i] = envelope[i-1] + (np.abs(input_signal[i]) - envelope[i-1]) * (1 - np.exp(-dt/tau_attack))
+    else:
+        # Release
+        envelope[i] = envelope[i-1] * np.exp(-dt/tau_release)
+
+# Compression (soft knee)
+threshold = 0.7
+ratio = 4
+compressed = np.zeros_like(input_signal)
+for i in range(len(input_signal)):
+    if envelope[i] > threshold:
+        gain_reduction = 1 + (envelope[i] - threshold) * (1 - 1/ratio) / envelope[i]
+        compressed[i] = input_signal[i] / gain_reduction
+    else:
+        compressed[i] = input_signal[i]
+
+axes[2, 0].plot(t_comp*1000, input_signal, 'b-', alpha=0.7, label='Input')
+axes[2, 0].plot(t_comp*1000, compressed, 'r-', linewidth=2, label='Compressed')
+axes[2, 0].plot(t_comp*1000, envelope, 'g--', label='Envelope')
+axes[2, 0].axhline(y=threshold, color='k', linestyle=':', label='Threshold')
+axes[2, 0].set_xlabel('Time (ms)')
+axes[2, 0].set_ylabel('Amplitude')
+axes[2, 0].set_title('Dynamic Range Compression')
+axes[2, 0].legend()
+axes[2, 0].grid(True, alpha=0.3)
+axes[2, 0].set_xlim(0, 500)
+
+# 6. Reverb all-pass filter network
+print("\nReverb Design (Schroeder Reverb):")
+# All-pass filter for reverb
+delay_time = 0.03  # 30 ms
+g = 0.7  # Feedback gain
+
+# Transfer function of all-pass filter
+# H(s) = (g + e^(-sT)) / (1 + g*e^(-sT))
+T = delay_time
+
+# Impulse response simulation
+t_reverb = np.linspace(0, 0.2, 2000)
+impulse_response = np.zeros_like(t_reverb)
+
+# Generate impulse response with multiple delays
+delays = [0.03, 0.037, 0.041, 0.043]  # Prime number ratios
+gains = [0.7, 0.65, 0.6, 0.55]
+
+for delay, gain in zip(delays, gains):
+    n_delay = int(delay * len(t_reverb) / t_reverb[-1])
+    temp_ir = np.zeros_like(t_reverb)
+    temp_ir[0] = 1
+    
+    # Recursive all-pass structure
+    for i in range(n_delay, len(t_reverb)):
+        temp_ir[i] = -gain * temp_ir[i-n_delay]
+        if i >= n_delay:
+            temp_ir[i] += gain * temp_ir[i-n_delay]
+    
+    impulse_response += temp_ir
+
+# Apply exponential decay
+impulse_response *= np.exp(-3 * t_reverb)
+
+axes[2, 1].plot(t_reverb*1000, impulse_response, 'purple', linewidth=1)
+axes[2, 1].set_xlabel('Time (ms)')
+axes[2, 1].set_ylabel('Amplitude')
+axes[2, 1].set_title('Reverb Impulse Response')
+axes[2, 1].grid(True, alpha=0.3)
+axes[2, 1].set_xlim(0, 200)
+
+plt.tight_layout()
+plt.show()
+
+# Summary of transfer functions
+print("\nSummary of Audio System Transfer Functions:")
+print("==========================================")
+print("1. Parametric EQ: Adjustable center frequency, Q, and gain")
+print("2. Crossover: Splits audio into frequency bands for speakers")
+print("3. Tone Stack: Shapes frequency response in guitar amps")
+print("4. Room Acoustics: Models reflections and comb filtering")
+print("5. Compressor: Non-linear dynamics processing")
+print("6. Reverb: All-pass filters create dense reflections")</code></pre>
+                                    
+                                    <div class="interactive-element">
+                                        <h4>Interactive: Audio Filter Designer</h4>
+                                        <div id="audio-filter-6-6" style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+                                            <canvas id="audioFilterCanvas" width="600" height="400"></canvas>
+                                            <div style="margin-top: 10px;">
+                                                <label>Filter Type: 
+                ouzou                                    <select id="filterType" onchange="updateAudioFilter()">
+                                                        <option value="lowpass">Low Pass</option>
+                                                        <option value="highpass">High Pass</option>
+                                                        <option value="bandpass">Band Pass</option>
+                                                        <option value="notch">Notch</option>
+                                                    </select>
+                                                </label>
+                                                <label style="margin-left: 20px;">Frequency: <span id="freqValue">1000</span> Hz
+                                                    <input type="range" id="freqSlider" min="20" max="20000" value="1000" 
+                                                           style="width: 200px;" oninput="updateAudioFilter()">
+                                                </label>
+                                                <label style="margin-left: 20px;">Q: <span id="qValue">1</span>
+                                                    <input type="range" id="qSlider" min="0.1" max="10" step="0.1" value="1" 
+                                                           style="width: 100px;" oninput="updateAudioFilter()">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </span>
+                                    <span id="5-7">
+                                    <h3>7. Reference</h3>
+                                    <p>Key formulas, tables, and resources for Laplace transforms.</p>
+                                    
+                                    <h4>Laplace Transform Table</h4>
+                                    <pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create comprehensive Laplace transform table
+transform_table = [
+    # Basic functions
+    ["Unit step", "u(t) or H(t)", "1/s", "s > 0"],
+    ["Unit impulse", "δ(t)", "1", "all s"],
+    ["Ramp", "t", "1/s²", "s > 0"],
+    ["Power", "t^n", "n!/s^(n+1)", "s > 0"],
+    ["Exponential", "e^(at)", "1/(s-a)", "s > a"],
+    ["Sine", "sin(ωt)", "ω/(s²+ω²)", "s > 0"],
+    ["Cosine", "cos(ωt)", "s/(s²+ω²)", "s > 0"],
+    ["Hyperbolic sine", "sinh(at)", "a/(s²-a²)", "s > |a|"],
+    ["Hyperbolic cosine", "cosh(at)", "s/(s²-a²)", "s > |a|"],
+    
+    # Damped functions
+    ["Damped sine", "e^(-at)sin(ωt)", "ω/((s+a)²+ω²)", "s > -a"],
+    ["Damped cosine", "e^(-at)cos(ωt)", "(s+a)/((s+a)²+ω²)", "s > -a"],
+    
+    # Products with t
+    ["t×exponential", "te^(at)", "1/(s-a)²", "s > a"],
+    ["t×sine", "t·sin(ωt)", "2ωs/(s²+ω²)²", "s > 0"],
+    ["t×cosine", "t·cos(ωt)", "(s²-ω²)/(s²+ω²)²", "s > 0"],
+    
+    # Special functions
+    ["Error function", "erf(√t)", "1/(s√(s+1))", "s > 0"],
+    ["Bessel J₀", "J₀(t)", "1/√(s²+1)", "s > 0"],
+    
+    # Discontinuous
+    ["Shifted step", "u(t-a)", "e^(-as)/s", "s > 0"],
+    ["Pulse", "u(t-a)-u(t-b)", "(e^(-as)-e^(-bs))/s", "s > 0"],
+    ["Periodic square", "Square wave (T)", "(1-e^(-sT/2))/(s(1-e^(-sT)))", "s > 0"]
+]
+
+# Create DataFrame
+df = pd.DataFrame(transform_table, columns=['Function Name', 'f(t)', 'F(s)', 'ROC'])
+
+print("Laplace Transform Reference Table")
+print("================================")
+print(df.to_string(index=False))
+
+# Visualize some key transform pairs
+fig, axes = plt.subplots(3, 3, figsize=(15, 12))
+t = np.linspace(0, 5, 1000)
+
+# Define functions for plotting
+functions = [
+    ("Unit Step", lambda t: np.ones_like(t), "1/s"),
+    ("Exponential e^(-2t)", lambda t: np.exp(-2*t), "1/(s+2)"),
+    ("Sine (2t)", lambda t: np.sin(2*t), "2/(s²+4)"),
+    ("Cosine (2t)", lambda t: np.cos(2*t), "s/(s²+4)"),
+    ("Ramp t", lambda t: t, "1/s²"),
+    ("t·e^(-t)", lambda t: t*np.exp(-t), "1/(s+1)²"),
+    ("Damped sine", lambda t: np.exp(-t)*np.sin(3*t), "3/((s+1)²+9)"),
+    ("Square pulse", lambda t: np.where((t > 1) & (t < 3), 1, 0), "(e^(-s)-e^(-3s))/s"),
+    ("Triangular", lambda t: np.where(t < 2, t/2, np.where(t < 4, 2-t/2, 0)), "Complex")
+]
+
+for idx, (name, func, transform) in enumerate(functions):
+    row = idx // 3
+    col = idx % 3
+    
+    y = func(t)
+    axes[row, col].plot(t, y, 'b-', linewidth=2)
+    axes[row, col].set_xlabel('t')
+    axes[row, col].set_ylabel('f(t)')
+    axes[row, col].set_title(f'{name}\nF(s) = {transform}')
+    axes[row, col].grid(True, alpha=0.3)
+    axes[row, col].set_xlim(0, 5)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                                    
+                                    <h4>Properties and Theorems</h4>
+                                    <pre><code>print("\nLaplace Transform Properties")
+print("===========================")
+
+properties = [
+    ("Linearity", "L{af(t) + bg(t)} = aF(s) + bG(s)"),
+    ("Time shifting", "L{f(t-a)u(t-a)} = e^(-as)F(s)"),
+    ("Frequency shifting", "L{e^(at)f(t)} = F(s-a)"),
+    ("Time scaling", "L{f(at)} = (1/a)F(s/a), a > 0"),
+    ("Differentiation (time)", "L{f'(t)} = sF(s) - f(0)"),
+    ("Differentiation (freq)", "L{tf(t)} = -dF/ds"),
+    ("Integration", "L{∫f(τ)dτ} = F(s)/s"),
+    ("Convolution", "L{f*g} = F(s)G(s)"),
+    ("Initial value", "f(0+) = lim(s→∞) sF(s)"),
+    ("Final value", "f(∞) = lim(s→0) sF(s)")
+]
+
+for prop, formula in properties:
+    print(f"{prop:25} {formula}")
+
+# Common partial fraction patterns
+print("\nPartial Fraction Patterns")
+print("========================")
+print("1. Distinct linear factors:")
+print("   F(s) = A/(s-a) + B/(s-b) + ...")
+print("\n2. Repeated linear factors:")
+print("   F(s) = A₁/(s-a) + A₂/(s-a)² + ... + Aₙ/(s-a)ⁿ")
+print("\n3. Quadratic factors:")
+print("   F(s) = (As + B)/(s² + ps + q)")
+print("\n4. Repeated quadratic factors:")
+print("   F(s) = (A₁s + B₁)/(s² + ps + q) + (A₂s + B₂)/(s² + ps + q)² + ...")
+
+# Solving differential equations procedure
+print("\nSolving ODEs with Laplace Transforms")
+print("===================================")
+print("1. Take Laplace transform of the entire equation")
+print("2. Apply initial conditions")
+print("3. Solve algebraically for Y(s)")
+print("4. Use partial fractions if necessary")
+print("5. Apply inverse Laplace transform")
+print("6. Verify solution satisfies original equation")
+
+# Example workflow
+print("\nExample: Solve y'' + 3y' + 2y = e^(-t), y(0) = 0, y'(0) = 1")
+print("--------------------------------------------------------")
+
+import sympy as sp
+t, s = sp.symbols('t s', real=True)
+Y = sp.Function('Y')
+
+# Step 1: Laplace transform
+print("Step 1: L{y'' + 3y' + 2y} = L{e^(-t)}")
+print("        s²Y(s) - sy(0) - y'(0) + 3[sY(s) - y(0)] + 2Y(s) = 1/(s+1)")
+
+# Step 2: Apply ICs
+print("\nStep 2: Apply y(0) = 0, y'(0) = 1")
+print("        s²Y(s) - 1 + 3sY(s) + 2Y(s) = 1/(s+1)")
+
+# Step 3: Solve for Y(s)
+print("\nStep 3: Y(s)[s² + 3s + 2] = 1/(s+1) + 1")
+Y_s = (1/(s+1) + 1) / (s**2 + 3*s + 2)
+Y_s = sp.simplify(Y_s)
+print(f"        Y(s) = {Y_s}")
+
+# Step 4: Partial fractions
+Y_s_pf = sp.apart(Y_s, s)
+print(f"\nStep 4: Partial fractions: Y(s) = {Y_s_pf}")
+
+# Step 5: Inverse transform
+y_t = sp.inverse_laplace_transform(Y_s, s, t)
+print(f"\nStep 5: y(t) = {y_t}")
+
+# Verification plot
+t_vals = np.linspace(0, 5, 1000)
+y_vals = sp.lambdify(t, y_t * sp.Heaviside(t), 'numpy')(t_vals)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t_vals, y_vals, 'b-', linewidth=2, label='Solution y(t)')
+plt.plot(t_vals, np.exp(-t_vals), 'r--', linewidth=2, label='Forcing e^(-t)')
+plt.xlabel('t')
+plt.ylabel('y(t)')
+plt.title('Solution to y\'\'\' + 3y\' + 2y = e^(-t)')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                                    
+                                    <div class="quiz-container">
+                                        <h4>Self-Assessment Quiz</h4>
+                                        <div class="quiz-question">
+                                            What is the Laplace transform of f(t) = t²e^(-3t)?
+                                        </div>
+                                        <ul class="quiz-options">
+                                            <li><input type="radio" name="q6-7" value="a"> 2/(s+3)³</li>
+                                            <li><input type="radio" name="q6-7" value="b"> 2/(s-3)³</li>
+                                            <li><input type="radio" name="q6-7" value="c"> 6/(s+3)³</li>
+                                            <li><input type="radio" name="q6-7" value="d"> 1/(s+3)²</li>
+                                        </ul>
+                                        <button class="quiz-submit btn btn-primary" onclick="checkAnswer6_7()">Check Answer</button>
+                                        <div class="quiz-feedback" id="feedback6-7"></div>
+                                    </div>
+                                    
+                                    <h4>Additional Resources</h4>
+                                    <ul>
+                                        <li><strong>Books:</strong>
+                                            <ul>
+                                                <li>"Advanced Engineering Mathematics" by Kreyszig</li>
+                                                <li>"Signals and Systems" by Oppenheim & Willsky</li>
+                                                <li>"Modern Control Engineering" by Ogata</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Online Tools:</strong>
+                                            <ul>
+                                                <li>Wolfram Alpha for transform calculations</li>
+                                                <li>SymPy for symbolic computation</li>
+                                                <li>MATLAB/Octave for numerical analysis</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Applications:</strong>
+                                            <ul>
+                                                <li>Control systems design</li>
+                                                <li>Signal processing</li>
+                                                <li>Circuit analysis</li>
+                                                <li>Mechanical vibrations</li>
+                                                <li>Heat transfer</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    </span>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Pyodide for Python in Browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    
+    <!-- Interactive Features -->
+    <script src="../js/interactive.js"></script>
+    <script src="../js/modern-content.js"></script>
+    <script src="../js/academic-enhancements.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $(".menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("")
+
+    </script>
+    
+    <script>
+        // Laplace Transform Visualizer (Section 1)
+        function updateLaplaceViz() {
+            const canvas = document.getElementById('laplaceCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const funcType = document.getElementById('functionSelect').value;
+            const param = parseFloat(document.getElementById('paramSlider').value);
+            document.getElementById('paramValue').textContent = param;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Split canvas - left for time domain, right for frequency domain
+            const midX = canvas.width / 2;
+            
+            // Draw dividing line
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(midX, 0);
+            ctx.lineTo(midX, canvas.height);
+            ctx.stroke();
+            
+            // Time domain (left side)
+            const t = [];
+            const f_t = [];
+            for (let i = 0; i < 200; i++) {
+                const tVal = i * 0.05;
+                t.push(tVal);
+                
+                switch(funcType) {
+                    case 'step':
+                        f_t.push(1);
+                        break;
+                    case 'exp':
+                        f_t.push(Math.exp(-param * tVal));
+                        break;
+                    case 'sin':
+                        f_t.push(Math.sin(param * tVal));
+                        break;
+                    case 'ramp':
+                        f_t.push(tVal);
+                        break;
+                }
+            }
+            
+            // Scale and draw time domain
+            const tScale = (midX - 60) / 10;
+            const yScale = 100;
+            const yMid = canvas.height / 2;
+            
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < t.length; i++) {
+                const x = 30 + t[i] * tScale;
+                const y = yMid - f_t[i] * yScale;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Axes for time domain
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(30, yMid);
+            ctx.lineTo(midX - 20, yMid);
+            ctx.moveTo(30, 20);
+            ctx.lineTo(30, canvas.height - 20);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText('t', midX - 30, yMid + 20);
+            ctx.fillText('f(t)', 10, 30);
+            
+            // Frequency domain (right side) - show magnitude of F(s)
+            const s_real = 0.1; // Real part of s
+            const s_imag = [];
+            const F_mag = [];
+            
+            for (let i = 0; i < 100; i++) {
+                const omega = i * 0.5;
+                s_imag.push(omega);
+                
+                let mag;
+                switch(funcType) {
+                    case 'step':
+                        mag = 1 / Math.sqrt(s_real*s_real + omega*omega);
+                        break;
+                    case 'exp':
+                        mag = 1 / Math.sqrt((s_real + param)*(s_real + param) + omega*omega);
+                        break;
+                    case 'sin':
+                        mag = param / Math.sqrt((s_real*s_real + omega*omega - param*param)**2 + (2*s_real*omega)**2);
+                        break;
+                    case 'ramp':
+                        mag = 1 / (s_real*s_real + omega*omega);
+                        break;
+                }
+                F_mag.push(mag);
+            }
+            
+            // Scale and draw frequency domain
+            const sScale = (midX - 60) / 50;
+            const magScale = 50;
+            
+            ctx.strokeStyle = '#d9534f';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < s_imag.length; i++) {
+                const x = midX + 30 + s_imag[i] * sScale;
+                const y = canvas.height - 40 - F_mag[i] * magScale;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Axes for frequency domain
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(midX + 30, canvas.height - 40);
+            ctx.lineTo(canvas.width - 20, canvas.height - 40);
+            ctx.moveTo(midX + 30, 20);
+            ctx.lineTo(midX + 30, canvas.height - 20);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillText('ω', canvas.width - 30, canvas.height - 20);
+            ctx.fillText('|F(jω)|', midX + 10, 30);
+            
+            // Titles
+            ctx.font = '14px Arial';
+            ctx.fillText('Time Domain', midX/2 - 30, 15);
+            ctx.fillText('Frequency Domain', midX + midX/2 - 40, 15);
+        }
+        
+        // Inverse Transform Calculator (Section 4)
+        function calculateInverse() {
+            const a = parseFloat(document.getElementById('coeff-a').value);
+            const b = parseFloat(document.getElementById('coeff-b').value);
+            const c = parseFloat(document.getElementById('coeff-c').value);
+            const d = parseFloat(document.getElementById('coeff-d').value);
+            
+            const canvas = document.getElementById('inverseCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Calculate discriminant to determine nature of poles
+            const disc = c*c - 4*d;
+            
+            let resultText = `F(s) = (${a}s + ${b}) / (s² + ${c}s + ${d})\\n\\n`;
+            
+            const t = [];
+            const y = [];
+            
+            for (let i = 0; i < 500; i++) {
+                const tVal = i * 0.02;
+                t.push(tVal);
+                
+                let yVal = 0;
+                if (disc > 0) {
+                    // Two real poles
+                    const r1 = (-c + Math.sqrt(disc)) / 2;
+                    const r2 = (-c - Math.sqrt(disc)) / 2;
+                    resultText += `Two real poles: s = ${r1.toFixed(2)}, ${r2.toFixed(2)}\\n`;
+                    
+                    // Partial fractions and inverse transform
+                    const A = (a*r1 + b) / (r1 - r2);
+                    const B = -(a*r2 + b) / (r1 - r2);
+                    yVal = A * Math.exp(r1 * tVal) + B * Math.exp(r2 * tVal);
+                } else if (disc < 0) {
+                    // Complex conjugate poles
+                    const alpha = -c / 2;
+                    const omega = Math.sqrt(-disc) / 2;
+                    resultText += `Complex poles: s = ${alpha.toFixed(2)} ± j${omega.toFixed(2)}\\n`;
+                    
+                    // Inverse transform for complex poles
+                    const mag = Math.sqrt(a*a + ((b - a*alpha)/omega)**2);
+                    const phase = Math.atan2((b - a*alpha)/omega, a);
+                    yVal = mag * Math.exp(alpha * tVal) * Math.cos(omega * tVal + phase);
+                } else {
+                    // Repeated real pole
+                    const r = -c / 2;
+                    resultText += `Repeated pole: s = ${r.toFixed(2)}\\n`;
+                    yVal = (a * tVal + (b - a*r)) * Math.exp(r * tVal);
+                }
+                
+                y.push(yVal);
+            }
+            
+            // Plot the result
+            const xScale = (canvas.width - 80) / 10;
+            const yMax = Math.max(...y.map(Math.abs));
+            const yScale = (canvas.height - 80) / (2 * yMax);
+            const yMid = canvas.height / 2;
+            
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(40, yMid);
+            ctx.lineTo(canvas.width - 40, yMid);
+            ctx.moveTo(40, 20);
+            ctx.lineTo(40, canvas.height - 20);
+            ctx.stroke();
+            
+            // Plot function
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < t.length; i++) {
+                const x = 40 + t[i] * xScale;
+                const yPos = yMid - y[i] * yScale;
+                if (i === 0) ctx.moveTo(x, yPos);
+                else ctx.lineTo(x, yPos);
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText('t', canvas.width - 30, yMid + 20);
+            ctx.fillText('f(t)', 20, 30);
+            
+            // Update result text
+            document.getElementById('inverseResult').textContent = resultText;
+        }
+        
+        // Audio Filter Designer (Section 6)
+        function updateAudioFilter() {
+            const canvas = document.getElementById('audioFilterCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const filterType = document.getElementById('filterType').value;
+            const freq = parseFloat(document.getElementById('freqSlider').value);
+            const Q = parseFloat(document.getElementById('qSlider').value);
+            
+            document.getElementById('freqValue').textContent = freq;
+            document.getElementById('qValue').textContent = Q.toFixed(1);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Generate frequency response
+            const freqs = [];
+            const mags = [];
+            
+            for (let i = 0; i < 200; i++) {
+                const f = 20 * Math.pow(10, i * 3.3 / 200); // 20Hz to 20kHz log scale
+                freqs.push(f);
+                
+                const omega = 2 * Math.PI * f;
+                const omega0 = 2 * Math.PI * freq;
+                
+                let H;
+                switch(filterType) {
+                    case 'lowpass':
+                        H = 1 / Math.sqrt(1 + Math.pow(omega/omega0, 2*2)); // 2nd order
+                        break;
+                    case 'highpass':
+                        H = 1 / Math.sqrt(1 + Math.pow(omega0/omega, 2*2));
+                        break;
+                    case 'bandpass':
+                        const x = omega/omega0;
+                        H = 1 / Math.sqrt(1 + Q*Q * Math.pow(x - 1/x, 2));
+                        break;
+                    case 'notch':
+                        const x2 = omega/omega0;
+                        H = Math.abs(x2*x2 - 1) / Math.sqrt(Math.pow(x2*x2 - 1, 2) + Math.pow(x2/Q, 2));
+                        break;
+                }
+                
+                mags.push(20 * Math.log10(H)); // Convert to dB
+            }
+            
+            // Draw frequency response
+            const xScale = (canvas.width - 80) / Math.log10(1000); // 20Hz to 20kHz
+            const yScale = (canvas.height - 80) / 60; // -40dB to +20dB range
+            const yZero = 40 + 20 * yScale; // 0dB position
+            
+            // Grid lines
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 1;
+            
+            // Horizontal grid (dB)
+            for (let db = -40; db <= 20; db += 10) {
+                const y = yZero - db * yScale;
+                ctx.beginPath();
+                ctx.moveTo(40, y);
+                ctx.lineTo(canvas.width - 40, y);
+                ctx.stroke();
+            }
+            
+            // Vertical grid (frequency)
+            const gridFreqs = [100, 1000, 10000];
+            for (let gf of gridFreqs) {
+                const x = 40 + Math.log10(gf/20) * xScale;
+                ctx.beginPath();
+                ctx.moveTo(x, 20);
+                ctx.lineTo(x, canvas.height - 20);
+                ctx.stroke();
+            }
+            
+            // Axes
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(40, yZero);
+            ctx.lineTo(canvas.width - 40, yZero);
+            ctx.stroke();
+            
+            // Plot magnitude response
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let i = 0; i < freqs.length; i++) {
+                const x = 40 + Math.log10(freqs[i]/20) * xScale;
+                const y = yZero - mags[i] * yScale;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Mark cutoff frequency
+            ctx.strokeStyle = '#d9534f';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            const xCutoff = 40 + Math.log10(freq/20) * xScale;
+            ctx.beginPath();
+            ctx.moveTo(xCutoff, 20);
+            ctx.lineTo(xCutoff, canvas.height - 20);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // -3dB line
+            ctx.strokeStyle = '#5cb85c';
+            ctx.lineWidth = 1;
+            const y3db = yZero - (-3) * yScale;
+            ctx.beginPath();
+            ctx.moveTo(40, y3db);
+            ctx.lineTo(canvas.width - 40, y3db);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText('100', 40 + Math.log10(100/20) * xScale - 10, canvas.height - 5);
+            ctx.fillText('1k', 40 + Math.log10(1000/20) * xScale - 5, canvas.height - 5);
+            ctx.fillText('10k', 40 + Math.log10(10000/20) * xScale - 10, canvas.height - 5);
+            ctx.fillText('Frequency (Hz)', canvas.width/2 - 40, canvas.height - 5);
+            
+            ctx.save();
+            ctx.translate(15, canvas.height/2);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText('Magnitude (dB)', 0, 0);
+            ctx.restore();
+            
+            // dB labels
+            ctx.fillText('0', 20, yZero + 5);
+            ctx.fillText('-20', 15, yZero + 20 * yScale + 5);
+            ctx.fillText('+20', 15, yZero - 20 * yScale + 5);
+        }
+        
+        // Quiz answer checker for section 6-7
+        function checkAnswer6_7() {
+            const selected = document.querySelector('input[name="q6-7"]:checked');
+            const feedback = document.getElementById('feedback6-7');
+            
+            if (!selected) {
+                feedback.textContent = 'Please select an answer.';
+                feedback.className = 'quiz-feedback incorrect';
+                return;
+            }
+            
+            if (selected.value === 'a') {
+                feedback.textContent = 'Correct! L{t²e^(-3t)} = 2!/(s+3)³ = 2/(s+3)³';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = 'Not quite. Use the formula L{t^n e^(at)} = n!/(s-a)^(n+1) with n=2 and a=-3.';
+                feedback.className = 'quiz-feedback incorrect';
+            }
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', function() {
+            if (document.getElementById('laplaceCanvas')) {
+                updateLaplaceViz();
+            }
+            if (document.getElementById('inverseCanvas')) {
+                calculateInverse();
+            }
+            if (document.getElementById('audioFilterCanvas')) {
+                updateAudioFilter();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interactive Demo - Differential Equations</title>
+    
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Differential Equations Demo</h1>
+        
+        <h2>1. Interactive Slope Field Visualization</h2>
+        <div class="plot-container">
+            <canvas id="slopeField" width="600" height="400"></canvas>
+            <div class="plot-controls">
+                <label>Equation: dy/dx = </label>
+                <select id="equation-select">
+                    <option value="x+y">x + y</option>
+                    <option value="x-y">x - y</option>
+                    <option value="x*y">x * y</option>
+                    <option value="-y/x">-y / x</option>
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="updateSlopeField()">Update</button>
+            </div>
+        </div>
+        
+        <h2>2. Parameter Exploration</h2>
+        <div class="plot-container">
+            <p>Explore the solution to: dy/dt = ay, where y(0) = 1</p>
+            <div class="plot-controls">
+                <label>Parameter a: <span class="plot-value" id="a-value">-2</span></label>
+                <input type="range" id="a-slider" min="-5" max="5" step="0.1" value="-2" oninput="updateParameter()">
+            </div>
+            <canvas id="paramPlot" width="600" height="400"></canvas>
+        </div>
+        
+        <h2>3. Self-Check Quiz</h2>
+        <div class="quiz-container">
+            <div class="quiz-question">What type of differential equation is dy/dx + P(x)y = Q(x)?</div>
+            <ul class="quiz-options">
+                <li><input type="radio" name="q1" value="a"> Separable equation</li>
+                <li><input type="radio" name="q1" value="b"> Linear first-order equation</li>
+                <li><input type="radio" name="q1" value="c"> Exact equation</li>
+                <li><input type="radio" name="q1" value="d"> Bernoulli equation</li>
+            </ul>
+            <button class="btn btn-primary quiz-submit" onclick="checkAnswer()">Check Answer</button>
+            <div class="quiz-feedback" id="quiz-feedback"></div>
+        </div>
+        
+        <h2>4. Collapsible Theory Sections</h2>
+        <button class="collapsible">What is a Differential Equation?</button>
+        <div class="collapsible-content">
+            <p>A differential equation is an equation that relates a function with its derivatives. They are fundamental in modeling real-world phenomena where rates of change are involved.</p>
+            <p>Example: The equation dy/dx = 2x describes how y changes with respect to x.</p>
+        </div>
+        
+        <button class="collapsible">Types of Differential Equations</button>
+        <div class="collapsible-content">
+            <ul>
+                <li><strong>Ordinary Differential Equations (ODEs):</strong> Involve functions of one variable</li>
+                <li><strong>Partial Differential Equations (PDEs):</strong> Involve functions of multiple variables</li>
+                <li><strong>Linear vs Nonlinear:</strong> Based on whether the equation is linear in the unknown function</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    
+    <script>
+        // Slope Field Visualization
+        function drawSlopeField() {
+            const canvas = document.getElementById('slopeField');
+            const ctx = canvas.getContext('2d');
+            const equation = document.getElementById('equation-select').value;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height/2);
+            ctx.lineTo(canvas.width, canvas.height/2);
+            ctx.moveTo(canvas.width/2, 0);
+            ctx.lineTo(canvas.width/2, canvas.height);
+            ctx.stroke();
+            
+            // Draw slope field
+            ctx.strokeStyle = '#337ab7';
+            const step = 20;
+            const length = 15;
+            
+            for (let px = step/2; px < canvas.width; px += step) {
+                for (let py = step/2; py < canvas.height; py += step) {
+                    const x = (px - canvas.width/2) / 50;
+                    const y = -(py - canvas.height/2) / 50;
+                    
+                    let slope;
+                    switch(equation) {
+                        case 'x+y': slope = x + y; break;
+                        case 'x-y': slope = x - y; break;
+                        case 'x*y': slope = x * y; break;
+                        case '-y/x': slope = x !== 0 ? -y/x : 0; break;
+                    }
+                    
+                    const angle = Math.atan(slope);
+                    const dx = length * Math.cos(angle) / 2;
+                    const dy = -length * Math.sin(angle) / 2;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(px - dx, py - dy);
+                    ctx.lineTo(px + dx, py + dy);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        function updateSlopeField() {
+            drawSlopeField();
+        }
+        
+        // Parameter exploration
+        function updateParameter() {
+            const a = parseFloat(document.getElementById('a-slider').value);
+            document.getElementById('a-value').textContent = a.toFixed(1);
+            
+            const canvas = document.getElementById('paramPlot');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height - 50);
+            ctx.lineTo(canvas.width - 50, canvas.height - 50);
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50, canvas.height - 50);
+            ctx.stroke();
+            
+            // Draw solution curve
+            ctx.strokeStyle = '#337ab7';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            for (let px = 50; px < canvas.width - 50; px++) {
+                const t = (px - 50) / 100;
+                const y = Math.exp(a * t);
+                const py = canvas.height - 50 - y * 50;
+                
+                if (px === 50) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            ctx.fillText('t', canvas.width - 40, canvas.height - 35);
+            ctx.fillText('y(t)', 10, 50);
+            ctx.fillText(`y(t) = e^(${a.toFixed(1)}t)`, canvas.width/2 - 50, 30);
+        }
+        
+        // Quiz functionality
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="q1"]:checked');
+            const feedback = document.getElementById('quiz-feedback');
+            
+            if (!selected) {
+                feedback.textContent = 'Please select an answer.';
+                feedback.className = 'quiz-feedback incorrect';
+                feedback.style.display = 'block';
+                return;
+            }
+            
+            if (selected.value === 'b') {
+                feedback.textContent = 'Correct! This is the standard form of a linear first-order differential equation.';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = 'Not quite. This is a linear first-order equation because it\'s linear in y and its derivative.';
+                feedback.className = 'quiz-feedback incorrect';
+            }
+            feedback.style.display = 'block';
+        }
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+        
+        // Initialize on load
+        window.onload = function() {
+            drawSlopeField();
+            updateParameter();
+        };
+    </script>
+</body>
+</html>
