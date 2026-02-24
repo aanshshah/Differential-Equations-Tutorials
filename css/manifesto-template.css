@@ -1,0 +1,59 @@
+:root {
+  --mf-bg: #f6f3ee;
+  --mf-paper: #f1ede7;
+  --mf-text: #1c1c1c;
+  --mf-muted: #57534e;
+  --mf-accent: #2f3a8f;
+  --mf-border: #d8d2c8;
+}
+
+html, body {
+  background: var(--mf-bg) !important;
+  color: var(--mf-text);
+}
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  line-height: 1.65;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Crimson Text", "Times New Roman", serif;
+  color: var(--mf-text);
+}
+
+a { color: var(--mf-accent); }
+
+hr, .divider, .section-divider {
+  border: 0;
+  border-top: 1px solid var(--mf-border);
+}
+
+/* Remove dashboard/chrome feel in legacy Bootstrap-driven templates */
+.panel, .panel-default, .card, .well, .jumbotron, .thumbnail,
+.alert, .label, .badge {
+  background: transparent !important;
+  border: 1px solid var(--mf-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--mf-text) !important;
+}
+
+.btn, .btn-primary, .btn-default, .btn-info, .btn-success, .btn-warning {
+  background: transparent !important;
+  border: 1px solid var(--mf-border) !important;
+  border-radius: 0 !important;
+  color: var(--mf-text) !important;
+  box-shadow: none !important;
+}
+
+pre, code {
+  font-family: "JetBrains Mono", Consolas, monospace;
+}
+
+pre {
+  background: #ebe6de !important;
+  border: 1px solid var(--mf-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
