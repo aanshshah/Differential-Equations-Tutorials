@@ -15,6 +15,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     sidebar.classList.remove('active');
                 }
             }
+
+            const header = document.createElement('header');
+            header.className = 'manifesto-injected-header';
+            header.setAttribute('role', 'banner');
+            header.innerHTML = `
+                <div class="manifesto-injected-header-inner">
+                    <a class="manifesto-brand" href="index.html">${levelLabel}</a>
+                    <nav class="manifesto-header-links" aria-label="Header links">
+                        <a href="../index.html">Home</a>
+                        <a href="index.html">Overview</a>
+                        <a href="interactive_demo.html">Demo</a>
+                    </nav>
+                </div>
+            `;
+            document.body.prepend(header);
+            document.body.classList.add('has-injected-header');
         });
     }
 
