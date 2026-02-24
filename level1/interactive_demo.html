@@ -9,8 +9,21 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/simple-sidebar.css" rel="stylesheet">
     <link href="../css/interactive.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/manifesto-template.css">
 </head>
-<body>
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="../index.html">Differential Equations Tutorials</a>
+    <p class="lesson-static-subtitle">Level I</p>
+    <nav class="lesson-static-links" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="interactive_demo.html">Demo</a>
+    </nav>
+  </div>
+</header>
+
     <div class="container">
         <h1>Interactive Differential Equations Demo</h1>
         
@@ -210,5 +223,7 @@
             updateParameter();
         };
     </script>
+    <script src="../js/site-framework.js"></script>
+    <script src="../js/modern-content.js"></script>
 </body>
 </html>

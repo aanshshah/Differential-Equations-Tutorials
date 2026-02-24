@@ -27,18 +27,23 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <link rel="stylesheet" href="../css/manifesto-template.css">
 </head>
 
-<body>
-<style>
-h1 {
-  margin: 0;
-    display: inline-block;
-}
-button {
-  float: right;
-}
-</style>
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="../index.html">Differential Equations Tutorials</a>
+    <p class="lesson-static-subtitle">Level I</p>
+    <nav class="lesson-static-links" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="interactive_demo.html">Demo</a>
+    </nav>
+  </div>
+</header>
+
+
     <div id="wrapper">
         	<!-- top navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -1154,6 +1159,7 @@ plt.show()</code></pre>
     
     <!-- Interactive Features -->
     <script src="../js/interactive.js"></script>
+    <script src="../js/site-framework.js"></script>
     <script src="../js/modern-content.js"></script>
     <script src="../js/academic-enhancements.js"></script>
     <!-- Menu Toggle Script -->

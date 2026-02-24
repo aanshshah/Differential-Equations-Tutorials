@@ -1,307 +1,167 @@
-// Modern Content Page Enhancements
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Add intro box to each section
-    function enhanceSections() {
-        const sections = document.querySelectorAll('span[id]');
-        
-        sections.forEach((section, index) => {
-            const heading = section.querySelector('h3');
-            if (heading && index === 0) {
-                // Add intro box for first section
-                const introBox = document.createElement('div');
-                introBox.className = 'intro-box';
-                introBox.innerHTML = `
-                    <h2>Welcome to ${document.title.split('-')[0].trim()}</h2>
-                    <p>This interactive tutorial will guide you through essential concepts with hands-on Python examples. 
-                    Each code block is fully executable - click "Run" to see results instantly in your browser.</p>
-                `;
-                section.insertBefore(introBox, heading);
-            }
-            
-            // Add learning objectives for major sections
-            if (heading && heading.textContent.includes('1.')) {
-                const objectivesBox = document.createElement('div');
-                objectivesBox.className = 'learning-objectives';
-                objectivesBox.innerHTML = `
-                    <h4>📚 In this section, you will:</h4>
-                    <ul>
-                        <li>Understand the fundamental concepts</li>
-                        <li>Implement solutions using Python</li>
-                        <li>Visualize results with interactive plots</li>
-                        <li>Practice with hands-on examples</li>
-                    </ul>
-                `;
-                heading.insertAdjacentElement('afterend', objectivesBox);
-            }
-        });
-    }
-    
-    // Enhance code blocks with context
-    function enhanceCodeBlocks() {
-        const codeContainers = document.querySelectorAll('.code-editor-container');
-        
-        codeContainers.forEach((container, index) => {
-            // Check if code contains specific patterns
-            const codeText = container.querySelector('.code-editor').value;
-            
-            if (codeText.includes('import matplotlib') || codeText.includes('plt.')) {
-                // Add plotting context
-                const contextBox = document.createElement('div');
-                contextBox.className = 'note-box';
-                contextBox.innerHTML = `
-                    <h4>📊 Visualization Example</h4>
-                    <p>This code creates an interactive plot. Modify the parameters to see how the visualization changes!</p>
-                `;
-                container.parentNode.insertBefore(contextBox, container);
-            } else if (codeText.includes('odeint') || codeText.includes('solve_ivp')) {
-                // Add ODE solving context
-                const contextBox = document.createElement('div');
-                contextBox.className = 'example-box';
-                contextBox.innerHTML = `
-                    <h4>🔄 Differential Equation Solver</h4>
-                    <p>This example demonstrates numerical solution of differential equations. Try changing initial conditions or parameters.</p>
-                `;
-                container.parentNode.insertBefore(contextBox, container);
-            } else if (codeText.includes('def ') && index === 0) {
-                // Add function definition context
-                const contextBox = document.createElement('div');
-                contextBox.className = 'interactive-highlight';
-                contextBox.innerHTML = `
-                    <h4>💡 Interactive Code</h4>
-                    <p>All code examples are editable and runnable. Feel free to experiment with different values and see the results immediately!</p>
-                `;
-                container.parentNode.insertBefore(contextBox, container);
-            }
-        });
-    }
-    
-    // Add section navigation
-    function addSectionNavigation() {
-        const sections = document.querySelectorAll('span[id]');
-        const container = document.querySelector('.container-fluid');
-        
-        if (sections.length > 1 && container) {
-            // Create progress indicator
-            const progressIndicator = document.createElement('div');
-            progressIndicator.className = 'section-progress';
-            
-            sections.forEach((section, index) => {
-                const indicator = document.createElement('span');
-                indicator.className = 'section-progress-item';
-                indicator.title = section.querySelector('h3')?.textContent || `Section ${index + 1}`;
-                indicator.onclick = () => section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                progressIndicator.appendChild(indicator);
-            });
-            
-            document.body.appendChild(progressIndicator);
-            
-            // Update active indicator on scroll
-            window.addEventListener('scroll', () => {
-                let current = 0;
-                sections.forEach((section, index) => {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top <= window.innerHeight / 2) {
-                        current = index;
-                    }
-                });
-                
-                document.querySelectorAll('.section-progress-item').forEach((item, index) => {
-                    item.classList.toggle('active', index === current);
-                });
-            });
-            
-            // Add next/previous navigation at the bottom
-            const lastSection = sections[sections.length - 1];
-            if (lastSection) {
-                const navDiv = document.createElement('div');
-                navDiv.className = 'section-nav';
-                
-                // Get current part number and create navigation
-                const currentPath = window.location.pathname;
-                const currentPart = currentPath.match(/part(\d+)\.html/);
-                
-                if (currentPart) {
-                    const partNum = parseInt(currentPart[1]);
-                    
-                    if (partNum > 1) {
-                        navDiv.innerHTML += `
-                            <a href="part${partNum - 1}.html">
-                                ← Previous Module
-                            </a>
-                        `;
-                    } else {
-                        navDiv.innerHTML += `
-                            <a href="index.html">
-                                ← Back to Overview
-                            </a>
-                        `;
-                    }
-                    
-                    if (partNum < 6) {
-                        navDiv.innerHTML += `
-                            <a href="part${partNum + 1}.html">
-                                Next Module →
-                            </a>
-                        `;
-                    } else {
-                        navDiv.innerHTML += `
-                            <a href="index.html">
-                                Complete! Return to Overview →
-                            </a>
-                        `;
-                    }
-                    
-                    container.appendChild(navDiv);
-                }
-            }
+// Manifesto-style plugins built on top of the DETFramework core.
+(function () {
+    const LEVEL_CONFIG = {
+        level1: {
+            label: 'Level I',
+            sequence: ['index.html', 'part1.html', 'part2.html', 'part3.html', 'part4.html', 'part5.html', 'part6.html', 'interactive_demo.html']
+        },
+        level2: {
+            label: 'Level II',
+            sequence: ['index.html', 'linalg.html', 'part1.html', 'part2.html', 'part3.html', 'part4.html', 'part5.html', 'part6.html', 'interactive_demo.html']
         }
+    };
+
+    function framework() {
+        if (window.DETFramework) return window.DETFramework;
+        return {
+            register: (_, handler) => handler({
+                path: window.location.pathname,
+                page: window.location.pathname.split('/').pop() || 'index.html',
+                level: (window.location.pathname.match(/\/(level1|level2)\//) || [])[1] || null,
+                hasStaticHeader: !!document.querySelector('.lesson-static-header'),
+                hasSiteHeader: !!document.querySelector('.site-header')
+            }),
+            run: () => {}
+        };
     }
-    
-    // Enhance tables
-    function enhanceTables() {
-        const tables = document.querySelectorAll('table');
-        tables.forEach(table => {
-            // Add responsive wrapper
-            const wrapper = document.createElement('div');
-            wrapper.style.overflowX = 'auto';
-            wrapper.style.marginBottom = '2rem';
-            table.parentNode.insertBefore(wrapper, table);
-            wrapper.appendChild(table);
-            
-            // Add Bootstrap classes
-            table.classList.add('table', 'table-hover');
-        });
-    }
-    
-    // Add topic overview cards
-    function addTopicOverview() {
-        const firstSection = document.querySelector('span[id]');
-        if (firstSection && document.title.includes('Part')) {
-            const topics = [];
-            document.querySelectorAll('span[id] h3').forEach(heading => {
-                const text = heading.textContent;
-                if (text && !text.includes('References')) {
-                    topics.push({
-                        title: text.replace(/^\d+\.?\s*/, ''),
-                        id: heading.parentElement.id
-                    });
+
+    function registerPlugins(frameworkCore) {
+        frameworkCore.register('consistent-header', (context) => {
+            if (context.hasSiteHeader || context.hasStaticHeader) return;
+            if (!context.level || !LEVEL_CONFIG[context.level]) return;
+
+            const levelLabel = LEVEL_CONFIG[context.level].label;
+            const navbar = document.querySelector('.navbar.navbar-fixed-top');
+
+            if (navbar) {
+                navbar.classList.add('manifesto-lesson-header');
+                const container = navbar.querySelector('.container') || navbar;
+
+                if (!container.querySelector('.manifesto-header-links')) {
+                    const links = document.createElement('nav');
+                    links.className = 'manifesto-header-links';
+                    links.setAttribute('aria-label', 'Header links');
+                    links.innerHTML = `
+                        <a href="../index.html">Home</a>
+                        <a href="index.html">${levelLabel}</a>
+                        <a href="interactive_demo.html">Demo</a>
+                    `;
+                    container.appendChild(links);
                 }
-            });
-            
-            if (topics.length > 3) {
-                const overviewGrid = document.createElement('div');
-                overviewGrid.className = 'topic-grid';
-                overviewGrid.innerHTML = `
-                    ${topics.slice(0, 6).map(topic => `
-                        <div class="topic-card" onclick="document.getElementById('${topic.id}').scrollIntoView({behavior: 'smooth'})">
-                            <h4>${topic.title}</h4>
-                            <p>Click to jump to this section</p>
-                        </div>
-                    `).join('')}
-                `;
-                
-                const heading = firstSection.querySelector('h3');
-                if (heading) {
-                    heading.insertAdjacentElement('beforebegin', overviewGrid);
-                }
+                return;
             }
-        }
-    }
-    
-    // Wrap content sections
-    function wrapContentSections() {
-        const sections = document.querySelectorAll('span[id]');
-        sections.forEach(section => {
-            if (!section.classList.contains('content-section')) {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'content-section';
-                
-                // Move all content until next section into wrapper
-                const elements = [];
-                let sibling = section.nextElementSibling;
-                
-                while (sibling && !sibling.querySelector('span[id]')) {
-                    elements.push(sibling);
-                    sibling = sibling.nextElementSibling;
-                }
-                
-                section.parentNode.insertBefore(wrapper, section);
-                wrapper.appendChild(section);
-                elements.forEach(el => wrapper.appendChild(el));
-            }
+
+            const header = document.createElement('header');
+            header.className = 'manifesto-injected-header';
+            header.setAttribute('role', 'banner');
+            header.innerHTML = `
+                <div class="manifesto-injected-header-inner">
+                    <a class="manifesto-brand" href="index.html">${levelLabel}</a>
+                    <nav class="manifesto-header-links" aria-label="Header links">
+                        <a href="../index.html">Home</a>
+                        <a href="index.html">Overview</a>
+                        <a href="interactive_demo.html">Demo</a>
+                    </nav>
+                </div>
+            `;
+            document.body.prepend(header);
+            document.body.classList.add('has-injected-header');
         });
-    }
-    
-    // Mobile menu toggle
-    function setupMobileMenu() {
-        const menuToggle = document.querySelector('.navbar-toggle');
-        const sidebar = document.getElementById('sidebar-wrapper');
-        
-        if (menuToggle && sidebar) {
-            menuToggle.addEventListener('click', function() {
+
+        frameworkCore.register('mobile-menu', () => {
+            const menuToggle = document.querySelector('.navbar-toggle');
+            const sidebar = document.getElementById('sidebar-wrapper');
+            if (!menuToggle || !sidebar) return;
+
+            menuToggle.addEventListener('click', function () {
                 sidebar.classList.toggle('active');
             });
-            
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', function(e) {
+
+            document.addEventListener('click', function (e) {
                 if (window.innerWidth <= 768) {
                     if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
                         sidebar.classList.remove('active');
                     }
                 }
             });
-        }
-    }
-    
-    // Initialize all enhancements
-    function init() {
-        wrapContentSections();
-        enhanceSections();
-        enhanceCodeBlocks();
-        addSectionNavigation();
-        enhanceTables();
-        addTopicOverview();
-        setupMobileMenu();
-        
-        // Update page title in navbar
-        const navbarBrand = document.querySelector('.navbar-brand');
-        if (navbarBrand) {
-            const pageTitle = document.title.replace(' - Python Tutorial', '');
-            navbarBrand.textContent = pageTitle;
-        }
-        
-        // Add smooth scroll behavior
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+        });
+
+        frameworkCore.register('smooth-anchors', () => {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (!target) return;
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
             });
         });
-        
-        // Track section completion
-        const checkboxes = document.querySelectorAll('.section-complete');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const progress = JSON.parse(localStorage.getItem('diffEqProgress') || '{}');
-                const sectionId = this.parentElement.parentElement.id;
-                progress[sectionId] = this.checked;
-                localStorage.setItem('diffEqProgress', JSON.stringify(progress));
-                
-                // Update progress bar if exists
-                if (typeof updateProgressBar === 'function') {
-                    updateProgressBar();
-                }
+
+        frameworkCore.register('navbar-title', () => {
+            const navbarBrand = document.querySelector('.navbar-brand');
+            if (!navbarBrand) return;
+            navbarBrand.textContent = document.title.replace(' - Python Tutorial', '');
+        });
+
+        frameworkCore.register('section-progress', () => {
+            const sections = document.querySelectorAll('span[id]');
+            if (sections.length < 2 || document.querySelector('.section-progress')) return;
+
+            const progressIndicator = document.createElement('div');
+            progressIndicator.className = 'section-progress';
+
+            sections.forEach((section, index) => {
+                const marker = document.createElement('button');
+                marker.className = 'section-progress-item';
+                marker.type = 'button';
+                marker.setAttribute('aria-label', `Jump to section ${index + 1}`);
+                marker.onclick = () => section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                progressIndicator.appendChild(marker);
+            });
+
+            document.body.appendChild(progressIndicator);
+
+            window.addEventListener('scroll', () => {
+                let current = 0;
+                sections.forEach((section, index) => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight * 0.35) current = index;
+                });
+                document.querySelectorAll('.section-progress-item').forEach((item, index) => {
+                    item.classList.toggle('active', index === current);
+                });
             });
         });
+
+        frameworkCore.register('prev-next-navigation', (context) => {
+            if (!context.level || !LEVEL_CONFIG[context.level]) return;
+            const items = LEVEL_CONFIG[context.level].sequence;
+            const idx = items.indexOf(context.page);
+            if (idx === -1) return;
+
+            const host = document.querySelector('.container-fluid') || document.querySelector('#main-content') || document.querySelector('.container') || document.body;
+            if (!host || host.querySelector('.lesson-prev-next')) return;
+
+            const nav = document.createElement('nav');
+            nav.className = 'lesson-prev-next';
+            nav.setAttribute('aria-label', 'Lesson navigation');
+
+            const prevHref = idx > 0 ? items[idx - 1] : '../index.html';
+            const nextHref = idx < items.length - 1 ? items[idx + 1] : '../index.html';
+
+            nav.innerHTML = `
+                <a class="lesson-nav-link" href="${prevHref}">← Previous</a>
+                <a class="lesson-nav-link lesson-nav-up" href="index.html">Back to ${context.level.toUpperCase()} overview</a>
+                <a class="lesson-nav-link" href="${nextHref}">Next →</a>
+            `;
+
+            host.appendChild(nav);
+        });
     }
-    
-    // Run initialization
-    init();
-});
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const frameworkCore = framework();
+        registerPlugins(frameworkCore);
+        frameworkCore.run();
+    });
+})();
