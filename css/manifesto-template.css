@@ -57,3 +57,89 @@ pre {
   border-radius: 0 !important;
   box-shadow: none !important;
 }
+
+/* ── Lesson static header (content pages) ── */
+.lesson-static-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(246, 243, 238, 0.96);
+  border-bottom: 1px solid var(--mf-border);
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.lesson-static-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lesson-static-brand {
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-size: 1.15rem;
+  color: var(--mf-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lesson-static-brand:hover {
+  color: var(--mf-accent);
+}
+
+.lesson-static-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.lesson-static-links a {
+  color: var(--mf-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.lesson-static-links a:hover,
+.lesson-static-links a:focus-visible {
+  color: var(--mf-accent);
+  border-bottom-color: var(--mf-accent);
+}
+
+.lesson-static-links a[aria-current="page"] {
+  color: var(--mf-accent);
+  border-bottom-color: var(--mf-accent);
+}
+
+.lesson-menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--mf-border);
+  padding: 0.25rem 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--mf-text);
+}
+
+/* When the static header is present, push body content below it */
+body.has-static-header .navbar.navbar-fixed-top {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  .lesson-static-links a {
+    font-size: 0.78rem;
+  }
+  .lesson-static-header-inner {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+    min-height: auto;
+  }
+}
