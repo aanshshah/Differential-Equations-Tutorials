@@ -326,3 +326,70 @@ table th, table td,
     justify-self: start;
   }
 }
+
+.manifesto-lesson-header,
+.manifesto-injected-header {
+  background: rgba(252, 250, 247, 0.96) !important;
+  border-bottom: 1px solid var(--mf-rule) !important;
+  box-shadow: none !important;
+}
+
+.manifesto-lesson-header .container,
+.manifesto-injected-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.manifesto-lesson-header .navbar-brand,
+.manifesto-brand {
+  color: var(--mf-accent) !important;
+  text-decoration: none;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.manifesto-header-links {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.manifesto-header-links a {
+  color: var(--mf-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid transparent;
+}
+
+.manifesto-header-links a:hover,
+.manifesto-header-links a:focus-visible {
+  color: var(--mf-accent);
+  border-bottom-color: var(--mf-accent);
+  outline: none;
+}
+
+.manifesto-injected-header {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+}
+
+.has-injected-header .container {
+  padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .manifesto-header-links {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
