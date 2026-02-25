@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 3.2: Physics-Informed Neural Networks (PINNs) — Embed differential equation constraints into neural network loss functions.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 3.2: Physics-Informed Neural Networks (PINNs)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 3 &mdash; AI-Driven DEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module3-1.html">3.1</a>
+      <a href="module3-2.html" aria-current="page">3.2</a>
+      <a href="module3-3.html">3.3</a>
+      <a href="module3-4.html">3.4</a>
+      <a href="module3-5.html">3.5</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block" style="margin-top:2rem;">
+    <div class="page-title">
+        <p style="font-size:0.95rem; color:var(--mf-muted); margin-bottom:0.25rem;">Module 3.2</p>
+        <h1>Physics-Informed Neural Networks (PINNs)</h1>
+        <p style="font-size:1.1rem; color:var(--mf-muted);">Embed differential equations directly into the loss function&mdash;the physics itself provides supervision, no labelled data required.</p>
+    </div>
+    <div class="content-section" style="margin-top:1rem;">
+        <table style="box-shadow:none; margin:0;">
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Difficulty:</strong></td><td style="border:none; padding:0.5rem 1rem;">Advanced</td></tr>
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Estimated Time:</strong></td><td style="border:none; padding:0.5rem 1rem;">4&ndash;5 hours</td></tr>
+        </table>
+        <h4 style="margin-top:1.5rem;">Prerequisites</h4>
+        <ul>
+            <li><a href="module3-1.html">Module 3.1</a>: Neural Differential Equations (neural network basics, automatic differentiation)</li>
+            <li><a href="../level2/module2-1.html">Module 2.1</a>: Scalar PDEs and Classification (PDE formulation, boundary conditions)</li>
+            <li>Familiarity with gradient descent and chain rule</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="content-section">
+        <h2>Why This Matters</h2>
+        <p>Traditional numerical PDE solvers (finite differences, finite elements) require meshes, careful discretization, and separate code for each equation. Physics-Informed Neural Networks (PINNs) offer a radically different approach: approximate the solution with a neural network and train it by minimizing the PDE residual at randomly sampled collocation points. The physics itself becomes the loss function.</p>
+        <p>This means PINNs can solve forward problems (given equation and conditions, find the solution), inverse problems (given partial observations, recover unknown parameters), and even problems on irregular domains without mesh generation. Applications span fluid dynamics, heat transfer, solid mechanics, medical imaging, and geophysics. PINNs are not a replacement for classical solvers but a powerful complement, especially when data and physics must be combined.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="content-section">
+        <h2>Learning Objectives</h2>
+        <ol>
+            <li>Formulate the PINN loss function from a PDE, initial conditions, and boundary conditions.</li>
+            <li>Explain how automatic differentiation computes $\partial u/\partial t$, $\partial^2 u/\partial x^2$ through the network.</li>
+            <li>Sample collocation points and construct the training set for a PINN.</li>
+            <li>Implement a PINN for a forward ODE problem in pure NumPy (toy scale).</li>
+            <li>Understand the role of loss weighting ($\lambda_{\text{PDE}}$, $\lambda_{\text{BC}}$, $\lambda_{\text{IC}}$) and its impact on training.</li>
+            <li>Set up an inverse problem where an unknown physical parameter is learned alongside the solution.</li>
+            <li>Analyze PINN failure modes: spectral bias, causality violation, loss imbalance.</li>
+            <li>Compare PINNs with classical finite-difference solvers on accuracy and computational cost.</li>
+            <li>Frame collocation point selection as an active-learning agent problem.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <div class="content-section">
+        <h2>Core Concepts</h2>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.1 (Physics-Informed Loss Function).</strong>
+            Given a PDE $\mathcal{N}[u](x) = 0$ on domain $\Omega$ with boundary condition $\mathcal{B}[u](x) = 0$ on $\partial\Omega$ and initial condition $u(x,0) = g(x)$, the PINN loss is:
+            $$\mathcal{L}(\theta) = \lambda_{\text{PDE}}\frac{1}{N_r}\sum_{i=1}^{N_r}|\mathcal{N}[u_\theta](x_i^r)|^2 + \lambda_{\text{BC}}\frac{1}{N_b}\sum_{i=1}^{N_b}|\mathcal{B}[u_\theta](x_i^b)|^2 + \lambda_{\text{IC}}\frac{1}{N_0}\sum_{i=1}^{N_0}|u_\theta(x_i^0, 0) - g(x_i^0)|^2$$
+            where $u_\theta$ is the neural network, $\{x_i^r\}$ are interior collocation points, $\{x_i^b\}$ are boundary points, and $\{x_i^0\}$ are initial-condition points.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.2 (Collocation Points).</strong>
+            <em>Collocation points</em> are the locations in the domain where the PDE residual is evaluated. They can be drawn uniformly at random, placed on a Latin hypercube, or sampled adaptively (concentrating where the residual is large). The PINN does not require a mesh&mdash;collocation points are independent samples.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.3 (PDE Residual).</strong>
+            The <em>PDE residual</em> at a point $x$ is $r(x;\theta) = \mathcal{N}[u_\theta](x)$. For the heat equation $u_t - \alpha u_{xx} = 0$, the residual is $r = \frac{\partial u_\theta}{\partial t} - \alpha \frac{\partial^2 u_\theta}{\partial x^2}$, computed by differentiating through the network using the chain rule.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.4 (Forward Problem).</strong>
+            In a <em>forward problem</em>, the PDE, domain, and all conditions are known. The PINN is trained to find the solution $u(x,t)$. No solution data is needed&mdash;the physics residual provides full supervision.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.5 (Inverse Problem).</strong>
+            In an <em>inverse problem</em>, some physical parameters (diffusivity, wave speed, reaction rates) are unknown. Given partial observations of the solution $\{(x_i, u_i^{\text{obs}})\}$, these parameters are made trainable alongside the network weights. The loss includes a data-fitting term:
+            $$\mathcal{L}_{\text{data}} = \frac{1}{N_d}\sum_{i=1}^{N_d}|u_\theta(x_i) - u_i^{\text{obs}}|^2$$
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.2.6 (Automatic Differentiation for Differential Operators).</strong>
+            To compute $\partial u_\theta / \partial x$, we apply the chain rule through every layer of the network. For a two-layer network $u_\theta(x) = W_2\sigma(W_1 x + b_1) + b_2$, the derivative is $\frac{\partial u_\theta}{\partial x} = W_2 \,\text{diag}(\sigma'(W_1 x + b_1))\, W_1$. Higher-order derivatives ($u_{xx}$) are obtained by differentiating again. In PyTorch, <code>torch.autograd.grad</code> with <code>create_graph=True</code> computes these automatically.
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.2.1 (Universal Approximation for PDE Solutions).</strong>
+            If $u^*$ is a continuous solution of a well-posed PDE on a compact domain $\bar{\Omega}$, then for any $\varepsilon > 0$ there exists a neural network $u_\theta$ with sufficiently many neurons such that $\|u_\theta - u^*\|_{C(\bar{\Omega})} < \varepsilon$. This follows from the classical universal approximation theorem applied to the solution space.
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.2.2 (PINN Convergence).</strong>
+            Under suitable regularity conditions, if $\mathcal{L}(\theta^*) \to 0$ as the number of collocation points $N_r, N_b, N_0 \to \infty$ and the network width grows, then $u_{\theta^*} \to u^*$ in $L^2(\Omega)$. The convergence rate depends on the PDE regularity, the network architecture, and the collocation point distribution (Shin et al. 2020).
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.2.3 (Error Decomposition).</strong>
+            The total PINN error decomposes as:
+            $$\|u_\theta - u^*\| \le \underbrace{\inf_\theta \|u_\theta - u^*\|}_{\text{approximation}} + \underbrace{\|u_{\hat\theta} - u_{\theta^*}\|}_{\text{optimization}} + \underbrace{O(N_r^{-1/2})}_{\text{generalization}}$$
+            The approximation error depends on network expressiveness, the optimization error on the training algorithm, and the generalization error on the number of collocation points.
+        </div>
+
+        <h3>Common Misconceptions</h3>
+
+        <div class="warning-box">
+            <strong>Misconception 1: &ldquo;PINNs always converge to the true solution.&rdquo;</strong>
+            PINNs can get stuck in local minima, suffer from spectral bias (learning low frequencies first), or fail on problems with sharp gradients. Loss minimization does not guarantee that all three loss components (PDE, BC, IC) are simultaneously small.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 2: &ldquo;PINNs don&rsquo;t need any data.&rdquo;</strong>
+            Forward PINNs don&rsquo;t need solution data, but they do need the PDE, boundary conditions, and initial conditions&mdash;which are themselves &ldquo;data&rdquo; about the physics. Inverse PINNs explicitly require observation data to identify unknown parameters.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 3: &ldquo;Deeper networks always perform better for PINNs.&rdquo;</strong>
+            Very deep networks suffer from vanishing gradients during the computation of high-order PDE residuals. For most PINN applications, 3&ndash;6 hidden layers with 50&ndash;200 neurons each are sufficient. Wider is often better than deeper.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 4: &ldquo;PINNs replace traditional solvers.&rdquo;</strong>
+            For well-posed problems on simple domains with known equations, classical methods (FEM, FDM, spectral) are typically faster and more accurate. PINNs excel in inverse problems, irregular geometries, and when combining sparse data with physics.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 5: &ldquo;Loss weights don&rsquo;t matter.&rdquo;</strong>
+            The relative weights $\lambda_{\text{PDE}}, \lambda_{\text{BC}}, \lambda_{\text{IC}}$ critically affect training. If $\lambda_{\text{PDE}}$ is too small, the network satisfies boundary conditions but ignores the interior physics. If too large, boundaries are violated. Adaptive weighting schemes (Wang et al. 2021) are often necessary.
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <div class="content-section">
+        <h2>Worked Examples</h2>
+
+        <div class="example-box">
+            <h3>Example 1: PINN for the Harmonic Oscillator</h3>
+            <p>Solve $y'' + y = 0$, $y(0) = 0$, $y'(0) = 1$ on $[0, 2\pi]$. Exact solution: $y(x) = \sin(x)$.</p>
+            <p><strong>Step 1: Network architecture.</strong> Let $u_\theta(x)$ be an MLP with 2 hidden layers of 20 neurons each and $\tanh$ activation. Input: $x \in \mathbb{R}$. Output: $u \in \mathbb{R}$.</p>
+            <p><strong>Step 2: Compute derivatives.</strong> Using the chain rule through the network:</p>
+            <ul>
+                <li>$u'_\theta(x) = \frac{\partial u_\theta}{\partial x}$ &mdash; first backpropagation through the network</li>
+                <li>$u''_\theta(x) = \frac{\partial^2 u_\theta}{\partial x^2}$ &mdash; differentiate the gradient again</li>
+            </ul>
+            <p><strong>Step 3: Define losses.</strong></p>
+            <ul>
+                <li>PDE loss: $\mathcal{L}_{\text{PDE}} = \frac{1}{N_r}\sum_{i=1}^{N_r}|u''_\theta(x_i) + u_\theta(x_i)|^2$ at $N_r = 100$ collocation points in $[0, 2\pi]$</li>
+                <li>IC loss: $\mathcal{L}_{\text{IC}} = |u_\theta(0) - 0|^2 + |u'_\theta(0) - 1|^2$</li>
+                <li>Total: $\mathcal{L} = \mathcal{L}_{\text{PDE}} + 10\,\mathcal{L}_{\text{IC}}$</li>
+            </ul>
+            <p><strong>Step 4: Train.</strong> Use Adam optimizer for 5000 iterations. The PDE loss drops below $10^{-5}$ and the learned solution matches $\sin(x)$ to 3&ndash;4 decimal places.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 2: PINN for 1D Heat Equation</h3>
+            <p>Solve $u_t = 0.01\,u_{xx}$ on $x \in [0, 1]$, $t \in [0, 1]$ with $u(x, 0) = \sin(\pi x)$ and $u(0,t) = u(1,t) = 0$.</p>
+            <p>Exact solution: $u(x,t) = e^{-0.01\pi^2 t}\sin(\pi x)$.</p>
+            <p><strong>Collocation:</strong> Sample $N_r = 10{,}000$ random $(x,t)$ pairs in $(0,1)\times(0,1)$; $N_0 = 200$ points for IC at $t=0$; $N_b = 100$ points each at $x=0$ and $x=1$.</p>
+            <p><strong>Residual:</strong> $r = u_t - 0.01\,u_{xx}$. Computed by two passes of automatic differentiation: first $\partial u/\partial t$ and $\partial u/\partial x$, then $\partial^2 u/\partial x^2$.</p>
+            <p><strong>Training:</strong> Network with layers [2, 50, 50, 50, 1]. Adam for 10,000 iterations, learning rate $10^{-3}$ with step decay. Achieve relative $L^2$ error below 1% on the test grid.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 3: Inverse Problem &mdash; Recovering the Spring Constant</h3>
+            <p>Given noisy measurements of a spring-mass system $y'' + ky = 0$ where $k$ is unknown, recover $k$ using a PINN.</p>
+            <p><strong>Setup:</strong> Generate data from $y'' + 4y = 0$, $y(0) = 1$, $y'(0) = 0$ (true $k = 4$, solution $y = \cos(2x)$). Add 5% Gaussian noise to 50 observation points.</p>
+            <p><strong>Network:</strong> Same architecture as Example 1, but add $k$ as a learnable parameter initialized to $k_{\text{init}} = 1.0$.</p>
+            <p><strong>Loss:</strong> $\mathcal{L} = \mathcal{L}_{\text{PDE}} + 10\,\mathcal{L}_{\text{data}}$ where $\mathcal{L}_{\text{data}} = \frac{1}{50}\sum |u_\theta(x_i) - y_i^{\text{obs}}|^2$.</p>
+            <p><strong>Result:</strong> After 10,000 training steps, $k$ converges from 1.0 to approximately 3.97 (true value: 4.0). The PINN simultaneously learns the solution shape and the unknown parameter.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<section id="code-labs">
+    <div class="content-section">
+        <h2>Interactive Code Lab</h2>
+
+        <div class="interactive-highlight">
+            <h3>Toy PINN in Pure NumPy</h3>
+            <p>We solve $y'' + y = 0$, $y(0) = 0$, $y'(0) = 1$ using a minimal PINN built entirely in NumPy. The exact solution is $\sin(x)$.</p>
+            <p><em>For production PINNs with automatic differentiation, see <code>notebooks/pinn_full.ipynb</code>.</em></p>
+
+            <div class="code-editor-container">
+<pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ── Tiny MLP in pure NumPy ───────────────────────────────────
+class TinyMLP:
+    """2-hidden-layer MLP with tanh activation for PINN demo."""
+    def __init__(self, layer_sizes, seed=42):
+        rng = np.random.RandomState(seed)
+        self.weights = []
+        self.biases = []
+        for i in range(len(layer_sizes) - 1):
+            fan_in, fan_out = layer_sizes[i], layer_sizes[i+1]
+            W = rng.randn(fan_in, fan_out) * np.sqrt(2.0 / (fan_in + fan_out))
+            b = np.zeros(fan_out)
+            self.weights.append(W)
+            self.biases.append(b)
+
+    def forward(self, x):
+        """Forward pass returning u, du/dx, d2u/dx2 via manual chain rule."""
+        # x is shape (N, 1)
+        # Layer 1: z1 = W1*x + b1, a1 = tanh(z1)
+        z1 = x @ self.weights[0] + self.biases[0]
+        a1 = np.tanh(z1)
+        da1 = 1.0 - a1**2          # tanh'(z1)
+        dda1 = -2.0 * a1 * da1     # tanh''(z1)
+
+        # Layer 2: z2 = W2*a1 + b2, a2 = tanh(z2)
+        z2 = a1 @ self.weights[1] + self.biases[1]
+        a2 = np.tanh(z2)
+        da2 = 1.0 - a2**2
+        dda2 = -2.0 * a2 * da2
+
+        # Output: u = W3*a2 + b3  (linear output)
+        u = a2 @ self.weights[2] + self.biases[2]  # (N, 1)
+
+        # du/dx via chain rule:
+        # du/da2 = W3^T, da2/dz2 = da2, dz2/da1 = W2^T, da1/dz1 = da1, dz1/dx = W1^T
+        # du/dx = W3 * da2 * W2 * da1 * W1  (element-wise along paths)
+        # For scalar output, this simplifies:
+        # du/dz2 = W3^T shape (hidden,)
+        du_dz2 = da2 * (self.weights[2].T)  # (N, hidden2)
+        du_da1 = du_dz2 @ self.weights[1].T  # (N, hidden1)
+        du_dz1 = du_da1 * da1  # (N, hidden1)
+        dudx = du_dz1 @ self.weights[0].T  # (N, 1)
+
+        # d2u/dx2 (second derivative through the chain rule)
+        # Need to differentiate dudx w.r.t. x again
+        # d(du_dz2)/dx = dda2 * W3^T * (dz2/dx)
+        # dz2/dx = W2^T * da1 * W1^T
+        dz2_dx = (da1 @ self.weights[1]) * 1.0  # we need dz2/dx per sample
+        # Actually let's compute d2u/dx2 numerically for simplicity
+        # (manual second derivative is complex; use finite differences on du/dx)
+        # This is the toy demo; production code uses autograd.
+        return u, dudx
+
+    def forward_with_d2(self, x, eps=1e-5):
+        """Forward pass with second derivative via finite differences on dudx."""
+        u, dudx = self.forward(x)
+        _, dudx_plus = self.forward(x + eps)
+        _, dudx_minus = self.forward(x - eps)
+        d2udx2 = (dudx_plus - dudx_minus) / (2 * eps)
+        return u, dudx, d2udx2
+
+    def get_params(self):
+        return [w.copy() for w in self.weights] + [b.copy() for b in self.biases]
+
+    def set_params(self, params):
+        n = len(self.weights)
+        for i in range(n):
+            self.weights[i] = params[i].copy()
+            self.biases[i] = params[i + n].copy()
+
+# ── PINN Training ────────────────────────────────────────────
+net = TinyMLP([1, 20, 20, 1])
+
+# Collocation points
+N_col = 100
+x_col = np.linspace(0, 2*np.pi, N_col).reshape(-1, 1)
+
+# Training parameters
+lr = 0.001
+lambda_ic = 50.0
+n_epochs = 3000
+losses = []
+
+for epoch in range(n_epochs):
+    # Forward pass at collocation points
+    u, dudx, d2udx2 = net.forward_with_d2(x_col)
+
+    # PDE residual: y'' + y = 0
+    residual = d2udx2 + u
+    loss_pde = np.mean(residual**2)
+
+    # IC: y(0) = 0, y'(0) = 1
+    u0, dudx0, _ = net.forward_with_d2(np.array([[0.0]]))
+    loss_ic = (u0[0,0] - 0.0)**2 + (dudx0[0,0] - 1.0)**2
+
+    loss = loss_pde + lambda_ic * loss_ic
+    losses.append(loss)
+
+    # Numerical gradient update (finite differences on each parameter)
+    eps_grad = 1e-5
+    params = net.get_params()
+    grads = []
+    for i, p in enumerate(params):
+        g = np.zeros_like(p)
+        for idx in np.ndindex(p.shape):
+            params_plus = [pp.copy() for pp in params]
+            params_plus[i][idx] += eps_grad
+            net.set_params(params_plus)
+            u_p, _, d2_p = net.forward_with_d2(x_col)
+            r_p = d2_p + u_p
+            l_pde_p = np.mean(r_p**2)
+            u0_p, du0_p, _ = net.forward_with_d2(np.array([[0.0]]))
+            l_ic_p = (u0_p[0,0])**2 + (du0_p[0,0] - 1.0)**2
+            loss_plus = l_pde_p + lambda_ic * l_ic_p
+
+            params_minus = [pp.copy() for pp in params]
+            params_minus[i][idx] -= eps_grad
+            net.set_params(params_minus)
+            u_m, _, d2_m = net.forward_with_d2(x_col)
+            r_m = d2_m + u_m
+            l_pde_m = np.mean(r_m**2)
+            u0_m, du0_m, _ = net.forward_with_d2(np.array([[0.0]]))
+            l_ic_m = (u0_m[0,0])**2 + (du0_m[0,0] - 1.0)**2
+            loss_minus = l_pde_m + lambda_ic * l_ic_m
+
+            g[idx] = (loss_plus - loss_minus) / (2 * eps_grad)
+        grads.append(g)
+
+    # Gradient descent
+    for i in range(len(params)):
+        params[i] -= lr * grads[i]
+    net.set_params(params)
+
+    if (epoch + 1) % 500 == 0:
+        print(f"Epoch {epoch+1}: loss={loss:.6f}, PDE={loss_pde:.6f}, IC={loss_ic:.6f}")
+
+# ── Evaluation ───────────────────────────────────────────────
+x_test = np.linspace(0, 2*np.pi, 200).reshape(-1, 1)
+u_pred, _, _ = net.forward_with_d2(x_test)
+u_exact = np.sin(x_test)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+axes[0].plot(x_test, u_exact, 'b-', lw=2, label='Exact: sin(x)')
+axes[0].plot(x_test, u_pred, 'r--', lw=2, label='PINN prediction')
+axes[0].set_xlabel('x'); axes[0].set_ylabel('y')
+axes[0].legend(); axes[0].set_title('PINN Solution for y\'\' + y = 0')
+axes[0].grid(True, alpha=0.3)
+
+axes[1].semilogy(losses)
+axes[1].set_xlabel('Epoch'); axes[1].set_ylabel('Total Loss')
+axes[1].set_title('Training History')
+axes[1].grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+print(f"Max absolute error: {np.max(np.abs(u_pred - u_exact)):.4f}")
+</code></pre>
+            </div>
+
+            <p><strong>Note:</strong> This toy implementation uses finite-difference gradients for both the PDE derivatives and the parameter updates. Production PINNs use PyTorch or JAX automatic differentiation, which is exact and orders of magnitude faster. See <code><a href="../notebooks/pinn_full.ipynb">notebooks/pinn_full.ipynb</a></code> for a full PyTorch implementation solving the Burgers equation.</p>
+
+            <p><strong>Exploration ideas:</strong></p>
+            <ul>
+                <li>Increase the network width from 20 to 40 neurons and compare convergence speed.</li>
+                <li>Change the problem to $y'' + 4y = 0$ (higher frequency) and observe whether the PINN struggles.</li>
+                <li>Add noise to the initial conditions and see how the solution quality degrades.</li>
+                <li>Try different values of $\lambda_{\text{IC}}$ (1, 10, 100) and observe the training dynamics.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <div class="content-section">
+        <h2>Agent Lens: The PINN as a Self-Supervised Agent</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>MDP Component</th><th>PINN Interpretation</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>State</strong></td><td>Current network parameters $\theta$, current loss components $(\mathcal{L}_{\text{PDE}}, \mathcal{L}_{\text{BC}}, \mathcal{L}_{\text{IC}})$, training iteration $k$</td></tr>
+                <tr><td><strong>Action</strong></td><td>Choose loss weights $(\lambda_{\text{PDE}}, \lambda_{\text{BC}}, \lambda_{\text{IC}})$; select new collocation points; adjust learning rate</td></tr>
+                <tr><td><strong>Reward</strong></td><td>Negative total weighted loss; bonus when PDE residual drops below threshold across the domain</td></tr>
+                <tr><td><strong>Policy</strong></td><td>Adaptive loss weighting (e.g., based on gradient magnitudes); residual-based adaptive refinement of collocation points</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Adaptive collocation as active learning.</strong> A key design choice in PINNs is <em>where</em> to place collocation points. Uniform random sampling wastes evaluations in smooth regions. A smarter agent samples more collocation points where the PDE residual is large&mdash;this is <em>residual-based adaptive refinement</em> (RAR). At each training stage, the agent evaluates the residual on a coarse grid, identifies high-residual regions, and adds new collocation points there. This is directly analogous to active learning: the agent chooses the most informative training examples.</p>
+
+        <p><strong>Loss balancing as reward shaping.</strong> The weights $\lambda_{\text{PDE}}, \lambda_{\text{BC}}, \lambda_{\text{IC}}$ shape the effective reward landscape. Wang et al. (2021) proposed using the Neural Tangent Kernel (NTK) to set weights that balance the learning rates of different loss components. This is analogous to reward shaping in RL: the raw reward (PDE residual) is supplemented with auxiliary rewards (BC, IC satisfaction) to guide learning.</p>
+
+        <p><strong>Curriculum learning.</strong> Some problems benefit from a training curriculum: first train with low-frequency collocation (or on an easier sub-domain), then gradually increase difficulty. This parallels curriculum learning in RL, where agents first learn simple tasks before tackling hard ones.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <div class="content-section">
+        <h2>Exercises</h2>
+
+        <h3>Analytical</h3>
+
+        <p><strong>Exercise 1.</strong> Write out the PINN loss function for the advection equation $u_t + cu_x = 0$ on $[0,1]\times[0,1]$ with $u(x,0) = \sin(2\pi x)$ and periodic boundary conditions.</p>
+        <details><summary>Solution</summary>
+            <p>$\mathcal{L} = \frac{1}{N_r}\sum_i|u_t(x_i, t_i) + c\,u_x(x_i, t_i)|^2 + \frac{\lambda_0}{N_0}\sum_j|u(x_j, 0) - \sin(2\pi x_j)|^2 + \frac{\lambda_b}{N_b}\sum_k|u(0, t_k) - u(1, t_k)|^2$.</p>
+        </details>
+
+        <p><strong>Exercise 2.</strong> For a network $u_\theta(x) = w_2\tanh(w_1 x + b_1) + b_2$ with scalar parameters, compute $du_\theta/dx$ and $d^2u_\theta/dx^2$ explicitly in terms of $w_1, w_2, b_1$.</p>
+        <details><summary>Solution</summary>
+            <p>Let $z = w_1 x + b_1$. Then $u = w_2\tanh(z) + b_2$. $du/dx = w_2(1 - \tanh^2(z))w_1 = w_1 w_2 \text{sech}^2(z)$. $d^2u/dx^2 = w_1^2 w_2 \cdot (-2\tanh(z)\text{sech}^2(z)) = -2w_1^2 w_2 \tanh(z)\text{sech}^2(z)$.</p>
+        </details>
+
+        <p><strong>Exercise 3.</strong> Explain why the total PINN error has three components (approximation, optimization, generalization) and give a concrete example of when each dominates.</p>
+        <details><summary>Solution</summary>
+            <p>Approximation error dominates when the network is too small to represent the solution (e.g., 5 neurons trying to approximate a high-frequency solution). Optimization error dominates when the loss landscape has many local minima (common for multi-scale problems). Generalization error dominates when too few collocation points are used (e.g., 10 points for a 2D domain).</p>
+        </details>
+
+        <p><strong>Exercise 4.</strong> Show that for the 1D Poisson equation $-u'' = f(x)$, $u(0) = u(1) = 0$, the PINN residual loss is $\mathcal{L}_{\text{PDE}} = \frac{1}{N}\sum |u''_\theta(x_i) + f(x_i)|^2$.</p>
+        <details><summary>Solution</summary>
+            <p>The PDE is $-u'' - f = 0$, so the residual is $r(x) = -u''_\theta(x) - f(x)$. $|r|^2 = |u''_\theta(x) + f(x)|^2$. Averaging over collocation points: $\mathcal{L}_{\text{PDE}} = \frac{1}{N}\sum |u''_\theta(x_i) + f(x_i)|^2$.</p>
+        </details>
+
+        <h3>Computational</h3>
+
+        <p><strong>Exercise 5.</strong> Modify the toy PINN code to solve $y'' + 4y = 0$, $y(0) = 1$, $y'(0) = 0$ (solution: $\cos(2x)$). Report the maximum error on $[0, \pi]$.</p>
+
+        <p><strong>Exercise 6.</strong> Implement a PINN for the exponential decay ODE $y' + 2y = 0$, $y(0) = 3$ (solution: $3e^{-2x}$). Since this is first-order, you only need $u$ and $u'$.</p>
+
+        <p><strong>Exercise 7.</strong> Add a data-fitting term to the code lab: generate 20 noisy observations of $\sin(x)$ and include them in the loss. Compare the result with and without the data term.</p>
+
+        <p><strong>Exercise 8.</strong> Implement residual-based adaptive refinement: every 500 epochs, evaluate the PDE residual on a fine grid, identify the 10 points with largest residual, and add them to the collocation set. Does this improve accuracy?</p>
+
+        <h3>Agentic</h3>
+
+        <p><strong>Exercise 9.</strong> Design an agent that adaptively adjusts $\lambda_{\text{IC}}$ during training. Start with $\lambda_{\text{IC}} = 100$ and reduce it as the IC loss decreases below a threshold. Compare the final accuracy with fixed $\lambda_{\text{IC}}$.</p>
+
+        <p><strong>Exercise 10.</strong> Implement a &ldquo;multi-task PINN agent&rdquo; that trains one network to solve $y'' + ky = 0$ for $k = 1, 4, 9$ simultaneously (with $k$ as an additional input). How does the agent balance accuracy across the three tasks?</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <div class="content-section">
+        <h2>Assessment</h2>
+
+        <h3>Quiz</h3>
+        <div class="quiz-container">
+            <p><strong>Q1.</strong> What are the three components of a typical PINN loss?</p>
+            <details><summary>Answer</summary><p>PDE residual loss, boundary condition loss, and initial condition loss.</p></details>
+
+            <p><strong>Q2.</strong> What are collocation points?</p>
+            <details><summary>Answer</summary><p>Points in the domain where the PDE residual is evaluated during training. They do not need to lie on a structured mesh.</p></details>
+
+            <p><strong>Q3.</strong> How does a PINN compute $\partial^2 u/\partial x^2$ through the network?</p>
+            <details><summary>Answer</summary><p>By applying automatic differentiation twice: first compute $\partial u/\partial x$, then differentiate that result with respect to $x$ again.</p></details>
+
+            <p><strong>Q4.</strong> What distinguishes a forward PINN problem from an inverse PINN problem?</p>
+            <details><summary>Answer</summary><p>In a forward problem, the PDE and all conditions are known; the PINN finds the solution. In an inverse problem, some parameters are unknown and are learned from observation data alongside the solution.</p></details>
+
+            <p><strong>Q5.</strong> Why might a PINN fail to converge even when the loss decreases?</p>
+            <details><summary>Answer</summary><p>Because one loss component (e.g., PDE residual) may decrease while another (e.g., boundary conditions) increases. The total loss can decrease while the actual solution quality degrades in certain regions.</p></details>
+
+            <p><strong>Q6.</strong> What is spectral bias in the context of PINNs?</p>
+            <details><summary>Answer</summary><p>Neural networks tend to learn low-frequency components of the solution first and struggle with high-frequency features. This can cause slow convergence or poor accuracy for solutions with sharp gradients or rapid oscillations.</p></details>
+
+            <p><strong>Q7.</strong> How does an inverse PINN learn an unknown parameter like viscosity?</p>
+            <details><summary>Answer</summary><p>The parameter is initialized as a trainable scalar alongside the network weights. The loss includes a data-fitting term that compares network predictions with observations. Gradients flow through the PDE residual to update both the network and the parameter.</p></details>
+
+            <p><strong>Q8.</strong> Why is loss weighting ($\lambda_{\text{PDE}}, \lambda_{\text{BC}}, \lambda_{\text{IC}}$) important?</p>
+            <details><summary>Answer</summary><p>Different loss components may have different magnitudes and gradient scales. Without proper weighting, the optimizer may satisfy one constraint at the expense of others, leading to inaccurate solutions.</p></details>
+
+            <p><strong>Q9.</strong> Name two advantages of PINNs over finite-difference methods.</p>
+            <details><summary>Answer</summary><p>1) PINNs are mesh-free, making them easier to apply on irregular domains. 2) PINNs can naturally incorporate sparse observation data and solve inverse problems.</p></details>
+
+            <p><strong>Q10.</strong> In the agent lens, what does residual-based adaptive refinement correspond to?</p>
+            <details><summary>Answer</summary><p>Active learning: the agent identifies the regions where its model is most uncertain (highest PDE residual) and allocates more training data (collocation points) there.</p></details>
+        </div>
+
+        <h3>Mini-Project: PINN for the Diffusion Equation</h3>
+        <p>Solve $u_t = 0.01\,u_{xx}$ on $[0,1] \times [0,1]$ with $u(x,0) = \sin(\pi x)$ and $u(0,t) = u(1,t) = 0$.</p>
+        <p><strong>Deliverables:</strong></p>
+        <ol>
+            <li>Implement a NumPy PINN (or use the PyTorch notebook as a starting point)</li>
+            <li>Plot the learned solution as a heatmap over $(x, t)$</li>
+            <li>Compare with the exact solution $u(x,t) = e^{-0.01\pi^2 t}\sin(\pi x)$</li>
+            <li>Implement a finite-difference solver and compare accuracy and runtime</li>
+            <li>Report the relative $L^2$ error for both methods</li>
+        </ol>
+
+        <table class="comparison-table">
+            <thead><tr><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>Correctness</td><td>30%</td><td>Both PINN and FD solutions are accurate (relative error below 5%)</td></tr>
+                <tr><td>Comparison</td><td>25%</td><td>Meaningful comparison of accuracy, runtime, and ease of implementation</td></tr>
+                <tr><td>Visualization</td><td>20%</td><td>Clear heatmaps, error plots, and training curves</td></tr>
+                <tr><td>Analysis</td><td>15%</td><td>Discussion of when PINNs are advantageous over classical methods</td></tr>
+                <tr><td>Code quality</td><td>10%</td><td>Clean, well-structured, commented code</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <div class="content-section">
+        <h2>References &amp; Next Steps</h2>
+
+        <h3>References</h3>
+        <ol>
+            <li>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). &ldquo;Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations.&rdquo; <em>Journal of Computational Physics</em>, 378, 686&ndash;707.</li>
+            <li>Lagaris, I. E., Likas, A., &amp; Fotiadis, D. I. (1998). &ldquo;Artificial neural networks for solving ordinary and partial differential equations.&rdquo; <em>IEEE Transactions on Neural Networks</em>, 9(5), 987&ndash;1000.</li>
+            <li>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E. (2021). &ldquo;DeepXDE: A deep learning library for solving differential equations.&rdquo; <em>SIAM Review</em>, 63(1), 208&ndash;228.</li>
+            <li>Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L. (2021). &ldquo;Physics-informed machine learning.&rdquo; <em>Nature Reviews Physics</em>, 3, 422&ndash;440.</li>
+            <li>Wang, S., Teng, Y., &amp; Perdikaris, P. (2021). &ldquo;Understanding and mitigating gradient flow pathologies in physics-informed neural networks.&rdquo; <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055&ndash;A3081.</li>
+            <li>Shin, Y., Darbon, J., &amp; Karniadakis, G. E. (2020). &ldquo;On the convergence of physics informed neural networks.&rdquo; <em>arXiv:2004.01806</em>.</li>
+        </ol>
+
+        <h3>Full PyTorch Notebook</h3>
+        <p>For a complete PINN implementation with automatic differentiation solving the Burgers equation (forward and inverse): <a href="../notebooks/pinn_full.ipynb"><code>notebooks/pinn_full.ipynb</code></a></p>
+
+        <h3>Next Steps</h3>
+        <ul>
+            <li><strong><a href="module3-3.html">Module 3.3: Neural Operators</a></strong> &mdash; learn entire solution operators instead of individual solutions.</li>
+            <li><strong><a href="module3-1.html">Module 3.1</a></strong> &larr; revisit Neural ODEs for comparison with the PINN approach.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Bottom navigation -->
+<div style="display:flex; justify-content:space-between; margin-top:3rem; padding:1.5rem 0; border-top:1px solid var(--mf-border);">
+    <a href="module3-1.html" style="color:var(--mf-accent);">&larr; Module 3.1: Neural Differential Equations</a>
+    <a href="module3-3.html" style="color:var(--mf-accent);">Module 3.3: Neural Operators &rarr;</a>
+</div>
+
+</div></div></div></div></div></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+</body>
+</html>
