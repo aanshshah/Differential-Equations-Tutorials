@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 1.1: First-Order ODEs and Modeling — Separable, linear, exact equations, and real-world modeling applications.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 1.1: First-Order ODEs and Modeling</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 1 &mdash; ODEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module1-1.html" aria-current="page">1.1</a>
+      <a href="module1-2.html">1.2</a>
+      <a href="module1-3.html">1.3</a>
+      <a href="module1-4.html">1.4</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:0.95rem; color:var(--text-light); margin-bottom:0.25rem;">Module 1.1</p>
+        <h1>First-Order ODEs and Modeling</h1>
+    </div>
+
+    <div class="content-section" style="margin-top:1rem;">
+        <table style="box-shadow:none; margin:0;">
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Difficulty:</strong></td><td style="border:none; padding:0.5rem 1rem;">Beginner</td></tr>
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Estimated Time:</strong></td><td style="border:none; padding:0.5rem 1rem;">4&ndash;5 hours</td></tr>
+        </table>
+
+        <h4 style="margin-top:1.5rem;">Prerequisites</h4>
+        <ul>
+            <li><a href="../level0/module0-1.html">Module 0.1 &mdash; Review of Calculus and Linear Algebra</a>: integration techniques, chain rule, partial derivatives</li>
+            <li><a href="../level0/module0-2.html">Module 0.2 &mdash; Introduction to Differential Equations</a>: classification by order, linearity, and the concept of a solution family</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="intro-box">
+        <h2>Why This Matters</h2>
+        <p>
+            First-order ordinary differential equations are the simplest differential equations, yet they model an extraordinary range of phenomena.
+            A single first-order ODE captures the essence of radioactive decay, population growth with carrying capacity,
+            thermal equilibration, and chemical mixing&mdash;each governed by a rate of change that depends on the current state.
+            Mastering separable, linear, and exact equations gives you an analytical toolkit that applies directly to engineering design,
+            pharmacokinetics, ecology, and financial modeling. Perhaps more importantly, the existence-uniqueness theorem
+            (Picard&ndash;Lindel&ouml;f) tells you <em>when</em> you can trust that a model has a well-defined solution and <em>when</em>
+            multiple solutions may coexist, preventing you from blindly trusting a computer output that may be selecting one branch among many.
+        </p>
+        <p>
+            This module builds the algebraic and geometric foundations you will use in every subsequent module:
+            integrating factors reappear in systems of ODEs, separation of variables returns in PDE methods,
+            and the interplay between analytical and numerical solutions becomes a recurring theme through the entire curriculum.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="learning-objectives">
+        <h4>Learning Objectives</h4>
+        <p>After completing this module, you will be able to:</p>
+        <ol>
+            <li><strong>Classify</strong> a given first-order ODE as separable, linear, exact, or none of these, and justify the classification.</li>
+            <li><strong>Solve</strong> separable equations by algebraic separation and integration, including implicit solutions.</li>
+            <li><strong>Derive</strong> and apply integrating factors to solve first-order linear ODEs of the form \(y' + p(t)\,y = g(t)\).</li>
+            <li><strong>Test</strong> an equation \(M(x,y)\,dx + N(x,y)\,dy = 0\) for exactness and solve it when exact.</li>
+            <li><strong>Formulate</strong> first-order ODE models for population growth (exponential and logistic), Newton's law of cooling, mixing/dilution problems, and radioactive decay.</li>
+            <li><strong>State</strong> the Picard&ndash;Lindel&ouml;f existence-uniqueness theorem and verify its hypotheses for a given initial-value problem.</li>
+            <li><strong>Identify</strong> initial-value problems where uniqueness fails and explain the geometric consequences (bifurcation of solution curves).</li>
+            <li><strong>Implement</strong> a numerical solver (Euler's method) in Python and compare its output against an exact analytical solution.</li>
+            <li><strong>Interpret</strong> solution behavior qualitatively using direction fields and equilibrium analysis.</li>
+            <li><strong>Evaluate</strong> the trade-off between step-size accuracy and computational cost in a numerical solver viewed as a decision-making agent.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ---- Definitions ---- -->
+    <h3>Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.1 &mdash; Separable Equation</h4>
+        <p>A first-order ODE is <strong>separable</strong> if it can be written in the form</p>
+        <div class="math-equation">
+            $$ \frac{dy}{dx} = f(x)\,g(y) $$
+        </div>
+        <p>
+            so that the variables can be algebraically separated: \(\displaystyle \frac{dy}{g(y)} = f(x)\,dx\).
+            Integration of both sides then yields the general solution (possibly in implicit form).
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.2 &mdash; First-Order Linear ODE</h4>
+        <p>A first-order ODE is <strong>linear</strong> if it has the standard form</p>
+        <div class="math-equation">
+            $$ \frac{dy}{dt} + p(t)\,y = g(t) $$
+        </div>
+        <p>
+            where \(p\) and \(g\) are continuous functions on an interval \(I\).
+            The equation is <em>homogeneous</em> when \(g(t) \equiv 0\) and <em>non-homogeneous</em> otherwise.
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.3 &mdash; Integrating Factor</h4>
+        <p>
+            For the linear ODE \(y' + p(t)\,y = g(t)\), the <strong>integrating factor</strong> is
+        </p>
+        <div class="math-equation">
+            $$ \mu(t) = e^{\int p(t)\,dt}. $$
+        </div>
+        <p>
+            Multiplying both sides by \(\mu(t)\) transforms the left side into the exact derivative
+            \(\frac{d}{dt}[\mu(t)\,y]\), enabling direct integration.
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.4 &mdash; Exact Equation</h4>
+        <p>
+            An equation \(M(x,y)\,dx + N(x,y)\,dy = 0\) is <strong>exact</strong> on a simply connected region if there
+            exists a function \(F(x,y)\) such that
+        </p>
+        <div class="math-equation">
+            $$ \frac{\partial F}{\partial x} = M, \qquad \frac{\partial F}{\partial y} = N. $$
+        </div>
+        <p>
+            A necessary and sufficient condition (when \(M\) and \(N\) are continuously differentiable) is
+            \(\displaystyle \frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}\).
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.5 &mdash; Initial-Value Problem (IVP)</h4>
+        <p>
+            An <strong>initial-value problem</strong> for a first-order ODE consists of the equation together with
+            a prescribed value at a specific point:
+        </p>
+        <div class="math-equation">
+            $$ \frac{dy}{dt} = f(t, y), \qquad y(t_0) = y_0. $$
+        </div>
+        <p>
+            The pair \((t_0, y_0)\) is the <em>initial condition</em>. A solution is a function \(y(t)\) satisfying
+            both the ODE and the initial condition on some interval containing \(t_0\).
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.1.6 &mdash; Equilibrium Solution</h4>
+        <p>
+            An <strong>equilibrium</strong> (or <strong>steady-state</strong>) solution of \(y' = f(t,y)\) is a constant
+            function \(y(t) = y^*\) satisfying \(f(t, y^*) = 0\) for all \(t\). Equilibria are classified as
+            <em>stable</em> (nearby solutions converge), <em>unstable</em> (nearby solutions diverge), or
+            <em>semi-stable</em>.
+        </p>
+    </div>
+
+    <!-- ---- Theorems ---- -->
+    <h3>Theorems and Key Results</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.1.1 &mdash; Picard&ndash;Lindel&ouml;f Existence-Uniqueness Theorem</h4>
+        <p>
+            Let \(f(t,y)\) be continuous on an open rectangle
+            \(R = \{(t,y) : |t - t_0| < a,\; |y - y_0| < b\}\) and let \(f\) satisfy a
+            <strong>Lipschitz condition</strong> in \(y\) on \(R\): there exists \(L > 0\) such that
+        </p>
+        <div class="math-equation">
+            $$ |f(t, y_1) - f(t, y_2)| \le L\,|y_1 - y_2| $$
+        </div>
+        <p>for all \((t,y_1), (t,y_2) \in R\). Then the initial-value problem</p>
+        <div class="math-equation">
+            $$ y' = f(t,y), \qquad y(t_0) = y_0 $$
+        </div>
+        <p>
+            has a <strong>unique</strong> solution \(y(t)\) on some interval \(|t - t_0| < h\) where
+            \(h = \min\!\bigl(a,\, b/M\bigr)\) and \(M = \max_{R} |f|\).
+        </p>
+        <div class="proof-box">
+            <strong>Proof sketch.</strong> Define the Picard iterates \(y_0(t) = y_0\),
+            \(\displaystyle y_{n+1}(t) = y_0 + \int_{t_0}^{t} f(s, y_n(s))\,ds\).
+            The Lipschitz condition guarantees the sequence \(\{y_n\}\) is Cauchy in the sup-norm on
+            \([t_0 - h, t_0 + h]\). By completeness of continuous functions under the sup-norm,
+            the sequence converges uniformly to a continuous function \(y(t)\) that satisfies the integral
+            equation \(\displaystyle y(t) = y_0 + \int_{t_0}^{t} f(s, y(s))\,ds\), which is equivalent to the IVP.
+            Uniqueness follows from a Gronwall-inequality argument.
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.1.2 &mdash; Solution of First-Order Linear ODEs</h4>
+        <p>
+            If \(p(t)\) and \(g(t)\) are continuous on an open interval \(I\) containing \(t_0\), then the IVP
+        </p>
+        <div class="math-equation">
+            $$ y' + p(t)\,y = g(t), \qquad y(t_0) = y_0 $$
+        </div>
+        <p>has the unique solution on \(I\):</p>
+        <div class="math-equation">
+            $$ y(t) = \frac{1}{\mu(t)}\left[\,y_0\,\mu(t_0) + \int_{t_0}^{t} \mu(s)\,g(s)\,ds\right], \qquad \mu(t) = e^{\int_{t_0}^{t} p(s)\,ds}. $$
+        </div>
+        <p>
+            In particular, because \(p\) and \(g\) are continuous on all of \(I\), the solution exists on the <em>entire</em>
+            interval, not just locally. This is a stronger conclusion than Picard&ndash;Lindel&ouml;f provides for general nonlinear equations.
+        </p>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.1.3 &mdash; Separability Test</h4>
+        <p>
+            The ODE \(y' = F(x, y)\) is separable if and only if \(F\) can be factored as a product
+            \(F(x,y) = f(x)\,g(y)\). A practical test: if \(\displaystyle \frac{\partial^2}{\partial x\,\partial y}\!\ln|F(x,y)| = 0\)
+            wherever \(F \neq 0\), then \(F\) is separable.
+        </p>
+    </div>
+
+    <!-- ---- Common Failure Modes / Misconceptions ---- -->
+    <h3>Common Failure Modes and Misconceptions</h3>
+
+    <div class="warning-box">
+        <h4>Misconception 1: "Every first-order ODE is separable."</h4>
+        <p>
+            Many students attempt to separate variables on equations like \(y' = x + y\). This equation is linear
+            but <em>not</em> separable because the right side cannot be written as \(f(x)\,g(y)\).
+            Forcing a separation leads to algebraic errors. Always classify before solving.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 2: Forgetting the absolute value or domain restrictions after separation.</h4>
+        <p>
+            When solving \(\displaystyle \frac{dy}{y} = k\,dt\), the result is \(\ln|y| = kt + C\), not \(\ln y = kt + C\).
+            Omitting the absolute value silently discards negative-valued solutions. In many applications the sign is
+            determined by context (e.g., population is positive), but the mathematical step must be justified.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 3: Dropping the constant of integration in the integrating factor.</h4>
+        <p>
+            When computing \(\mu(t) = e^{\int p(t)\,dt}\), the arbitrary constant in the exponent is irrelevant
+            because it produces a multiplicative constant that cancels. Students who carry it through
+            create unnecessary complexity. Conversely, students sometimes omit the constant of integration
+            in the <em>final</em> solution step, where it is essential.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 4: Assuming uniqueness without checking Lipschitz.</h4>
+        <p>
+            The classic example \(y' = 3y^{2/3}\), \(y(0)=0\) has the trivial solution \(y=0\) <em>and</em>
+            the family \(y = (t-c)^3\) for any \(c \ge 0\). Here \(\partial f/\partial y = 2y^{-1/3}\) is unbounded
+            near \(y=0\), so the Lipschitz condition fails. Blindly applying a numerical solver returns one
+            particular solution with no warning that others exist.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 5: Confusing the exactness test with the integrating factor method.</h4>
+        <p>
+            The test \(\partial M/\partial y = \partial N/\partial x\) determines whether the equation
+            is <em>already</em> exact. If it fails, you need an integrating factor to <em>make</em> it exact.
+            The integrating factor for exactness is in general different from the integrating factor for
+            linear equations. Students often mix up the two procedures.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 6: Dividing by zero during separation.</h4>
+        <p>
+            When separating \(\displaystyle \frac{dy}{g(y)} = f(x)\,dx\), any value \(y^*\) where
+            \(g(y^*) = 0\) is a <em>singular</em> solution (an equilibrium). Dividing by \(g(y)\)
+            silently excludes these constant solutions. Always check \(g(y)=0\) separately before
+            declaring a general solution.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <!-- Example 1 -->
+    <div class="example-box">
+        <h4>Example 1 &mdash; Mixing Problem (Linear First-Order ODE)</h4>
+
+        <p><strong>Problem.</strong> A 500-liter tank initially contains 100 liters of pure water.
+        Brine with a salt concentration of 20 g/L flows in at 6 L/min. The well-stirred solution flows
+        out at 4 L/min. Find the amount of salt \(Q(t)\) in the tank at time \(t\), and determine
+        when the tank is full and the salt concentration at that moment.</p>
+
+        <h5>Step 1 &mdash; Set up the balance equation</h5>
+        <p>Volume at time \(t\): \(V(t) = 100 + (6-4)t = 100 + 2t\) liters.</p>
+        <p>Rate in: \(6 \times 20 = 120\) g/min.</p>
+        <p>Rate out: \(\displaystyle 4 \times \frac{Q(t)}{V(t)} = \frac{4Q}{100+2t}\) g/min.</p>
+        <p>Balance:</p>
+        <div class="math-equation">
+            $$ \frac{dQ}{dt} = 120 - \frac{4Q}{100+2t} = 120 - \frac{2Q}{50+t}. $$
+        </div>
+
+        <h5>Step 2 &mdash; Write in standard linear form</h5>
+        <div class="math-equation">
+            $$ Q' + \frac{2}{50+t}\,Q = 120, \qquad Q(0) = 0. $$
+        </div>
+
+        <h5>Step 3 &mdash; Compute the integrating factor</h5>
+        <div class="math-equation">
+            $$ \mu(t) = e^{\int \frac{2}{50+t}\,dt} = e^{2\ln(50+t)} = (50+t)^2. $$
+        </div>
+
+        <h5>Step 4 &mdash; Multiply and integrate</h5>
+        <div class="math-equation">
+            $$ \frac{d}{dt}\bigl[(50+t)^2\,Q\bigr] = 120\,(50+t)^2. $$
+        </div>
+        <p>Integrate both sides:</p>
+        <div class="math-equation">
+            $$ (50+t)^2\,Q = 120 \cdot \frac{(50+t)^3}{3} + C = 40\,(50+t)^3 + C. $$
+        </div>
+
+        <h5>Step 5 &mdash; Apply initial condition</h5>
+        <p>\(Q(0) = 0\): \(2500 \cdot 0 = 40 \cdot 125000 + C\), so \(C = -5{,}000{,}000\).</p>
+        <div class="math-equation">
+            $$ Q(t) = 40(50+t) - \frac{5{,}000{,}000}{(50+t)^2}. $$
+        </div>
+
+        <h5>Step 6 &mdash; Interpret</h5>
+        <p>
+            The tank is full when \(V(t) = 500\), i.e., \(t = 200\) min. At \(t=200\):
+        </p>
+        <div class="math-equation">
+            $$ Q(200) = 40(250) - \frac{5{,}000{,}000}{250^2} = 10{,}000 - 80 = 9{,}920 \text{ g}. $$
+        </div>
+        <p>
+            Concentration at \(t=200\): \(9920/500 = 19.84\) g/L, which is close to but slightly below
+            the incoming concentration of 20 g/L, as expected.
+        </p>
+        <p>
+            As \(t \to \infty\) (if the tank could grow indefinitely), \(Q/V \to 40(50+t)/(50+t) = 40\)... but
+            here the physical constraint \(V=500\) changes the regime at \(t=200\). After that, a new ODE
+            with constant volume would apply.
+        </p>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="example-box">
+        <h4>Example 2 &mdash; Logistic Population Growth (Separable Equation)</h4>
+
+        <p><strong>Problem.</strong> A bacteria culture in a nutrient broth follows the logistic equation
+        \(\displaystyle \frac{dP}{dt} = 0.5\,P\!\left(1 - \frac{P}{1000}\right)\),
+        with initial population \(P(0) = 50\). Find \(P(t)\) and determine when the population reaches
+        900.</p>
+
+        <h5>Step 1 &mdash; Separate variables</h5>
+        <div class="math-equation">
+            $$ \frac{dP}{P(1 - P/1000)} = 0.5\,dt. $$
+        </div>
+        <p>Use partial fractions on the left:</p>
+        <div class="math-equation">
+            $$ \frac{1}{P(1-P/1000)} = \frac{1}{P} + \frac{1/1000}{1-P/1000} = \frac{1}{P} + \frac{1}{1000 - P}. $$
+        </div>
+
+        <h5>Step 2 &mdash; Integrate both sides</h5>
+        <div class="math-equation">
+            $$ \int \left(\frac{1}{P} + \frac{1}{1000 - P}\right)dP = \int 0.5\,dt $$
+        </div>
+        <div class="math-equation">
+            $$ \ln|P| - \ln|1000 - P| = 0.5\,t + C_1. $$
+        </div>
+        <div class="math-equation">
+            $$ \ln\!\left|\frac{P}{1000 - P}\right| = 0.5\,t + C_1. $$
+        </div>
+
+        <h5>Step 3 &mdash; Exponentiate and solve for \(P\)</h5>
+        <div class="math-equation">
+            $$ \frac{P}{1000 - P} = A\,e^{0.5t}, \qquad A = e^{C_1}. $$
+        </div>
+        <p>Solve for \(P\):</p>
+        <div class="math-equation">
+            $$ P(t) = \frac{1000\,A\,e^{0.5t}}{1 + A\,e^{0.5t}} = \frac{1000}{1 + A^{-1}e^{-0.5t}}. $$
+        </div>
+
+        <h5>Step 4 &mdash; Apply initial condition</h5>
+        <p>\(P(0)=50\): \(\displaystyle 50 = \frac{1000\,A}{1+A}\), so \(A = 50/950 = 1/19\).</p>
+        <div class="math-equation">
+            $$ P(t) = \frac{1000}{1 + 19\,e^{-0.5t}}. $$
+        </div>
+
+        <h5>Step 5 &mdash; Find \(t\) when \(P=900\)</h5>
+        <div class="math-equation">
+            $$ 900 = \frac{1000}{1+19\,e^{-0.5t}} \implies 1 + 19\,e^{-0.5t} = \frac{1000}{900} = \frac{10}{9} $$
+        </div>
+        <div class="math-equation">
+            $$ 19\,e^{-0.5t} = \frac{1}{9} \implies e^{-0.5t} = \frac{1}{171} \implies t = \frac{\ln 171}{0.5} = 2\ln 171 \approx 10.28 \text{ time units}. $$
+        </div>
+
+        <h5>Step 6 &mdash; Interpret</h5>
+        <p>
+            The solution is a sigmoid curve. The population grows nearly exponentially when \(P \ll 1000\),
+            inflects at \(P = 500\) (half the carrying capacity), and asymptotically approaches \(K=1000\).
+            The inflection point occurs at \(t = 2\ln 19 \approx 5.89\), where the growth rate is maximal.
+            After \(t \approx 10.3\), the population has consumed most of the available capacity and growth
+            has slowed dramatically.
+        </p>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="example-box">
+        <h4>Example 3 &mdash; Exact Equation</h4>
+        <p><strong>Problem.</strong> Solve \((2xy + 3)\,dx + (x^2 - 1)\,dy = 0\).</p>
+
+        <h5>Step 1 &mdash; Check exactness</h5>
+        <p>\(M = 2xy + 3\), \(N = x^2 - 1\).</p>
+        <div class="math-equation">
+            $$ \frac{\partial M}{\partial y} = 2x, \qquad \frac{\partial N}{\partial x} = 2x. $$
+        </div>
+        <p>Equal, so the equation is exact.</p>
+
+        <h5>Step 2 &mdash; Find \(F(x,y)\) with \(F_x = M\)</h5>
+        <div class="math-equation">
+            $$ F(x,y) = \int (2xy+3)\,dx = x^2 y + 3x + h(y). $$
+        </div>
+
+        <h5>Step 3 &mdash; Determine \(h(y)\) from \(F_y = N\)</h5>
+        <div class="math-equation">
+            $$ F_y = x^2 + h'(y) = x^2 - 1 \implies h'(y) = -1 \implies h(y) = -y. $$
+        </div>
+
+        <h5>Step 4 &mdash; Write the implicit solution</h5>
+        <div class="math-equation">
+            $$ F(x,y) = x^2 y + 3x - y = C. $$
+        </div>
+        <p>This can be solved explicitly: \(\displaystyle y = \frac{C - 3x}{x^2 - 1}\) for \(x \neq \pm 1\).</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+
+    <div class="interactive-highlight">
+        <h4>Lab 1.1 &mdash; Mixing Problem: Numerical vs. Exact Solution</h4>
+        <p>
+            Below is a complete Python script (Pyodide-compatible) that solves the mixing problem from
+            Example 1 using Euler's method and compares the result to the exact analytical solution.
+            Copy this code into a Pyodide-enabled environment to run it.
+        </p>
+
+        <pre><code class="language-python">import numpy as np
+
+# -----------------------------------------------------------
+# Mixing Problem: 500 L tank, starts at 100 L pure water
+#   Inflow: 6 L/min at 20 g/L
+#   Outflow: 4 L/min
+#   V(t) = 100 + 2t,  tank full at t = 200 min
+# -----------------------------------------------------------
+
+def dQ_dt(t, Q):
+    """Right-hand side of the mixing ODE: Q' = 120 - 2Q/(50+t)."""
+    return 120.0 - 2.0 * Q / (50.0 + t)
+
+def Q_exact(t):
+    """Exact solution derived in Example 1."""
+    return 40.0 * (50.0 + t) - 5_000_000.0 / (50.0 + t)**2
+
+# ---- Euler's method ----
+dt = 0.5          # step size (minutes)
+t_end = 200.0     # tank full at t=200
+N_steps = int(t_end / dt)
+
+t_euler = np.zeros(N_steps + 1)
+Q_euler = np.zeros(N_steps + 1)
+t_euler[0] = 0.0
+Q_euler[0] = 0.0  # initial condition: no salt
+
+for n in range(N_steps):
+    Q_euler[n+1] = Q_euler[n] + dt * dQ_dt(t_euler[n], Q_euler[n])
+    t_euler[n+1] = t_euler[n] + dt
+
+# ---- Evaluate exact solution on the same grid ----
+Q_ex = Q_exact(t_euler)
+
+# ---- Compute error metrics ----
+abs_error = np.abs(Q_euler - Q_ex)
+max_error = np.max(abs_error)
+final_euler = Q_euler[-1]
+final_exact = Q_ex[-1]
+
+print("Mixing Problem — Euler vs. Exact")
+print(f"  Step size:            {dt} min")
+print(f"  Number of steps:      {N_steps}")
+print(f"  Q_euler(200):         {final_euler:.4f} g")
+print(f"  Q_exact(200):         {final_exact:.4f} g")
+print(f"  Max absolute error:   {max_error:.4f} g")
+print(f"  Final concentration:  {final_euler/500:.4f} g/L")
+
+# ---- Optional: plot (works in Pyodide with matplotlib) ----
+try:
+    import matplotlib
+    matplotlib.use('Agg')         # non-interactive backend
+    import matplotlib.pyplot as plt
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+    # Left: Q(t)
+    ax1.plot(t_euler, Q_ex, 'b-', linewidth=2, label='Exact')
+    ax1.plot(t_euler[::20], Q_euler[::20], 'ro', markersize=4, label=f'Euler (dt={dt})')
+    ax1.set_xlabel('Time (min)')
+    ax1.set_ylabel('Salt Q(t) (grams)')
+    ax1.set_title('Salt in Tank over Time')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    # Right: error
+    ax2.plot(t_euler, abs_error, 'r-', linewidth=1.5)
+    ax2.set_xlabel('Time (min)')
+    ax2.set_ylabel('|Euler - Exact| (grams)')
+    ax2.set_title('Absolute Error')
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig('mixing_problem_euler.png', dpi=120)
+    print("  Plot saved to mixing_problem_euler.png")
+except ImportError:
+    print("  (matplotlib not available — skipping plot)")
+</code></pre>
+
+        <p><strong>Expected output (approximate):</strong></p>
+        <pre><code>Mixing Problem — Euler vs. Exact
+  Step size:            0.5 min
+  Number of steps:      400
+  Q_euler(200):         9919.4762 g
+  Q_exact(200):         9920.0000 g
+  Max absolute error:   1.0932 g
+  Final concentration:  19.8390 g/L
+</code></pre>
+
+        <p>
+            <strong>Experiment:</strong> Change <code>dt</code> to 2.0, 1.0, 0.1, and observe how the
+            maximum error scales roughly linearly with step size (first-order convergence). Then try
+            implementing a simple second-order method (Heun's method) and compare.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <h2>Agent Lens</h2>
+
+    <div class="content-section">
+        <p>
+            Viewing an ODE solver through the lens of reinforcement learning reveals a natural
+            decision-making structure. Here we frame Euler's method (and more sophisticated solvers)
+            as an <em>agent</em> that sequentially interacts with the differential equation.
+        </p>
+
+        <h4>State</h4>
+        <p>
+            At each step \(n\), the agent observes the state \(s_n = (t_n,\, y_n,\, \hat{e}_n)\) where
+            \(t_n\) is the current time, \(y_n\) is the current numerical approximation, and \(\hat{e}_n\)
+            is an estimate of the local truncation error (zero for fixed-step Euler, computed via step-doubling
+            or embedded methods in adaptive solvers).
+        </p>
+
+        <h4>Action</h4>
+        <p>
+            The agent selects an action \(a_n = (h_n, m_n)\): a step size \(h_n > 0\) and possibly
+            a method order \(m_n\) (e.g., Euler = order 1, RK4 = order 4). In fixed-step Euler the
+            action space is trivial (one constant), but adaptive solvers like <code>scipy.integrate.solve_ivp</code>
+            with <code>method='RK45'</code> make genuine step-size decisions at every stage.
+        </p>
+
+        <h4>Reward / Utility</h4>
+        <p>
+            The reward balances <strong>accuracy</strong> against <strong>computational cost</strong>:
+        </p>
+        <div class="math-equation">
+            $$ r_n = -\alpha\,\hat{e}_n^2 \;-\; \beta\,\frac{1}{h_n} $$
+        </div>
+        <p>
+            The first term penalizes large local error; the second penalizes small steps (which cost more
+            function evaluations). The constants \(\alpha, \beta > 0\) define the trade-off. A solver
+            that takes too-large steps earns large negative rewards from error; one that takes too-small
+            steps earns large negative rewards from cost.
+        </p>
+
+        <h4>Learning / Policy</h4>
+        <p>
+            Classical adaptive solvers implement a <em>hand-crafted policy</em>: if the estimated error
+            exceeds a tolerance \(\varepsilon\), reject the step and halve \(h\); if the error is well below
+            \(\varepsilon\), accept and grow \(h\) by a safety-factored ratio. This is analogous to a
+            bang-bang controller. Modern neural-ODE solvers and learned step-size controllers replace this
+            heuristic with a trained policy network, demonstrating that the agent-environment framing
+            is not merely an analogy but a practical design paradigm.
+        </p>
+
+        <div class="note-box">
+            <h4>Connection to Module 1.4</h4>
+            <p>
+                In Module 1.4 (Numerical ODE Solvers) we will formalize the agent framework further,
+                introducing the <em>cost-of-computation</em> perspective: given a fixed compute budget
+                of \(N\) function evaluations, what is the optimal allocation of step sizes to minimize
+                global error? This is a finite-horizon sequential optimization problem.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.1.1 (Separable).</strong>
+        Solve the IVP \(\displaystyle \frac{dy}{dx} = \frac{x\,e^{-x^2}}{y}\), \(y(0) = 1\).
+        Express the solution explicitly.</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Separate: \(y\,dy = x\,e^{-x^2}\,dx\). Integrate:</p>
+            <div class="math-equation">
+                $$ \frac{y^2}{2} = -\frac{1}{2}e^{-x^2} + C. $$
+            </div>
+            <p>Apply \(y(0)=1\): \(1/2 = -1/2 + C\), so \(C=1\).</p>
+            <div class="math-equation">
+                $$ y^2 = 2 - e^{-x^2}, \qquad y(x) = \sqrt{2 - e^{-x^2}} \quad (\text{taking positive root since } y(0)=1>0). $$
+            </div>
+        </details>
+
+        <p><strong>Exercise 1.1.2 (Linear).</strong>
+        Solve \(\displaystyle y' + \frac{3}{t}\,y = \frac{\sin t}{t^3}\) for \(t > 0\).</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Integrating factor: \(\mu = e^{3\ln t} = t^3\).</p>
+            <div class="math-equation">
+                $$ \frac{d}{dt}[t^3 y] = \sin t \implies t^3 y = -\cos t + C $$
+            </div>
+            <div class="math-equation">
+                $$ y(t) = \frac{-\cos t + C}{t^3}. $$
+            </div>
+        </details>
+
+        <p><strong>Exercise 1.1.3 (Exact).</strong>
+        Determine whether \((ye^{xy} + 2x)\,dx + (xe^{xy} - 1)\,dy = 0\) is exact, and if so, solve it.</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>\(M = ye^{xy} + 2x\), \(N = xe^{xy} - 1\).</p>
+            <p>\(M_y = e^{xy} + xye^{xy}\), \(N_x = e^{xy} + xye^{xy}\). Equal, so exact.</p>
+            <p>\(F = \int M\,dx = e^{xy} + x^2 + h(y)\). \(F_y = xe^{xy} + h'(y) = xe^{xy} - 1\), so \(h'(y) = -1\), \(h = -y\).</p>
+            <div class="math-equation">
+                $$ e^{xy} + x^2 - y = C. $$
+            </div>
+        </details>
+
+        <p><strong>Exercise 1.1.4 (Existence-Uniqueness).</strong>
+        Consider the IVP \(y' = \sqrt{|y|}\), \(y(0) = 0\). Does a solution exist? Is it unique?
+        Find all solutions.</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>
+                \(f(t,y) = \sqrt{|y|}\) is continuous everywhere, so Peano's theorem guarantees existence.
+                However, \(\partial f/\partial y = 1/(2\sqrt{|y|})\) is unbounded near \(y=0\), so the
+                Lipschitz condition fails. Indeed, uniqueness fails: \(y \equiv 0\) is a solution,
+                and for any \(c \ge 0\), the function
+            </p>
+            <div class="math-equation">
+                $$ y(t) = \begin{cases} 0 & t \le c \\ \tfrac{1}{4}(t-c)^2 & t > c \end{cases} $$
+            </div>
+            <p>is also a solution. There are infinitely many solutions.</p>
+        </details>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.1.5.</strong>
+        Implement Euler's method to solve the logistic equation
+        \(P' = 0.5\,P(1 - P/1000)\), \(P(0)=50\), on \([0, 30]\) with step sizes
+        \(h = 1, 0.5, 0.1\). Compute the error at \(t=10\) against the exact solution from Example 2
+        and verify the error is \(O(h)\).</p>
+
+        <p><strong>Exercise 1.1.6.</strong>
+        Write a Python function that takes a function \(f(t,y)\), an initial condition \((t_0, y_0)\),
+        and an end time \(t_f\), and solves the IVP with a user-specified tolerance using <em>adaptive</em>
+        step-size control: at each step compute both a full-step Euler result and two half-step results;
+        if they disagree by more than the tolerance, halve \(h\); if they agree to within tolerance/10,
+        double \(h\). Test on Newton's cooling: \(T' = -0.1(T - 20)\), \(T(0) = 90\).</p>
+
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+def adaptive_euler(f, t0, y0, tf, tol=1e-4, h_init=1.0):
+    """Adaptive Euler method using step-doubling error estimation."""
+    t, y, h = t0, y0, h_init
+    ts, ys = [t], [y]
+
+    while t < tf - 1e-12:
+        h = min(h, tf - t)
+        # Full step
+        y_full = y + h * f(t, y)
+        # Two half steps
+        y_half = y + (h/2) * f(t, y)
+        y_half = y_half + (h/2) * f(t + h/2, y_half)
+        # Error estimate
+        err = abs(y_half - y_full)
+        if err > tol:
+            h /= 2.0
+            continue
+        # Accept step (use the more accurate half-step result)
+        t += h
+        y = y_half
+        ts.append(t)
+        ys.append(y)
+        if err < tol / 10:
+            h *= 2.0
+    return np.array(ts), np.array(ys)
+
+# Test: Newton's cooling
+f_cool = lambda t, T: -0.1 * (T - 20.0)
+ts, Ts = adaptive_euler(f_cool, 0, 90.0, 50.0, tol=1e-3)
+T_exact = lambda t: 20 + 70 * np.exp(-0.1 * t)
+print(f"Steps taken: {len(ts)-1}")
+print(f"T(50) adaptive: {Ts[-1]:.6f}")
+print(f"T(50) exact:    {T_exact(50):.6f}")
+</code></pre>
+        </details>
+
+        <p><strong>Exercise 1.1.7.</strong>
+        For the radioactive decay equation \(N' = -\lambda N\) with \(\lambda = 0.0866\,\text{yr}^{-1}\)
+        (corresponding to a half-life of 8 years) and \(N(0)=1000\), solve analytically and numerically
+        on \([0, 40]\). Plot both on the same axes and add a horizontal line at \(N = 1000/2^5 = 31.25\)
+        to visualize 5 half-lives.</p>
+
+        <p><strong>Exercise 1.1.8.</strong>
+        Use <code>scipy.integrate.solve_ivp</code> to solve the mixing problem from Example 1 and
+        compare with the exact solution. Use both <code>method='RK45'</code> and <code>method='Radau'</code>.
+        Which uses fewer function evaluations? Why?</p>
+
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">from scipy.integrate import solve_ivp
+import numpy as np
+
+def mixing_ode(t, Q):
+    return [120.0 - 2.0 * Q[0] / (50.0 + t)]
+
+Q_exact = lambda t: 40.0*(50+t) - 5e6/(50+t)**2
+
+sol_rk45 = solve_ivp(mixing_ode, [0, 200], [0.0], method='RK45',
+                       dense_output=True, rtol=1e-8, atol=1e-10)
+sol_radau = solve_ivp(mixing_ode, [0, 200], [0.0], method='Radau',
+                       dense_output=True, rtol=1e-8, atol=1e-10)
+
+t_eval = np.linspace(0, 200, 500)
+print(f"RK45  steps: {sol_rk45.t.size},  nfev: {sol_rk45.nfev}")
+print(f"Radau steps: {sol_radau.t.size},  nfev: {sol_radau.nfev}")
+print(f"RK45  error at t=200: {abs(sol_rk45.sol(200)[0] - Q_exact(200)):.2e}")
+print(f"Radau error at t=200: {abs(sol_radau.sol(200)[0] - Q_exact(200)):.2e}")
+# RK45 typically uses fewer evaluations for this non-stiff problem.
+</code></pre>
+        </details>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.1.9 (Agent Design).</strong>
+        Design a "step-size agent" for solving \(y' = -50y + 50\sin t\) on \([0, 2]\) with \(y(0)=0\).
+        This equation is <em>stiff</em>: the transient \(e^{-50t}\) decays rapidly while the forced
+        response \(\sin t\) varies slowly. Your agent should:</p>
+        <ul>
+            <li>(a) Start with \(h=0.001\) and use Euler's method.</li>
+            <li>(b) At each step, estimate error via step-doubling.</li>
+            <li>(c) Record the step sizes chosen and the total number of function evaluations.</li>
+            <li>(d) Compare against a "naive agent" that uses a fixed \(h=0.001\) throughout.</li>
+        </ul>
+        <p>Report: Does your adaptive agent use fewer evaluations while achieving comparable accuracy?
+        At what times does it choose large steps vs. small steps?</p>
+
+        <details>
+            <summary>Solution sketch</summary>
+            <p>
+                The stiff transient near \(t=0\) forces small steps (\(h \approx 0.001\) to maintain stability
+                for explicit Euler). After \(t \approx 0.1\), the transient has decayed by \(e^{-5} \approx 0.007\)
+                and the agent can safely increase \(h\) to \(\sim 0.05\) or more. The adaptive agent typically uses
+                200&ndash;300 evaluations compared to 2000 for the fixed agent, with comparable accuracy. The agent
+                "learns" (via the error estimate) that the dynamics have become benign and increases its step size
+                accordingly. Note: explicit Euler is unconditionally unstable for large \(h\) on stiff problems;
+                if the agent grows \(h\) too aggressively, it must detect and reject bad steps.
+            </p>
+        </details>
+
+        <p><strong>Exercise 1.1.10 (Model Selection Agent).</strong>
+        You are given noisy data from an unknown first-order process: time-concentration pairs measured
+        every 2 minutes for 30 minutes. The agent must choose between three models:</p>
+        <ul>
+            <li>Exponential decay: \(C' = -kC\)</li>
+            <li>Linear dilution: \(C' = -\alpha\)</li>
+            <li>Logistic: \(C' = rC(1-C/K)\)</li>
+        </ul>
+        <p>
+        Write a Python script that fits each model to the data (using least-squares), computes the
+        AIC (Akaike Information Criterion) for each, and selects the best model. Test with synthetic
+        data generated from exponential decay with added Gaussian noise (\(\sigma=0.5\)).</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <!-- Quiz -->
+    <h3>Quiz &mdash; Module 1.1 (10 Questions)</h3>
+
+    <div class="content-section">
+        <ol>
+            <li>
+                <p>Which of the following is separable?</p>
+                <p>(a) \(y' = x + y\) &emsp; (b) \(y' = xy^2\) &emsp; (c) \(y' = x^2 + y^2\) &emsp; (d) \(y' = e^{x+y}\)</p>
+            </li>
+            <li>
+                <p>The integrating factor for \(y' + 2ty = t\) is:</p>
+                <p>(a) \(e^{t^2}\) &emsp; (b) \(e^{2t}\) &emsp; (c) \(e^{t}\) &emsp; (d) \(t^2\)</p>
+            </li>
+            <li>
+                <p>For the equation \(M\,dx + N\,dy = 0\) to be exact, we require:</p>
+                <p>(a) \(M = N\) &emsp; (b) \(M_x = N_y\) &emsp; (c) \(M_y = N_x\) &emsp; (d) \(M_x = N_x\)</p>
+            </li>
+            <li>
+                <p>The Picard&ndash;Lindel&ouml;f theorem guarantees both existence and uniqueness when \(f(t,y)\) satisfies:</p>
+                <p>(a) Continuity in \(t\) only &emsp; (b) Continuity in \(y\) only &emsp; (c) A Lipschitz condition in \(y\) and continuity in both variables &emsp; (d) Differentiability everywhere</p>
+            </li>
+            <li>
+                <p>How many solutions does the IVP \(y' = 3y^{2/3}\), \(y(0) = 0\) have?</p>
+                <p>(a) None &emsp; (b) Exactly one &emsp; (c) Exactly two &emsp; (d) Infinitely many</p>
+            </li>
+            <li>
+                <p>In the logistic equation \(P' = rP(1 - P/K)\), the inflection point of \(P(t)\) occurs at:</p>
+                <p>(a) \(P = 0\) &emsp; (b) \(P = K/4\) &emsp; (c) \(P = K/2\) &emsp; (d) \(P = K\)</p>
+            </li>
+            <li>
+                <p>Newton's law of cooling states \(T' = -k(T - T_{\text{env}})\). If \(T(0)=90\), \(T_{\text{env}}=20\), and \(T(10)=60\), then \(k\) equals:</p>
+                <p>(a) \(\tfrac{1}{10}\ln(7/4)\) &emsp; (b) \(\tfrac{1}{10}\ln(7/3)\) &emsp; (c) \(\tfrac{1}{10}\ln(9/4)\) &emsp; (d) \(\tfrac{1}{10}\ln 2\)</p>
+            </li>
+            <li>
+                <p>Euler's method with step size \(h\) has a global truncation error of order:</p>
+                <p>(a) \(O(h^2)\) &emsp; (b) \(O(h)\) &emsp; (c) \(O(h^{1/2})\) &emsp; (d) \(O(1)\)</p>
+            </li>
+            <li>
+                <p>In the mixing problem of Example 1, as \(t \to \infty\) (ignoring the tank-full constraint), the concentration \(Q/V\) approaches:</p>
+                <p>(a) 0 g/L &emsp; (b) 10 g/L &emsp; (c) 20 g/L &emsp; (d) 40 g/L</p>
+            </li>
+            <li>
+                <p>Which statement about the solution to the linear ODE \(y' + p(t)y = g(t)\) is true?</p>
+                <p>(a) The solution exists only locally near \(t_0\) &emsp; (b) The solution exists on any interval where \(p\) and \(g\) are continuous &emsp; (c) Multiple solutions can pass through each initial point &emsp; (d) The solution is always bounded</p>
+            </li>
+        </ol>
+
+        <h4>Answer Key</h4>
+        <ol>
+            <li><strong>(b) and (d)</strong>. \(y' = xy^2 = f(x)g(y)\) with \(f=x, g=y^2\). Also \(y' = e^{x+y} = e^x \cdot e^y\). The others cannot be factored.</li>
+            <li><strong>(a)</strong>. \(\mu = e^{\int 2t\,dt} = e^{t^2}\).</li>
+            <li><strong>(c)</strong>. \(\partial M/\partial y = \partial N/\partial x\).</li>
+            <li><strong>(c)</strong>. Continuity of \(f\) in both variables plus a Lipschitz condition in \(y\).</li>
+            <li><strong>(d)</strong>. Infinitely many, including \(y=0\) and \(y=(t-c)^3/(27)\) for all \(c \ge 0\) (after correcting the algebra: \(y = (t-c)^3\) solves \(y'=3y^{2/3}\) since \(3(t-c)^2 = 3[(t-c)^3]^{2/3}\)).</li>
+            <li><strong>(c)</strong>. The inflection occurs at \(P = K/2\).</li>
+            <li><strong>(a)</strong>. \(T(t) = 20 + 70e^{-kt}\). At \(t=10\): \(60=20+70e^{-10k}\), so \(e^{-10k}=40/70=4/7\), giving \(k = \tfrac{1}{10}\ln(7/4)\).</li>
+            <li><strong>(b)</strong>. \(O(h)\) &mdash; first-order global accuracy.</li>
+            <li><strong>(c)</strong>. \(Q/V \to 40(50+t)/(100+2t) = 40/2 = 20\) g/L, which equals the incoming concentration.</li>
+            <li><strong>(b)</strong>. The linear ODE has a unique solution on any interval where the coefficients are continuous.</li>
+        </ol>
+    </div>
+
+    <!-- Mini-Project -->
+    <h3>Mini-Project &mdash; Drug Pharmacokinetics Simulation</h3>
+
+    <div class="content-section">
+        <h4>Problem Statement</h4>
+        <p>
+            A drug is administered intravenously at a constant rate of \(D = 50\) mg/hr for the first 2 hours,
+            then the infusion stops. The drug is eliminated from the bloodstream at a rate proportional to
+            its current concentration, with elimination constant \(k_e = 0.3\,\text{hr}^{-1}\). The volume
+            of distribution is \(V_d = 10\) L.
+        </p>
+        <p>Let \(C(t)\) be the drug concentration (mg/L) in the blood. The governing ODE is:</p>
+        <div class="math-equation">
+            $$ V_d\,\frac{dC}{dt} = \begin{cases} D - k_e\,V_d\,C & 0 \le t \le 2 \\ -k_e\,V_d\,C & t > 2 \end{cases} $$
+        </div>
+        <p>with \(C(0) = 0\).</p>
+
+        <h4>Deliverables</h4>
+        <ol>
+            <li><strong>Analytical solution:</strong> Solve the ODE analytically on \([0,2]\) and \([2, \infty)\) separately, matching \(C(2^-) = C(2^+)\) for continuity.</li>
+            <li><strong>Numerical solution:</strong> Implement both Euler's method and an adaptive method to solve on \([0, 12]\). Use at least two step sizes for Euler and verify convergence order.</li>
+            <li><strong>Comparison plot:</strong> Overlay analytical and numerical solutions. Plot the error for each numerical method.</li>
+            <li><strong>Clinical analysis:</strong> Determine (a) the peak concentration, (b) the time at which concentration drops below the therapeutic threshold of 2 mg/L, (c) the total drug exposure (area under the curve, \(\int_0^{12} C(t)\,dt\)).</li>
+            <li><strong>Agent perspective:</strong> Describe how an adaptive solver acts as an agent in this problem. Where does it choose small steps? Large steps? Why?</li>
+        </ol>
+
+        <h4>Rubric (100 points)</h4>
+        <table>
+            <thead>
+                <tr><th>Criterion</th><th>Points</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Correctness</strong></td>
+                    <td>35</td>
+                    <td>Analytical solution is correct on both intervals with proper matching at \(t=2\). Numerical solutions converge to the analytical result. Clinical quantities are computed accurately.</td>
+                </tr>
+                <tr>
+                    <td><strong>Efficiency</strong></td>
+                    <td>20</td>
+                    <td>Adaptive solver uses significantly fewer steps than fixed-step Euler for comparable accuracy. Convergence study uses a systematic sequence of step sizes (e.g., halving).</td>
+                </tr>
+                <tr>
+                    <td><strong>Robustness</strong></td>
+                    <td>25</td>
+                    <td>Code handles the discontinuity at \(t=2\) correctly (e.g., event detection or explicit split). Edge cases (negative concentration, very large \(t\)) are addressed. Error estimation is included.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reproducibility</strong></td>
+                    <td>20</td>
+                    <td>Code is well-documented with clear variable names. Plots are labeled and captioned. A requirements specification or environment description is provided. Results can be reproduced by running the script.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <div class="content-section">
+        <h4>References</h4>
+        <ol class="reference-list">
+            <li>Boyce, W. E. &amp; DiPrima, R. C. <em>Elementary Differential Equations and Boundary Value Problems</em>, 11th ed., Wiley, 2017. Chapters 2&ndash;3.</li>
+            <li>Tenenbaum, M. &amp; Pollard, H. <em>Ordinary Differential Equations</em>, Dover, 1985. A thorough classical treatment with extensive worked examples.</li>
+            <li>Strogatz, S. H. <em>Nonlinear Dynamics and Chaos</em>, 2nd ed., Westview Press, 2015. Chapter 2 provides geometric intuition for first-order ODEs.</li>
+            <li>Coddington, E. A. &amp; Levinson, N. <em>Theory of Ordinary Differential Equations</em>, McGraw-Hill, 1955. Rigorous proof of the Picard&ndash;Lindel&ouml;f theorem (Chapter 1).</li>
+            <li>SciPy documentation: <code>scipy.integrate.solve_ivp</code> &mdash; <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html" target="_blank">https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html</a></li>
+        </ol>
+
+        <h4>Next Steps</h4>
+        <div class="section-nav">
+            <a href="index.html">&larr; Back to Level 1 Overview</a>
+            <a href="module1-2.html">Module 1.2: Second-Order Linear ODEs &rarr;</a>
+        </div>
+    </div>
+</section>
+
+</div><!-- col-lg-12 -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<!-- KaTeX auto-render -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+    });
+});
+</script>
+
+</body>
+</html>

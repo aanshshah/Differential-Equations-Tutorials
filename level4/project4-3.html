@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Project 4.3: Scientific Machine Learning for Real Data — Differential Equations Tutorials">
+    <meta name="author" content="">
+
+    <title>Project 4.3 — Scientific Machine Learning for Real Data</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 4 &mdash; Projects</a>
+    <nav class="lesson-static-links" aria-label="Project navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="project4-1.html">4.1 Agent Simulation</a>
+      <a href="project4-2.html">4.2 Neural vs Classical</a>
+      <a href="project4-3.html" aria-current="page">4.3 SciML Real Data</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a href="index.html">Level 4 Projects</a></li>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="#title-block">Project Brief</a></li>
+            <li><a href="#problem-statement">Problem Statement</a></li>
+            <li><a href="#modeling-assumptions">Assumptions</a></li>
+            <li><a href="#data-generation">Data Generation</a></li>
+            <li><a href="#baselines">Baselines</a></li>
+            <li><a href="#agent-approach">Agent Approach</a></li>
+            <li><a href="#deliverables">Deliverables</a></li>
+            <li><a href="#rubric">Rubric</a></li>
+            <li><a href="#references">References</a></li>
+        </ul>
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <!-- ============================================================ -->
+                    <!-- TITLE BLOCK                                                   -->
+                    <!-- ============================================================ -->
+                    <section id="title-block" style="margin-top: 2rem;">
+                        <p style="font-family: 'JetBrains Mono', monospace; color: var(--mf-muted); margin-bottom: 0.25rem;">PROJECT 4.3</p>
+                        <h1 style="font-family: 'Crimson Text', serif; font-size: 2.4rem; margin-bottom: 0.5rem;">Scientific Machine Learning for Real Data</h1>
+                        <table style="border-collapse: collapse; margin: 1rem 0 2rem 0; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Difficulty</td>
+                                <td><strong>Advanced</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Estimated Time</td>
+                                <td><strong>5 &ndash; 7 hours</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Prerequisites</td>
+                                <td>
+                                    Module 3.1 (Neural ODEs),
+                                    Module 3.5 (SINDy &amp; Equation Discovery)
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="border-top: 1px solid var(--mf-border);">
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- PROBLEM STATEMENT                                             -->
+                    <!-- ============================================================ -->
+                    <section id="problem-statement" style="margin-top: 2rem;">
+                        <h2>1. Problem Statement</h2>
+
+                        <p>
+                            A central challenge in scientific machine learning is recovering interpretable governing
+                            equations directly from observed data. The <strong>Sparse Identification of Nonlinear
+                            Dynamics (SINDy)</strong> framework addresses this by expressing the time derivatives of
+                            state variables as sparse linear combinations of candidate nonlinear functions drawn from
+                            a library. When the true dynamics are sparse in the chosen library, SINDy can recover
+                            the exact governing equations from data &mdash; even in the presence of measurement noise.
+                        </p>
+
+                        <p>
+                            In this project you will apply SINDy to discover the governing equations of the
+                            <strong>SIR (Susceptible-Infected-Recovered) epidemiological model</strong>, one of the
+                            foundational compartmental models in mathematical epidemiology. The SIR system is:
+                        </p>
+
+                        <div class="math-equation">
+                            $$\frac{dS}{dt} = -\beta S I, \qquad \frac{dI}{dt} = \beta S I - \gamma I, \qquad \frac{dR}{dt} = \gamma I$$
+                        </div>
+
+                        <p>
+                            with parameters $\beta = 0.3$ (transmission rate) and $\gamma = 0.1$ (recovery rate),
+                            and the conservation law $S(t) + I(t) + R(t) = N$ (total population). The basic
+                            reproduction number is $\mathcal{R}_0 = \beta / \gamma = 3.0$, indicating a strongly
+                            transmissible disease.
+                        </p>
+
+                        <p>
+                            Your task is to: (1) generate synthetic SIR trajectory data with controlled noise levels,
+                            (2) implement the SINDy algorithm to discover the governing equations from this noisy data,
+                            (3) compare the discovered model against simpler baselines, and (4) build an <strong>iterative
+                            model refinement agent</strong> that automatically tunes SINDy hyperparameters (sparsity
+                            threshold, library composition, noise filtering) to maximize equation recovery accuracy.
+                            This project connects differential equations, data-driven modeling, and automated scientific
+                            discovery.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- MODELING ASSUMPTIONS                                          -->
+                    <!-- ============================================================ -->
+                    <section id="modeling-assumptions" style="margin-top: 2rem;">
+                        <h2>2. Modeling Assumptions</h2>
+
+                        <ol>
+                            <li>
+                                <strong>Closed population.</strong> The total population $N = S + I + R$ is constant
+                                (no births, deaths, immigration, or emigration). We set $N = 1000$ and work with
+                                absolute counts, so the conservation law is $S(t) + I(t) + R(t) = 1000$ for all $t$.
+                            </li>
+                            <li>
+                                <strong>Homogeneous mixing.</strong> Every susceptible individual has equal probability
+                                of contacting every infected individual at each time step. This justifies the mass-action
+                                incidence term $\beta S I / N$ (or equivalently $\beta S I$ with a rescaled $\beta$).
+                                We use the unnormalized form $\beta S I$ with $\beta = 0.3 / N = 3 \times 10^{-4}$.
+                            </li>
+                            <li>
+                                <strong>Observation noise model.</strong> Measurements are corrupted by additive
+                                Gaussian noise: $\tilde{y}(t_k) = y(t_k) + \sigma \cdot \eta_k$, where $\eta_k \sim
+                                \mathcal{N}(0, 1)$ and $\sigma$ controls the noise standard deviation. We test
+                                $\sigma / \max(y) \in \{0, 0.01, 0.02, 0.05, 0.10\}$ (0% to 10% relative noise).
+                            </li>
+                            <li>
+                                <strong>Discrete sampling.</strong> The continuous trajectory is observed at uniformly
+                                spaced time points $t_k = k \Delta t$ for $k = 0, 1, \ldots, M$. The default sampling
+                                interval is $\Delta t = 0.5$ days over a total period of $T = 160$ days, giving
+                                $M = 320$ observations. We also test $\Delta t \in \{0.1, 0.5, 1.0, 2.0\}$ days
+                                to assess the effect of temporal resolution on equation recovery.
+                            </li>
+                            <li>
+                                <strong>Known library structure.</strong> The SINDy candidate library includes
+                                constant, linear, and pairwise product terms of the state variables:
+                                $\Theta = [1,\; S,\; I,\; R,\; S^2,\; SI,\; SR,\; I^2,\; IR,\; R^2]$.
+                                This 10-term library is expressive enough to contain the true dynamics (which involve
+                                the terms $SI$ and $I$ only) while including many spurious candidates that must be
+                                eliminated by the sparsity-promoting regression.
+                            </li>
+                            <li>
+                                <strong>Derivative estimation.</strong> Time derivatives $\dot{y}(t_k)$ are estimated
+                                from the noisy data using either finite differences (central, fourth-order) or
+                                a Savitzky-Golay smoothing filter followed by analytical differentiation of the
+                                fitted polynomial. The derivative estimation method is a key source of error at
+                                high noise levels.
+                            </li>
+                            <li>
+                                <strong>Sparsity via sequential thresholding.</strong> The SINDy regression uses
+                                sequential thresholded least squares (STLS): solve the least-squares problem, zero
+                                out coefficients below a threshold $\lambda$, repeat until convergence. The threshold
+                                $\lambda$ is the primary hyperparameter controlling model complexity.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DATA GENERATION                                               -->
+                    <!-- ============================================================ -->
+                    <section id="data-generation" style="margin-top: 2rem;">
+                        <h2>3. Synthetic Data Generation</h2>
+
+                        <p>
+                            The following code generates clean SIR trajectories using a high-accuracy ODE solver,
+                            then adds controlled noise to simulate realistic observational data. Multiple noise
+                            levels and sampling rates are produced for systematic evaluation.
+                        </p>
+
+<pre><code class="language-python">import numpy as np
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# --- SIR model parameters ---
+N_POP = 1000          # total population
+BETA = 0.3 / N_POP   # transmission rate (per capita)
+GAMMA = 0.1           # recovery rate
+T_FINAL = 160.0       # simulation duration (days)
+
+# Initial conditions: small outbreak
+S0 = 999.0
+I0 = 1.0
+R0_INIT = 0.0
+
+# Reproduction number
+R0 = (BETA * N_POP) / GAMMA
+print(f"Basic reproduction number R0 = {R0:.1f}")
+
+
+def sir_rhs(t, y, beta=BETA, gamma=GAMMA):
+    """Right-hand side of the SIR system.
+
+    Args:
+        t: time (unused, autonomous system)
+        y: state vector [S, I, R]
+        beta: transmission rate
+        gamma: recovery rate
+
+    Returns:
+        dydt: time derivatives [dS/dt, dI/dt, dR/dt]
+    """
+    S, I, R = y
+    dSdt = -beta * S * I
+    dIdt = beta * S * I - gamma * I
+    dRdt = gamma * I
+    return [dSdt, dIdt, dRdt]
+
+
+def generate_sir_data(dt=0.5, noise_levels=None, seed=42):
+    """Generate SIR trajectory data with multiple noise levels.
+
+    Args:
+        dt: sampling interval in days
+        noise_levels: list of relative noise levels (fraction of max value)
+        seed: random seed for reproducibility
+
+    Returns:
+        t: time points, shape (M,)
+        y_clean: clean trajectory, shape (M, 3)
+        noisy_data: dict mapping noise_level -> noisy trajectory, shape (M, 3)
+    """
+    if noise_levels is None:
+        noise_levels = [0.0, 0.01, 0.02, 0.05, 0.10]
+
+    rng = np.random.default_rng(seed)
+
+    # Solve ODE with high accuracy
+    t_eval = np.arange(0, T_FINAL + dt, dt)
+    sol = solve_ivp(
+        sir_rhs, [0, T_FINAL], [S0, I0, R0_INIT],
+        method='RK45', t_eval=t_eval,
+        rtol=1e-10, atol=1e-12, max_step=0.1
+    )
+    t = sol.t
+    y_clean = sol.y.T  # shape (M, 3)
+
+    # Verify conservation law
+    pop_error = np.max(np.abs(y_clean.sum(axis=1) - N_POP))
+    print(f"Max population conservation error: {pop_error:.2e}")
+
+    # Add noise at each level
+    noisy_data = {}
+    for noise_level in noise_levels:
+        if noise_level == 0.0:
+            noisy_data[noise_level] = y_clean.copy()
+        else:
+            sigma = noise_level * np.max(y_clean, axis=0)  # per-variable scaling
+            noise = rng.normal(0, 1, size=y_clean.shape) * sigma[np.newaxis, :]
+            y_noisy = y_clean + noise
+            # Clip to non-negative values (physical constraint)
+            y_noisy = np.clip(y_noisy, 0, None)
+            noisy_data[noise_level] = y_noisy
+
+    return t, y_clean, noisy_data
+
+
+def estimate_derivatives(t, y, method='central4'):
+    """Estimate time derivatives from discrete data.
+
+    Args:
+        t: time points, shape (M,)
+        y: trajectory data, shape (M, 3)
+        method: 'central4' for 4th-order central differences,
+                'savgol' for Savitzky-Golay filter
+
+    Returns:
+        t_d: interior time points, shape (M',)
+        y_d: interpolated state at interior points, shape (M', 3)
+        dydt: estimated derivatives, shape (M', 3)
+    """
+    dt = t[1] - t[0]
+    M = len(t)
+
+    if method == 'central4':
+        # 4th-order central finite differences (interior points only)
+        dydt = np.zeros_like(y)
+        # Interior: (-y[i+2] + 8*y[i+1] - 8*y[i-1] + y[i-2]) / (12*dt)
+        for i in range(2, M - 2):
+            dydt[i] = (-y[i+2] + 8*y[i+1] - 8*y[i-1] + y[i-2]) / (12 * dt)
+        return t[2:-2], y[2:-2], dydt[2:-2]
+
+    elif method == 'savgol':
+        from scipy.signal import savgol_filter
+        # Window length must be odd, polynomial order 3
+        window = min(21, M if M % 2 == 1 else M - 1)
+        y_smooth = np.zeros_like(y)
+        dydt = np.zeros_like(y)
+        for col in range(3):
+            y_smooth[:, col] = savgol_filter(y[:, col], window, 3)
+            dydt[:, col] = savgol_filter(y[:, col], window, 3, deriv=1, delta=dt)
+        # Trim edges where filter is unreliable
+        trim = window // 4
+        return t[trim:-trim], y_smooth[trim:-trim], dydt[trim:-trim]
+
+    else:
+        raise ValueError(f"Unknown method: {method}")
+
+
+# --- Generate datasets for all noise levels and sampling rates ---
+NOISE_LEVELS = [0.0, 0.01, 0.02, 0.05, 0.10]
+SAMPLING_INTERVALS = [0.1, 0.5, 1.0, 2.0]
+
+datasets = {}
+for dt in SAMPLING_INTERVALS:
+    t, y_clean, noisy = generate_sir_data(dt=dt, noise_levels=NOISE_LEVELS)
+    datasets[dt] = {'t': t, 'clean': y_clean, 'noisy': noisy}
+    print(f"dt={dt}: {len(t)} samples, t in [{t[0]:.1f}, {t[-1]:.1f}]")
+
+# Save primary dataset
+primary = datasets[0.5]
+np.savez('sir_data.npz',
+         t=primary['t'],
+         y_clean=primary['clean'],
+         **{f"y_noise_{nl}": primary['noisy'][nl] for nl in NOISE_LEVELS})
+print(f"Saved {len(NOISE_LEVELS)} noise variants to sir_data.npz")</code></pre>
+
+                        <p>
+                            The primary dataset uses $\Delta t = 0.5$ days and produces 321 observations over 160
+                            days. The epidemic peaks at approximately $t \approx 47$ days with $I_{\max} \approx 300$
+                            individuals. After the peak, infection decays exponentially as the susceptible pool is
+                            depleted, and the system reaches a final size of approximately $R(\infty) \approx 940$.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- BASELINES                                                     -->
+                    <!-- ============================================================ -->
+                    <section id="baselines" style="margin-top: 2rem;">
+                        <h2>4. Baselines</h2>
+
+                        <h3>4.1 Baseline 1: Least-Squares Parameter Fitting</h3>
+
+                        <p>
+                            The first baseline assumes the SIR structure is known and estimates $\beta$ and $\gamma$
+                            by minimizing the sum of squared residuals between the observed trajectory and the ODE
+                            solution. This represents the traditional approach where the model form is specified
+                            <em>a priori</em> and only the parameters are learned.
+                        </p>
+
+<pre><code class="language-python">from scipy.optimize import minimize
+
+def sir_residual(params, t_obs, y_obs):
+    """Compute residual between SIR model and observations.
+
+    Args:
+        params: [beta, gamma] to optimize
+        t_obs: observation times, shape (M,)
+        y_obs: observed trajectory, shape (M, 3)
+
+    Returns:
+        total squared residual (scalar)
+    """
+    beta_opt, gamma_opt = params
+    if beta_opt <= 0 or gamma_opt <= 0:
+        return 1e12
+
+    sol = solve_ivp(
+        sir_rhs, [t_obs[0], t_obs[-1]], y_obs[0],
+        args=(beta_opt, gamma_opt),
+        method='RK45', t_eval=t_obs,
+        rtol=1e-8, atol=1e-10
+    )
+
+    if sol.status != 0 or sol.y.shape[1] != len(t_obs):
+        return 1e12
+
+    residual = np.sum((sol.y.T - y_obs)**2)
+    return residual
+
+
+def fit_sir_parameters(t_obs, y_obs, beta_init=1e-4, gamma_init=0.05):
+    """Estimate SIR parameters via least-squares fitting.
+
+    Args:
+        t_obs: observation times
+        y_obs: observed trajectory (possibly noisy)
+        beta_init, gamma_init: initial guesses
+
+    Returns:
+        beta_hat, gamma_hat: estimated parameters
+        result: full optimization result
+    """
+    result = minimize(
+        sir_residual, [beta_init, gamma_init],
+        args=(t_obs, y_obs),
+        method='Nelder-Mead',
+        options={'maxiter': 5000, 'xatol': 1e-10, 'fatol': 1e-10}
+    )
+    beta_hat, gamma_hat = result.x
+    print(f"Fitted: beta={beta_hat:.6e}, gamma={gamma_hat:.6f}")
+    print(f"True:   beta={BETA:.6e}, gamma={GAMMA:.6f}")
+    print(f"Relative error: beta={abs(beta_hat-BETA)/BETA:.4%}, "
+          f"gamma={abs(gamma_hat-GAMMA)/GAMMA:.4%}")
+    return beta_hat, gamma_hat, result</code></pre>
+
+                        <h3>4.2 Baseline 2: Initial Growth Rate Estimation</h3>
+
+                        <p>
+                            The second baseline exploits the early-phase approximation. When $S \approx N$ and $I$
+                            is small, the infected compartment grows approximately exponentially:
+                            $I(t) \approx I_0 e^{(\beta N - \gamma)t}$. By fitting an exponential to the early
+                            growth phase, we can estimate $\mathcal{R}_0$ and $\gamma$ independently.
+                        </p>
+
+<pre><code class="language-python">def estimate_from_initial_growth(t, y_obs, growth_window=30):
+    """Estimate R0 and gamma from the initial exponential growth phase.
+
+    During early growth (S ~ N), I(t) ~ I0 * exp((beta*N - gamma)*t).
+    The growth rate r = beta*N - gamma gives R0 = 1 + r/gamma.
+
+    Args:
+        t: time points
+        y_obs: observed trajectory, shape (M, 3)
+        growth_window: number of initial points to use for fit
+
+    Returns:
+        r_hat: estimated growth rate
+        R0_hat: estimated reproduction number
+        beta_hat, gamma_hat: estimated parameters
+    """
+    # Extract early-phase I(t) data
+    I_early = y_obs[:growth_window, 1]
+    t_early = t[:growth_window]
+
+    # Fit log(I) = log(I0) + r*t via linear regression
+    # Only use points where I > 0
+    mask = I_early > 0
+    log_I = np.log(I_early[mask])
+    t_fit = t_early[mask]
+
+    # Linear regression: log(I) = a + r*t
+    coeffs = np.polyfit(t_fit, log_I, 1)
+    r_hat = coeffs[0]  # growth rate
+
+    # Estimate gamma from recovery phase (after peak)
+    peak_idx = np.argmax(y_obs[:, 1])
+    # After peak, dI/dt < 0, and if S is small: dI/dt ~ -gamma * I
+    I_decay = y_obs[peak_idx:peak_idx + 50, 1]
+    t_decay = t[peak_idx:peak_idx + 50]
+    mask_decay = I_decay > 10  # only use points with sufficient counts
+    if mask_decay.sum() > 5:
+        log_I_decay = np.log(I_decay[mask_decay])
+        t_d = t_decay[mask_decay]
+        decay_coeffs = np.polyfit(t_d, log_I_decay, 1)
+        gamma_hat = -decay_coeffs[0]
+    else:
+        gamma_hat = 0.1  # fallback
+
+    R0_hat = 1.0 + r_hat / gamma_hat
+    beta_hat = (r_hat + gamma_hat) / N_POP
+
+    print(f"Growth rate r = {r_hat:.4f}")
+    print(f"Estimated gamma = {gamma_hat:.4f} (true: {GAMMA})")
+    print(f"Estimated R0 = {R0_hat:.2f} (true: {R0:.1f})")
+    print(f"Estimated beta = {beta_hat:.6e} (true: {BETA:.6e})")
+
+    return r_hat, R0_hat, beta_hat, gamma_hat</code></pre>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- AGENT APPROACH                                                -->
+                    <!-- ============================================================ -->
+                    <section id="agent-approach" style="margin-top: 2rem;">
+                        <h2>5. Agent Approach: Iterative Model Refinement</h2>
+
+                        <h3>5.1 SINDy Implementation</h3>
+
+                        <p>
+                            Before describing the agent, we provide the core SINDy algorithm. The method
+                            constructs a library matrix $\Theta(\mathbf{X}) \in \mathbb{R}^{M \times p}$ from the
+                            state data, then solves $\dot{\mathbf{X}} = \Theta(\mathbf{X})\, \Xi$ for the sparse
+                            coefficient matrix $\Xi \in \mathbb{R}^{p \times n}$ using sequential thresholded
+                            least squares (STLS).
+                        </p>
+
+<pre><code class="language-python">def build_library(X, poly_order=2):
+    """Build the SINDy candidate function library.
+
+    Args:
+        X: state data, shape (M, n) where n = number of state variables
+        poly_order: maximum polynomial order
+
+    Returns:
+        Theta: library matrix, shape (M, p)
+        labels: list of string labels for each library function
+    """
+    M, n = X.shape
+    labels = ['1']
+    Theta = [np.ones(M)]
+
+    # Linear terms
+    var_names = ['S', 'I', 'R']
+    for i in range(n):
+        labels.append(var_names[i])
+        Theta.append(X[:, i])
+
+    # Quadratic terms
+    if poly_order >= 2:
+        for i in range(n):
+            for j in range(i, n):
+                labels.append(f"{var_names[i]}*{var_names[j]}")
+                Theta.append(X[:, i] * X[:, j])
+
+    Theta = np.column_stack(Theta)
+    return Theta, labels
+
+
+def sindy_stls(Theta, dXdt, threshold=0.1, max_iter=20, alpha=0.0):
+    """Sparse regression via Sequential Thresholded Least Squares (STLS).
+
+    Args:
+        Theta: library matrix, shape (M, p)
+        dXdt: derivative data, shape (M, n)
+        threshold: sparsity threshold lambda
+        max_iter: maximum number of thresholding iterations
+        alpha: L2 regularization strength (ridge parameter)
+
+    Returns:
+        Xi: sparse coefficient matrix, shape (p, n)
+    """
+    M, p = Theta.shape
+    n = dXdt.shape[1]
+
+    # Initial least-squares solution (with optional ridge regularization)
+    if alpha > 0:
+        Xi = np.linalg.solve(
+            Theta.T @ Theta + alpha * np.eye(p),
+            Theta.T @ dXdt
+        )
+    else:
+        Xi, _, _, _ = np.linalg.lstsq(Theta, dXdt, rcond=None)
+
+    for iteration in range(max_iter):
+        Xi_prev = Xi.copy()
+
+        # Threshold: zero out small coefficients
+        small_mask = np.abs(Xi) < threshold
+        Xi[small_mask] = 0.0
+
+        # Re-solve least squares for remaining nonzero coefficients
+        for j in range(n):
+            nonzero = np.where(Xi[:, j] != 0)[0]
+            if len(nonzero) == 0:
+                continue
+            if alpha > 0:
+                Xi[nonzero, j] = np.linalg.solve(
+                    Theta[:, nonzero].T @ Theta[:, nonzero]
+                    + alpha * np.eye(len(nonzero)),
+                    Theta[:, nonzero].T @ dXdt[:, j]
+                )
+            else:
+                Xi[nonzero, j], _, _, _ = np.linalg.lstsq(
+                    Theta[:, nonzero], dXdt[:, j], rcond=None
+                )
+
+        # Check convergence
+        if np.allclose(Xi, Xi_prev, atol=1e-12):
+            print(f"STLS converged at iteration {iteration + 1}")
+            break
+
+    return Xi
+
+
+def print_equations(Xi, labels, var_names=['dS/dt', 'dI/dt', 'dR/dt']):
+    """Pretty-print the discovered equations."""
+    n = Xi.shape[1]
+    for j in range(n):
+        terms = []
+        for i, label in enumerate(labels):
+            if abs(Xi[i, j]) > 1e-15:
+                terms.append(f"{Xi[i, j]:+.6e} * {label}")
+        equation = ' '.join(terms) if terms else '0'
+        print(f"  {var_names[j]} = {equation}")</code></pre>
+
+                        <h3>5.2 Agent State Space</h3>
+                        <p>
+                            The iterative model refinement agent operates in a hyperparameter search loop. At each
+                            iteration $k$, the agent observes:
+                        </p>
+                        <div class="math-equation">
+                            $$\mathbf{s}_k = \bigl(\lambda_k,\; \alpha_k,\; d_{\text{method}},\; n_{\text{active}},\; \|\mathbf{r}\|_2,\; \text{AICc}_k\bigr) \in \mathbb{R}^6$$
+                        </div>
+                        <p>where:</p>
+                        <ul>
+                            <li>$\lambda_k$ is the current sparsity threshold (log-scaled).</li>
+                            <li>$\alpha_k$ is the current ridge regularization parameter (log-scaled).</li>
+                            <li>$d_{\text{method}} \in \{0, 1\}$ encodes the derivative estimation method (0 = central differences, 1 = Savitzky-Golay).</li>
+                            <li>$n_{\text{active}}$ is the number of nonzero terms in the discovered model.</li>
+                            <li>$\|\mathbf{r}\|_2$ is the least-squares residual norm of the current fit.</li>
+                            <li>$\text{AICc}_k$ is the corrected Akaike Information Criterion, balancing fit quality against model complexity.</li>
+                        </ul>
+
+                        <h3>5.3 Action Space</h3>
+                        <p>The agent selects one of the following actions at each refinement step:</p>
+                        <ul>
+                            <li>$a = 0$: Decrease $\lambda$ by factor 2 (less sparsity, more terms).</li>
+                            <li>$a = 1$: Increase $\lambda$ by factor 2 (more sparsity, fewer terms).</li>
+                            <li>$a = 2$: Decrease $\alpha$ by factor 10 (less regularization).</li>
+                            <li>$a = 3$: Increase $\alpha$ by factor 10 (more regularization).</li>
+                            <li>$a = 4$: Switch derivative estimation method.</li>
+                            <li>$a = 5$: Accept current model and terminate.</li>
+                        </ul>
+
+                        <h3>5.4 Reward / Objective Function</h3>
+                        <div class="math-equation">
+                            $$r_k = -\text{AICc}_k - \mu \cdot \mathbb{1}[n_{\text{active}} > n_{\text{true}}]$$
+                        </div>
+                        <p>
+                            where $n_{\text{true}} = 4$ is the number of nonzero terms in the true SIR dynamics
+                            (the terms $SI$ in $dS/dt$, $SI$ and $I$ in $dI/dt$, and $I$ in $dR/dt$), and
+                            $\mu = 50$ is a penalty for including spurious terms. The AICc component encourages
+                            parsimonious models that fit the data well, while the penalty discourages overfitting.
+                        </p>
+
+                        <h3>5.5 Evaluation Metrics</h3>
+                        <p>
+                            The discovered model is evaluated against the true SIR equations using:
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Coefficient recovery error:</strong>
+                                $E_{\text{coeff}} = \|\Xi_{\text{discovered}} - \Xi_{\text{true}}\|_F \,/\, \|\Xi_{\text{true}}\|_F$,
+                                the relative Frobenius norm error in the coefficient matrix.
+                            </li>
+                            <li>
+                                <strong>Support recovery:</strong> Precision, recall, and F1 score for correctly
+                                identifying the nonzero entries of $\Xi_{\text{true}}$.
+                            </li>
+                            <li>
+                                <strong>Trajectory prediction error:</strong> Integrate the discovered model forward
+                                from $t = 0$ and compare against the true trajectory using the relative $L^2$ error:
+                                $E_{\text{traj}} = \|y_{\text{pred}} - y_{\text{true}}\|_2 \,/\, \|y_{\text{true}}\|_2$.
+                            </li>
+                        </ul>
+
+                        <h3>5.6 Training Procedure</h3>
+                        <ol>
+                            <li>
+                                <strong>Data sweep.</strong> For each combination of noise level
+                                ($\sigma / \max(y) \in \{0, 0.01, 0.02, 0.05, 0.10\}$) and sampling rate
+                                ($\Delta t \in \{0.1, 0.5, 1.0, 2.0\}$), generate the SIR data and run the
+                                SINDy pipeline. This produces $5 \times 4 = 20$ problem instances.
+                            </li>
+                            <li>
+                                <strong>Agent training.</strong> Use a tabular Q-learning agent (the state space is
+                                small enough for discretization) with learning rate $\alpha_Q = 0.1$, discount
+                                factor $\gamma_Q = 0.95$, and $\epsilon$-greedy exploration with $\epsilon$
+                                decaying from 1.0 to 0.05 over 500 episodes.
+                            </li>
+                            <li>
+                                <strong>Evaluation.</strong> Report the agent's final model for each of the 20
+                                problem instances. Compare against: (a) fixed $\lambda = 0.1$ baseline,
+                                (b) grid search over $\lambda \in \{0.001, 0.01, 0.1, 1.0\}$,
+                                (c) the least-squares parameter fitting baseline.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DELIVERABLES                                                  -->
+                    <!-- ============================================================ -->
+                    <section id="deliverables" style="margin-top: 2rem;">
+                        <h2>6. Deliverables</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border);">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">#</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Item</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D1</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>sir_data_gen.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">SIR model simulation, noise injection, and derivative estimation. Generates all 20 dataset variants (5 noise levels $\times$ 4 sampling rates).</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D2</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>sindy_core.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">SINDy library construction, STLS regression, equation printing, AICc computation. Supports configurable library order and sparsity threshold.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D3</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>baselines.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Least-squares parameter fitting and initial growth rate estimation baselines. Outputs fitted parameters and trajectory predictions.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D4</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>refinement_agent.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Q-learning agent for iterative SINDy hyperparameter tuning. Includes state discretization, $\epsilon$-greedy policy, and evaluation loop.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D5</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>evaluate_all.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Runs SINDy, baselines, and agent on all 20 problem instances. Outputs CSV with coefficient errors, support F1 scores, and trajectory errors.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D6</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Report (PDF, 5&ndash;7 pages)</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Sections: Introduction, SIR Model &amp; Data Generation, SINDy Method, Baselines, Agent-Based Refinement, Results, Discussion, Conclusion.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D7</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Plots</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        (a) SIR trajectories at each noise level (S, I, R vs time).<br>
+                                        (b) Discovered coefficient matrix heatmap vs ground truth for each noise level.<br>
+                                        (c) Support recovery F1 score vs noise level (SINDy, agent, baselines).<br>
+                                        (d) Trajectory prediction error vs noise level and sampling rate (heatmap).<br>
+                                        (e) Agent's $\lambda$ selection trajectory over refinement iterations.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D8</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Metrics table</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        For each method and each of the 20 problem instances: coefficient recovery error,
+                                        support F1 score, trajectory $L^2$ error, number of active terms, and AICc.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- RUBRIC                                                        -->
+                    <!-- ============================================================ -->
+                    <section id="rubric" style="margin-top: 2rem;">
+                        <h2>7. Grading Rubric</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border); width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 25%;">Criterion</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 10%; text-align: center;">Weight</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Correctness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">30</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        SIR simulation matches analytical properties ($\mathcal{R}_0 = 3.0$, conservation
+                                        law $S + I + R = N$). SINDy correctly recovers the exact equations from clean data
+                                        ($\sigma = 0$): $dS/dt = -\beta SI$, $dI/dt = \beta SI - \gamma I$, $dR/dt = \gamma I$,
+                                        with coefficient errors below 1%. STLS converges and produces sparse solutions.
+                                        Derivative estimation is validated against analytical derivatives.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Efficiency</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        SINDy pipeline runs in under 5 seconds per problem instance. Library construction
+                                        and STLS use vectorized NumPy operations. The agent converges within 500 episodes
+                                        of Q-learning (less than 2 minutes total training time).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Robustness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">25</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        The agent-tuned SINDy achieves support recovery F1 $\geq 0.8$ for noise levels
+                                        up to 5% and all sampling rates. At 10% noise, the method degrades gracefully
+                                        (F1 $\geq 0.5$). The discovered model produces bounded, physically plausible
+                                        trajectories (non-negative populations, conservation law approximately satisfied)
+                                        when integrated forward. Performance is consistent across 5 random seeds.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Reproducibility</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        All random seeds are fixed (NumPy). A <code>requirements.txt</code> specifies
+                                        exact package versions. Running <code>python sir_data_gen.py &amp;&amp;
+                                        python evaluate_all.py</code> reproduces all results. Output CSV matches
+                                        reported tables exactly.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Documentation</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Report clearly explains the SINDy algorithm and its connection to sparse regression.
+                                        Discussion section addresses: (a) when SINDy succeeds vs fails, (b) the role of
+                                        derivative estimation quality, (c) how the agent's strategy adapts to noise level,
+                                        and (d) limitations of the approach for more complex epidemic models (SEIR, stochastic).
+                                        Code has module-level and function-level docstrings. Plots are publication-quality.
+                                    </td>
+                                </tr>
+                                <tr style="background: var(--mf-paper);">
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"><strong>Total</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border); text-align: center;"><strong>100</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- REFERENCES                                                    -->
+                    <!-- ============================================================ -->
+                    <section id="references" style="margin-top: 2rem;">
+                        <h2>8. References &amp; Links</h2>
+
+                        <ol>
+                            <li>
+                                Brunton, S. L., Proctor, J. L., &amp; Kutz, J. N. (2016). "Discovering governing equations
+                                from data by sparse identification of nonlinear dynamical systems." <em>Proceedings of the
+                                National Academy of Sciences</em>, 113(15), 3932&ndash;3937.
+                            </li>
+                            <li>
+                                Kermack, W. O. &amp; McKendrick, A. G. (1927). "A contribution to the mathematical theory
+                                of epidemics." <em>Proceedings of the Royal Society of London A</em>, 115(772), 700&ndash;721.
+                            </li>
+                            <li>
+                                de Silva, B., Champion, K., Quade, M., Loiseau, J.-C., Kutz, J. N., &amp; Brunton, S. L.
+                                (2020). "PySINDy: A Python package for the sparse identification of nonlinear dynamical
+                                systems from data." <em>Journal of Open Source Software</em>, 5(49), 2104.
+                            </li>
+                            <li>
+                                Rudy, S. H., Brunton, S. L., Proctor, J. L., &amp; Kutz, J. N. (2017). "Data-driven
+                                discovery of partial differential equations." <em>Science Advances</em>, 3(4), e1602614.
+                            </li>
+                            <li>
+                                Hethcote, H. W. (2000). "The mathematics of infectious diseases." <em>SIAM Review</em>,
+                                42(4), 599&ndash;653.
+                            </li>
+                            <li>
+                                PySINDy documentation: <a href="https://pysindy.readthedocs.io/" target="_blank" rel="noopener">https://pysindy.readthedocs.io/</a>
+                            </li>
+                            <li>
+                                SciPy <code>solve_ivp</code> documentation: <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html" target="_blank" rel="noopener">https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html</a>
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- NAVIGATION                                                    -->
+                    <!-- ============================================================ -->
+                    <hr style="border-top: 1px solid var(--mf-border); margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0 3rem 0;">
+                        <a href="project4-2.html" style="font-family: 'Inter', sans-serif;">&larr; Project 4.2: Neural vs Classical</a>
+                        <a href="../index.html" style="font-family: 'Inter', sans-serif;">Curriculum Complete &mdash; Return Home &rarr;</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

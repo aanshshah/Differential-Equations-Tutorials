@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 3.1: Neural Differential Equations - Learn how neural networks parameterize ODE dynamics">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 3.1: Neural Differential Equations</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 3 &mdash; AI-Driven DEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module3-1.html" aria-current="page">3.1</a>
+      <a href="module3-2.html">3.2</a>
+      <a href="module3-3.html">3.3</a>
+      <a href="module3-4.html">3.4</a>
+      <a href="module3-5.html">3.5</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (i): TITLE BLOCK
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="title-block" style="margin-top:2rem;">
+    <div class="page-title">
+        <h1>Module 3.1: Neural Differential Equations</h1>
+        <p style="font-size:1.1rem; color: var(--mf-muted);">
+            Replace hand-crafted dynamics with learned vector fields &mdash; parameterize
+            $\frac{d\mathbf{y}}{dt} = f_\theta(t, \mathbf{y})$ with a neural network and solve with standard ODE integrators.
+        </p>
+    </div>
+
+    <div class="prerequisites-alert">
+        <strong>Module 1.4</strong> (Numerical Methods for ODEs), <strong>Module 1.1</strong> (First-Order ODEs),
+        and a basic understanding of neural networks (forward pass, backpropagation, gradient descent).
+        <br><em>Difficulty:</em> Advanced &nbsp;|&nbsp; <em>Estimated time:</em> 4&ndash;5 hours
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (ii): WHY THIS MATTERS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="why-this-matters" style="margin-top:2.5rem;">
+    <h2>Why This Matters</h2>
+    <hr>
+    <p>
+        Classical differential equations require an explicit formula for the right-hand side:
+        $\dot{y} = -ky$, $\dot{y} = \sin(y) - y^3$, and so on. But what if the governing law
+        is <em>unknown</em>&mdash;buried in experimental data from a biological system, a financial market,
+        or a robotic controller? Neural Ordinary Differential Equations (Neural ODEs) answer this
+        question by replacing the hand-crafted right-hand side with a neural network
+        $f_\theta$, then solving the resulting initial-value problem with an off-the-shelf ODE solver.
+    </p>
+    <p>
+        Introduced by Chen et al. (NeurIPS 2018), Neural ODEs have opened entirely new avenues:
+    </p>
+    <ul>
+        <li><strong>Continuous-depth networks:</strong> Instead of stacking discrete residual layers,
+            the hidden state evolves continuously, enabling adaptive computation.</li>
+        <li><strong>Memory-efficient training:</strong> The adjoint sensitivity method computes gradients
+            without storing intermediate activations, making it possible to train arbitrarily deep models.</li>
+        <li><strong>Irregularly sampled time series:</strong> Latent ODE models handle missing data and
+            variable time gaps naturally, unlike RNNs that assume fixed sampling.</li>
+        <li><strong>Scientific discovery:</strong> Fitting a Neural ODE to physical measurements yields
+            a differentiable, continuous-time surrogate model that can be interrogated, extrapolated, or
+            composed with known physics.</li>
+    </ul>
+    <p>
+        This module develops the mathematical framework, derives the adjoint method from first
+        principles, and provides a complete NumPy implementation of a toy Neural ODE so you can see
+        every gradient flow by hand.
+    </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (iii): LEARNING OBJECTIVES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="learning-objectives" style="margin-top:2.5rem;">
+    <h2>Learning Objectives</h2>
+    <hr>
+    <p>After completing this module you will be able to:</p>
+    <ol>
+        <li>State the Neural ODE initial-value problem $\frac{d\mathbf{y}}{dt} = f_\theta(t,\mathbf{y})$
+            and explain how it generalises discrete residual networks.</li>
+        <li>Implement a forward Euler / RK4 solver to propagate a Neural ODE forward in time.</li>
+        <li>Derive the adjoint ODE for computing $\frac{dL}{d\theta}$ without storing intermediate states.</li>
+        <li>Compare memory complexity of backpropagation-through-the-solver vs. the adjoint method.</li>
+        <li>Train a simple Neural ODE on synthetic trajectory data using NumPy and finite-difference gradients.</li>
+        <li>Explain the connection between ResNets ($\mathbf{h}_{t+1} = \mathbf{h}_t + f_\theta(\mathbf{h}_t)$)
+            and the Euler discretisation of a Neural ODE.</li>
+        <li>Describe the Latent ODE framework for modelling irregularly sampled time series.</li>
+        <li>Identify failure modes: stiff dynamics, non-unique solutions, and numerical instability.</li>
+        <li>Articulate the universal approximation result for neural-network right-hand sides.</li>
+        <li>Frame the Neural ODE as a continuous-time agent and connect adjoint gradients to
+            policy optimisation in reinforcement learning.</li>
+    </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (iv): CORE CONCEPTS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="core-concepts" style="margin-top:2.5rem;">
+    <h2>Core Concepts</h2>
+    <hr>
+
+    <!-- ── Definitions ── -->
+    <h3 id="definitions">Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.1 &mdash; Neural ODE</h4>
+        <p>A <strong>Neural Ordinary Differential Equation</strong> is an initial-value problem</p>
+        <div class="math-equation">
+            $$\frac{d\mathbf{y}}{dt} = f_\theta(t, \mathbf{y}(t)), \qquad \mathbf{y}(t_0) = \mathbf{y}_0,$$
+        </div>
+        <p>where $f_\theta : \mathbb{R} \times \mathbb{R}^d \to \mathbb{R}^d$ is a neural network with
+        parameters $\theta \in \mathbb{R}^p$, and $\mathbf{y}(t) \in \mathbb{R}^d$ is the state vector.
+        The solution at any target time $t_1$ is obtained by numerical integration:</p>
+        <div class="math-equation">
+            $$\mathbf{y}(t_1) = \mathbf{y}(t_0) + \int_{t_0}^{t_1} f_\theta(t, \mathbf{y}(t))\,dt.$$
+        </div>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.2 &mdash; Adjoint State</h4>
+        <p>Given a scalar loss $L(\mathbf{y}(t_1))$, the <strong>adjoint state</strong> is defined as</p>
+        <div class="math-equation">
+            $$\mathbf{a}(t) = \frac{\partial L}{\partial \mathbf{y}(t)} \in \mathbb{R}^d.$$
+        </div>
+        <p>The adjoint evolves <em>backward</em> in time according to the adjoint ODE (see Theorem 3.1.1 below).</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.3 &mdash; Continuous-Depth Network</h4>
+        <p>A <strong>continuous-depth network</strong> replaces a sequence of discrete residual layers</p>
+        <div class="math-equation">
+            $$\mathbf{h}_{t+1} = \mathbf{h}_t + f_\theta(\mathbf{h}_t)$$
+        </div>
+        <p>with the limit as step size $\Delta t \to 0$, recovering the ODE
+        $\dot{\mathbf{h}} = f_\theta(\mathbf{h})$. The &ldquo;depth&rdquo; is now a continuous variable
+        (integration time) rather than a layer index.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.4 &mdash; Latent ODE</h4>
+        <p>A <strong>Latent ODE model</strong> consists of:</p>
+        <ol>
+            <li>An encoder (often an RNN or attention mechanism) that maps an observed time series
+                $\{(\mathbf{x}_i, t_i)\}$ to an approximate posterior $q(\mathbf{z}_0)$ over initial latent states.</li>
+            <li>A Neural ODE that propagates $\mathbf{z}_0$ forward to any desired time:
+                $\mathbf{z}(t) = \mathbf{z}_0 + \int_0^t f_\theta(s, \mathbf{z}(s))\,ds$.</li>
+            <li>A decoder that maps $\mathbf{z}(t_i)$ back to observation space to reconstruct $\mathbf{x}_i$.</li>
+        </ol>
+        <p>Training uses the evidence lower bound (ELBO), enabling principled handling of irregularly
+        sampled and partially observed data.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.5 &mdash; Augmented Neural ODE</h4>
+        <p>An <strong>Augmented Neural ODE</strong> extends the state space by appending extra dimensions:</p>
+        <div class="math-equation">
+            $$\frac{d}{dt}\begin{pmatrix}\mathbf{y} \\ \mathbf{a}\end{pmatrix} =
+            \begin{pmatrix}f_\theta(t, \mathbf{y}, \mathbf{a}) \\ g_\theta(t, \mathbf{y}, \mathbf{a})\end{pmatrix},
+            \qquad \mathbf{a}(t_0) = \mathbf{0}.$$
+        </div>
+        <p>This overcomes a limitation of standard Neural ODEs: because ODE flows are homeomorphisms
+        (continuous bijections), a Neural ODE in $\mathbb{R}^d$ cannot represent mappings that change
+        topology (e.g., mapping a single connected component to two). Augmentation lifts the dynamics
+        into a higher-dimensional space where such mappings become possible.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.1.6 &mdash; Backpropagation Through the Solver (Discretise-then-Optimise)</h4>
+        <p>An alternative to the adjoint method: treat each step of the numerical solver as a layer in
+        a computational graph and apply standard backpropagation. Memory cost is $O(N)$ where $N$ is
+        the number of solver steps, but it produces exact gradients of the <em>discretised</em> objective
+        (as opposed to the continuous adjoint, which solves a different ODE backward).</p>
+    </div>
+
+    <!-- ── Theorems / Results ── -->
+    <h3 id="theorems" style="margin-top:2rem;">Theorems and Key Results</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 3.1.1 &mdash; Adjoint ODE for Gradient Computation</h4>
+        <p><em>(Pontryagin, 1962; Chen et al., 2018)</em></p>
+        <p>Let $\mathbf{y}(t)$ solve the Neural ODE $\dot{\mathbf{y}} = f_\theta(t, \mathbf{y})$ on $[t_0, t_1]$,
+        and let $L = L(\mathbf{y}(t_1))$ be a scalar loss. Define the adjoint
+        $\mathbf{a}(t) = \frac{\partial L}{\partial \mathbf{y}(t)}$.
+        Then:</p>
+        <p><strong>(a)</strong> The adjoint satisfies the ODE solved <em>backward</em> from $t_1$ to $t_0$:</p>
+        <div class="math-equation">
+            $$\frac{d\mathbf{a}}{dt} = -\mathbf{a}(t)^\top \frac{\partial f_\theta}{\partial \mathbf{y}}(t, \mathbf{y}(t)),
+            \qquad \mathbf{a}(t_1) = \frac{\partial L}{\partial \mathbf{y}(t_1)}.$$
+        </div>
+        <p><strong>(b)</strong> The gradient with respect to parameters is:</p>
+        <div class="math-equation">
+            $$\frac{dL}{d\theta} = -\int_{t_1}^{t_0} \mathbf{a}(t)^\top
+            \frac{\partial f_\theta}{\partial \theta}(t, \mathbf{y}(t))\,dt.$$
+        </div>
+        <p><strong>Memory advantage:</strong> The adjoint method requires $O(1)$ memory in the number of
+        solver steps (only the current state and adjoint need be stored), compared to $O(N)$ for
+        backpropagation through all $N$ solver steps.</p>
+    </div>
+
+    <div class="proof-box">
+        <strong>Proof sketch.</strong>
+        Consider a small perturbation $\delta \mathbf{y}(t)$ to the trajectory. By the chain rule,
+        the change in loss is $\delta L = \mathbf{a}(t_1)^\top \delta \mathbf{y}(t_1)$. The perturbation
+        evolves as $\frac{d}{dt}\delta \mathbf{y} = \frac{\partial f_\theta}{\partial \mathbf{y}} \delta \mathbf{y}$
+        (linearisation). We want $\frac{d}{dt}[\mathbf{a}^\top \delta \mathbf{y}] = 0$ so that the
+        inner product is preserved backward in time. Differentiating:
+        $\dot{\mathbf{a}}^\top \delta \mathbf{y} + \mathbf{a}^\top \dot{\delta \mathbf{y}} = 0$,
+        giving $\dot{\mathbf{a}}^\top \delta \mathbf{y} + \mathbf{a}^\top \frac{\partial f}{\partial \mathbf{y}} \delta \mathbf{y} = 0$.
+        Since this must hold for all $\delta \mathbf{y}$, we obtain
+        $\dot{\mathbf{a}} = -\left(\frac{\partial f}{\partial \mathbf{y}}\right)^\top \mathbf{a}$.
+        Part (b) follows by applying the same argument to perturbations in $\theta$.
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 3.1.2 &mdash; Universal Approximation for ODE Right-Hand Sides</h4>
+        <p>Let $g : [0,T] \times \mathbb{R}^d \to \mathbb{R}^d$ be a continuous vector field. For any
+        $\varepsilon > 0$ and compact set $K \subset \mathbb{R}^d$, there exists a feedforward neural
+        network $f_\theta$ with a single hidden layer and finitely many neurons such that</p>
+        <div class="math-equation">
+            $$\sup_{t \in [0,T]} \sup_{\mathbf{y} \in K}
+            \|f_\theta(t, \mathbf{y}) - g(t, \mathbf{y})\| < \varepsilon.$$
+        </div>
+        <p>Consequently, the Neural ODE $\dot{\mathbf{y}} = f_\theta(t,\mathbf{y})$ can approximate
+        the flow of any ODE $\dot{\mathbf{y}} = g(t,\mathbf{y})$ to arbitrary accuracy on compact
+        time-state domains.</p>
+        <p><em>This follows from the classical Universal Approximation Theorem (Cybenko 1989, Hornik 1991)
+        applied to vector-valued functions on $[0,T] \times K$.</em></p>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Result 3.1.3 &mdash; ResNet-to-Neural-ODE Correspondence</h4>
+        <p>A Residual Network with $N$ layers of the form $\mathbf{h}_{k+1} = \mathbf{h}_k + \frac{T}{N} f_\theta(\mathbf{h}_k)$
+        is exactly the forward Euler discretisation of the ODE $\dot{\mathbf{h}} = f_\theta(\mathbf{h})$
+        on $[0, T]$ with step size $\Delta t = T/N$. In the limit $N \to \infty$ (infinite depth),
+        the ResNet converges to the Neural ODE solution.</p>
+    </div>
+
+    <!-- ── Misconceptions ── -->
+    <h3 id="misconceptions" style="margin-top:2rem;">Common Misconceptions</h3>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 1: &ldquo;Neural ODEs can represent any mapping.&rdquo;</strong><br>
+        <em>Reality:</em> The flow of an ODE is a diffeomorphism (smooth, invertible map). This means a
+        standard Neural ODE in $\mathbb{R}^d$ <em>cannot</em> map one connected component to two disjoint
+        components, or cross trajectories. Augmented Neural ODEs partially overcome this limitation by
+        lifting the dynamics to a higher-dimensional space.
+    </div>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 2: &ldquo;The adjoint method always gives more accurate gradients.&rdquo;</strong><br>
+        <em>Reality:</em> The adjoint method solves a <em>different</em> ODE backward. Numerical error in the
+        backward solve can make adjoint gradients <em>less</em> accurate than backpropagation through the
+        solver (discretise-then-optimise), especially for stiff or chaotic dynamics. The adjoint's advantage
+        is <em>memory</em>, not necessarily gradient accuracy.
+    </div>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 3: &ldquo;Neural ODEs are always more efficient than ResNets.&rdquo;</strong><br>
+        <em>Reality:</em> Adaptive solvers can take many small steps in regions of complex dynamics,
+        making a single forward pass potentially more expensive than a fixed-depth ResNet. The
+        computational cost is <em>data-dependent</em> and can vary significantly across inputs.
+    </div>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 4: &ldquo;You need automatic differentiation to train Neural ODEs.&rdquo;</strong><br>
+        <em>Reality:</em> While autodiff frameworks make training convenient, gradients can be computed
+        via finite differences, the adjoint method implemented manually, or even evolutionary strategies.
+        Our code lab below demonstrates training with finite-difference gradients in pure NumPy.
+    </div>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 5: &ldquo;Deeper (longer integration time) always means more expressive.&rdquo;</strong><br>
+        <em>Reality:</em> Longer integration can cause gradient explosion/vanishing and numerical instability.
+        The expressivity of a Neural ODE depends on the <em>network architecture</em> of $f_\theta$ and the
+        <em>state dimension</em>, not just the integration interval. Furthermore, trajectories cannot cross
+        in the state space (uniqueness theorem), which fundamentally limits expressivity regardless of depth.
+    </div>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 6: &ldquo;Neural ODEs are only for time-series data.&rdquo;</strong><br>
+        <em>Reality:</em> Neural ODEs have been applied to image classification (continuous-depth CNNs),
+        generative modelling (continuous normalising flows), point cloud processing, and molecular
+        dynamics&mdash;anywhere the &ldquo;depth&rdquo; of a network can be reinterpreted as a continuous variable.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (v): WORKED EXAMPLES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="worked-examples" style="margin-top:2.5rem;">
+    <h2>Worked Examples</h2>
+    <hr>
+
+    <div class="academic-box">
+        <h4>Example 3.1.1 &mdash; Forward Pass of a Neural ODE (by hand)</h4>
+        <p>Consider a 1D Neural ODE with a single-neuron hidden layer:</p>
+        <div class="math-equation">
+            $$f_\theta(y) = w_2 \tanh(w_1 y + b_1) + b_2$$
+        </div>
+        <p>with parameters $\theta = (w_1, b_1, w_2, b_2) = (1.5, 0, -2, 0)$ and initial condition $y(0)=1$.
+        We solve $\dot{y} = f_\theta(y)$ on $[0, 0.5]$ using Euler's method with $\Delta t = 0.25$.</p>
+
+        <h5>Step 1: $t=0 \to t=0.25$</h5>
+        <p>$f_\theta(y_0) = -2\,\tanh(1.5 \cdot 1) = -2\,\tanh(1.5) \approx -2 \times 0.9051 = -1.8102$</p>
+        <p>$y_1 = y_0 + \Delta t \cdot f_\theta(y_0) = 1 + 0.25 \times (-1.8102) = 1 - 0.4526 = 0.5474$</p>
+
+        <h5>Step 2: $t=0.25 \to t=0.5$</h5>
+        <p>$f_\theta(y_1) = -2\,\tanh(1.5 \times 0.5474) = -2\,\tanh(0.8211) \approx -2 \times 0.6756 = -1.3513$</p>
+        <p>$y_2 = 0.5474 + 0.25 \times (-1.3513) = 0.5474 - 0.3378 = 0.2096$</p>
+
+        <h5>Interpretation</h5>
+        <p>With these parameters, the network has learned a vector field that drives $y$ toward zero&mdash;qualitatively
+        similar to $\dot{y} = -2y$ for small $y$ (since $\tanh(w_1 y) \approx w_1 y$ near the origin).
+        The true analytical solution of $\dot{y} = -2y$ gives $y(0.5) = e^{-1} \approx 0.3679$.
+        The discrepancy arises because $\tanh$ saturates for large arguments, making the effective decay
+        rate slower than $-2y$ when $|y|$ is large.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Example 3.1.2 &mdash; Adjoint Gradient Computation</h4>
+        <p>Continuing Example 3.1.1, suppose we observe $y^*(0.5) = 0.37$ and use
+        $L = \frac{1}{2}(y(0.5) - y^*)^2$. We compute $\frac{dL}{dw_2}$ via the adjoint method.</p>
+
+        <h5>Step 1: Terminal condition</h5>
+        <p>$\mathbf{a}(t_1) = \frac{\partial L}{\partial y(0.5)} = y(0.5) - y^* = 0.2096 - 0.37 = -0.1604$</p>
+
+        <h5>Step 2: Backward Euler for adjoint, $t=0.5 \to t=0.25$</h5>
+        <p>The adjoint ODE in 1D is $\frac{da}{dt} = -a \cdot \frac{\partial f_\theta}{\partial y}$.
+        We need $\frac{\partial f_\theta}{\partial y}\big|_{y=y_2}$:</p>
+        <div class="math-equation">
+            $$\frac{\partial f_\theta}{\partial y} = w_2 \cdot w_1 \cdot \text{sech}^2(w_1 y + b_1)
+            = (-2)(1.5)(1 - \tanh^2(0.8211)) \approx -3 \times 0.5436 = -1.6307$$
+        </div>
+        <p>Backward Euler step (going from $t=0.5$ to $t=0.25$, so $\Delta t = -0.25$):</p>
+        <p>$a_1 = a_2 - \Delta t \cdot \left(-a_2 \cdot \frac{\partial f}{\partial y}\big|_{y_2}\right)
+        = -0.1604 - 0.25 \times (-(-0.1604)(-1.6307)) = -0.1604 - 0.25 \times (-0.2616) = -0.0950$</p>
+
+        <h5>Step 3: Accumulate parameter gradient</h5>
+        <p>$\frac{\partial f_\theta}{\partial w_2}\big|_{y_2} = \tanh(w_1 y_2) = \tanh(0.8211) \approx 0.6756$</p>
+        <p>$\frac{\partial f_\theta}{\partial w_2}\big|_{y_1} = \tanh(w_1 y_1) = \tanh(0.8211) \approx 0.6756$</p>
+        <p>Using the trapezoidal rule to approximate the integral:</p>
+        <div class="math-equation">
+            $$\frac{dL}{dw_2} \approx -\frac{\Delta t}{2}
+            \left[a_2 \cdot \frac{\partial f}{\partial w_2}\big|_{y_2}
+            + a_1 \cdot \frac{\partial f}{\partial w_2}\big|_{y_1}\right]
+            = -\frac{0.25}{2}[(-0.1604)(0.6756) + (-0.0950)(0.6756)] \approx 0.0862$$
+        </div>
+        <p>This positive gradient tells us that <em>increasing</em> $w_2$ would increase the loss&mdash;which
+        makes sense because $w_2$ controls the magnitude of the vector field, and a more negative $w_2$
+        would push $y(0.5)$ closer to the target $0.37$.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (vi): INTERACTIVE CODE LAB
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="code-lab" style="margin-top:2.5rem;">
+    <h2>Interactive Code Lab: Toy Neural ODE in NumPy</h2>
+    <hr>
+    <p>
+        Below is a complete, runnable implementation of a Neural ODE that learns the dynamics
+        $\dot{y} = -2y$ from noisy trajectory data. The &ldquo;network&rdquo; is a one-hidden-layer MLP
+        with $H=8$ hidden units and $\tanh$ activation. Gradients are estimated via finite differences.
+    </p>
+    <p>
+        <strong>Constraint note:</strong> This runs in-browser using only NumPy.
+        For a full PyTorch implementation with <code>torchdiffeq</code>,
+        see <a href="../notebooks/neural_ode_full.ipynb">the companion notebook</a>.
+    </p>
+
+    <div class="code-editor-container">
+        <textarea class="code-editor" id="neural-ode-code" rows="90" style="width:100%; font-family:'JetBrains Mono',monospace; font-size:13px;">
+import numpy as np
+
+# ──────────────────────────────────────────────
+# 1. Generate training data from dy/dt = -2y
+# ──────────────────────────────────────────────
+np.random.seed(42)
+t_span = np.linspace(0, 2, 40)          # 40 time points in [0,2]
+y0_true = 1.0
+y_true = y0_true * np.exp(-2 * t_span)  # exact solution
+y_data = y_true + 0.03 * np.random.randn(len(t_span))  # noisy obs
+
+# ──────────────────────────────────────────────
+# 2. Define a 1-hidden-layer MLP: f_theta(y)
+#    Architecture: y -> Linear(1,H) -> tanh -> Linear(H,1)
+# ──────────────────────────────────────────────
+H = 8  # hidden units
+
+def init_params(H):
+    """Xavier-style initialisation."""
+    W1 = np.random.randn(H, 1) * np.sqrt(2.0 / (1 + H))
+    b1 = np.zeros(H)
+    W2 = np.random.randn(1, H) * np.sqrt(2.0 / (H + 1))
+    b2 = np.zeros(1)
+    return [W1, b1, W2, b2]
+
+def f_net(y, params):
+    """Forward pass: scalar y -> scalar dy/dt."""
+    W1, b1, W2, b2 = params
+    h = np.tanh(W1[:, 0] * y + b1)   # shape (H,)
+    out = W2[0, :] @ h + b2[0]       # scalar
+    return out
+
+# ──────────────────────────────────────────────
+# 3. Euler ODE solver
+# ──────────────────────────────────────────────
+def euler_solve(f, y0, t_eval, params, dt=0.01):
+    """Solve dy/dt = f(y, params) with forward Euler."""
+    trajectory = [y0]
+    y = y0
+    t_curr = t_eval[0]
+    idx = 1
+    while idx < len(t_eval):
+        y = y + dt * f(y, params)
+        t_curr += dt
+        if t_curr >= t_eval[idx] - 1e-10:
+            trajectory.append(y)
+            idx += 1
+    return np.array(trajectory)
+
+# ──────────────────────────────────────────────
+# 4. Loss: mean squared error on trajectory
+# ──────────────────────────────────────────────
+def loss_fn(params, t_eval, y_data, y0):
+    y_pred = euler_solve(f_net, y0, t_eval, params)
+    return np.mean((y_pred - y_data) ** 2)
+
+# ──────────────────────────────────────────────
+# 5. Finite-difference gradient
+# ──────────────────────────────────────────────
+def fd_gradient(params, t_eval, y_data, y0, eps=1e-5):
+    """Compute gradient of loss w.r.t. each scalar parameter."""
+    grads = []
+    for i, p in enumerate(params):
+        g = np.zeros_like(p)
+        it = np.nditer(p, flags=['multi_index'])
+        while not it.finished:
+            ix = it.multi_index
+            old_val = p[ix]
+            p[ix] = old_val + eps
+            loss_plus = loss_fn(params, t_eval, y_data, y0)
+            p[ix] = old_val - eps
+            loss_minus = loss_fn(params, t_eval, y_data, y0)
+            g[ix] = (loss_plus - loss_minus) / (2 * eps)
+            p[ix] = old_val
+            it.iternext()
+        grads.append(g)
+    return grads
+
+# ──────────────────────────────────────────────
+# 6. Training loop
+# ──────────────────────────────────────────────
+params = init_params(H)
+lr = 0.01
+n_epochs = 120
+y0 = y_data[0]
+
+print("Training Neural ODE (NumPy, finite-diff gradients)...")
+print(f"{'Epoch':>6}  {'Loss':>10}")
+print("-" * 20)
+
+for epoch in range(n_epochs):
+    L = loss_fn(params, t_span, y_data, y0)
+    if epoch % 20 == 0:
+        print(f"{epoch:6d}  {L:10.6f}")
+
+    grads = fd_gradient(params, t_span, y_data, y0)
+    for i in range(len(params)):
+        params[i] -= lr * grads[i]
+
+L_final = loss_fn(params, t_span, y_data, y0)
+print(f"{'Final':>6}  {L_final:10.6f}")
+
+# ──────────────────────────────────────────────
+# 7. Compare learned vs true dynamics
+# ──────────────────────────────────────────────
+y_pred = euler_solve(f_net, y0, t_span, params)
+
+print("\n--- Learned vs True Dynamics ---")
+print(f"{'t':>6}  {'y_true':>8}  {'y_pred':>8}  {'y_data':>8}")
+for i in range(0, len(t_span), 5):
+    print(f"{t_span[i]:6.2f}  {y_true[i]:8.4f}  {y_pred[i]:8.4f}  {y_data[i]:8.4f}")
+
+# Evaluate learned vector field vs true (-2y) at sample points
+print("\n--- Learned Vector Field f_theta(y) vs True f(y) = -2y ---")
+y_test = np.array([1.0, 0.5, 0.25, 0.1, 0.0, -0.1])
+print(f"{'y':>6}  {'f_true':>8}  {'f_learned':>10}")
+for yv in y_test:
+    print(f"{yv:6.2f}  {-2*yv:8.4f}  {f_net(yv, params):10.4f}")
+</textarea>
+        <div class="code-buttons">
+            <button class="btn btn-default" onclick="alert('To run this code, use the Pyodide runner integrated in the main site, or copy into a Python environment.')">
+                Run Code
+            </button>
+            <button class="btn btn-default" onclick="document.getElementById('neural-ode-code').value=document.getElementById('neural-ode-code').defaultValue">
+                Reset
+            </button>
+        </div>
+        <div class="code-output" id="neural-ode-output">
+            <pre class="output-info">Click "Run Code" to execute. Expected output: loss decreasing from ~0.1 to ~0.001,
+and learned vector field values close to -2y at each test point.</pre>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (vii): AGENT LENS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="agent-lens" style="margin-top:2.5rem;">
+    <h2>Agent Lens: The Neural ODE as a Continuous-Time Agent</h2>
+    <hr>
+
+    <div class="application-example">
+        <h5>Reinforcement Learning Analogy</h5>
+        <p>A Neural ODE can be viewed through the lens of a <strong>continuous-time agent</strong>
+        operating in a dynamical environment. The correspondence is:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>RL Concept</th>
+                    <th>Neural ODE Counterpart</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>State</strong> $s_t$</td>
+                    <td>Hidden representation $\mathbf{y}(t)$</td>
+                </tr>
+                <tr>
+                    <td><strong>Action</strong> $a_t$</td>
+                    <td>Instantaneous velocity $f_\theta(t, \mathbf{y}(t))$, applied continuously</td>
+                </tr>
+                <tr>
+                    <td><strong>Policy</strong> $\pi_\theta(a|s)$</td>
+                    <td>The neural network $f_\theta$ mapping state to action (deterministic)</td>
+                </tr>
+                <tr>
+                    <td><strong>Environment dynamics</strong></td>
+                    <td>$\dot{\mathbf{y}} = f_\theta(t, \mathbf{y})$ (the agent <em>is</em> the dynamics)</td>
+                </tr>
+                <tr>
+                    <td><strong>Reward / Return</strong></td>
+                    <td>$-L(\mathbf{y}(t_1))$: negative of reconstruction or prediction loss</td>
+                </tr>
+                <tr>
+                    <td><strong>Policy gradient</strong> $\nabla_\theta J$</td>
+                    <td>Adjoint gradient $\frac{dL}{d\theta}$, computed by solving the adjoint ODE backward</td>
+                </tr>
+                <tr>
+                    <td><strong>Episode</strong></td>
+                    <td>One forward integration from $t_0$ to $t_1$</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Why this perspective is powerful</h3>
+    <p><strong>Continuous-time policy gradient.</strong> The adjoint method is equivalent to the continuous-time
+    limit of the REINFORCE policy gradient. In discrete RL, the policy gradient theorem gives</p>
+    <div class="math-equation">
+        $$\nabla_\theta J = \mathbb{E}\left[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(a_t|s_t) \cdot G_t\right],$$
+    </div>
+    <p>where $G_t$ is the return-to-go. In the Neural ODE setting, the sum becomes an integral, the
+    stochastic policy becomes deterministic, and the return-to-go becomes the adjoint state
+    $\mathbf{a}(t)$. The adjoint ODE propagates &ldquo;credit&rdquo; backward through continuous time,
+    exactly as $G_t$ propagates reward backward through discrete time steps.</p>
+
+    <p><strong>Adaptive computation as adaptive planning.</strong> An adaptive ODE solver (e.g., Dormand&ndash;Prince)
+    takes smaller steps where the dynamics are complex and larger steps where they are simple. This is
+    analogous to an agent spending more &ldquo;thinking time&rdquo; on difficult decisions&mdash;a form
+    of adaptive computation depth that emerges naturally from the numerical method.</p>
+
+    <p><strong>Latent ODE as a world model.</strong> In model-based RL, an agent learns a &ldquo;world model&rdquo;
+    to predict future states. A Latent ODE serves exactly this purpose: given partial observations,
+    it infers the latent state and predicts forward trajectories. The encoder is the perception module,
+    the Neural ODE is the transition model, and the decoder maps predicted states back to observations.</p>
+
+    <div class="historical-note">
+        The connection between optimal control (Pontryagin's Maximum Principle, 1962) and neural network
+        training was recognised early by LeCun (1988) and later formalised by E (2017). The Neural ODE paper
+        (Chen et al., 2018) made this connection practical by providing an efficient implementation of
+        the adjoint method within modern automatic differentiation frameworks.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (viii): EXERCISES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="exercises" style="margin-top:2.5rem;">
+    <h2>Exercises</h2>
+    <hr>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.1 (Euler Discretisation)</h4>
+        <p>Show that the ResNet update $\mathbf{h}_{k+1} = \mathbf{h}_k + \frac{1}{N} f_\theta(\mathbf{h}_k)$
+        with $N$ layers is the forward Euler discretisation of $\dot{\mathbf{h}} = f_\theta(\mathbf{h})$
+        on $[0, 1]$ with step size $\Delta t = 1/N$. What is the local truncation error?</p>
+
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Forward Euler for $\dot{\mathbf{h}} = f_\theta(\mathbf{h})$ with step size $\Delta t$:</p>
+            <div class="math-equation">
+                $$\mathbf{h}(t + \Delta t) \approx \mathbf{h}(t) + \Delta t \cdot f_\theta(\mathbf{h}(t))$$
+            </div>
+            <p>Setting $\Delta t = 1/N$ and $t_k = k/N$, we get
+            $\mathbf{h}_{k+1} = \mathbf{h}_k + \frac{1}{N} f_\theta(\mathbf{h}_k)$,
+            which is exactly the ResNet update.</p>
+            <p>The local truncation error of forward Euler is $O(\Delta t^2) = O(1/N^2)$.
+            The global error after $N$ steps is $O(\Delta t) = O(1/N)$.
+            As $N \to \infty$, the ResNet converges to the ODE solution (assuming $f_\theta$ is Lipschitz).</p>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.2 (Adjoint ODE Derivation)</h4>
+        <p>For the scalar ODE $\dot{y} = -\alpha y$ with $y(0) = y_0$ and loss $L = \frac{1}{2}(y(T) - y^*)^2$:</p>
+        <ol type="a">
+            <li>Write the adjoint ODE and its terminal condition.</li>
+            <li>Solve the adjoint ODE analytically.</li>
+            <li>Compute $\frac{dL}{d\alpha}$ and verify by direct differentiation of $y(T) = y_0 e^{-\alpha T}$.</li>
+        </ol>
+
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p><strong>(a)</strong> Here $f(y) = -\alpha y$, so $\frac{\partial f}{\partial y} = -\alpha$.
+            The adjoint ODE is:</p>
+            <div class="math-equation">
+                $$\frac{da}{dt} = -a(t) \cdot (-\alpha) = \alpha\, a(t), \qquad a(T) = y(T) - y^*$$
+            </div>
+            <p><strong>(b)</strong> This is a linear ODE with solution $a(t) = a(T) e^{\alpha(t - T)}$,
+            i.e., $a(t) = (y_0 e^{-\alpha T} - y^*) e^{\alpha(t-T)}$.</p>
+            <p><strong>(c)</strong> We have $\frac{\partial f}{\partial \alpha} = -y$, so:</p>
+            <div class="math-equation">
+                $$\frac{dL}{d\alpha} = -\int_T^0 a(t) \cdot (-y(t))\,dt = \int_0^T a(t)\, y(t)\,dt$$
+            </div>
+            <p>Substituting $a(t) = (y_0 e^{-\alpha T} - y^*) e^{\alpha(t-T)}$ and $y(t) = y_0 e^{-\alpha t}$:</p>
+            <div class="math-equation">
+                $$\frac{dL}{d\alpha} = (y_0 e^{-\alpha T} - y^*) y_0 \int_0^T e^{\alpha(t-T)} e^{-\alpha t}\,dt
+                = (y_0 e^{-\alpha T} - y^*) y_0 \int_0^T e^{-\alpha T}\,dt$$
+                $$= (y_0 e^{-\alpha T} - y^*) y_0 T e^{-\alpha T}$$
+            </div>
+            <p><strong>Verification:</strong> $y(T) = y_0 e^{-\alpha T}$, so
+            $L = \frac{1}{2}(y_0 e^{-\alpha T} - y^*)^2$. Direct differentiation:
+            $\frac{dL}{d\alpha} = (y_0 e^{-\alpha T} - y^*) \cdot (-T y_0 e^{-\alpha T})$,
+            which matches (up to the sign convention in the integration bounds).</p>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.3 (Topology Constraint)</h4>
+        <p>Prove that a Neural ODE $\dot{\mathbf{y}} = f_\theta(t,\mathbf{y})$ in $\mathbb{R}^2$
+        with Lipschitz $f_\theta$ cannot map a disk to an annulus.
+        <em>Hint:</em> Use the fact that ODE flows are homeomorphisms and homeomorphisms
+        preserve simple connectedness.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.4 (Memory Analysis)</h4>
+        <p>A Neural ODE is solved with an adaptive RK45 solver that takes $N$ steps.
+        The network $f_\theta$ has $p$ parameters and the state dimension is $d$.</p>
+        <ol type="a">
+            <li>What is the memory cost of backpropagation through the solver?</li>
+            <li>What is the memory cost of the adjoint method?</li>
+            <li>Under what conditions is the adjoint method preferable?</li>
+        </ol>
+
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p><strong>(a)</strong> Backprop through solver: $O(N \cdot d)$ for storing all intermediate states,
+            plus $O(p)$ for the graph of $f_\theta$ at each step. Total: $O(N(d + p))$.</p>
+            <p><strong>(b)</strong> Adjoint method: $O(d + p)$. Only the current state, adjoint, and accumulated
+            parameter gradient need to be stored. The forward trajectory is recomputed backward.</p>
+            <p><strong>(c)</strong> The adjoint method is preferable when $N$ is large (many solver steps),
+            $d$ is large (high-dimensional state), or memory is the bottleneck. However, if $N$ is small
+            or gradient accuracy is critical (stiff systems), backprop through the solver may be better
+            despite higher memory cost.</p>
+        </div>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.5 (Implement RK4 Solver)</h4>
+        <p>Modify the code lab to use a 4th-order Runge-Kutta solver instead of Euler.
+        Compare the trajectory accuracy for the same step size $\Delta t = 0.05$.
+        How many Euler steps would you need to match RK4 accuracy?</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.6 (2D System)</h4>
+        <p>Extend the code lab to learn a 2D dynamical system: the damped harmonic oscillator
+        $\dot{x} = v$, $\dot{v} = -kx - cv$ with $k=1, c=0.5$. Use a 2-input, 2-output MLP.
+        Generate training trajectories from multiple initial conditions and train the Neural ODE.</p>
+
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+<pre><code>import numpy as np
+np.random.seed(42)
+
+# True system: dx/dt = v, dv/dt = -x - 0.5v
+def true_rhs(state):
+    x, v = state
+    return np.array([v, -x - 0.5*v])
+
+# Euler solver for 2D
+def euler_2d(f, y0, t_eval, params, dt=0.01):
+    traj = [y0.copy()]
+    y = y0.copy()
+    t = t_eval[0]
+    idx = 1
+    while idx < len(t_eval):
+        y = y + dt * f(y, params)
+        t += dt
+        if t >= t_eval[idx] - 1e-10:
+            traj.append(y.copy())
+            idx += 1
+    return np.array(traj)
+
+# 2D MLP: R^2 -> R^H -> R^2
+H = 16
+W1 = np.random.randn(H, 2) * 0.5
+b1 = np.zeros(H)
+W2 = np.random.randn(2, H) * 0.5
+b2 = np.zeros(2)
+params = [W1, b1, W2, b2]
+
+def f_net_2d(y, params):
+    W1, b1, W2, b2 = params
+    h = np.tanh(W1 @ y + b1)
+    return W2 @ h + b2
+
+# Generate data
+t_span = np.linspace(0, 4, 50)
+ics = [np.array([1.0, 0.0]), np.array([0.0, 1.0]),
+       np.array([-0.5, 0.5])]
+data = []
+for ic in ics:
+    traj = euler_2d(lambda y, p: true_rhs(y), ic, t_span, None)
+    data.append((ic, traj))
+
+# Training (finite diff)
+lr = 0.005
+for epoch in range(80):
+    total_loss = 0
+    for ic, traj_true in data:
+        traj_pred = euler_2d(f_net_2d, ic, t_span, params)
+        total_loss += np.mean((traj_pred - traj_true)**2)
+    if epoch % 20 == 0:
+        print(f"Epoch {epoch}: loss = {total_loss:.6f}")
+    # finite-diff gradient update
+    eps = 1e-5
+    for i, p in enumerate(params):
+        g = np.zeros_like(p)
+        it = np.nditer(p, flags=['multi_index'])
+        while not it.finished:
+            ix = it.multi_index
+            old = p[ix]
+            p[ix] = old + eps
+            lp = sum(np.mean((euler_2d(f_net_2d, ic, t_span, params) - tr)**2) for ic, tr in data)
+            p[ix] = old - eps
+            lm = sum(np.mean((euler_2d(f_net_2d, ic, t_span, params) - tr)**2) for ic, tr in data)
+            g[ix] = (lp - lm) / (2 * eps)
+            p[ix] = old
+            it.iternext()
+        params[i] -= lr * g
+print("Done!")
+</code></pre>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.7 (Learning Rate Sensitivity)</h4>
+        <p>Run the toy Neural ODE code lab with learning rates $\eta \in \{0.001, 0.005, 0.01, 0.05, 0.1\}$.
+        For each, record the final loss after 120 epochs. Plot (or tabulate) loss vs. learning rate.
+        What happens for large $\eta$? Explain in terms of the loss landscape.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.8 (Analytic vs. Finite-Difference Gradients)</h4>
+        <p>For the scalar Neural ODE with $f_\theta(y) = w_2 \tanh(w_1 y + b_1) + b_2$:</p>
+        <ol type="a">
+            <li>Derive $\frac{\partial f_\theta}{\partial w_1}$, $\frac{\partial f_\theta}{\partial b_1}$,
+                $\frac{\partial f_\theta}{\partial w_2}$, $\frac{\partial f_\theta}{\partial b_2}$ analytically.</li>
+            <li>Implement a version of the training loop that uses these analytic local gradients combined
+                with backpropagation through the Euler solver (chain rule across steps) instead of finite differences.</li>
+            <li>Compare convergence speed (epochs to reach loss $< 0.005$) of the two approaches.</li>
+        </ol>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.9 (Adaptive Depth Agent)</h4>
+        <p>Design an &ldquo;adaptive depth&rdquo; strategy for the Neural ODE: at each Euler step,
+        the agent decides whether to take another step or to stop early, based on the magnitude of
+        $f_\theta(y)$. Specifically:</p>
+        <ol type="a">
+            <li>Define a stopping criterion: stop if $\|f_\theta(\mathbf{y})\| < \varepsilon$ for some threshold $\varepsilon$.</li>
+            <li>Implement this in the Euler solver.</li>
+            <li>Train the Neural ODE and compare the average number of steps taken vs. the fixed-step solver.
+                How does the accuracy change?</li>
+            <li>Discuss: in an RL context, this is analogous to what kind of agent behaviour?</li>
+        </ol>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.1.10 (Curriculum Learning for Neural ODEs)</h4>
+        <p>Implement a curriculum learning strategy: start by training the Neural ODE on short time
+        horizons ($T=0.5$) and progressively increase to $T=2.0$. Compare against training on the full
+        interval from the start.</p>
+        <ol type="a">
+            <li>Implement a schedule: $T_{\text{epoch}} = 0.5 + 1.5 \cdot \min(1, \text{epoch}/60)$.</li>
+            <li>Record the loss trajectory for both approaches.</li>
+            <li>Explain the analogy to curriculum learning in RL, where the agent first learns
+                easy tasks before progressing to harder ones.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (ix): ASSESSMENT
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="assessment" style="margin-top:2.5rem;">
+    <h2>Assessment</h2>
+    <hr>
+
+    <h3>Quiz (10 Questions)</h3>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q1. What is the fundamental equation defining a Neural ODE?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q1" value="a"> (a) $\mathbf{y}_{t+1} = \sigma(W\mathbf{y}_t + b)$</li>
+            <li><input type="radio" name="q1" value="b"> (b) $\frac{d\mathbf{y}}{dt} = f_\theta(t, \mathbf{y}(t))$</li>
+            <li><input type="radio" name="q1" value="c"> (c) $\nabla^2 u = f$</li>
+            <li><input type="radio" name="q1" value="d"> (d) $\mathbf{y}(t_1) = e^{At}\mathbf{y}(t_0)$</li>
+        </ul>
+        <p><em>Answer: (b)</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q2. The adjoint method computes gradients with what memory complexity in the number of solver steps $N$?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q2" value="a"> (a) $O(N^2)$</li>
+            <li><input type="radio" name="q2" value="b"> (b) $O(N \log N)$</li>
+            <li><input type="radio" name="q2" value="c"> (c) $O(N)$</li>
+            <li><input type="radio" name="q2" value="d"> (d) $O(1)$</li>
+        </ul>
+        <p><em>Answer: (d). The adjoint method requires only constant memory in $N$, since it recomputes the forward trajectory during the backward pass.</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q3. A standard (non-augmented) Neural ODE in $\mathbb{R}^d$ defines a flow map that is:</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q3" value="a"> (a) A surjection but not an injection</li>
+            <li><input type="radio" name="q3" value="b"> (b) A homeomorphism (continuous bijection with continuous inverse)</li>
+            <li><input type="radio" name="q3" value="c"> (c) An arbitrary nonlinear map</li>
+            <li><input type="radio" name="q3" value="d"> (d) A linear transformation</li>
+        </ul>
+        <p><em>Answer: (b). By the existence-uniqueness theorem, trajectories cannot cross, so the flow is a homeomorphism (in fact a diffeomorphism if $f_\theta$ is smooth).</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q4. The ResNet update $\mathbf{h}_{k+1} = \mathbf{h}_k + \frac{1}{N}f_\theta(\mathbf{h}_k)$ corresponds to which numerical method applied to the Neural ODE?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q4" value="a"> (a) Backward Euler</li>
+            <li><input type="radio" name="q4" value="b"> (b) Forward Euler</li>
+            <li><input type="radio" name="q4" value="c"> (c) Runge-Kutta 4</li>
+            <li><input type="radio" name="q4" value="d"> (d) Adams-Bashforth</li>
+        </ul>
+        <p><em>Answer: (b)</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q5. In the adjoint method, the adjoint state $\mathbf{a}(t) = \frac{\partial L}{\partial \mathbf{y}(t)}$ satisfies which equation?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q5" value="a"> (a) $\dot{\mathbf{a}} = f_\theta(t, \mathbf{a})$</li>
+            <li><input type="radio" name="q5" value="b"> (b) $\dot{\mathbf{a}} = -\mathbf{a}^\top \frac{\partial f_\theta}{\partial \mathbf{y}}$</li>
+            <li><input type="radio" name="q5" value="c"> (c) $\dot{\mathbf{a}} = \mathbf{a}^\top \frac{\partial f_\theta}{\partial \theta}$</li>
+            <li><input type="radio" name="q5" value="d"> (d) $\dot{\mathbf{a}} = -\nabla^2 L$</li>
+        </ul>
+        <p><em>Answer: (b)</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q6. Why might the adjoint method produce less accurate gradients than backpropagation through the solver?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q6" value="a"> (a) It uses a lower-order ODE solver</li>
+            <li><input type="radio" name="q6" value="b"> (b) It solves a different (continuous) ODE backward, accumulating numerical error that doesn't match the discrete forward pass</li>
+            <li><input type="radio" name="q6" value="c"> (c) It doesn't use the chain rule</li>
+            <li><input type="radio" name="q6" value="d"> (d) It ignores the initial condition</li>
+        </ul>
+        <p><em>Answer: (b). The adjoint ODE is the continuous limit; numerical errors in both the forward and backward solves can compound, especially for stiff or chaotic systems.</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q7. What advantage do Latent ODE models have over standard RNNs for time-series modelling?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q7" value="a"> (a) They are always faster to train</li>
+            <li><input type="radio" name="q7" value="b"> (b) They naturally handle irregularly sampled time points and missing data</li>
+            <li><input type="radio" name="q7" value="c"> (c) They require less data</li>
+            <li><input type="radio" name="q7" value="d"> (d) They always have lower loss</li>
+        </ul>
+        <p><em>Answer: (b). Since the ODE can be evaluated at any time $t$, it handles variable time gaps naturally, unlike RNNs which assume fixed time steps.</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q8. Augmented Neural ODEs address which limitation of standard Neural ODEs?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q8" value="a"> (a) Slow training speed</li>
+            <li><input type="radio" name="q8" value="b"> (b) The inability to represent maps that change topology (e.g., separating connected components)</li>
+            <li><input type="radio" name="q8" value="c"> (c) The need for a numerical solver</li>
+            <li><input type="radio" name="q8" value="d"> (d) High memory usage</li>
+        </ul>
+        <p><em>Answer: (b)</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q9. In the agent-lens view of a Neural ODE, what corresponds to the RL &ldquo;policy&rdquo;?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q9" value="a"> (a) The ODE solver</li>
+            <li><input type="radio" name="q9" value="b"> (b) The loss function $L$</li>
+            <li><input type="radio" name="q9" value="c"> (c) The neural network $f_\theta$ mapping state to instantaneous velocity</li>
+            <li><input type="radio" name="q9" value="d"> (d) The initial condition $\mathbf{y}_0$</li>
+        </ul>
+        <p><em>Answer: (c). The network $f_\theta$ determines what &ldquo;action&rdquo; (velocity) to apply at each state, analogous to a deterministic policy.</em></p>
+    </div>
+
+    <div class="quiz-container">
+        <p class="quiz-question">Q10. For the Universal Approximation Theorem applied to Neural ODEs, which condition is required?</p>
+        <ul class="quiz-options">
+            <li><input type="radio" name="q10" value="a"> (a) The target vector field must be analytic</li>
+            <li><input type="radio" name="q10" value="b"> (b) The target vector field must be continuous on a compact domain</li>
+            <li><input type="radio" name="q10" value="c"> (c) The state dimension must be at least 3</li>
+            <li><input type="radio" name="q10" value="d"> (d) The network must have at least 10 layers</li>
+        </ul>
+        <p><em>Answer: (b). The classical universal approximation theorem requires only continuity on a compact set; a single hidden layer with sufficiently many neurons suffices.</em></p>
+    </div>
+
+    <!-- ── Mini-Project ── -->
+    <h3 style="margin-top:2.5rem;">Mini-Project: Learning an Unknown 2D Oscillator</h3>
+
+    <div class="academic-box">
+        <h4>Project Description</h4>
+        <p>You are given noisy trajectory data from an unknown 2D dynamical system (which is secretly
+        the Van der Pol oscillator $\dot{x} = y$, $\dot{y} = \mu(1-x^2)y - x$ with $\mu = 1$,
+        but you should treat the dynamics as unknown).</p>
+
+        <h5>Tasks</h5>
+        <ol>
+            <li><strong>Data generation</strong> (provided): Generate 5 trajectories from different initial
+                conditions, each with 100 time points over $[0, 10]$, with Gaussian noise ($\sigma = 0.05$).</li>
+            <li><strong>Model</strong>: Implement a 2D Neural ODE with a 2-hidden-layer MLP
+                ($2 \to 32 \to 32 \to 2$) using NumPy. Use $\tanh$ activations.</li>
+            <li><strong>Training</strong>: Train for at least 200 epochs using finite-difference gradients.
+                Report the loss curve.</li>
+            <li><strong>Evaluation</strong>: From a held-out initial condition, propagate the learned ODE
+                and compare to the true trajectory. Report MSE over the trajectory.</li>
+            <li><strong>Phase portrait</strong>: Evaluate the learned vector field on a grid in $[-3,3]^2$
+                and produce a quiver plot (or a table of vector field values). Compare qualitatively to the
+                true Van der Pol vector field.</li>
+            <li><strong>Analysis</strong>: Discuss whether the learned system captures the limit cycle.
+                What happens if you extrapolate beyond the training time horizon?</li>
+        </ol>
+
+        <h5>Rubric</h5>
+        <table class="error-table">
+            <thead>
+                <tr>
+                    <th>Criterion</th>
+                    <th>Excellent (A)</th>
+                    <th>Satisfactory (B)</th>
+                    <th>Needs Work (C)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="method-name">Implementation</td>
+                    <td>Complete, correct NumPy code; RK4 or adaptive solver</td>
+                    <td>Working Euler solver; minor issues</td>
+                    <td>Incomplete or non-functional code</td>
+                </tr>
+                <tr>
+                    <td class="method-name">Training</td>
+                    <td>Loss converges below 0.01; proper hyperparameter tuning documented</td>
+                    <td>Loss converges below 0.05; default hyperparameters</td>
+                    <td>Loss does not converge or training crashes</td>
+                </tr>
+                <tr>
+                    <td class="method-name">Evaluation</td>
+                    <td>Quantitative MSE comparison; multiple held-out ICs tested</td>
+                    <td>Single held-out IC; qualitative comparison</td>
+                    <td>No held-out evaluation</td>
+                </tr>
+                <tr>
+                    <td class="method-name">Phase Portrait</td>
+                    <td>Clear vector field comparison; limit cycle visible</td>
+                    <td>Vector field plotted/tabulated but incomplete comparison</td>
+                    <td>Missing or incorrect</td>
+                </tr>
+                <tr>
+                    <td class="method-name">Analysis</td>
+                    <td>Insightful discussion of limit cycle capture, extrapolation, and failure modes</td>
+                    <td>Basic discussion</td>
+                    <td>No analysis provided</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (x): REFERENCES & NEXT STEPS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="references" style="margin-top:2.5rem;">
+    <h2>References &amp; Next Steps</h2>
+    <hr>
+
+    <h3>References</h3>
+    <ol class="reference-list">
+        <li>R. T. Q. Chen, Y. Rubanova, J. Bettencourt, D. Duvenaud, &ldquo;Neural Ordinary Differential Equations,&rdquo;
+            <em>NeurIPS</em>, 2018. <a href="https://arxiv.org/abs/1806.07366">arXiv:1806.07366</a></li>
+        <li>L. S. Pontryagin, V. G. Boltyanskii, R. V. Gamkrelidze, E. F. Mishchenko,
+            <em>The Mathematical Theory of Optimal Processes</em>, Wiley, 1962.</li>
+        <li>E. Dupont, A. Doucet, Y. W. Teh, &ldquo;Augmented Neural ODEs,&rdquo; <em>NeurIPS</em>, 2019.
+            <a href="https://arxiv.org/abs/1904.01681">arXiv:1904.01681</a></li>
+        <li>Y. Rubanova, R. T. Q. Chen, D. Duvenaud, &ldquo;Latent ODEs for Irregularly-Sampled Time Series,&rdquo;
+            <em>NeurIPS</em>, 2019. <a href="https://arxiv.org/abs/1907.03907">arXiv:1907.03907</a></li>
+        <li>W. Grathwohl, R. T. Q. Chen, J. Bettencourt, I. Sutskever, D. Duvenaud,
+            &ldquo;FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models,&rdquo;
+            <em>ICLR</em>, 2019. <a href="https://arxiv.org/abs/1810.01367">arXiv:1810.01367</a></li>
+        <li>K. Hornik, &ldquo;Approximation capabilities of multilayer feedforward networks,&rdquo;
+            <em>Neural Networks</em>, 4(2):251&ndash;257, 1991.</li>
+        <li>E. Weinan, &ldquo;A Proposal on Machine Learning via Dynamical Systems,&rdquo;
+            <em>Communications in Mathematics and Statistics</em>, 5(1):1&ndash;11, 2017.</li>
+        <li>P. Kidger, &ldquo;On Neural Differential Equations,&rdquo; DPhil Thesis, University of Oxford, 2022.
+            <a href="https://arxiv.org/abs/2202.02435">arXiv:2202.02435</a></li>
+    </ol>
+
+    <h3 style="margin-top:2rem;">Next Steps</h3>
+    <div class="summary-box">
+        <h4>Where to go from here</h4>
+        <ul>
+            <li><strong>Full implementation:</strong> Work through the
+                <a href="../notebooks/neural_ode_full.ipynb">PyTorch Neural ODE notebook</a>
+                which uses <code>torchdiffeq</code> for adaptive solvers and automatic adjoint differentiation.</li>
+            <li><strong>Next module:</strong> <a href="module3-2.html">Module 3.2 &mdash; Physics-Informed Neural Networks (PINNs)</a>
+                builds on Neural ODEs by embedding PDE residuals directly into the loss function.</li>
+            <li><strong>Advanced topics:</strong> Module 3.3 covers Neural Operators (DeepONet, FNO) for
+                learning mappings between function spaces.</li>
+            <li><strong>Agent connection:</strong> Module 3.4 applies reinforcement learning to ODE/PDE control,
+                using the continuous-time policy gradient ideas introduced here.</li>
+        </ul>
+    </div>
+
+    <div style="margin-top:2rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <a href="index.html" class="btn btn-default">&larr; Back to Level 3 Overview</a>
+        <a href="module3-2.html" class="btn btn-default">Next: Module 3.2 &mdash; PINNs &rarr;</a>
+    </div>
+</section>
+
+</div><!-- col-lg-12 -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<!-- Collapsible section script -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var coll = document.getElementsByClassName("collapsible");
+    for (var i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

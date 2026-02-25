@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Project 4.2: Neural Solver vs Classical Solver Benchmark — Differential Equations Tutorials">
+    <meta name="author" content="">
+
+    <title>Project 4.2 — Neural Solver vs Classical Solver Benchmark</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 4 &mdash; Projects</a>
+    <nav class="lesson-static-links" aria-label="Project navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="project4-1.html">4.1 Agent Simulation</a>
+      <a href="project4-2.html" aria-current="page">4.2 Neural vs Classical</a>
+      <a href="project4-3.html">4.3 SciML Real Data</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a href="index.html">Level 4 Projects</a></li>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="#title-block">Project Brief</a></li>
+            <li><a href="#problem-statement">Problem Statement</a></li>
+            <li><a href="#modeling-assumptions">Assumptions</a></li>
+            <li><a href="#data-generation">Data Generation</a></li>
+            <li><a href="#baselines">Baselines</a></li>
+            <li><a href="#agent-approach">Agent Approach</a></li>
+            <li><a href="#deliverables">Deliverables</a></li>
+            <li><a href="#rubric">Rubric</a></li>
+            <li><a href="#references">References</a></li>
+        </ul>
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <!-- ============================================================ -->
+                    <!-- TITLE BLOCK                                                   -->
+                    <!-- ============================================================ -->
+                    <section id="title-block" style="margin-top: 2rem;">
+                        <p style="font-family: 'JetBrains Mono', monospace; color: var(--mf-muted); margin-bottom: 0.25rem;">PROJECT 4.2</p>
+                        <h1 style="font-family: 'Crimson Text', serif; font-size: 2.4rem; margin-bottom: 0.5rem;">Neural Solver vs Classical Solver Benchmark</h1>
+                        <table style="border-collapse: collapse; margin: 1rem 0 2rem 0; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Difficulty</td>
+                                <td><strong>Advanced</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Estimated Time</td>
+                                <td><strong>5 &ndash; 7 hours</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Prerequisites</td>
+                                <td>
+                                    <a href="../level1/part4.html">Module 1.4 (Higher-Order ODEs)</a>,
+                                    Module 2.2 (PDEs &amp; Boundary Value Problems),
+                                    Module 3.1 (Neural ODEs),
+                                    Module 3.2 (PINNs)
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="border-top: 1px solid var(--mf-border);">
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- PROBLEM STATEMENT                                             -->
+                    <!-- ============================================================ -->
+                    <section id="problem-statement" style="margin-top: 2rem;">
+                        <h2>1. Problem Statement</h2>
+
+                        <p>
+                            The one-dimensional viscous Burgers equation is a fundamental nonlinear PDE that serves as
+                            a prototype for convection-diffusion phenomena and develops sharp gradients (shocks in the
+                            inviscid limit). The equation is:
+                        </p>
+
+                        <div class="math-equation">
+                            $$\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} = \nu \frac{\partial^2 u}{\partial x^2}, \quad x \in [-1, 1], \quad t \in [0, 1]$$
+                        </div>
+
+                        <p>
+                            with periodic boundary conditions $u(-1, t) = u(1, t)$ and a parameterized family of initial
+                            conditions $u(x, 0) = u_0(x; \alpha)$. For small viscosity $\nu$, the solution develops steep
+                            fronts that challenge both classical and neural solvers in different ways: classical finite-difference
+                            schemes require fine grids and small time steps near the shock, while physics-informed neural
+                            networks (PINNs) struggle with sharp gradients due to spectral bias.
+                        </p>
+
+                        <p>
+                            Your task is to implement <strong>both</strong> a classical finite-difference solver and a PINN
+                            solver for this problem, then conduct a rigorous benchmark comparing accuracy (relative $L^2$
+                            error against a high-resolution reference), computational cost (wall-clock time and FLOPs),
+                            and generalization (performance across varying viscosity $\nu \in [0.001, 0.1]$ and different
+                            initial condition families). The final component is a <strong>bandit-based solver selection
+                            agent</strong> that, given the problem parameters, selects the solver expected to achieve the
+                            target accuracy in the least time.
+                        </p>
+
+                        <p>
+                            This project provides hands-on experience with the trade-offs between data-free neural methods
+                            and well-understood classical discretizations, a central question in scientific machine learning.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- MODELING ASSUMPTIONS                                          -->
+                    <!-- ============================================================ -->
+                    <section id="modeling-assumptions" style="margin-top: 2rem;">
+                        <h2>2. Modeling Assumptions</h2>
+
+                        <ol>
+                            <li>
+                                <strong>Spatial domain and boundary conditions.</strong> The spatial domain is $x \in [-1, 1]$
+                                with periodic boundary conditions. This avoids complications from inflow/outflow boundaries
+                                and ensures the total integral $\int u\, dx$ is conserved (for $\nu = 0$).
+                            </li>
+                            <li>
+                                <strong>Viscosity range.</strong> The viscosity parameter is sampled from
+                                $\nu \in \{0.001, 0.005, 0.01, 0.02, 0.05, 0.1\}$. Lower values produce sharper gradients
+                                and are harder for both solvers.
+                            </li>
+                            <li>
+                                <strong>Initial condition families.</strong> Three families are used:
+                                (a) $u_0(x) = -\sin(\pi x)$ (standard benchmark),
+                                (b) $u_0(x) = \exp(-25 x^2)$ (Gaussian pulse),
+                                (c) $u_0(x) = \text{sign}(x) \cdot (1 - |x|)$ (triangular wave).
+                            </li>
+                            <li>
+                                <strong>Reference solution.</strong> The ground-truth reference is computed using a
+                                high-resolution finite-difference scheme on a grid of $N_x = 8192$ points with
+                                $\Delta t = 10^{-6}$, using a Crank-Nicolson scheme for diffusion and a third-order
+                                upwind scheme for advection (MUSCL-Hancock).
+                            </li>
+                            <li>
+                                <strong>Classical solver specification.</strong> The "student" classical solver uses a
+                                coarser grid ($N_x \in \{64, 128, 256, 512\}$) with an explicit upwind scheme for the
+                                convective term and centered differences for the diffusion term, subject to the CFL
+                                condition $\Delta t \leq \min\left(\frac{\Delta x}{|u|_{\max}},\; \frac{\Delta x^2}{2\nu}\right)$.
+                            </li>
+                            <li>
+                                <strong>PINN architecture.</strong> The PINN uses a fully connected MLP with
+                                $L \in \{3, 4, 5, 6\}$ hidden layers of width $W \in \{32, 64, 128\}$, $\tanh$
+                                activation, and is trained by minimizing the PDE residual loss plus boundary/initial
+                                condition losses.
+                            </li>
+                            <li>
+                                <strong>Error metric.</strong> The primary metric is the relative $L^2$ error:
+                                $\varepsilon = \|u_{\text{pred}} - u_{\text{ref}}\|_2 / \|u_{\text{ref}}\|_2$,
+                                evaluated on a uniform grid of 1000 points at $t = 1$.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DATA GENERATION                                               -->
+                    <!-- ============================================================ -->
+                    <section id="data-generation" style="margin-top: 2rem;">
+                        <h2>3. Reference Solution &amp; Data Generation</h2>
+
+                        <p>
+                            The following code generates high-resolution reference solutions for the Burgers equation
+                            across all viscosity and initial-condition combinations. These serve as ground truth for
+                            evaluating both solvers.
+                        </p>
+
+<pre><code class="language-python">import numpy as np
+import time
+
+# --- Grid parameters for reference solution ---
+NX_REF = 8192
+DX_REF = 2.0 / NX_REF
+DT_REF = 1e-6
+T_FINAL = 1.0
+N_STEPS_REF = int(T_FINAL / DT_REF)
+
+# Spatial grid (cell centers)
+x_ref = np.linspace(-1 + DX_REF/2, 1 - DX_REF/2, NX_REF)
+
+# --- Initial condition families ---
+def ic_sine(x):
+    return -np.sin(np.pi * x)
+
+def ic_gaussian(x):
+    return np.exp(-25.0 * x**2)
+
+def ic_triangular(x):
+    return np.sign(x) * (1.0 - np.abs(x))
+
+IC_FAMILIES = {
+    'sine': ic_sine,
+    'gaussian': ic_gaussian,
+    'triangular': ic_triangular,
+}
+
+# --- Viscosity values ---
+NU_VALUES = [0.001, 0.005, 0.01, 0.02, 0.05, 0.1]
+
+
+def burgers_reference(u0, nu, nx, dx, dt, n_steps):
+    """Compute reference solution using operator splitting:
+       - Upwind (first-order) for advection: u_t + u*u_x = 0
+       - Crank-Nicolson for diffusion: u_t = nu * u_xx
+    Periodic boundary conditions via modular indexing.
+    """
+    u = u0.copy()
+    # Precompute tridiagonal matrix for Crank-Nicolson
+    r = nu * dt / (2.0 * dx**2)
+    # For periodic BC, we use scipy sparse solver
+    from scipy.sparse import diags, eye
+    from scipy.sparse.linalg import spsolve
+
+    # Diffusion matrix: (I - r*D2) u^{n+1} = (I + r*D2) u^n
+    e = np.ones(nx)
+    D2 = diags([e, -2*e, e], [-1, 0, 1], shape=(nx, nx)).toarray()
+    # Periodic BCs
+    D2[0, -1] = 1.0
+    D2[-1, 0] = 1.0
+    A_lhs = np.eye(nx) - r * D2
+    A_rhs = np.eye(nx) + r * D2
+
+    for step in range(n_steps):
+        # --- Advection substep (upwind) ---
+        u_new = u.copy()
+        for i in range(nx):
+            ip = (i + 1) % nx
+            im = (i - 1) % nx
+            if u[i] >= 0:
+                u_new[i] = u[i] - dt / dx * u[i] * (u[i] - u[im])
+            else:
+                u_new[i] = u[i] - dt / dx * u[i] * (u[ip] - u[i])
+        u = u_new
+
+        # --- Diffusion substep (Crank-Nicolson) ---
+        rhs = A_rhs @ u
+        u = np.linalg.solve(A_lhs, rhs)
+
+    return u
+
+
+def generate_all_references():
+    """Generate reference solutions for all (IC, nu) combinations."""
+    results = {}
+    for ic_name, ic_func in IC_FAMILIES.items():
+        for nu in NU_VALUES:
+            print(f"Computing reference: IC={ic_name}, nu={nu}...")
+            u0 = ic_func(x_ref)
+
+            # Adjust dt for stability: CFL condition
+            u_max = np.max(np.abs(u0)) + 1e-8
+            dt_cfl = min(DX_REF / u_max, DX_REF**2 / (2 * nu))
+            dt = min(DT_REF, 0.5 * dt_cfl)
+            n_steps = int(T_FINAL / dt)
+
+            t0 = time.time()
+            u_final = burgers_reference(u0, nu, NX_REF, DX_REF, dt, n_steps)
+            elapsed = time.time() - t0
+
+            results[(ic_name, nu)] = {
+                'x': x_ref.copy(),
+                'u0': u0.copy(),
+                'u_final': u_final.copy(),
+                'dt': dt,
+                'n_steps': n_steps,
+                'wall_time': elapsed,
+            }
+            print(f"  Done in {elapsed:.1f}s, {n_steps} steps, dt={dt:.2e}")
+    return results
+
+
+# --- Generate and save ---
+references = generate_all_references()
+np.savez('burgers_references.npz', **{
+    f"{k[0]}_nu{k[1]}": v['u_final'] for k, v in references.items()
+}, x=x_ref)
+print(f"Saved {len(references)} reference solutions.")
+</code></pre>
+
+                        <p>
+                            This produces 18 reference solutions (3 ICs $\times$ 6 viscosities). Use 12 for training
+                            the solver-selection agent and hold out 6 for evaluation (one per IC family at
+                            $\nu \in \{0.005, 0.05\}$).
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- BASELINES                                                     -->
+                    <!-- ============================================================ -->
+                    <section id="baselines" style="margin-top: 2rem;">
+                        <h2>4. Baselines</h2>
+
+                        <h3>4.1 Classical Baseline: Explicit Finite Difference with Upwind Scheme</h3>
+
+                        <p>
+                            The classical baseline uses first-order upwind differencing for the convective term and
+                            second-order centered differences for the diffusion term on a coarse grid. The time step
+                            is determined by the CFL condition.
+                        </p>
+
+<pre><code class="language-python">def burgers_fd_upwind(u0, nu, nx, t_final):
+    """Solve Burgers equation with upwind + centered diffusion on coarse grid.
+
+    Args:
+        u0: initial condition on the coarse grid, shape (nx,)
+        nu: viscosity
+        nx: number of grid points
+        t_final: final time
+
+    Returns:
+        u_final: solution at t_final, shape (nx,)
+        n_steps: number of time steps taken
+        wall_time: elapsed wall-clock time in seconds
+    """
+    dx = 2.0 / nx
+    u = u0.copy()
+    t = 0.0
+    n_steps = 0
+    t0 = time.time()
+
+    while t < t_final:
+        u_max = np.max(np.abs(u)) + 1e-10
+        dt = 0.4 * min(dx / u_max, dx**2 / (2 * nu))
+        dt = min(dt, t_final - t)
+
+        u_new = np.zeros_like(u)
+        for i in range(nx):
+            ip = (i + 1) % nx
+            im = (i - 1) % nx
+
+            # Upwind for advection
+            if u[i] >= 0:
+                advection = u[i] * (u[i] - u[im]) / dx
+            else:
+                advection = u[i] * (u[ip] - u[i]) / dx
+
+            # Centered for diffusion
+            diffusion = nu * (u[ip] - 2*u[i] + u[im]) / dx**2
+
+            u_new[i] = u[i] + dt * (-advection + diffusion)
+
+        u = u_new
+        t += dt
+        n_steps += 1
+
+    wall_time = time.time() - t0
+    return u, n_steps, wall_time
+</code></pre>
+
+                        <h3>4.2 Neural Baseline: Physics-Informed Neural Network (PINN)</h3>
+
+                        <p>
+                            The PINN baseline represents $u(x, t)$ with a 4-layer MLP (64 units per layer, $\tanh$
+                            activation) and minimizes a weighted combination of the PDE residual loss, initial condition
+                            loss, and periodic boundary condition loss. No labeled data from the reference solution is used.
+                        </p>
+
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+class BurgersPINN(nn.Module):
+    def __init__(self, layers=[2, 64, 64, 64, 64, 1]):
+        super().__init__()
+        modules = []
+        for i in range(len(layers) - 2):
+            modules.append(nn.Linear(layers[i], layers[i+1]))
+            modules.append(nn.Tanh())
+        modules.append(nn.Linear(layers[-2], layers[-1]))
+        self.net = nn.Sequential(*modules)
+
+    def forward(self, x, t):
+        inp = torch.cat([x, t], dim=1)
+        return self.net(inp)
+
+
+def pinn_loss(model, nu, x_pde, t_pde, x_ic, u_ic, x_bc_l, x_bc_r, t_bc,
+              w_pde=1.0, w_ic=10.0, w_bc=10.0):
+    """Compute total PINN loss for Burgers equation.
+
+    Args:
+        model: BurgersPINN instance
+        nu: viscosity (scalar)
+        x_pde, t_pde: collocation points for PDE residual, shape (N_pde, 1)
+        x_ic, u_ic: initial condition points and values
+        x_bc_l, x_bc_r, t_bc: boundary points at x=-1 and x=+1
+
+    Returns:
+        total_loss, (loss_pde, loss_ic, loss_bc)
+    """
+    # PDE residual: u_t + u*u_x - nu*u_xx = 0
+    x_pde.requires_grad_(True)
+    t_pde.requires_grad_(True)
+    u = model(x_pde, t_pde)
+    u_x = torch.autograd.grad(u, x_pde, torch.ones_like(u),
+                               create_graph=True)[0]
+    u_t = torch.autograd.grad(u, t_pde, torch.ones_like(u),
+                               create_graph=True)[0]
+    u_xx = torch.autograd.grad(u_x, x_pde, torch.ones_like(u_x),
+                                create_graph=True)[0]
+    residual = u_t + u * u_x - nu * u_xx
+    loss_pde = torch.mean(residual**2)
+
+    # Initial condition: u(x, 0) = u_ic(x)
+    t_zero = torch.zeros_like(x_ic)
+    u_pred_ic = model(x_ic, t_zero)
+    loss_ic = torch.mean((u_pred_ic - u_ic)**2)
+
+    # Periodic BC: u(-1, t) = u(1, t)
+    u_left = model(x_bc_l, t_bc)
+    u_right = model(x_bc_r, t_bc)
+    loss_bc = torch.mean((u_left - u_right)**2)
+
+    total = w_pde * loss_pde + w_ic * loss_ic + w_bc * loss_bc
+    return total, (loss_pde.item(), loss_ic.item(), loss_bc.item())
+
+
+def train_pinn(model, nu, ic_func, n_epochs=20000, lr=1e-3, n_pde=10000,
+               n_ic=200, n_bc=200):
+    """Train a PINN for Burgers equation.
+
+    Returns:
+        model: trained model
+        history: dict of loss histories
+        wall_time: training time in seconds
+    """
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5000,
+                                                 gamma=0.5)
+    history = {'total': [], 'pde': [], 'ic': [], 'bc': []}
+    t0 = time.time()
+
+    for epoch in range(n_epochs):
+        # Sample collocation points
+        x_pde = torch.rand(n_pde, 1) * 2 - 1       # x in [-1, 1]
+        t_pde = torch.rand(n_pde, 1)                # t in [0, 1]
+        x_ic = torch.rand(n_ic, 1) * 2 - 1
+        u_ic_vals = torch.tensor(
+            ic_func(x_ic.numpy()), dtype=torch.float32
+        )
+        t_bc = torch.rand(n_bc, 1)
+        x_bc_l = -torch.ones(n_bc, 1)
+        x_bc_r = torch.ones(n_bc, 1)
+
+        optimizer.zero_grad()
+        loss, (l_pde, l_ic, l_bc) = pinn_loss(
+            model, nu, x_pde, t_pde, x_ic, u_ic_vals, x_bc_l, x_bc_r, t_bc
+        )
+        loss.backward()
+        optimizer.step()
+        scheduler.step()
+
+        history['total'].append(loss.item())
+        history['pde'].append(l_pde)
+        history['ic'].append(l_ic)
+        history['bc'].append(l_bc)
+
+        if (epoch + 1) % 2000 == 0:
+            print(f"Epoch {epoch+1}: loss={loss.item():.6e} "
+                  f"(PDE={l_pde:.2e}, IC={l_ic:.2e}, BC={l_bc:.2e})")
+
+    wall_time = time.time() - t0
+    return model, history, wall_time
+</code></pre>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- AGENT APPROACH                                                -->
+                    <!-- ============================================================ -->
+                    <section id="agent-approach" style="margin-top: 2rem;">
+                        <h2>5. Agent Approach Specification</h2>
+
+                        <h3>5.1 State Space</h3>
+                        <p>
+                            The solver-selection problem is framed as a contextual multi-armed bandit. The context
+                            (state) for each problem instance is:
+                        </p>
+                        <div class="math-equation">
+                            $$\mathbf{s} = \bigl(\nu,\; C_{\text{IC}},\; \varepsilon_{\text{target}},\; N_x\bigr) \in \mathbb{R}^4$$
+                        </div>
+                        <p>where:</p>
+                        <ul>
+                            <li>$\nu$ is the viscosity parameter (log-scaled: $\log_{10} \nu$).</li>
+                            <li>$C_{\text{IC}}$ is a scalar complexity measure of the initial condition, defined as the
+                                total variation $\text{TV}(u_0) = \int |u_0'(x)|\, dx$.</li>
+                            <li>$\varepsilon_{\text{target}}$ is the target relative $L^2$ error (log-scaled).</li>
+                            <li>$N_x$ is the grid resolution available for the FD solver (log-scaled).</li>
+                        </ul>
+
+                        <h3>5.2 Action Space</h3>
+                        <p>The agent selects one of $K = 6$ solver configurations:</p>
+                        <ul>
+                            <li>$a = 0$: FD solver, $N_x = 128$</li>
+                            <li>$a = 1$: FD solver, $N_x = 256$</li>
+                            <li>$a = 2$: FD solver, $N_x = 512$</li>
+                            <li>$a = 3$: PINN, 3 layers $\times$ 64 units, 10k epochs</li>
+                            <li>$a = 4$: PINN, 4 layers $\times$ 64 units, 20k epochs</li>
+                            <li>$a = 5$: PINN, 5 layers $\times$ 128 units, 30k epochs</li>
+                        </ul>
+
+                        <h3>5.3 Reward / Objective Function</h3>
+                        <div class="math-equation">
+                            $$r(a, \mathbf{s}) = \begin{cases}
+                            -\log_{10}(T_{\text{wall}}) & \text{if } \varepsilon(a, \mathbf{s}) \leq \varepsilon_{\text{target}} \\[4pt]
+                            -10 - \log_{10}\!\bigl(\varepsilon(a, \mathbf{s}) / \varepsilon_{\text{target}}\bigr) & \text{otherwise}
+                            \end{cases}$$
+                        </div>
+                        <p>
+                            where $T_{\text{wall}}$ is the wall-clock time in seconds and $\varepsilon(a, \mathbf{s})$
+                            is the achieved $L^2$ error. The reward encourages the agent to select the fastest solver
+                            that meets the accuracy target. Failing to meet the target incurs a large penalty proportional
+                            to how far the error exceeds the target.
+                        </p>
+
+                        <h3>5.4 Training Procedure</h3>
+                        <ol>
+                            <li>
+                                <strong>Data collection.</strong> Run all 6 solver configurations on all 12 training
+                                problem instances. Record the wall-clock time and $L^2$ error for each. This produces
+                                a dataset of $12 \times 6 = 72$ (context, action, reward) tuples.
+                            </li>
+                            <li>
+                                <strong>Bandit algorithm.</strong> Train a LinUCB (linear Upper Confidence Bound) agent
+                                with feature vector $\phi(\mathbf{s}, a) \in \mathbb{R}^{24}$ formed by the outer
+                                product of the 4-dimensional context with a 6-dimensional one-hot action encoding.
+                                The exploration parameter is $\alpha = 1.0$.
+                            </li>
+                            <li>
+                                <strong>Online refinement.</strong> After the initial batch, run the agent on the
+                                training set for 20 additional rounds, each time selecting actions using UCB scores,
+                                executing the selected solver, and updating the model with the observed reward.
+                            </li>
+                            <li>
+                                <strong>Evaluation.</strong> On the 6 held-out instances, compare: (a) the agent's
+                                selected solver, (b) always choosing the best FD solver, (c) always choosing the best
+                                PINN, and (d) an oracle that picks the globally best solver per instance.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DELIVERABLES                                                  -->
+                    <!-- ============================================================ -->
+                    <section id="deliverables" style="margin-top: 2rem;">
+                        <h2>6. Deliverables</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border);">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">#</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Item</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D1</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>burgers_fd.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Finite-difference solver with upwind advection and centered diffusion. Supports configurable $N_x$. Includes reference solution generator.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D2</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>burgers_pinn.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">PINN solver with configurable architecture. Includes training loop, loss logging, and prediction on evaluation grid.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D3</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>generate_references.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Script to produce high-resolution reference solutions for all 18 (IC, $\nu$) combinations.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D4</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>benchmark.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Runs all solver configs on all problem instances. Outputs a CSV with columns: IC, nu, solver, Nx/layers, L2_error, wall_time, n_steps/epochs.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D5</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>solver_agent.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">LinUCB bandit agent for solver selection. Includes training and evaluation loops.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D6</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Report (PDF, 5&ndash;7 pages)</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Sections: Introduction, Classical Solver, PINN Solver, Benchmark Results, Solver Selection Agent, Discussion, Conclusion.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D7</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Plots</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        (a) Solution profiles $u(x, 1)$ for FD vs PINN vs reference at three $\nu$ values.<br>
+                                        (b) $L^2$ error vs $\nu$ for both solvers (log-log plot).<br>
+                                        (c) Wall-clock time vs $L^2$ error Pareto front.<br>
+                                        (d) PINN training loss curves for different architectures.<br>
+                                        (e) Agent's solver selection decisions shown as a confusion matrix vs oracle.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D8</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Metrics table</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        Complete table of $L^2$ error, wall-clock time, and solver selected for all 18 instances
+                                        and all solver configurations. Mean and std across IC families.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- RUBRIC                                                        -->
+                    <!-- ============================================================ -->
+                    <section id="rubric" style="margin-top: 2rem;">
+                        <h2>7. Grading Rubric</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border); width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 25%;">Criterion</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 10%; text-align: center;">Weight</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Correctness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">30</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        FD solver correctly implements upwind advection and centered diffusion; converges
+                                        at the expected rate ($O(\Delta x)$ for upwind). PINN correctly computes PDE
+                                        residual gradients via automatic differentiation. Both solvers produce solutions
+                                        with $L^2$ error below $10^{-2}$ for $\nu = 0.1$. Reference solution is validated
+                                        against an analytical solution for the sine IC case.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Efficiency</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">20</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        FD solver uses vectorized NumPy operations (no Python for-loops over grid points
+                                        in the final version). PINN training uses GPU if available and batched collocation
+                                        sampling. Benchmark timing is fair (same hardware, warm-up runs excluded).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Robustness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">20</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Both solvers produce finite, physically plausible solutions for all 18 problem
+                                        instances. The FD solver does not blow up for any $\nu$ value. The PINN converges
+                                        (loss decreases monotonically after initial transient) for all configurations.
+                                        The bandit agent's selected solver meets the accuracy target on at least 4 of
+                                        6 held-out instances.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Reproducibility</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        All random seeds are fixed (NumPy, PyTorch, CUDA). A <code>requirements.txt</code>
+                                        specifies exact package versions. Running <code>python generate_references.py &amp;&amp;
+                                        python benchmark.py &amp;&amp; python solver_agent.py</code> reproduces all results.
+                                        Benchmark CSV matches reported tables to within 5% on wall-clock time.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Documentation</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Report includes clear derivation of both numerical schemes. Plots are publication-quality
+                                        with labeled axes, legends, and captions. Code has module-level and function-level
+                                        docstrings. Discussion section addresses when each solver is preferred and why.
+                                    </td>
+                                </tr>
+                                <tr style="background: var(--mf-paper);">
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"><strong>Total</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border); text-align: center;"><strong>100</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- REFERENCES                                                    -->
+                    <!-- ============================================================ -->
+                    <section id="references" style="margin-top: 2rem;">
+                        <h2>8. References &amp; Links</h2>
+
+                        <ol>
+                            <li>
+                                Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). "Physics-informed neural
+                                networks: A deep learning framework for solving forward and inverse problems involving
+                                nonlinear partial differential equations." <em>Journal of Computational Physics</em>,
+                                378, 686&ndash;707.
+                            </li>
+                            <li>
+                                LeVeque, R. J. (2002). <em>Finite Volume Methods for Hyperbolic Problems</em>.
+                                Cambridge University Press.
+                            </li>
+                            <li>
+                                Cole, J. D. (1951). "On a quasi-linear parabolic equation occurring in aerodynamics."
+                                <em>Quarterly of Applied Mathematics</em>, 9(3), 225&ndash;236.
+                            </li>
+                            <li>
+                                Li, L., Chu, W., Langford, J., &amp; Schapire, R. E. (2010). "A contextual-bandit
+                                approach to personalized news article recommendation." <em>Proceedings of the 19th
+                                International Conference on World Wide Web</em>, 661&ndash;670.
+                            </li>
+                            <li>
+                                Krishnapriyan, A. S., Gholami, A., Zhe, S., Kirby, R. M., &amp; Mahoney, M. W. (2021).
+                                "Characterizing possible failure modes in physics-informed neural networks."
+                                <em>NeurIPS 2021</em>.
+                            </li>
+                            <li>
+                                PyTorch documentation: <a href="https://pytorch.org/docs/stable/" target="_blank" rel="noopener">https://pytorch.org/docs/stable/</a>
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- NAVIGATION                                                    -->
+                    <!-- ============================================================ -->
+                    <hr style="border-top: 1px solid var(--mf-border); margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0 3rem 0;">
+                        <a href="project4-1.html" style="font-family: 'Inter', sans-serif;">&larr; Project 4.1: Agent Simulation</a>
+                        <a href="project4-3.html" style="font-family: 'Inter', sans-serif;">Project 4.3: SciML Real Data &rarr;</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

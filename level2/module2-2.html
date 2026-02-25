@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 2.2: Numerical PDE Methods — finite differences, CFL condition, stability analysis, finite elements, spectral methods">
+    <title>Module 2.2 — Numerical PDE Methods</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 2 — PDEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module2-1.html">2.1 Scalar PDEs</a>
+      <a href="module2-2.html" aria-current="page">2.2 Numerical Methods</a>
+      <a href="module2-3.html">2.3 Stochastic Models</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:1rem;color:var(--mf-muted);margin-bottom:0.25rem;">Module 2.2</p>
+        <h1>Numerical PDE Methods</h1>
+    </div>
+
+    <div class="content-section" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+        <div>
+            <strong>Difficulty:</strong> Advanced<br>
+            <strong>Estimated Time:</strong> 5 -- 6 hours<br>
+        </div>
+        <div>
+            <strong>Prerequisites:</strong>
+            <ul style="margin:0.25rem 0 0 1.25rem;">
+                <li><a href="module2-1.html">Module 2.1 — Scalar PDEs and Classification</a></li>
+                <li><a href="../level1/module1-4.html">Module 1.4 — Numerical Methods for ODEs</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="intro-box">
+        <h2>Why This Matters</h2>
+        <p>
+            Analytic solutions to PDEs exist only for idealised geometries and simple boundary conditions. In practice, every engineering simulation, weather forecast, and computational-physics experiment depends on numerical PDE solvers. Finite difference methods are the most transparent entry point: they replace derivatives with algebraic differences on a grid, transforming a continuous problem into a large but finite linear system. However, a naive discretisation can produce results that diverge, oscillate, or bear no resemblance to the true solution. The CFL condition and von Neumann stability analysis give you precise criteria for when a scheme will work and when it will fail. The Lax equivalence theorem elevates this to a fundamental principle: for a consistent scheme, stability is both necessary and sufficient for convergence. Beyond finite differences, the finite element method (FEM) and spectral methods offer superior accuracy on complex geometries and smooth problems, respectively. This module equips you to choose, implement, and validate numerical PDE solvers with confidence.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="learning-objectives">
+        <h4>Learning Objectives</h4>
+        <p>After completing this module you will be able to:</p>
+        <ol>
+            <li>Discretise the 1D heat equation using explicit (FTCS) and implicit (BTCS) finite difference schemes.</li>
+            <li>Derive the CFL condition for the explicit heat equation scheme and verify it numerically.</li>
+            <li>Perform von Neumann stability analysis by substituting a Fourier mode into the difference equation.</li>
+            <li>Implement the Crank-Nicolson scheme and explain why it achieves second-order accuracy in both space and time.</li>
+            <li>Discretise the 1D wave equation with the standard explicit leap-frog stencil and state its CFL condition.</li>
+            <li>State and explain the Lax equivalence theorem: consistency + stability = convergence.</li>
+            <li>Formulate the weak form of an elliptic boundary-value problem and identify trial and test function spaces.</li>
+            <li>Construct piecewise-linear (hat) basis functions for a 1D finite element discretisation.</li>
+            <li>Describe the key idea behind spectral methods: expand the solution in global basis functions (Fourier modes or Chebyshev polynomials) and achieve exponential convergence for smooth solutions.</li>
+            <li>Compare finite difference, finite element, and spectral methods in terms of accuracy, complexity, and applicability.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ---- Definitions ---- -->
+    <h3>Key Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.1 — Finite Difference Approximation</h4>
+        <p>Given a uniform spatial grid \(x_j = j\Delta x\) and time levels \(t^n = n\Delta t\), the <strong>centred second difference</strong> approximates the second spatial derivative:</p>
+        $$ u_{xx}(x_j,t^n) \approx \frac{U_j^{n+1/0} - 2U_j^n + U_{j-1}^n}{(\Delta x)^2} + \mathcal{O}((\Delta x)^2), $$
+        <p>where \(U_j^n \approx u(x_j,t^n)\) denotes the discrete approximation.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.2 — FTCS (Forward-Time Central-Space) Scheme</h4>
+        <p>The <strong>explicit</strong> finite difference scheme for \(u_t = k\,u_{xx}\) uses a forward difference in time and centred difference in space:</p>
+        $$ U_j^{n+1} = U_j^n + r\bigl(U_{j+1}^n - 2U_j^n + U_{j-1}^n\bigr), \qquad r = \frac{k\,\Delta t}{(\Delta x)^2}. $$
+        <p>The parameter \(r\) is called the <strong>mesh ratio</strong> or <strong>Fourier number</strong>.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.3 — Crank-Nicolson Scheme</h4>
+        <p>The <strong>Crank-Nicolson</strong> scheme averages the spatial operator at time levels \(n\) and \(n+1\):</p>
+        $$ U_j^{n+1} - U_j^n = \frac{r}{2}\bigl[\bigl(U_{j+1}^{n+1}-2U_j^{n+1}+U_{j-1}^{n+1}\bigr) + \bigl(U_{j+1}^n-2U_j^n+U_{j-1}^n\bigr)\bigr]. $$
+        <p>This is an <strong>implicit</strong> scheme (requiring a tridiagonal solve at each time step) with truncation error \(\mathcal{O}((\Delta t)^2 + (\Delta x)^2)\) and is <strong>unconditionally stable</strong>.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.4 — Consistency</h4>
+        <p>A finite difference scheme is <strong>consistent</strong> with the PDE if the local truncation error \(\tau_j^n \to 0\) as \(\Delta x, \Delta t \to 0\). Formally, substituting the exact solution into the difference equation and Taylor-expanding must recover the PDE plus vanishing remainder.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.5 — Stability (von Neumann Sense)</h4>
+        <p>A scheme is <strong>stable</strong> if there exists a constant \(C\) (independent of \(\Delta x, \Delta t\)) such that the discrete solution remains bounded: \(\|U^n\| \leq C\,\|U^0\|\) for all \(n\Delta t \leq T\). In the <strong>von Neumann analysis</strong>, one substitutes the Fourier mode \(U_j^n = g^n e^{i\xi j\Delta x}\) and requires \(|g(\xi)|\leq 1\) for all wave numbers \(\xi\).</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.2.6 — Weak Formulation</h4>
+        <p>Given the boundary-value problem \(-u''=f\) on \((0,1)\) with \(u(0)=u(1)=0\), the <strong>weak form</strong> seeks \(u\in H_0^1(0,1)\) such that</p>
+        $$ \int_0^1 u'(x)\,v'(x)\,dx = \int_0^1 f(x)\,v(x)\,dx \qquad \forall\, v\in H_0^1(0,1). $$
+        <p>This is obtained by multiplying the PDE by a test function \(v\) and integrating by parts.</p>
+    </div>
+
+    <!-- ---- Theorems ---- -->
+    <h3>Key Theorems</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.2.1 — Lax Equivalence Theorem</h4>
+        <p>For a well-posed linear initial-value problem and a consistent finite difference scheme, <strong>stability is necessary and sufficient for convergence</strong>.</p>
+        <p>That is, if the scheme is consistent with the PDE and stable, then</p>
+        $$ \max_j |U_j^n - u(x_j,t^n)| \to 0 \quad\text{as}\quad \Delta x, \Delta t \to 0 $$
+        <p>for any fixed final time \(T = n\Delta t\). Conversely, if the scheme converges, it must be stable.</p>
+        <div class="proof-box">
+            <p><strong>Proof sketch.</strong> Write the global error \(e^n = U^n - \hat{U}^n\) (where \(\hat{U}^n\) is the exact solution restricted to the grid). The error satisfies the same difference operator plus the truncation error: \(e^{n+1}=G\,e^n + \Delta t\,\tau^n\). Iterating, \(e^n = G^n e^0 + \Delta t\sum_{m=0}^{n-1}G^{n-1-m}\tau^m\). Stability gives \(\|G^n\|\leq C\); consistency gives \(\|\tau^m\|\to 0\). Together they yield \(\|e^n\|\to 0\).</p>
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.2.2 — CFL Necessary Condition</h4>
+        <p>The <strong>Courant-Friedrichs-Lewy (CFL) condition</strong> states that a necessary condition for convergence of a finite difference scheme for a hyperbolic PDE is that the <strong>numerical domain of dependence</strong> must contain the <strong>analytical domain of dependence</strong>.</p>
+        <p>For the 1D wave equation \(u_{tt}=c^2 u_{xx}\) with the standard leap-frog scheme, this requires</p>
+        $$ \nu = \frac{c\,\Delta t}{\Delta x} \leq 1, $$
+        <p>where \(\nu\) is the <strong>Courant number</strong>. For the explicit heat equation scheme (FTCS), the analogous stability condition is \(r = k\Delta t/(\Delta x)^2 \leq 1/2\).</p>
+    </div>
+
+    <!-- ---- Misconceptions ---- -->
+    <h3>Common Misconceptions</h3>
+
+    <div class="warning-box">
+        <h4>Misconception 1: "A smaller time step always gives a better solution."</h4>
+        <p>While reducing \(\Delta t\) improves accuracy for stable schemes, reducing \(\Delta t\) alone while keeping \(\Delta x\) fixed can violate the CFL condition for explicit schemes (since \(r = k\Delta t/(\Delta x)^2\)), though for the heat equation this actually helps. For the wave equation, the condition \(\nu = c\Delta t/\Delta x \leq 1\) means that refining \(\Delta x\) without proportionally refining \(\Delta t\) can cause instability. The key lesson: \(\Delta t\) and \(\Delta x\) must be refined together according to the stability constraint.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 2: "Implicit schemes are always better than explicit schemes."</h4>
+        <p>Implicit schemes (BTCS, Crank-Nicolson) are unconditionally stable, but each time step requires solving a linear system. For problems in multiple spatial dimensions, this system can be large and expensive. Explicit schemes, despite their time-step restriction, can be faster per step and easier to parallelise. The optimal choice depends on the problem, hardware, and accuracy requirements.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 3: "Consistency alone guarantees convergence."</h4>
+        <p>The Lax equivalence theorem shows that consistency without stability is worthless. A classic counterexample: the DuFort-Frankel scheme is consistent and unconditionally stable, but if \(\Delta t/\Delta x \to \text{const}\) as both go to zero, it approximates a different PDE (the telegraph equation). Consistency must be verified in the specific limit under consideration.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 4: "Finite elements are just finite differences on an unstructured mesh."</h4>
+        <p>While both produce algebraic systems, the derivation and properties differ fundamentally. Finite elements start from the weak formulation and provide a variational framework guaranteeing best-approximation properties (Cea's lemma). Finite differences start from pointwise Taylor expansions. FEM naturally handles complex geometries and non-uniform meshes; FD methods are simplest on regular grids.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 5: "Spectral methods always give exponential convergence."</h4>
+        <p>Spectral methods achieve exponential (spectral) convergence only for infinitely smooth solutions. If the solution has limited regularity (e.g., due to non-smooth boundary data or corners in the domain), the convergence rate degrades to algebraic, similar to or even worse than high-order finite elements. Spectral methods also struggle with complex geometries unless combined with domain decomposition.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <div class="example-box">
+        <h4>Example 2.2.1 — Von Neumann Stability Analysis of FTCS</h4>
+        <p><strong>Problem.</strong> Determine the stability condition for the FTCS scheme applied to \(u_t = k\,u_{xx}\).</p>
+
+        <p><strong>Step 1 — Substitute a Fourier mode.</strong> Let \(U_j^n = g^n e^{i\xi j\Delta x}\). The FTCS scheme gives</p>
+        $$ g^{n+1}e^{i\xi j\Delta x} = g^n e^{i\xi j\Delta x} + r\bigl(g^n e^{i\xi(j+1)\Delta x}-2g^n e^{i\xi j\Delta x}+g^n e^{i\xi(j-1)\Delta x}\bigr). $$
+
+        <p><strong>Step 2 — Divide by \(g^n e^{i\xi j\Delta x}\):</strong></p>
+        $$ g = 1 + r\bigl(e^{i\xi\Delta x}-2+e^{-i\xi\Delta x}\bigr) = 1 + 2r\bigl(\cos(\xi\Delta x)-1\bigr). $$
+
+        <p><strong>Step 3 — Simplify.</strong> Using \(\cos\theta - 1 = -2\sin^2(\theta/2)\):</p>
+        $$ g = 1 - 4r\sin^2\!\left(\frac{\xi\Delta x}{2}\right). $$
+
+        <p><strong>Step 4 — Stability requires \(|g|\leq 1\).</strong> The worst case is when \(\sin^2(\xi\Delta x/2)=1\), giving \(g=1-4r\). We need \(-1\leq 1-4r\leq 1\), which yields \(0\leq r\leq 1/2\).</p>
+
+        <p><strong>Conclusion:</strong> The FTCS scheme is stable if and only if</p>
+        $$ r = \frac{k\,\Delta t}{(\Delta x)^2} \leq \frac{1}{2}. $$
+    </div>
+
+    <div class="example-box">
+        <h4>Example 2.2.2 — Deriving the Crank-Nicolson System</h4>
+        <p><strong>Problem.</strong> Write the Crank-Nicolson scheme for \(u_t=k\,u_{xx}\) as a tridiagonal linear system.</p>
+
+        <p><strong>Step 1 — The scheme.</strong> At interior grid points \(j=1,\ldots,M-1\):</p>
+        $$ -\frac{r}{2}U_{j-1}^{n+1} + (1+r)U_j^{n+1} - \frac{r}{2}U_{j+1}^{n+1} = \frac{r}{2}U_{j-1}^n + (1-r)U_j^n + \frac{r}{2}U_{j+1}^n. $$
+
+        <p><strong>Step 2 — Matrix form.</strong> Let \(\mathbf{U}^n = (U_1^n, U_2^n, \ldots, U_{M-1}^n)^T\). Define the tridiagonal matrices</p>
+        $$ A = \begin{pmatrix} 1+r & -r/2 & & \\ -r/2 & 1+r & -r/2 & \\ & \ddots & \ddots & \ddots \\ & & -r/2 & 1+r \end{pmatrix}, \quad B = \begin{pmatrix} 1-r & r/2 & & \\ r/2 & 1-r & r/2 & \\ & \ddots & \ddots & \ddots \\ & & r/2 & 1-r \end{pmatrix}. $$
+
+        <p><strong>Step 3 — The system at each time step is:</strong></p>
+        $$ A\,\mathbf{U}^{n+1} = B\,\mathbf{U}^n + \mathbf{b}^n, $$
+        <p>where \(\mathbf{b}^n\) incorporates the boundary conditions. Since \(A\) is tridiagonal and diagonally dominant (for \(r>0\)), the Thomas algorithm solves this in \(\mathcal{O}(M)\) operations.</p>
+
+        <p><strong>Truncation error:</strong> \(\mathcal{O}((\Delta t)^2+(\Delta x)^2)\) since Crank-Nicolson averages the forward and backward Euler methods.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LABS                                    -->
+<!-- ============================================================ -->
+<section id="code-lab">
+    <h2>Interactive Code Labs</h2>
+
+    <!-- CODE LAB 1 -->
+    <div class="interactive-highlight">
+        <h4>Lab 1: Explicit Finite Difference Solver for the 1D Heat Equation</h4>
+        <p>This lab implements the FTCS scheme for the heat equation \(u_t = k\,u_{xx}\) on \([0,1]\) with \(u(x,0)=\sin(\pi x)\) and homogeneous Dirichlet BCs. The exact solution is \(u(x,t)=e^{-k\pi^2 t}\sin(\pi x)\). We animate the numerical vs. exact solution and demonstrate instability when the CFL condition is violated.</p>
+
+        <div class="code-editor-container">
+            <textarea class="code-editor" id="ftcs-code" rows="52">
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# --- Parameters ---
+k = 1.0          # thermal diffusivity
+L = 1.0          # domain length
+M = 50           # number of spatial intervals
+dx = L / M
+x = np.linspace(0, L, M + 1)
+
+# --- Choose r: try r=0.4 (stable) vs r=0.6 (unstable) ---
+r = 0.4          # mesh ratio  k*dt/dx^2
+dt = r * dx**2 / k
+N_steps = 200    # number of time steps
+
+print(f"dx = {dx:.4f}, dt = {dt:.6f}, r = {r:.2f}")
+print(f"CFL condition (r <= 0.5): {'SATISFIED' if r <= 0.5 else 'VIOLATED'}")
+
+# --- Exact solution ---
+def u_exact(x, t):
+    return np.exp(-k * np.pi**2 * t) * np.sin(np.pi * x)
+
+# --- FTCS scheme ---
+U = np.sin(np.pi * x).copy()  # initial condition
+history = [U.copy()]
+
+for n in range(N_steps):
+    U_new = U.copy()
+    for j in range(1, M):
+        U_new[j] = U[j] + r * (U[j+1] - 2*U[j] + U[j-1])
+    # Enforce boundary conditions
+    U_new[0] = 0.0
+    U_new[M] = 0.0
+    U = U_new.copy()
+    if n % 5 == 0:
+        history.append(U.copy())
+
+# --- Animation ---
+fig, ax = plt.subplots(figsize=(8, 5))
+line_num, = ax.plot(x, history[0], 'b-o', markersize=2, label='FTCS numerical')
+line_exact, = ax.plot(x, u_exact(x, 0), 'r--', linewidth=2, label='Exact')
+ax.set_xlim(0, L)
+ax.set_ylim(-0.2, 1.2)
+ax.set_xlabel('x')
+ax.set_ylabel('u(x, t)')
+ax.legend()
+title = ax.set_title(f'FTCS Heat Equation (r={r})  t = 0.0000')
+ax.grid(True, alpha=0.3)
+
+def animate(frame):
+    t = frame * 5 * dt
+    line_num.set_ydata(history[min(frame, len(history)-1)])
+    line_exact.set_ydata(u_exact(x, t))
+    title.set_text(f'FTCS Heat Equation (r={r})  t = {t:.4f}')
+    return line_num, line_exact, title
+
+ani = FuncAnimation(fig, animate, frames=len(history), interval=80, blit=True)
+plt.tight_layout()
+plt.show()
+
+# --- Error at final time ---
+t_final = N_steps * dt
+error = np.max(np.abs(U - u_exact(x, t_final)))
+print(f"\nFinal time: t = {t_final:.4f}")
+print(f"Max error at t_final: {error:.2e}")
+            </textarea>
+            <div class="code-buttons">
+                <button class="btn btn-success" onclick="alert('Copy this code into a Python environment (Jupyter, Colab, or local) to run it.')">Run Code</button>
+                <button class="btn btn-default" onclick="document.getElementById('ftcs-code').value=document.getElementById('ftcs-code').defaultValue">Reset</button>
+            </div>
+            <div class="code-output">
+                <p class="output-info">Output: An animated plot comparing the FTCS numerical solution (blue dots) to the exact solution (red dashed). Change <code>r = 0.6</code> to observe the explosive instability when the CFL condition is violated.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CODE LAB 2 -->
+    <div class="interactive-highlight" style="margin-top:2rem;">
+        <h4>Lab 2: Crank-Nicolson Implicit Solver — Comparison with FTCS</h4>
+        <p>This lab implements the Crank-Nicolson scheme and compares it side-by-side with the explicit FTCS scheme. Note that Crank-Nicolson is unconditionally stable and second-order in both time and space.</p>
+
+        <div class="code-editor-container">
+            <textarea class="code-editor" id="cn-code" rows="72">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# --- Parameters ---
+k = 1.0
+L = 1.0
+M = 40                # spatial intervals
+dx = L / M
+x = np.linspace(0, L, M + 1)
+t_final = 0.1
+
+# We test both schemes at the SAME large r to show CN remains stable
+r_values = [0.4, 0.8]  # r = 0.4 (both stable), r = 0.8 (FTCS unstable, CN stable)
+
+fig, axes = plt.subplots(len(r_values), 2, figsize=(12, 5 * len(r_values)))
+
+for row, r in enumerate(r_values):
+    dt = r * dx**2 / k
+    N_steps = int(t_final / dt)
+
+    # --- Exact solution ---
+    def u_exact(x, t):
+        return np.exp(-k * np.pi**2 * t) * np.sin(np.pi * x)
+
+    # --- FTCS (explicit) ---
+    U_ftcs = np.sin(np.pi * x).copy()
+    for n in range(N_steps):
+        U_new = U_ftcs.copy()
+        for j in range(1, M):
+            U_new[j] = U_ftcs[j] + r * (U_ftcs[j+1] - 2*U_ftcs[j] + U_ftcs[j-1])
+        U_new[0] = 0.0
+        U_new[M] = 0.0
+        U_ftcs = U_new.copy()
+
+    # --- Crank-Nicolson (implicit, tridiagonal solve) ---
+    U_cn = np.sin(np.pi * x).copy()
+
+    # Build tridiagonal matrices A and B for interior points
+    M_int = M - 1
+    # A * U^{n+1} = B * U^n  (interior points only)
+    a_diag = (1 + r) * np.ones(M_int)
+    a_off  = (-r / 2) * np.ones(M_int - 1)
+    b_diag = (1 - r) * np.ones(M_int)
+    b_off  = (r / 2) * np.ones(M_int - 1)
+
+    def tridiag_solve(lower, diag, upper, rhs):
+        """Thomas algorithm for tridiagonal system."""
+        n = len(diag)
+        c = np.zeros(n)
+        d = np.zeros(n)
+        x_sol = np.zeros(n)
+        c[0] = upper[0] / diag[0]
+        d[0] = rhs[0] / diag[0]
+        for i in range(1, n):
+            m = lower[i-1] / (diag[i] - lower[i-1] * c[i-1]) if i < n else 0
+            # corrected Thomas algorithm
+            denom = diag[i] - lower[i-1] * c[i-1]
+            if i < n - 1:
+                c[i] = upper[i] / denom
+            d[i] = (rhs[i] - lower[i-1] * d[i-1]) / denom
+        x_sol[-1] = d[-1]
+        for i in range(n-2, -1, -1):
+            x_sol[i] = d[i] - c[i] * x_sol[i+1]
+        return x_sol
+
+    for n in range(N_steps):
+        # Right-hand side: B * U_interior
+        U_int = U_cn[1:M]
+        rhs = b_diag * U_int
+        rhs[:-1] += b_off * U_int[1:]
+        rhs[1:]  += b_off * U_int[:-1]
+        # Boundary terms (both zero for homogeneous Dirichlet)
+
+        # Solve A * U_int_new = rhs
+        U_int_new = tridiag_solve(a_off, a_diag, a_off, rhs)
+        U_cn[1:M] = U_int_new
+        U_cn[0] = 0.0
+        U_cn[M] = 0.0
+
+    # --- Plotting ---
+    exact = u_exact(x, N_steps * dt)
+
+    ax1 = axes[row, 0]
+    ax1.plot(x, exact, 'r--', linewidth=2, label='Exact')
+    ax1.plot(x, U_ftcs, 'b-o', markersize=3, label='FTCS')
+    ax1.set_title(f'FTCS  (r = {r})  t = {N_steps*dt:.4f}')
+    ax1.set_ylim(-1.5, 1.5)
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    if r > 0.5:
+        ax1.annotate('UNSTABLE!', xy=(0.5, 0.8), fontsize=14, color='red',
+                      ha='center', fontweight='bold')
+
+    ax2 = axes[row, 1]
+    ax2.plot(x, exact, 'r--', linewidth=2, label='Exact')
+    ax2.plot(x, U_cn, 'g-s', markersize=3, label='Crank-Nicolson')
+    ax2.set_title(f'Crank-Nicolson  (r = {r})  t = {N_steps*dt:.4f}')
+    ax2.set_ylim(-1.5, 1.5)
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    err_ftcs = np.max(np.abs(U_ftcs - exact))
+    err_cn = np.max(np.abs(U_cn - exact))
+    print(f"r = {r}: FTCS max error = {err_ftcs:.2e}, CN max error = {err_cn:.2e}")
+
+plt.tight_layout()
+plt.savefig('ftcs_vs_cn.png', dpi=120)
+plt.show()
+print("\nKey observation: Crank-Nicolson remains stable and accurate even at r=0.8,")
+print("while FTCS produces wild oscillations that grow without bound.")
+            </textarea>
+            <div class="code-buttons">
+                <button class="btn btn-success" onclick="alert('Copy this code into a Python environment (Jupyter, Colab, or local) to run it.')">Run Code</button>
+                <button class="btn btn-default" onclick="document.getElementById('cn-code').value=document.getElementById('cn-code').defaultValue">Reset</button>
+            </div>
+            <div class="code-output">
+                <p class="output-info">Output: A 2x2 grid of plots. Top row (r=0.4): both schemes agree with the exact solution. Bottom row (r=0.8): FTCS is unstable while Crank-Nicolson remains accurate.</p>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <h4>Exploration Ideas</h4>
+            <ul>
+                <li>Measure how the error scales with \(\Delta x\) for fixed \(r\). Plot error vs. \(\Delta x\) on a log-log scale and verify second-order convergence for Crank-Nicolson.</li>
+                <li>Implement the backward Euler (BTCS) scheme and compare its accuracy (first-order in time) to Crank-Nicolson (second-order).</li>
+                <li>Replace the smooth initial condition with \(u(x,0)=1\) (discontinuous at the boundaries) and observe how each scheme handles the resulting sharp transients.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <h2>Agent Lens: Numerical Scheme Selection Agent</h2>
+
+    <div class="content-section" style="border-left:4px solid var(--secondary-color);">
+        <p>We frame the choice of numerical scheme parameters as a reinforcement-learning problem. The agent must balance accuracy against computational cost by tuning the discretisation.</p>
+
+        <h4>State</h4>
+        <p>The agent observes:</p>
+        <ul>
+            <li>The PDE type (parabolic, hyperbolic, elliptic) and its coefficients.</li>
+            <li>The current grid resolution \(\Delta x\) and time step \(\Delta t\).</li>
+            <li>The estimated local truncation error at the previous time step.</li>
+            <li>The remaining computational budget (wall-clock time or FLOP count).</li>
+            <li>The current scheme type (explicit, implicit, Crank-Nicolson).</li>
+        </ul>
+
+        <h4>Action</h4>
+        <p>The agent chooses from:</p>
+        <ul>
+            <li><strong>Refine grid:</strong> halve \(\Delta x\) (and adjust \(\Delta t\) to maintain stability).</li>
+            <li><strong>Coarsen grid:</strong> double \(\Delta x\) to save computation.</li>
+            <li><strong>Switch scheme:</strong> change from explicit to Crank-Nicolson (or vice versa).</li>
+            <li><strong>Adaptive time-stepping:</strong> increase or decrease \(\Delta t\) within the CFL constraint.</li>
+            <li><strong>Keep current settings:</strong> continue with unchanged parameters.</li>
+        </ul>
+
+        <h4>Reward</h4>
+        <ul>
+            <li>\(+10\) if the solution error (measured against a fine-grid reference) is below a user-specified tolerance \(\epsilon\).</li>
+            <li>\(-\text{cost}\) proportional to the number of floating-point operations used.</li>
+            <li>\(-100\) if the scheme becomes unstable (solution blows up).</li>
+            <li>\(+5\) bonus for achieving the error target with minimal grid points.</li>
+        </ul>
+
+        <h4>Learning</h4>
+        <p>Through Q-learning or policy gradient, the agent discovers that explicit schemes are efficient when the CFL condition allows large time steps (small diffusivity, coarse spatial grid), while implicit schemes are preferable when accuracy demands fine spatial grids that would force prohibitively small \(\Delta t\) for explicit methods. The agent learns to start coarse for a quick estimate, then adaptively refine only in regions where the error indicator is large, mimicking the logic of adaptive mesh refinement (AMR) strategies used in production PDE solvers.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.1.</strong> Perform von Neumann stability analysis on the backward-Euler (BTCS) scheme:</p>
+        $$ U_j^{n+1} = U_j^n + r\bigl(U_{j+1}^{n+1}-2U_j^{n+1}+U_{j-1}^{n+1}\bigr). $$
+        <p>Show that it is unconditionally stable (\(|g|\leq 1\) for all \(r>0\)).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Substitute \(U_j^n = g^n e^{i\xi j\Delta x}\). The scheme gives</p>
+            $$ g = 1 + r\,g\bigl(e^{i\xi\Delta x}-2+e^{-i\xi\Delta x}\bigr) = 1 - 4rg\sin^2(\xi\Delta x/2). $$
+            <p>Solving for \(g\):</p>
+            $$ g = \frac{1}{1+4r\sin^2(\xi\Delta x/2)}. $$
+            <p>Since \(r>0\) and \(\sin^2\geq 0\), the denominator is \(\geq 1\), so \(0 < g \leq 1\). The scheme is unconditionally stable.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.2.</strong> Derive the local truncation error of the Crank-Nicolson scheme. Show that it is \(\mathcal{O}((\Delta t)^2+(\Delta x)^2)\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Taylor-expand \(u(x,t+\Delta t)\) and \(u(x\pm\Delta x,t)\), \(u(x\pm\Delta x,t+\Delta t)\) about \((x,t+\Delta t/2)\). The time discretisation is the trapezoidal rule (midpoint average of forward and backward Euler), giving \(\mathcal{O}((\Delta t)^2)\). The spatial discretisation is centred differences at both time levels, each \(\mathcal{O}((\Delta x)^2)\). Thus the combined truncation error is \(\tau = \mathcal{O}((\Delta t)^2+(\Delta x)^2)\).</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.3.</strong> For the explicit leap-frog scheme for the wave equation \(u_{tt}=c^2 u_{xx}\):</p>
+        $$ U_j^{n+1} = 2U_j^n - U_j^{n-1} + \nu^2\bigl(U_{j+1}^n - 2U_j^n + U_{j-1}^n\bigr), $$
+        <p>show via von Neumann analysis that stability requires \(\nu = c\Delta t/\Delta x \leq 1\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Substitute \(U_j^n = g^n e^{i\xi j\Delta x}\):</p>
+            $$ g = 2 - 4\nu^2\sin^2(\xi\Delta x/2) - g^{-1}. $$
+            <p>Multiply by \(g\): \(g^2 - [2-4\nu^2\sin^2(\xi\Delta x/2)]g + 1 = 0\).</p>
+            <p>Let \(\alpha = 2-4\nu^2\sin^2(\xi\Delta x/2)\). The roots satisfy \(g_1 g_2 = 1\). For stability we need \(|g_1|=|g_2|=1\), which requires the discriminant \(\alpha^2-4\leq 0\), i.e., \(|\alpha|\leq 2\). The binding constraint is \(\alpha\geq -2\):</p>
+            $$ 2-4\nu^2\sin^2(\xi\Delta x/2) \geq -2 \implies \nu^2\sin^2(\xi\Delta x/2)\leq 1. $$
+            <p>The worst case is \(\sin^2=1\), giving \(\nu\leq 1\).</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.4.</strong> Write down the weak form of the boundary-value problem \(-u''+u=f\) on \((0,1)\) with \(u(0)=u(1)=0\). Identify the bilinear form \(a(u,v)\) and the linear form \(\ell(v)\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Multiply by \(v\in H_0^1\) and integrate by parts:</p>
+            $$ \int_0^1 u'v'\,dx + \int_0^1 uv\,dx = \int_0^1 fv\,dx. $$
+            <p>So \(a(u,v) = \int_0^1(u'v'+uv)\,dx\) and \(\ell(v)=\int_0^1 fv\,dx\). The bilinear form is symmetric, continuous, and coercive on \(H_0^1(0,1)\), so the Lax-Milgram theorem guarantees a unique weak solution.</p>
+        </div>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.5.</strong> Implement the FTCS scheme for the heat equation. Run convergence tests: fix \(r=0.4\) and halve \(\Delta x\) repeatedly. Plot the max error at \(t=0.1\) vs. \(\Delta x\) on a log-log scale and verify second-order spatial convergence.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.6.</strong> Implement the explicit leap-frog scheme for the wave equation \(u_{tt}=c^2u_{xx}\) on \([0,1]\) with \(c=1\), \(u(x,0)=\sin(2\pi x)\), \(u_t(x,0)=0\), and Dirichlet BCs. Animate the standing wave. Verify that the scheme blows up when \(\nu>1\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+c, L = 1.0, 1.0
+M = 100
+dx = L / M
+x = np.linspace(0, L, M + 1)
+nu = 0.9  # Courant number (try 1.1 for instability)
+dt = nu * dx / c
+N_steps = 500
+
+# Initial conditions
+U_prev = np.sin(2 * np.pi * x)
+U_curr = U_prev.copy()  # u_t(x,0)=0 => first step uses special formula
+# First time step: U^1 = U^0 + 0.5*nu^2*(U_{j+1}-2U_j+U_{j-1})
+U_first = np.zeros_like(x)
+for j in range(1, M):
+    U_first[j] = U_curr[j] + 0.5*nu**2*(U_curr[j+1]-2*U_curr[j]+U_curr[j-1])
+U_prev = U_curr.copy()
+U_curr = U_first.copy()
+
+frames = [U_curr.copy()]
+for n in range(2, N_steps):
+    U_next = np.zeros_like(x)
+    for j in range(1, M):
+        U_next[j] = 2*U_curr[j] - U_prev[j] + nu**2*(U_curr[j+1]-2*U_curr[j]+U_curr[j-1])
+    U_prev = U_curr.copy()
+    U_curr = U_next.copy()
+    if n % 3 == 0:
+        frames.append(U_curr.copy())
+
+fig, ax = plt.subplots()
+line, = ax.plot(x, frames[0])
+ax.set_ylim(-1.5, 1.5)
+ax.set_xlabel('x'); ax.set_ylabel('u')
+title = ax.set_title(f'Wave equation (nu={nu})')
+
+def animate(i):
+    line.set_ydata(frames[min(i, len(frames)-1)])
+    return line,
+
+ani = FuncAnimation(fig, animate, frames=len(frames), interval=30)
+plt.show()</code></pre>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.7.</strong> Implement a 1D finite element solver using piecewise-linear hat functions for \(-u''=\sin(\pi x)\) on \([0,1]\) with \(u(0)=u(1)=0\). Compare to the exact solution \(u(x)=\sin(\pi x)/\pi^2\) and measure convergence as the number of elements increases.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.8.</strong> Compare the explicit FTCS, BTCS, and Crank-Nicolson schemes for the heat equation with initial condition \(u(x,0) = \chi_{[0.25,0.75]}(x)\) (indicator function). Plot each solution at \(t=0.01\) and comment on oscillations near the discontinuity.</p>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.9 (Agentic).</strong> Build an adaptive time-stepping agent for the explicit heat equation solver. At each time step, the agent estimates the local error by comparing solutions at \(\Delta t\) and \(\Delta t/2\), then adjusts \(\Delta t\) (staying within the CFL limit). Track the total number of time steps vs. a fixed-step simulation achieving the same final accuracy.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.2.10 (Agentic).</strong> Implement a reinforcement-learning agent (Q-learning with discretised state/action spaces) that selects among FTCS, BTCS, and Crank-Nicolson at each time step based on the current solution smoothness and remaining budget. The reward is \(-(\text{error}+\lambda\cdot\text{cost})\). Train on 500 episodes with random initial conditions and report the learned policy.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <h3>Quiz (10 Questions)</h3>
+
+    <div class="quiz-container">
+        <p><strong>Q1.</strong> The FTCS scheme for the heat equation is stable if the mesh ratio \(r = k\Delta t/(\Delta x)^2\) satisfies:</p>
+        <p>(a) \(r \leq 1\) &emsp; (b) \(r \leq 1/2\) &emsp; (c) \(r \leq 1/4\) &emsp; (d) No restriction</p>
+
+        <p><strong>Q2.</strong> The Crank-Nicolson scheme is:</p>
+        <p>(a) Explicit, first-order &emsp; (b) Implicit, first-order &emsp; (c) Explicit, second-order &emsp; (d) Implicit, second-order</p>
+
+        <p><strong>Q3.</strong> The Lax equivalence theorem states that for a consistent scheme applied to a well-posed linear problem, convergence is equivalent to:</p>
+        <p>(a) Accuracy &emsp; (b) Stability &emsp; (c) Efficiency &emsp; (d) Robustness</p>
+
+        <p><strong>Q4.</strong> In von Neumann stability analysis, the amplification factor \(g\) for the FTCS scheme is:</p>
+        <p>(a) \(g = 1+4r\sin^2(\xi\Delta x/2)\) &emsp; (b) \(g = 1-4r\sin^2(\xi\Delta x/2)\) &emsp; (c) \(g = e^{-r}\) &emsp; (d) \(g = 1/(1+4r)\)</p>
+
+        <p><strong>Q5.</strong> The CFL condition for the wave equation \(u_{tt}=c^2 u_{xx}\) with the leap-frog scheme requires:</p>
+        <p>(a) \(c\Delta t/\Delta x \leq 1/2\) &emsp; (b) \(c\Delta t/\Delta x \leq 1\) &emsp; (c) \(c^2\Delta t/(\Delta x)^2 \leq 1\) &emsp; (d) No restriction</p>
+
+        <p><strong>Q6.</strong> The Thomas algorithm solves a tridiagonal system of size \(n\) in:</p>
+        <p>(a) \(\mathcal{O}(n^3)\) &emsp; (b) \(\mathcal{O}(n^2)\) &emsp; (c) \(\mathcal{O}(n\log n)\) &emsp; (d) \(\mathcal{O}(n)\)</p>
+
+        <p><strong>Q7.</strong> In the finite element method, the weak form is obtained by:</p>
+        <p>(a) Discretising derivatives with finite differences &emsp; (b) Multiplying the PDE by a test function and integrating by parts &emsp; (c) Expanding the solution in Fourier modes &emsp; (d) Applying the Laplace transform</p>
+
+        <p><strong>Q8.</strong> Spectral methods achieve exponential convergence when the solution is:</p>
+        <p>(a) Piecewise constant &emsp; (b) Continuous but not differentiable &emsp; (c) Infinitely smooth &emsp; (d) Discontinuous</p>
+
+        <p><strong>Q9.</strong> A finite difference scheme is consistent if the local truncation error:</p>
+        <p>(a) Is exactly zero &emsp; (b) Tends to zero as the mesh is refined &emsp; (c) Is bounded by 1 &emsp; (d) Equals the global error</p>
+
+        <p><strong>Q10.</strong> For the backward-Euler (BTCS) scheme, the amplification factor is:</p>
+        <p>(a) \(g=1+4r\sin^2(\xi\Delta x/2)\) &emsp; (b) \(g=1/(1+4r\sin^2(\xi\Delta x/2))\) &emsp; (c) \(g=1-4r\sin^2(\xi\Delta x/2)\) &emsp; (d) \(g=e^{-4r}\)</p>
+    </div>
+
+    <button class="collapsible">Show Answer Key</button>
+    <div class="collapsible-content">
+        <p><strong>Q1:</strong> (b) &emsp; <strong>Q2:</strong> (d) &emsp; <strong>Q3:</strong> (b) &emsp; <strong>Q4:</strong> (b) &emsp; <strong>Q5:</strong> (b)</p>
+        <p><strong>Q6:</strong> (d) &emsp; <strong>Q7:</strong> (b) &emsp; <strong>Q8:</strong> (c) &emsp; <strong>Q9:</strong> (b) &emsp; <strong>Q10:</strong> (b)</p>
+    </div>
+
+    <h3>Mini-Project: Adaptive PDE Solver Benchmark</h3>
+
+    <div class="content-section">
+        <p><strong>Objective:</strong> Implement three numerical schemes (FTCS, BTCS, Crank-Nicolson) for the 1D heat equation and build a benchmarking harness that compares them across a suite of test problems with varying smoothness, diffusivity, and grid resolution.</p>
+
+        <h4>Requirements</h4>
+        <ol>
+            <li>Implement all three schemes in a modular code with a common interface.</li>
+            <li>For each scheme, run convergence tests (error vs. \(\Delta x\) at fixed final time) and verify the theoretical convergence orders.</li>
+            <li>Produce stability diagrams: for each scheme, plot the maximum stable \(\Delta t\) as a function of \(\Delta x\).</li>
+            <li>Implement a simple adaptive time-stepping strategy for the explicit scheme (double or halve \(\Delta t\) based on a local error estimate).</li>
+            <li>Produce a summary table comparing wall-clock time, number of time steps, and final error for each method on each test problem.</li>
+        </ol>
+
+        <h4>Rubric</h4>
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Criterion</th><th>Excellent (90--100%)</th><th>Good (70--89%)</th><th>Needs Improvement (&lt;70%)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Correctness</strong></td>
+                    <td>All three schemes converge at the theoretical rate; stability boundaries match the analysis; adaptive stepping maintains accuracy.</td>
+                    <td>Two schemes correct; minor issues with convergence rates or stability.</td>
+                    <td>Incorrect implementations or wrong convergence orders.</td>
+                </tr>
+                <tr>
+                    <td><strong>Efficiency</strong></td>
+                    <td>Vectorised inner loops; Thomas algorithm used for implicit solves; benchmark runs in under 60 seconds on a laptop for all test cases.</td>
+                    <td>Runs correctly but uses slow Python loops; benchmark takes several minutes.</td>
+                    <td>Prohibitively slow or memory-intensive.</td>
+                </tr>
+                <tr>
+                    <td><strong>Robustness</strong></td>
+                    <td>Handles edge cases (zero diffusivity, very fine/coarse grids, discontinuous initial conditions) with informative warnings.</td>
+                    <td>Works on standard inputs; may crash on edge cases.</td>
+                    <td>Crashes on valid inputs.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reproducibility</strong></td>
+                    <td>Complete <code>requirements.txt</code>, docstrings for every function, a Jupyter notebook with all figures, and a summary table.</td>
+                    <td>Code runs but documentation is sparse.</td>
+                    <td>Cannot reproduce results without significant effort.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <div class="reference-list">
+        <ol>
+            <li>LeVeque, R. J. (2007). <em>Finite Difference Methods for Ordinary and Partial Differential Equations</em>. SIAM.</li>
+            <li>Strikwerda, J. C. (2004). <em>Finite Difference Schemes and Partial Differential Equations</em>, 2nd ed. SIAM.</li>
+            <li>Brenner, S. C. and Scott, L. R. (2008). <em>The Mathematical Theory of Finite Element Methods</em>, 3rd ed. Springer.</li>
+            <li>Trefethen, L. N. (2000). <em>Spectral Methods in MATLAB</em>. SIAM.</li>
+            <li>Courant, R., Friedrichs, K., and Lewy, H. (1928). "Uber die partiellen Differenzengleichungen der mathematischen Physik." <em>Mathematische Annalen</em>, 100(1), 32--74.</li>
+        </ol>
+    </div>
+
+    <div class="section-nav">
+        <a href="index.html">&larr; Back to Level 2 Overview</a>
+        <a href="module2-3.html">Next: Module 2.3 — Stochastic and Complex Models &rarr;</a>
+    </div>
+</section>
+
+</div><!-- col -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<script>
+// Collapsible sections
+document.querySelectorAll('.collapsible').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        if(content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        }
+    });
+});
+</script>
+</body>
+</html>

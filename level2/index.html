@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Differential Equations II — Chapter Guide</title>
+    <title>Level 2 — Partial Differential Equations</title>
     <link rel="stylesheet" href="../css/modern-style.css">
     <link rel="stylesheet" href="../css/manifesto-template.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,24 +15,59 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header" role="banner">
     <div class="page-shell header-layout">
-        <p class="site-mark">Differential Equations II</p>
+        <p class="site-mark">Level 2 — PDEs</p>
         <nav aria-label="Primary navigation" class="top-nav">
             <a href="../index.html">Home</a>
-            <a href="#chapters">Chapters</a>
-            <a href="interactive_demo.html">Demo</a>
+            <a href="#new-modules">New Modules</a>
+            <a href="#legacy">Legacy Chapters</a>
+            <a href="../level1/index.html">Level 1</a>
+            <a href="../level3/index.html">Level 3</a>
         </nav>
     </div>
 </header>
 <main id="main-content" class="page-shell">
     <section class="hero" aria-labelledby="hero-title">
-        <p class="hero-kicker">Advanced notebook</p>
-        <h1 id="hero-title">Systems, PDEs, and Spectral Methods</h1>
-        <p class="hero-subtitle">A continuation focused on linear algebra tools, Fourier reasoning, and computational methods for advanced models.</p>
-        <p class="hero-cta">Start with <a href="linalg.html">Linear Algebra Review</a>, then proceed chapter by chapter.</p>
+        <p class="hero-kicker">Intermediate–Advanced · 3 modules + 7 legacy chapters</p>
+        <h1 id="hero-title">Partial Differential Equations</h1>
+        <p class="hero-subtitle">Scalar PDE classification, numerical methods (finite differences, finite elements, spectral methods), and stochastic and complex models — with agent-based perspectives on solver decision-making.</p>
+        <p class="hero-cta">Requires <a href="../level1/index.html">Level 1: ODEs</a>. Continue to <a href="../level3/index.html">Level 3: AI-Driven Methods</a>.</p>
     </section>
 
-    <section id="chapters" class="section-block" aria-labelledby="chapters-title">
-        <h2 id="chapters-title">Chapter List</h2>
+    <section id="new-modules" class="section-block" aria-labelledby="new-modules-title">
+        <h2 id="new-modules-title">Curriculum Modules</h2>
+        <ol class="chapter-list">
+            <li>
+                <a href="module2-1.html" class="chapter-link">
+                    <div>
+                        <h3><span>2.1</span> — Scalar PDEs and Classification</h3>
+                        <p>Elliptic, parabolic, and hyperbolic PDEs. Heat equation, wave equation, Laplace equation, separation of variables, and Fourier series solutions.</p>
+                    </div>
+                    <p class="chapter-meta">Intermediate · 5–6 Hours</p>
+                </a>
+            </li>
+            <li>
+                <a href="module2-2.html" class="chapter-link">
+                    <div>
+                        <h3><span>2.2</span> — Numerical PDE Methods</h3>
+                        <p>Finite difference methods, stability analysis (CFL condition, von Neumann analysis), finite element introduction, and spectral methods overview.</p>
+                    </div>
+                    <p class="chapter-meta">Advanced · 5–6 Hours</p>
+                </a>
+            </li>
+            <li>
+                <a href="module2-3.html" class="chapter-link">
+                    <div>
+                        <h3><span>2.3</span> — Stochastic and Complex Models</h3>
+                        <p>Stochastic differential equations, Brownian motion, Ito calculus, Monte Carlo methods, and coupled multi-physics systems.</p>
+                    </div>
+                    <p class="chapter-meta">Advanced · 4–5 Hours</p>
+                </a>
+            </li>
+        </ol>
+    </section>
+
+    <section id="legacy" class="section-block" aria-labelledby="legacy-title">
+        <h2 id="legacy-title">Legacy Chapters (Original Material)</h2>
         <ol class="chapter-list">
             <li><a class="chapter-link" href="linalg.html"><div><h3><span>00</span> — Linear Algebra Review</h3><p>Core matrix tools, eigen-structure, and decomposition techniques for DE analysis.</p></div><p class="chapter-meta">Foundation · 2–3 Hours</p></a></li>
             <li><a class="chapter-link" href="part1.html"><div><h3><span>01</span> — Advanced Linear Algebra</h3><p>Spectral viewpoints and transforms supporting high-dimensional systems.</p></div><p class="chapter-meta">Intermediate · 4 Hours</p></a></li>

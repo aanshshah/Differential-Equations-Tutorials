@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Project 4.1: Agent-Based Simulation of Physical Systems — Differential Equations Tutorials">
+    <meta name="author" content="">
+
+    <title>Project 4.1 — Agent-Based Simulation of Physical Systems</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 4 &mdash; Projects</a>
+    <nav class="lesson-static-links" aria-label="Project navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="project4-1.html" aria-current="page">4.1 Agent Simulation</a>
+      <a href="project4-2.html">4.2 Neural vs Classical</a>
+      <a href="project4-3.html">4.3 SciML Real Data</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a href="index.html">Level 4 Projects</a></li>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="#title-block">Project Brief</a></li>
+            <li><a href="#problem-statement">Problem Statement</a></li>
+            <li><a href="#modeling-assumptions">Assumptions</a></li>
+            <li><a href="#data-generation">Data Generation</a></li>
+            <li><a href="#baselines">Baselines</a></li>
+            <li><a href="#agent-approach">Agent Approach</a></li>
+            <li><a href="#deliverables">Deliverables</a></li>
+            <li><a href="#rubric">Rubric</a></li>
+            <li><a href="#references">References</a></li>
+        </ul>
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <!-- ============================================================ -->
+                    <!-- TITLE BLOCK                                                   -->
+                    <!-- ============================================================ -->
+                    <section id="title-block" style="margin-top: 2rem;">
+                        <p style="font-family: 'JetBrains Mono', monospace; color: var(--mf-muted); margin-bottom: 0.25rem;">PROJECT 4.1</p>
+                        <h1 style="font-family: 'Crimson Text', serif; font-size: 2.4rem; margin-bottom: 0.5rem;">Agent-Based Simulation of Physical Systems</h1>
+                        <table style="border-collapse: collapse; margin: 1rem 0 2rem 0; font-size: 0.95rem;">
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Difficulty</td>
+                                <td><strong>Advanced</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Estimated Time</td>
+                                <td><strong>5 &ndash; 7 hours</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 1.5rem 0.3rem 0; color: var(--mf-muted);">Prerequisites</td>
+                                <td>
+                                    <a href="../level1/part3.html">Module 1.3 (Numerical Methods)</a>,
+                                    <a href="../level1/part4.html">Module 1.4 (Higher-Order ODEs)</a>,
+                                    Module 3.4 (RL for Dynamical Systems)
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="border-top: 1px solid var(--mf-border);">
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- PROBLEM STATEMENT                                             -->
+                    <!-- ============================================================ -->
+                    <section id="problem-statement" style="margin-top: 2rem;">
+                        <h2>1. Problem Statement</h2>
+
+                        <p>
+                            The gravitational three-body problem is one of the oldest unsolved problems in classical mechanics.
+                            Given three point masses interacting through Newtonian gravity, the system of coupled second-order
+                            ODEs is:
+                        </p>
+
+                        <div class="math-equation">
+                            $$m_i \ddot{\mathbf{r}}_i = \sum_{j \neq i} \frac{G\, m_i\, m_j\, (\mathbf{r}_j - \mathbf{r}_i)}{|\mathbf{r}_j - \mathbf{r}_i|^3}, \quad i = 1, 2, 3$$
+                        </div>
+
+                        <p>
+                            Naively integrating this system with a fixed time step and a single integration method leads to
+                            either excessive computation (small fixed step) or numerical blow-up near close encounters
+                            (large fixed step). Your task is to build a <strong>reinforcement learning agent</strong> that
+                            adaptively selects both the time step size and the integration method at each simulation step,
+                            aiming to maintain the relative energy error below a prescribed threshold while minimizing the
+                            total number of force evaluations (a proxy for computational cost).
+                        </p>
+
+                        <p>
+                            The agent must handle the full range of dynamical regimes that arise in the three-body problem:
+                            wide hierarchical orbits where large steps suffice, close binary interactions requiring small
+                            steps and symplectic methods, and chaotic scattering events where the trajectory is sensitive
+                            to integration accuracy. A successful solution demonstrates that learned policies can
+                            outperform hand-tuned adaptive stepping heuristics on this challenging benchmark.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- MODELING ASSUMPTIONS                                          -->
+                    <!-- ============================================================ -->
+                    <section id="modeling-assumptions" style="margin-top: 2rem;">
+                        <h2>2. Modeling Assumptions</h2>
+
+                        <ol>
+                            <li>
+                                <strong>Point-mass approximation.</strong> Each body is a point mass with no spatial
+                                extent. Collisions occur only when $|\mathbf{r}_i - \mathbf{r}_j| < \epsilon_{\text{soft}}$,
+                                where the softening length $\epsilon_{\text{soft}} = 10^{-4}$ AU prevents singularities.
+                            </li>
+                            <li>
+                                <strong>Newtonian gravity only.</strong> No relativistic corrections, radiation pressure,
+                                or tidal effects are included. The gravitational constant is $G = 4\pi^2$ in units where
+                                distances are in AU, masses in solar masses, and time in years.
+                            </li>
+                            <li>
+                                <strong>Two-dimensional dynamics.</strong> All motion is restricted to the $xy$-plane.
+                                This simplifies the state space from 18 to 12 phase-space dimensions while preserving the
+                                essential chaotic dynamics of the three-body problem.
+                            </li>
+                            <li>
+                                <strong>Bounded simulation domain.</strong> If any body moves beyond $R_{\max} = 100$ AU
+                                from the center of mass, the simulation is terminated as an ejection event.
+                            </li>
+                            <li>
+                                <strong>Energy conservation as the quality metric.</strong> The relative energy error
+                                is $\Delta E / |E_0| = |E(t) - E_0| / |E_0|$, where $E_0$ is the initial total energy.
+                                The threshold is $\delta = 10^{-6}$.
+                            </li>
+                            <li>
+                                <strong>Discrete method choices.</strong> The agent selects from exactly three integration
+                                methods: Forward Euler (1 evaluation per step), classical RK4 (4 evaluations per step),
+                                and velocity Verlet (2 evaluations per step, symplectic).
+                            </li>
+                            <li>
+                                <strong>Time-step range.</strong> The time step is constrained to
+                                $dt \in [10^{-6}, 10^{-1}]$ years. The agent chooses a multiplier
+                                $m \in \{0.25, 0.5, 1.0, 2.0, 4.0\}$ applied to the current $dt$.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DATA GENERATION                                               -->
+                    <!-- ============================================================ -->
+                    <section id="data-generation" style="margin-top: 2rem;">
+                        <h2>3. Synthetic Data Generation</h2>
+
+                        <p>
+                            There is no external dataset for this project. Instead, you must generate initial conditions
+                            for the three-body system and use numerical integration to produce reference trajectories.
+                            The following Python code generates a single random initial condition and computes a
+                            high-accuracy reference solution using <code>scipy.integrate.solve_ivp</code> with the
+                            DOP853 method (8th-order Runge-Kutta) at very tight tolerances.
+                        </p>
+
+<pre><code class="language-python">import numpy as np
+from scipy.integrate import solve_ivp
+
+# --- Constants ---
+G = 4.0 * np.pi**2        # AU^3 / (M_sun * yr^2)
+SOFTENING = 1e-4           # AU
+T_FINAL = 5.0              # years
+N_SCENARIOS = 50           # number of initial conditions to generate
+
+def generate_initial_conditions(seed=None):
+    """Generate random initial conditions for a 3-body system in 2D.
+
+    Returns:
+        masses: array of shape (3,), in solar masses [1, 10]
+        state0: array of shape (12,), [x1,y1,x2,y2,x3,y3,vx1,vy1,vx2,vy2,vx3,vy3]
+    """
+    rng = np.random.default_rng(seed)
+
+    # Random masses between 1 and 10 solar masses
+    masses = rng.uniform(1.0, 10.0, size=3)
+
+    # Random positions in [-5, 5] AU
+    positions = rng.uniform(-5.0, 5.0, size=6)
+
+    # Shift to center-of-mass frame
+    total_mass = masses.sum()
+    com_x = (masses[0]*positions[0] + masses[1]*positions[2] + masses[2]*positions[4]) / total_mass
+    com_y = (masses[0]*positions[1] + masses[1]*positions[3] + masses[2]*positions[5]) / total_mass
+    positions[0] -= com_x; positions[1] -= com_y
+    positions[2] -= com_x; positions[3] -= com_y
+    positions[4] -= com_x; positions[5] -= com_y
+
+    # Random velocities in [-2, 2] AU/yr
+    velocities = rng.uniform(-2.0, 2.0, size=6)
+
+    # Shift to zero total momentum
+    px = masses[0]*velocities[0] + masses[1]*velocities[2] + masses[2]*velocities[4]
+    py = masses[0]*velocities[1] + masses[1]*velocities[3] + masses[2]*velocities[5]
+    velocities[0] -= px / (3*masses[0]); velocities[1] -= py / (3*masses[0])
+    velocities[2] -= px / (3*masses[1]); velocities[3] -= py / (3*masses[1])
+    velocities[4] -= px / (3*masses[2]); velocities[5] -= py / (3*masses[2])
+
+    state0 = np.concatenate([positions, velocities])
+    return masses, state0
+
+
+def gravitational_rhs(t, state, masses):
+    """Right-hand side of the 3-body equations of motion in 2D."""
+    pos = state[:6].reshape(3, 2)
+    vel = state[6:].reshape(3, 2)
+    acc = np.zeros_like(pos)
+    for i in range(3):
+        for j in range(3):
+            if i == j:
+                continue
+            rij = pos[j] - pos[i]
+            dist = np.sqrt(np.dot(rij, rij) + SOFTENING**2)
+            acc[i] += G * masses[j] * rij / dist**3
+    return np.concatenate([vel.flatten(), acc.flatten()])
+
+
+def total_energy(state, masses):
+    """Compute kinetic + potential energy of the 3-body system."""
+    pos = state[:6].reshape(3, 2)
+    vel = state[6:].reshape(3, 2)
+    KE = 0.5 * sum(masses[i] * np.dot(vel[i], vel[i]) for i in range(3))
+    PE = 0.0
+    for i in range(3):
+        for j in range(i+1, 3):
+            rij = pos[j] - pos[i]
+            dist = np.sqrt(np.dot(rij, rij) + SOFTENING**2)
+            PE -= G * masses[i] * masses[j] / dist
+    return KE + PE
+
+
+def generate_reference_solution(masses, state0, t_final=T_FINAL, n_eval=10000):
+    """High-accuracy reference solution using DOP853."""
+    t_eval = np.linspace(0, t_final, n_eval)
+    sol = solve_ivp(
+        gravitational_rhs, [0, t_final], state0,
+        args=(masses,), method='DOP853',
+        rtol=1e-13, atol=1e-15, t_eval=t_eval, max_step=1e-3
+    )
+    return sol.t, sol.y.T  # shape (n_eval, 12)
+
+
+# --- Generate all scenarios ---
+scenarios = []
+for i in range(N_SCENARIOS):
+    masses, state0 = generate_initial_conditions(seed=42 + i)
+    E0 = total_energy(state0, masses)
+    t_ref, y_ref = generate_reference_solution(masses, state0)
+    scenarios.append({
+        'masses': masses, 'state0': state0,
+        'E0': E0, 't_ref': t_ref, 'y_ref': y_ref
+    })
+    print(f"Scenario {i}: masses={masses.round(2)}, E0={E0:.6f}")
+</code></pre>
+
+                        <p>
+                            Generate at least 50 scenarios. Use 40 for training the RL agent and hold out 10 for
+                            evaluation. Store each scenario as a dictionary containing the masses, initial state,
+                            initial energy, and reference trajectory.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- BASELINES                                                     -->
+                    <!-- ============================================================ -->
+                    <section id="baselines" style="margin-top: 2rem;">
+                        <h2>4. Baselines</h2>
+
+                        <h3>4.1 Classical Baseline: Fixed-Step RK4</h3>
+
+                        <p>
+                            The classical baseline uses the standard fourth-order Runge-Kutta method with a fixed time
+                            step of $dt = 0.001$ years. This is the simplest "safe" choice: it provides reasonable
+                            accuracy for moderately separated configurations but wastes computation during quiescent
+                            phases and may still violate the energy threshold during close encounters.
+                        </p>
+
+<pre><code class="language-python">def rk4_step(f, t, state, dt, masses):
+    """Single step of the classical RK4 method."""
+    k1 = f(t, state, masses)
+    k2 = f(t + 0.5*dt, state + 0.5*dt*k1, masses)
+    k3 = f(t + 0.5*dt, state + 0.5*dt*k2, masses)
+    k4 = f(t + dt, state + dt*k3, masses)
+    return state + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
+
+
+def run_fixed_rk4(masses, state0, t_final, dt=0.001):
+    """Run fixed-step RK4 simulation. Returns trajectory and evaluation count."""
+    t = 0.0
+    state = state0.copy()
+    trajectory = [state.copy()]
+    times = [0.0]
+    n_evals = 0
+
+    while t < t_final:
+        dt_actual = min(dt, t_final - t)
+        state = rk4_step(gravitational_rhs, t, state, dt_actual, masses)
+        t += dt_actual
+        n_evals += 4  # RK4 uses 4 function evaluations per step
+        trajectory.append(state.copy())
+        times.append(t)
+
+    return np.array(times), np.array(trajectory), n_evals
+</code></pre>
+
+                        <p>
+                            Record the total number of force evaluations, final energy error, and maximum energy error
+                            over the trajectory. These serve as the primary comparison metrics.
+                        </p>
+
+                        <h3>4.2 Heuristic Baseline: Velocity-Adaptive Stepping</h3>
+
+                        <p>
+                            A simple adaptive heuristic adjusts the time step inversely proportional to the maximum
+                            velocity magnitude in the system. When bodies are moving fast (close encounter), the step
+                            shrinks; when they are moving slowly (wide separation), the step grows.
+                        </p>
+
+<pre><code class="language-python">def run_velocity_adaptive(masses, state0, t_final, dt_base=0.001):
+    """Heuristic adaptive stepping based on max velocity magnitude."""
+    t = 0.0
+    state = state0.copy()
+    trajectory = [state.copy()]
+    times = [0.0]
+    n_evals = 0
+    dt = dt_base
+
+    while t < t_final:
+        # Compute max velocity magnitude
+        vel = state[6:].reshape(3, 2)
+        v_max = max(np.linalg.norm(vel[i]) for i in range(3))
+
+        # Adaptive step: dt ~ 1 / v_max, clamped to [1e-6, 0.1]
+        dt = np.clip(dt_base / max(v_max, 0.1), 1e-6, 0.1)
+        dt_actual = min(dt, t_final - t)
+
+        state = rk4_step(gravitational_rhs, t, state, dt_actual, masses)
+        t += dt_actual
+        n_evals += 4
+        trajectory.append(state.copy())
+        times.append(t)
+
+    return np.array(times), np.array(trajectory), n_evals
+</code></pre>
+
+                        <p>
+                            This heuristic is intuitive but does not account for the structure of the integration
+                            error (it does not switch methods) and cannot learn from past experience across different
+                            initial conditions.
+                        </p>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- AGENT APPROACH                                                -->
+                    <!-- ============================================================ -->
+                    <section id="agent-approach" style="margin-top: 2rem;">
+                        <h2>5. Agent Approach Specification</h2>
+
+                        <h3>5.1 State Space</h3>
+                        <p>At each simulation step $k$, the agent observes:</p>
+                        <div class="math-equation">
+                            $$\mathbf{s}_k = \bigl(\mathbf{r}_1, \mathbf{r}_2, \mathbf{r}_3,\; \mathbf{v}_1, \mathbf{v}_2, \mathbf{v}_3,\; \Delta E_k,\; dt_k,\; m_{\text{method}}\bigr) \in \mathbb{R}^{15}$$
+                        </div>
+                        <p>
+                            where $\mathbf{r}_i, \mathbf{v}_i \in \mathbb{R}^2$ are positions and velocities of the
+                            three bodies (12 components), $\Delta E_k = |E(t_k) - E_0| / |E_0|$ is the current
+                            relative energy error (1 component), $dt_k$ is the current time step in log-scale
+                            (1 component), and $m_{\text{method}} \in \{0, 1, 2\}$ is the index of the currently
+                            selected integration method (1 component, one-hot encoded as 3 components in practice,
+                            giving 16 total inputs).
+                        </p>
+
+                        <h3>5.2 Action Space</h3>
+                        <p>The agent outputs a discrete action $a_k \in \{0, 1, \ldots, 14\}$, which encodes a joint decision:</p>
+                        <ul>
+                            <li><strong>Time-step multiplier</strong> $\mu \in \{0.25,\, 0.5,\, 1.0,\, 2.0,\, 4.0\}$ &mdash; applied as $dt_{k+1} = \text{clip}(\mu \cdot dt_k,\; 10^{-6},\; 10^{-1})$.</li>
+                            <li><strong>Method index</strong> $m \in \{0, 1, 2\}$ corresponding to Euler, RK4, Verlet respectively.</li>
+                        </ul>
+                        <p>The total action space has $5 \times 3 = 15$ discrete actions.</p>
+
+                        <h3>5.3 Reward Function</h3>
+                        <div class="math-equation">
+                            $$r_k = \begin{cases}
+                            -\,c_{\text{method}} & \text{if } \Delta E_k < \delta = 10^{-6} \\[4pt]
+                            -1000 & \text{if } \Delta E_k \geq \delta
+                            \end{cases}$$
+                        </div>
+                        <p>
+                            where $c_{\text{method}}$ is the computational cost of the chosen method: $c_{\text{Euler}} = 1$,
+                            $c_{\text{Verlet}} = 2$, $c_{\text{RK4}} = 4$. This reward structure incentivizes the agent
+                            to advance the simulation as cheaply as possible (fewest force evaluations) while maintaining
+                            energy conservation. The large penalty for violating the threshold ensures constraint satisfaction.
+                        </p>
+
+                        <h3>5.4 Training Procedure</h3>
+                        <ol>
+                            <li>
+                                <strong>Environment.</strong> Wrap the three-body integrator as a Gymnasium-compatible
+                                environment. Each episode corresponds to simulating one scenario from $t = 0$ to
+                                $t = T_{\text{final}}$. The episode terminates early if the energy error exceeds $\delta$
+                                or a body is ejected beyond $R_{\max}$.
+                            </li>
+                            <li>
+                                <strong>Algorithm.</strong> Use Proximal Policy Optimization (PPO) with a shared
+                                encoder for the actor and critic. Architecture: 2-layer MLP with 128 hidden units each,
+                                ReLU activations.
+                            </li>
+                            <li>
+                                <strong>Hyperparameters.</strong>
+                                Learning rate: $3 \times 10^{-4}$. Discount factor $\gamma = 0.99$.
+                                GAE parameter $\lambda = 0.95$. Clip ratio $\epsilon = 0.2$.
+                                Mini-batch size: 64. Number of epochs per update: 10.
+                                Total training steps: $5 \times 10^5$.
+                            </li>
+                            <li>
+                                <strong>Curriculum.</strong> Begin training with "easy" scenarios (well-separated
+                                bodies, small velocities), then gradually introduce harder configurations (close
+                                initial separations, high relative velocities) by controlling the random seed distribution.
+                            </li>
+                            <li>
+                                <strong>Evaluation.</strong> Every 10,000 training steps, evaluate on the held-out
+                                10 scenarios. Report mean and max energy error, total force evaluations, and
+                                episode completion rate.
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- DELIVERABLES                                                  -->
+                    <!-- ============================================================ -->
+                    <section id="deliverables" style="margin-top: 2rem;">
+                        <h2>6. Deliverables</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border);">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">#</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Item</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.5rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D1</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>threebody_env.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Gymnasium environment wrapping the 3-body integrator with Euler, RK4, and Verlet methods. Includes <code>reset()</code>, <code>step()</code>, and <code>render()</code>.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D2</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>generate_scenarios.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Script to generate 50+ initial conditions and reference trajectories. Saves to <code>scenarios.npz</code>.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D3</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>train_agent.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">PPO training script with logging. Saves checkpoints every 50k steps.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D4</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);"><code>evaluate.py</code></td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Evaluation script: runs agent, fixed-RK4, and heuristic on held-out scenarios. Outputs CSV with metrics.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D5</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Report (PDF, 4&ndash;6 pages)</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Sections: Introduction, Methods (environment + agent), Results (plots + tables), Discussion, Conclusion.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D6</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Plots</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        (a) Orbital trajectories for 3 representative scenarios.<br>
+                                        (b) Energy error vs. time for agent, fixed-RK4, and heuristic.<br>
+                                        (c) Cumulative force evaluations vs. time for all three methods.<br>
+                                        (d) Training reward curve (mean &plusmn; std over 5 seeds).<br>
+                                        (e) Heatmap of agent's method selection over the trajectory.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">D7</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">Metrics table</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--mf-border);">
+                                        For each method and each held-out scenario: max energy error, mean energy error,
+                                        total force evaluations, wall-clock time, and completion rate.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- RUBRIC                                                        -->
+                    <!-- ============================================================ -->
+                    <section id="rubric" style="margin-top: 2rem;">
+                        <h2>7. Grading Rubric</h2>
+
+                        <table class="table" style="border: 1px solid var(--mf-border); width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 25%;">Criterion</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem; width: 10%; text-align: center;">Weight</th>
+                                    <th style="border-bottom: 2px solid var(--mf-border); padding: 0.6rem;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Correctness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">30</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Euler, RK4, and Verlet are implemented correctly and pass unit tests against known
+                                        two-body analytical solutions. Energy conservation for fixed-step RK4 matches reference.
+                                        Agent actions are applied correctly (dt clipping, method switching).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Efficiency</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">25</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        The trained agent uses fewer total force evaluations than fixed-step RK4 on at least
+                                        7 out of 10 held-out scenarios while maintaining the energy threshold. Improvement
+                                        over the heuristic baseline on at least 5 out of 10 scenarios.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Robustness</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">20</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Agent completes at least 8 out of 10 held-out scenarios without triggering the
+                                        energy violation penalty or ejection termination. Performance is consistent across
+                                        3 random training seeds.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Reproducibility</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">15</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        A single <code>requirements.txt</code> and <code>README.md</code> allow the grader
+                                        to reproduce all results by running <code>python generate_scenarios.py &amp;&amp; python train_agent.py &amp;&amp; python evaluate.py</code>.
+                                        Random seeds are fixed. All hyperparameters are in a config file or argparse.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);"><strong>Documentation</strong></td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border); text-align: center;">10</td>
+                                    <td style="padding: 0.6rem; border-bottom: 1px solid var(--mf-border);">
+                                        Report is clearly written with proper figures. Code has docstrings and inline
+                                        comments for non-obvious steps. Plots are labeled and legible.
+                                    </td>
+                                </tr>
+                                <tr style="background: var(--mf-paper);">
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"><strong>Total</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border); text-align: center;"><strong>100</strong></td>
+                                    <td style="padding: 0.6rem; border-top: 2px solid var(--mf-border);"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- REFERENCES                                                    -->
+                    <!-- ============================================================ -->
+                    <section id="references" style="margin-top: 2rem;">
+                        <h2>8. References &amp; Links</h2>
+
+                        <ol>
+                            <li>
+                                Hairer, E., Lubich, C., &amp; Wanner, G. (2006). <em>Geometric Numerical Integration:
+                                Structure-Preserving Algorithms for Ordinary Differential Equations</em>. Springer.
+                            </li>
+                            <li>
+                                Aarseth, S. J. (2003). <em>Gravitational N-Body Simulations: Tools and Algorithms</em>.
+                                Cambridge University Press.
+                            </li>
+                            <li>
+                                Schulman, J., Wolski, F., Dhariwal, P., Radford, A., &amp; Klimov, O. (2017).
+                                "Proximal Policy Optimization Algorithms." <em>arXiv:1707.06347</em>.
+                            </li>
+                            <li>
+                                Breen, P. G., Foley, C. N., Boekholt, T., &amp; Portegies Zwart, S. (2020).
+                                "Newton vs the machine: solving the chaotic three-body problem using deep neural networks."
+                                <em>Monthly Notices of the Royal Astronomical Society</em>, 494(2), 2465&ndash;2470.
+                            </li>
+                            <li>
+                                Gymnasium documentation: <a href="https://gymnasium.farama.org/" target="_blank" rel="noopener">https://gymnasium.farama.org/</a>
+                            </li>
+                            <li>
+                                Stable-Baselines3 PPO: <a href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html" target="_blank" rel="noopener">https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html</a>
+                            </li>
+                        </ol>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- NAVIGATION                                                    -->
+                    <!-- ============================================================ -->
+                    <hr style="border-top: 1px solid var(--mf-border); margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0 3rem 0;">
+                        <a href="index.html" style="font-family: 'Inter', sans-serif;">&larr; Level 4 Overview</a>
+                        <a href="project4-2.html" style="font-family: 'Inter', sans-serif;">Project 4.2: Neural vs Classical &rarr;</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
