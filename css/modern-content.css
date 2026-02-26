@@ -8,7 +8,7 @@
     --dark-bg: #2c3e50;
     --light-bg: #ecf0f1;
     --text-dark: #2c3e50;
-    --text-light: #7f8c8d;
+    --text-light: #555b61;
     --border-radius: 8px;
     --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
@@ -72,7 +72,7 @@ body {
     font-size: 1.2rem;
     font-weight: 600;
     padding: 15px 20px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, #2f3a8f, #3b5998);
     color: white;
     margin-bottom: 20px;
 }
@@ -150,7 +150,7 @@ h3 {
 
 /* Introduction boxes */
 .intro-box {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b4cc0 0%, #5b3a8c 100%);
     color: white;
     padding: 2rem;
     border-radius: var(--border-radius);
@@ -303,7 +303,7 @@ table {
 }
 
 table thead {
-    background: var(--primary-color);
+    background: #2f4a8f;
     color: white;
 }
 
@@ -327,7 +327,7 @@ table tbody tr:hover {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), #5f7cdb);
+    background: linear-gradient(135deg, #2f4a8f, #4a69bd);
     color: white;
 }
 
@@ -392,7 +392,8 @@ table tbody tr:hover {
 }
 
 .nav-pills > li.active > a {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, #2f4a8f, #3b5998);
+    color: white;
 }
 
 /* Section navigation */
@@ -429,29 +430,160 @@ table tbody tr:hover {
         margin-left: -280px;
         transition: all 0.3s ease;
     }
-    
+
     #sidebar-wrapper.active {
         margin-left: 0;
     }
-    
+
     #page-content-wrapper {
         padding-left: 0;
     }
-    
+
     .container-fluid {
         padding: 20px 15px;
     }
-    
+
     .section-progress {
         display: none;
     }
-    
+
     h1 {
         font-size: 2rem;
     }
-    
+
     h2 {
         font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    .content-section {
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .intro-box {
+        padding: 1.25rem;
+    }
+
+    .intro-box p {
+        font-size: 1rem;
+    }
+
+    .learning-objectives,
+    .example-box,
+    .note-box,
+    .warning-box {
+        padding: 1rem;
+    }
+
+    .math-equation {
+        padding: 1rem;
+        font-size: 1rem;
+        overflow-x: auto;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table th, table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .topic-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .topic-card {
+        padding: 1.25rem;
+    }
+
+    .section-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .section-nav a {
+        justify-content: center;
+    }
+
+    .interactive-highlight {
+        padding: 1.25rem;
+    }
+
+    .nav-pills {
+        padding: 0.5rem;
+    }
+
+    .nav-pills > li > a {
+        padding: 0.4rem 0.75rem;
+        margin: 0.25rem;
+        font-size: 0.9rem;
+    }
+
+    .code-editor-container {
+        margin: 1rem 0;
+    }
+
+    .code-editor {
+        min-height: 120px;
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .code-buttons {
+        padding: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-fluid {
+        padding: 12px 10px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    .content-section {
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .intro-box {
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .section-nav a {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
     }
 }
 

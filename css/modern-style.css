@@ -241,3 +241,47 @@ h2 {
     .section-block,
     .hero { padding: var(--space-lg) 0; }
 }
+
+@media (max-width: 600px) {
+    .page-shell {
+        width: calc(100% - 1.5rem);
+    }
+
+    .header-layout {
+        min-height: 56px;
+        gap: var(--space-sm);
+    }
+
+    .site-mark {
+        font-size: 1.1rem;
+    }
+
+    .top-nav {
+        gap: var(--space-sm);
+    }
+
+    .top-nav a {
+        font-size: 0.85rem;
+    }
+
+    .chapter-link {
+        padding: var(--space-md) 0;
+    }
+
+    .chapter-link h3 {
+        font-size: 1.3rem;
+    }
+
+    .chapter-link p {
+        font-size: 0.95rem;
+    }
+
+    .objectives ul {
+        padding-left: var(--space-md);
+    }
+
+    .code-example pre {
+        font-size: 0.8rem;
+        padding: var(--space-sm);
+    }
+}

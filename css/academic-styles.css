@@ -217,7 +217,7 @@
 }
 
 .error-table thead {
-    background: linear-gradient(135deg, var(--primary-color), #5f7cdb);
+    background: linear-gradient(135deg, #2f4a8f, #4a69bd);
     color: white;
 }
 
@@ -354,7 +354,7 @@
 }
 
 .comparison-table thead {
-    background: var(--primary-color);
+    background: #2f4a8f;
     color: white;
 }
 
@@ -384,7 +384,7 @@
 
 /* Interactive callouts */
 .try-it-yourself {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b4cc0 0%, #5b3a8c 100%);
     color: white;
     padding: 1.5rem;
     margin: 2rem 0;
@@ -403,4 +403,92 @@
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .academic-box {
+        padding: 1.25rem;
+    }
+
+    .theorem-box,
+    .definition-box,
+    .algorithm-box {
+        padding: 1rem;
+        margin: 1.25rem 0;
+    }
+
+    .proof-box {
+        margin-left: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .convergence-box {
+        padding: 1rem;
+    }
+
+    .historical-note,
+    .application-example,
+    .important-note,
+    .prerequisites-alert {
+        padding: 1rem;
+        margin: 1.25rem 0;
+    }
+
+    .summary-box {
+        padding: 1.25rem;
+        margin: 2rem 0;
+    }
+
+    .try-it-yourself {
+        padding: 1rem;
+    }
+
+    .error-table,
+    .comparison-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .error-table th,
+    .error-table td,
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .complexity-box {
+        font-size: 0.85rem;
+    }
+
+    .math-equation {
+        font-size: 1rem;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .algorithm-steps li {
+        padding-left: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .academic-box {
+        padding: 1rem;
+    }
+
+    .academic-box h4 {
+        font-size: 1.1rem;
+    }
+
+    .theorem-box::before,
+    .definition-box::before {
+        font-size: 1.2rem;
+    }
+
+    .try-it-yourself::before {
+        font-size: 1rem;
+    }
 }
