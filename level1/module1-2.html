@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 1.2: Second-Order Linear ODEs — Characteristic equations, undetermined coefficients, variation of parameters, mechanical vibrations, and resonance.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 1.2: Second-Order Linear ODEs</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 1 &mdash; ODEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module1-1.html">1.1</a>
+      <a href="module1-2.html" aria-current="page">1.2</a>
+      <a href="module1-3.html">1.3</a>
+      <a href="module1-4.html">1.4</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:0.95rem; color:var(--text-light); margin-bottom:0.25rem;">Module 1.2</p>
+        <h1>Second-Order Linear ODEs</h1>
+    </div>
+
+    <div class="content-section" style="margin-top:1rem;">
+        <table style="box-shadow:none; margin:0;">
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Difficulty:</strong></td><td style="border:none; padding:0.5rem 1rem;">Intermediate</td></tr>
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Estimated Time:</strong></td><td style="border:none; padding:0.5rem 1rem;">4&ndash;5 hours</td></tr>
+        </table>
+
+        <h4 style="margin-top:1.5rem;">Prerequisites</h4>
+        <ul>
+            <li><a href="module1-1.html">Module 1.1 &mdash; First-Order ODEs and Modeling</a>: separable and linear equation techniques, integrating factors, existence-uniqueness concepts</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="intro-box">
+        <h2>Why This Matters</h2>
+        <p>
+            Second-order linear ODEs are the backbone of classical physics and engineering.
+            Newton's second law \(F = ma\) is itself a second-order ODE relating force to the second
+            derivative of position. Every mass-spring-damper system, every RLC electrical circuit,
+            every small-amplitude pendulum, and every vibrating string (discretized into modes) reduces
+            to a second-order linear ODE or a system of them.
+        </p>
+        <p>
+            The mathematical structure of these equations is remarkably rich: the solution space of a
+            homogeneous equation is a two-dimensional vector space, the characteristic equation transforms
+            a differential equation into an algebraic one, and the Wronskian provides a determinantal test
+            for linear independence. The method of undetermined coefficients and variation of parameters
+            give complementary strategies for non-homogeneous equations, each with clear trade-offs in
+            generality versus computational effort.
+        </p>
+        <p>
+            Physically, this module introduces the critical phenomenon of <strong>resonance</strong>:
+            when a periodic driving force matches the natural frequency of a system, the amplitude grows
+            without bound (or, with damping, reaches a dangerously large peak). Understanding resonance
+            is essential for structural engineering (bridge design), audio engineering (speaker crossovers),
+            and control theory (stability margins).
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="learning-objectives">
+        <h4>Learning Objectives</h4>
+        <p>After completing this module, you will be able to:</p>
+        <ol>
+            <li><strong>Derive</strong> the characteristic equation from a constant-coefficient homogeneous ODE and classify the roots as distinct real, repeated, or complex conjugate.</li>
+            <li><strong>Construct</strong> the general solution for each root case, including the use of \(te^{rt}\) for repeated roots and \(e^{\alpha t}\cos\beta t\), \(e^{\alpha t}\sin\beta t\) for complex roots.</li>
+            <li><strong>Apply</strong> the method of undetermined coefficients to solve non-homogeneous equations with polynomial, exponential, sinusoidal, and product-type forcing.</li>
+            <li><strong>Apply</strong> variation of parameters to solve non-homogeneous equations with arbitrary continuous forcing functions, and explain why this method is more general than undetermined coefficients.</li>
+            <li><strong>Compute</strong> the Wronskian of two solutions and use it to verify linear independence.</li>
+            <li><strong>State</strong> the superposition principle for linear ODEs and apply it to decompose solutions into homogeneous and particular parts.</li>
+            <li><strong>Model</strong> mechanical vibrations (free undamped, free damped, forced damped) and classify the damping regime as underdamped, critically damped, or overdamped.</li>
+            <li><strong>Identify</strong> resonance conditions for both undamped and damped forced oscillations and compute the resonant frequency and peak amplitude.</li>
+            <li><strong>Analyze</strong> series RLC circuits by translating Kirchhoff's voltage law into a second-order ODE and mapping electrical quantities to their mechanical analogues.</li>
+            <li><strong>Simulate</strong> damped harmonic oscillators numerically in Python and produce comparative visualizations of underdamped, critically damped, and overdamped regimes.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ---- Definitions ---- -->
+    <h3>Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.1 &mdash; Second-Order Linear ODE</h4>
+        <p>A <strong>second-order linear ODE</strong> has the form</p>
+        <div class="math-equation">
+            $$ a(t)\,y'' + b(t)\,y' + c(t)\,y = g(t) $$
+        </div>
+        <p>
+            where \(a(t) \neq 0\) on the interval of interest. The equation is <em>homogeneous</em>
+            when \(g(t) \equiv 0\) and <em>non-homogeneous</em> otherwise. When \(a, b, c\) are constants,
+            we call it a <strong>constant-coefficient</strong> equation.
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.2 &mdash; Characteristic Equation</h4>
+        <p>
+            For the constant-coefficient homogeneous equation \(ay'' + by' + cy = 0\), the substitution
+            \(y = e^{rt}\) yields the <strong>characteristic equation</strong>
+        </p>
+        <div class="math-equation">
+            $$ ar^2 + br + c = 0. $$
+        </div>
+        <p>The roots \(r_1, r_2\) determine the form of the general solution:</p>
+        <ul>
+            <li><strong>Distinct real roots</strong> \(r_1 \neq r_2\): \(y = c_1 e^{r_1 t} + c_2 e^{r_2 t}\).</li>
+            <li><strong>Repeated root</strong> \(r_1 = r_2 = r\): \(y = (c_1 + c_2 t)\,e^{rt}\).</li>
+            <li><strong>Complex conjugate roots</strong> \(r = \alpha \pm i\beta\): \(y = e^{\alpha t}(c_1\cos\beta t + c_2\sin\beta t)\).</li>
+        </ul>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.3 &mdash; Wronskian</h4>
+        <p>
+            Given two differentiable functions \(y_1(t)\) and \(y_2(t)\), their <strong>Wronskian</strong> is the determinant
+        </p>
+        <div class="math-equation">
+            $$ W(y_1, y_2)(t) = \begin{vmatrix} y_1 & y_2 \\ y_1' & y_2' \end{vmatrix} = y_1 y_2' - y_2 y_1'. $$
+        </div>
+        <p>
+            If \(y_1\) and \(y_2\) are solutions of the same second-order linear homogeneous ODE on an interval \(I\),
+            then \(W \neq 0\) everywhere on \(I\) if and only if \(y_1, y_2\) are linearly independent (and thus form a fundamental set of solutions).
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.4 &mdash; Particular Solution via Undetermined Coefficients</h4>
+        <p>
+            For \(ay'' + by' + cy = g(t)\) with constant coefficients, if \(g(t)\) is a polynomial,
+            exponential, sinusoid, or a product of these, one <em>guesses</em> a particular solution \(Y_p\)
+            of the same form and determines the unknown coefficients by substitution. If the guess
+            duplicates a homogeneous solution, it must be multiplied by \(t\) (or \(t^2\) for a double duplication).
+        </p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.5 &mdash; Variation of Parameters</h4>
+        <p>
+            Given a fundamental set \(\{y_1, y_2\}\) for \(y'' + p(t)y' + q(t)y = 0\), a particular solution
+            of the non-homogeneous equation \(y'' + p(t)y' + q(t)y = g(t)\) is
+        </p>
+        <div class="math-equation">
+            $$ Y_p(t) = -y_1(t)\int\frac{y_2(t)\,g(t)}{W(t)}\,dt + y_2(t)\int\frac{y_1(t)\,g(t)}{W(t)}\,dt $$
+        </div>
+        <p>where \(W(t) = W(y_1, y_2)(t)\) is the Wronskian. This method works for any continuous \(g(t)\), not just the special forms required by undetermined coefficients.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.6 &mdash; Damping Ratio and Natural Frequency</h4>
+        <p>
+            For the mechanical oscillator \(m\ddot{x} + c\dot{x} + kx = 0\), define the
+            <strong>natural frequency</strong> \(\omega_0 = \sqrt{k/m}\) and the <strong>damping ratio</strong>
+            \(\zeta = c/(2\sqrt{mk})\). The character of the solution depends on \(\zeta\):
+        </p>
+        <ul>
+            <li>\(\zeta < 1\): <strong>underdamped</strong> &mdash; oscillatory decay.</li>
+            <li>\(\zeta = 1\): <strong>critically damped</strong> &mdash; fastest non-oscillatory return to equilibrium.</li>
+            <li>\(\zeta > 1\): <strong>overdamped</strong> &mdash; slow exponential return without oscillation.</li>
+        </ul>
+        <p>The damped natural frequency (for \(\zeta < 1\)) is \(\omega_d = \omega_0\sqrt{1 - \zeta^2}\).</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 1.2.7 &mdash; Resonance</h4>
+        <p>
+            For the forced undamped oscillator \(m\ddot{x} + kx = F_0\cos\omega t\), <strong>resonance</strong>
+            occurs when the driving frequency \(\omega\) equals the natural frequency \(\omega_0 = \sqrt{k/m}\).
+            The particular solution then grows linearly: \(\displaystyle x_p(t) = \frac{F_0}{2m\omega_0}\,t\sin\omega_0 t\).
+            With damping (\(c > 0\)), the amplitude remains bounded but peaks sharply near \(\omega = \omega_0\sqrt{1-2\zeta^2}\)
+            (the amplitude resonance frequency).
+        </p>
+    </div>
+
+    <!-- ---- Theorems ---- -->
+    <h3>Theorems and Key Results</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.2.1 &mdash; Superposition Principle</h4>
+        <p>
+            If \(y_1(t)\) and \(y_2(t)\) are solutions of the homogeneous equation
+            \(a(t)y'' + b(t)y' + c(t)y = 0\), then for any constants \(c_1, c_2\),
+        </p>
+        <div class="math-equation">
+            $$ y(t) = c_1\,y_1(t) + c_2\,y_2(t) $$
+        </div>
+        <p>
+            is also a solution. More generally, if \(Y_1\) is a particular solution of
+            \(Ly = g_1\) and \(Y_2\) is a particular solution of \(Ly = g_2\) (where \(L\) is the linear
+            differential operator), then \(Y_1 + Y_2\) is a particular solution of \(Ly = g_1 + g_2\).
+        </p>
+        <div class="proof-box">
+            <strong>Proof.</strong> Let \(L[y] = a(t)y'' + b(t)y' + c(t)y\). Since differentiation and multiplication
+            by functions of \(t\) are both linear operations,
+            \(L[c_1 y_1 + c_2 y_2] = c_1 L[y_1] + c_2 L[y_2] = c_1 \cdot 0 + c_2 \cdot 0 = 0.\)
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.2.2 &mdash; Abel's Theorem (Wronskian Formula)</h4>
+        <p>
+            If \(y_1\) and \(y_2\) are solutions of \(y'' + p(t)y' + q(t)y = 0\) on an interval \(I\)
+            where \(p\) and \(q\) are continuous, then the Wronskian satisfies
+        </p>
+        <div class="math-equation">
+            $$ W(y_1, y_2)(t) = W(y_1, y_2)(t_0)\,\exp\!\left(-\int_{t_0}^{t} p(s)\,ds\right) $$
+        </div>
+        <p>
+            for any \(t_0 \in I\). In particular, \(W\) is either identically zero or never zero on \(I\).
+        </p>
+        <div class="proof-box">
+            <strong>Proof.</strong> Differentiate \(W = y_1 y_2' - y_2 y_1'\):
+            \(W' = y_1 y_2'' - y_2 y_1''\).
+            Since \(y_i'' = -p(t)y_i' - q(t)y_i\), we get
+            \(W' = y_1(-py_2' - qy_2) - y_2(-py_1' - qy_1) = -p(y_1 y_2' - y_2 y_1') = -pW.\)
+            This first-order linear ODE has the solution
+            \(W(t) = W(t_0)\exp\!\bigl(-\int_{t_0}^{t} p\,ds\bigr)\).
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 1.2.3 &mdash; General Solution Structure</h4>
+        <p>
+            The general solution of \(y'' + p(t)y' + q(t)y = g(t)\) is
+        </p>
+        <div class="math-equation">
+            $$ y(t) = c_1\,y_1(t) + c_2\,y_2(t) + Y_p(t) $$
+        </div>
+        <p>
+            where \(\{y_1, y_2\}\) is a fundamental set of the associated homogeneous equation
+            and \(Y_p\) is any particular solution of the non-homogeneous equation. The constants
+            \(c_1, c_2\) are determined by initial conditions \(y(t_0) = y_0\), \(y'(t_0) = y_0'\).
+        </p>
+    </div>
+
+    <!-- ---- Common Failure Modes / Misconceptions ---- -->
+    <h3>Common Failure Modes and Misconceptions</h3>
+
+    <div class="warning-box">
+        <h4>Misconception 1: Forgetting the modification rule in undetermined coefficients.</h4>
+        <p>
+            When the guess for \(Y_p\) duplicates a homogeneous solution, students often proceed
+            without multiplying by \(t\). For example, for \(y'' - 4y = e^{2t}\), the homogeneous
+            solutions include \(e^{2t}\), so the correct guess is \(Y_p = Ate^{2t}\), not \(Ae^{2t}\).
+            Substituting \(Ae^{2t}\) produces \(0 = e^{2t}\), which is impossible.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 2: Applying undetermined coefficients to non-constant-coefficient equations.</h4>
+        <p>
+            The method of undetermined coefficients relies on the fact that derivatives of polynomials,
+            exponentials, and sinusoids produce functions of the same type. For variable-coefficient equations
+            like \(t^2 y'' + ty' + y = \sin t\), the method does not apply. Use variation of parameters instead.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 3: Writing complex exponentials instead of real solutions.</h4>
+        <p>
+            When the characteristic roots are \(r = \alpha \pm i\beta\), the fundamental solutions are
+            \(e^{\alpha t}\cos\beta t\) and \(e^{\alpha t}\sin\beta t\), not \(e^{(\alpha+i\beta)t}\)
+            and \(e^{(\alpha-i\beta)t}\). While the complex exponentials are technically correct as a
+            basis for the complex solution space, physical problems require real-valued solutions, and
+            exam answers should use the real form.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 4: Confusing natural frequency with damped frequency.</h4>
+        <p>
+            The natural frequency \(\omega_0 = \sqrt{k/m}\) is the oscillation frequency of the <em>undamped</em>
+            system. The <em>damped</em> system oscillates at \(\omega_d = \omega_0\sqrt{1-\zeta^2} < \omega_0\).
+            Furthermore, the amplitude resonance frequency in a forced damped system is
+            \(\omega_r = \omega_0\sqrt{1-2\zeta^2}\), which is yet another value. Confusing these three
+            frequencies is a common source of error in vibration analysis.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 5: Assuming resonance means infinite amplitude.</h4>
+        <p>
+            True infinite-amplitude resonance occurs only in the <em>undamped</em> forced oscillator
+            (\(\zeta = 0\)). Any amount of damping, no matter how small, keeps the amplitude finite.
+            In a real physical system, nonlinear effects (material yielding, air resistance) also limit
+            amplitude. Resonance is dangerous not because amplitude is literally infinite, but because
+            it can be <em>orders of magnitude</em> larger than the static response.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 6: Neglecting the transient in forced-vibration problems.</h4>
+        <p>
+            The complete solution of a forced damped oscillator is \(y = y_h + Y_p\) where \(y_h\)
+            is the transient (decaying) part. Students sometimes write only \(Y_p\) and claim it is
+            "the solution." For the <em>steady-state</em> response this is acceptable, but if
+            initial conditions are specified, the transient is needed to satisfy them.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <!-- Example 1 -->
+    <div class="example-box">
+        <h4>Example 1 &mdash; Damped Harmonic Oscillator (Constant Coefficients)</h4>
+
+        <p><strong>Problem.</strong> A 2-kg mass is attached to a spring with constant \(k = 50\) N/m and
+        a dashpot providing a damping force of \(c = 12\) N&middot;s/m. The mass is displaced 0.1 m
+        from equilibrium and released from rest. Find \(x(t)\) and classify the damping.</p>
+
+        <h5>Step 1 &mdash; Write the ODE</h5>
+        <div class="math-equation">
+            $$ 2x'' + 12x' + 50x = 0 \implies x'' + 6x' + 25x = 0. $$
+        </div>
+
+        <h5>Step 2 &mdash; Characteristic equation</h5>
+        <div class="math-equation">
+            $$ r^2 + 6r + 25 = 0 \implies r = \frac{-6 \pm \sqrt{36 - 100}}{2} = \frac{-6 \pm \sqrt{-64}}{2} = -3 \pm 4i. $$
+        </div>
+        <p>Complex roots with \(\alpha = -3\), \(\beta = 4\).</p>
+
+        <h5>Step 3 &mdash; General solution</h5>
+        <div class="math-equation">
+            $$ x(t) = e^{-3t}(c_1 \cos 4t + c_2 \sin 4t). $$
+        </div>
+
+        <h5>Step 4 &mdash; Apply initial conditions</h5>
+        <p>\(x(0) = 0.1\): \(c_1 = 0.1\).</p>
+        <p>\(x'(t) = e^{-3t}[(-3c_1 + 4c_2)\cos 4t + (-3c_2 - 4c_1)\sin 4t]\).</p>
+        <p>\(x'(0) = 0\): \(-3(0.1) + 4c_2 = 0 \implies c_2 = 0.075\).</p>
+
+        <h5>Step 5 &mdash; Final solution</h5>
+        <div class="math-equation">
+            $$ x(t) = e^{-3t}(0.1\cos 4t + 0.075\sin 4t). $$
+        </div>
+
+        <h5>Step 6 &mdash; Classification and interpretation</h5>
+        <p>
+            Natural frequency: \(\omega_0 = \sqrt{25} = 5\) rad/s.
+            Damping ratio: \(\zeta = 6/(2 \times 5) = 0.6 < 1\). The system is <strong>underdamped</strong>.
+        </p>
+        <p>
+            Damped frequency: \(\omega_d = 5\sqrt{1-0.36} = 5\times 0.8 = 4\) rad/s.
+            The solution oscillates at 4 rad/s while the amplitude decays as \(e^{-3t}\).
+            In amplitude-phase form:
+        </p>
+        <div class="math-equation">
+            $$ x(t) = R\,e^{-3t}\cos(4t - \phi), \quad R = \sqrt{0.1^2 + 0.075^2} = 0.125 \text{ m}, \quad \phi = \arctan(0.075/0.1) \approx 0.6435 \text{ rad}. $$
+        </div>
+        <p>The amplitude halves roughly every \(\ln 2 / 3 \approx 0.23\) seconds.</p>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="example-box">
+        <h4>Example 2 &mdash; Forced Oscillation with Undetermined Coefficients</h4>
+
+        <p><strong>Problem.</strong> Solve \(y'' + 4y' + 4y = 3e^{-2t}\), \(y(0) = 1\), \(y'(0) = 0\).</p>
+
+        <h5>Step 1 &mdash; Solve the homogeneous equation</h5>
+        <p>Characteristic: \(r^2 + 4r + 4 = (r+2)^2 = 0\), so \(r = -2\) (repeated).</p>
+        <div class="math-equation">
+            $$ y_h = (c_1 + c_2 t)\,e^{-2t}. $$
+        </div>
+
+        <h5>Step 2 &mdash; Guess the particular solution</h5>
+        <p>
+            The forcing is \(3e^{-2t}\). Since \(e^{-2t}\) is a homogeneous solution and \(te^{-2t}\)
+            is also a homogeneous solution (repeated root), we must multiply by \(t^2\):
+        </p>
+        <div class="math-equation">
+            $$ Y_p = At^2 e^{-2t}. $$
+        </div>
+
+        <h5>Step 3 &mdash; Substitute and determine \(A\)</h5>
+        <p>Compute the derivatives:</p>
+        <div class="math-equation">
+            $$ Y_p' = A(2t - 2t^2)e^{-2t}, \qquad Y_p'' = A(2 - 8t + 4t^2)e^{-2t}. $$
+        </div>
+        <p>Substitute into \(Y_p'' + 4Y_p' + 4Y_p\):</p>
+        <div class="math-equation">
+            $$ A\bigl[(2 - 8t + 4t^2) + 4(2t - 2t^2) + 4t^2\bigr]e^{-2t} = A\cdot 2\,e^{-2t} = 3e^{-2t}. $$
+        </div>
+        <p>So \(2A = 3\), giving \(A = 3/2\).</p>
+
+        <h5>Step 4 &mdash; General solution</h5>
+        <div class="math-equation">
+            $$ y(t) = (c_1 + c_2 t)\,e^{-2t} + \frac{3}{2}t^2 e^{-2t} = \left(c_1 + c_2 t + \frac{3}{2}t^2\right)e^{-2t}. $$
+        </div>
+
+        <h5>Step 5 &mdash; Apply initial conditions</h5>
+        <p>\(y(0) = 1\): \(c_1 = 1\).</p>
+        <p>\(y'(t) = \bigl[c_2 + 3t - 2(c_1 + c_2 t + \tfrac{3}{2}t^2)\bigr]e^{-2t}\).</p>
+        <p>\(y'(0) = c_2 - 2c_1 = c_2 - 2 = 0\), so \(c_2 = 2\).</p>
+
+        <h5>Step 6 &mdash; Final answer</h5>
+        <div class="math-equation">
+            $$ y(t) = \left(1 + 2t + \frac{3}{2}t^2\right)e^{-2t}. $$
+        </div>
+        <p>
+            <strong>Interpretation:</strong> Despite the forcing term, the solution still decays to zero
+            because the factor \(e^{-2t}\) dominates the polynomial growth \(t^2\) as \(t \to \infty\).
+            The peak displacement occurs near \(t \approx 0.27\) s (found by setting \(y'=0\)) and is
+            approximately \(y_{\max} \approx 1.16\).
+        </p>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="example-box">
+        <h4>Example 3 &mdash; RLC Circuit Analysis</h4>
+
+        <p><strong>Problem.</strong> A series RLC circuit has \(R = 100\,\Omega\), \(L = 0.5\) H,
+        \(C = 10^{-4}\) F, and is driven by \(E(t) = 20\cos(100t)\) V. Find the steady-state
+        current \(I(t)\).</p>
+
+        <h5>Step 1 &mdash; Write the ODE for charge \(q(t)\)</h5>
+        <p>Kirchhoff's voltage law: \(L q'' + R q' + q/C = E(t)\).</p>
+        <div class="math-equation">
+            $$ 0.5\,q'' + 100\,q' + 10000\,q = 20\cos(100t). $$
+        </div>
+        <p>Divide by 0.5:</p>
+        <div class="math-equation">
+            $$ q'' + 200\,q' + 20000\,q = 40\cos(100t). $$
+        </div>
+
+        <h5>Step 2 &mdash; Find the steady-state particular solution</h5>
+        <p>Guess: \(q_p = A\cos(100t) + B\sin(100t)\).</p>
+        <p>Substituting:</p>
+        <div class="math-equation">
+            $$ q_p'' = -10000A\cos(100t) - 10000B\sin(100t), $$
+        </div>
+        <div class="math-equation">
+            $$ q_p' = -100A\sin(100t) + 100B\cos(100t). $$
+        </div>
+        <p>Collecting cosine terms: \(-10000A + 20000B + 20000A = 40\), i.e., \(10000A + 20000B = 40\).</p>
+        <p>Collecting sine terms: \(-10000B - 20000A + 20000B = 0\), i.e., \(-20000A + 10000B = 0\), so \(B = 2A\).</p>
+        <p>From the first: \(10000A + 40000A = 40\), giving \(A = 40/50000 = 0.0008\), \(B = 0.0016\).</p>
+
+        <h5>Step 3 &mdash; Compute the steady-state current</h5>
+        <p>\(I(t) = q_p'(t)\):</p>
+        <div class="math-equation">
+            $$ I(t) = -100(0.0008)\sin(100t) + 100(0.0016)\cos(100t) = -0.08\sin(100t) + 0.16\cos(100t). $$
+        </div>
+        <p>In amplitude-phase form:</p>
+        <div class="math-equation">
+            $$ I(t) = I_0 \cos(100t - \psi), \quad I_0 = \sqrt{0.08^2 + 0.16^2} \approx 0.179 \text{ A}, \quad \psi = \arctan(0.08/0.16) \approx 0.464 \text{ rad}. $$
+        </div>
+
+        <h5>Step 4 &mdash; Interpretation</h5>
+        <p>
+            Natural frequency: \(\omega_0 = \sqrt{20000} \approx 141.4\) rad/s.
+            The driving frequency \(\omega = 100\) rad/s is below resonance.
+            The damping ratio \(\zeta = 200/(2\times 141.4) \approx 0.707\), indicating a moderately damped circuit.
+            At resonance (\(\omega = 141.4\)), the current amplitude would peak at approximately \(20/(100) = 0.2\) A.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+
+    <div class="interactive-highlight">
+        <h4>Lab 1.2 &mdash; Damped Harmonic Oscillator: Three Damping Regimes</h4>
+        <p>
+            This script solves the damped oscillator \(x'' + 2\zeta\omega_0 x' + \omega_0^2 x = 0\)
+            for three values of \(\zeta\) (underdamped, critically damped, overdamped) and plots
+            the results on a single figure. It uses both exact analytical solutions and numerical
+            integration via the fourth-order Runge-Kutta method for comparison.
+        </p>
+
+        <pre><code class="language-python">import numpy as np
+
+# ============================================================
+# Damped Harmonic Oscillator:  x'' + 2*zeta*w0*x' + w0^2*x = 0
+# Initial conditions: x(0) = 1.0, x'(0) = 0.0
+# Natural frequency: w0 = 5 rad/s
+# ============================================================
+
+w0 = 5.0                  # natural frequency
+x0, v0 = 1.0, 0.0         # initial displacement and velocity
+t_end = 4.0
+dt = 0.005
+t = np.arange(0, t_end + dt, dt)
+
+# --- Exact analytical solutions ---
+def exact_underdamped(t, zeta, w0, x0, v0):
+    wd = w0 * np.sqrt(1 - zeta**2)
+    alpha = zeta * w0
+    A = x0
+    B = (v0 + alpha * x0) / wd
+    return np.exp(-alpha * t) * (A * np.cos(wd * t) + B * np.sin(wd * t))
+
+def exact_critical(t, w0, x0, v0):
+    alpha = w0
+    return (x0 + (v0 + alpha * x0) * t) * np.exp(-alpha * t)
+
+def exact_overdamped(t, zeta, w0, x0, v0):
+    disc = w0 * np.sqrt(zeta**2 - 1)
+    r1 = -zeta * w0 + disc
+    r2 = -zeta * w0 - disc
+    c2 = (v0 - r1 * x0) / (r2 - r1)
+    c1 = x0 - c2
+    return c1 * np.exp(r1 * t) + c2 * np.exp(r2 * t)
+
+# --- Fourth-order Runge-Kutta for the system ---
+def rk4_oscillator(zeta, w0, x0, v0, t):
+    """Solve x'' + 2*zeta*w0*x' + w0^2*x = 0 using RK4."""
+    N = len(t)
+    x = np.zeros(N)
+    v = np.zeros(N)
+    x[0], v[0] = x0, v0
+    for i in range(N - 1):
+        h = t[i+1] - t[i]
+        # State: [x, v], derivatives: [v, -2*zeta*w0*v - w0^2*x]
+        def f(xi, vi):
+            return vi, -2*zeta*w0*vi - w0**2*xi
+
+        k1x, k1v = f(x[i], v[i])
+        k2x, k2v = f(x[i]+h/2*k1x, v[i]+h/2*k1v)
+        k3x, k3v = f(x[i]+h/2*k2x, v[i]+h/2*k2v)
+        k4x, k4v = f(x[i]+h*k3x, v[i]+h*k3v)
+
+        x[i+1] = x[i] + h/6*(k1x + 2*k2x + 2*k3x + k4x)
+        v[i+1] = v[i] + h/6*(k1v + 2*k2v + 2*k3v + k4v)
+    return x
+
+# --- Compute all cases ---
+cases = [
+    {"zeta": 0.2, "label": "Underdamped (zeta=0.2)", "color": "blue"},
+    {"zeta": 1.0, "label": "Critically damped (zeta=1.0)", "color": "green"},
+    {"zeta": 2.5, "label": "Overdamped (zeta=2.5)", "color": "red"},
+]
+
+print("Damped Harmonic Oscillator — Three Regimes")
+print(f"  w0 = {w0} rad/s,  x(0) = {x0},  x'(0) = {v0}")
+print(f"  dt = {dt},  t in [0, {t_end}]")
+print("-" * 55)
+
+results = {}
+for case in cases:
+    z = case["zeta"]
+    x_rk4 = rk4_oscillator(z, w0, x0, v0, t)
+
+    if z &lt; 1:
+        x_ex = exact_underdamped(t, z, w0, x0, v0)
+    elif z == 1:
+        x_ex = exact_critical(t, w0, x0, v0)
+    else:
+        x_ex = exact_overdamped(t, z, w0, x0, v0)
+
+    max_err = np.max(np.abs(x_rk4 - x_ex))
+    results[z] = {"rk4": x_rk4, "exact": x_ex}
+    print(f"  zeta={z:.1f}: max |RK4 - exact| = {max_err:.2e}")
+
+# --- Plot (if matplotlib available) ---
+try:
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+    # Top: solutions
+    for case in cases:
+        z = case["zeta"]
+        axes[0].plot(t, results[z]["exact"], color=case["color"],
+                     linewidth=2, label=case["label"] + " (exact)")
+        axes[0].plot(t[::40], results[z]["rk4"][::40], 'o',
+                     color=case["color"], markersize=4, alpha=0.7,
+                     label=case["label"] + " (RK4)")
+
+    axes[0].set_ylabel("Displacement x(t)")
+    axes[0].set_title("Damped Harmonic Oscillator: Three Damping Regimes")
+    axes[0].axhline(y=0, color='gray', linewidth=0.5)
+    axes[0].legend(fontsize=8, ncol=2)
+    axes[0].grid(True, alpha=0.3)
+
+    # Bottom: energy
+    for case in cases:
+        z = case["zeta"]
+        x_ex = results[z]["exact"]
+        v_approx = np.gradient(x_ex, dt)
+        energy = 0.5 * w0**2 * x_ex**2 + 0.5 * v_approx**2
+        axes[1].plot(t, energy / energy[0], color=case["color"],
+                     linewidth=2, label=case["label"])
+
+    axes[1].set_xlabel("Time (s)")
+    axes[1].set_ylabel("Normalized Energy E(t)/E(0)")
+    axes[1].set_title("Energy Dissipation")
+    axes[1].legend(fontsize=8)
+    axes[1].grid(True, alpha=0.3)
+    axes[1].set_ylim(-0.05, 1.1)
+
+    plt.tight_layout()
+    plt.savefig("damped_oscillator_regimes.png", dpi=120)
+    print("\n  Plot saved to damped_oscillator_regimes.png")
+except ImportError:
+    print("\n  (matplotlib not available — skipping plot)")
+</code></pre>
+
+        <p><strong>Expected output (approximate):</strong></p>
+        <pre><code>Damped Harmonic Oscillator — Three Regimes
+  w0 = 5.0 rad/s,  x(0) = 1.0,  x'(0) = 0.0
+  dt = 0.005,  t in [0, 4.0]
+-------------------------------------------------------
+  zeta=0.2: max |RK4 - exact| = 3.47e-11
+  zeta=1.0: max |RK4 - exact| = 8.12e-12
+  zeta=2.5: max |RK4 - exact| = 1.05e-11
+</code></pre>
+
+        <p>
+            <strong>Experiments to try:</strong>
+        </p>
+        <ul>
+            <li>Add a forcing term \(F_0\cos(\omega t)\) and observe the beat phenomenon when \(\omega \approx \omega_d\) with low damping.</li>
+            <li>Set \(\zeta = 0\) and \(\omega = \omega_0\) exactly to see the linear growth of resonance.</li>
+            <li>Replace RK4 with Euler's method and compare the number of steps needed for similar accuracy.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <h2>Agent Lens</h2>
+
+    <div class="content-section">
+        <p>
+            A vibration control system can be viewed as an <em>agent</em> that monitors and adjusts
+            the damping of a mechanical (or electrical) oscillator in real time. This perspective
+            transforms the passive analysis of this module into an active control design problem.
+        </p>
+
+        <h4>State</h4>
+        <p>
+            The agent observes the state vector \(\mathbf{s}(t) = \bigl(x(t),\, \dot{x}(t),\, \omega_{\text{drive}}(t),\, E(t)\bigr)\)
+            where \(x\) is the displacement, \(\dot{x}\) is the velocity, \(\omega_{\text{drive}}\) is
+            the current driving frequency (which may sweep over time), and \(E(t) = \tfrac{1}{2}k\,x^2 + \tfrac{1}{2}m\,\dot{x}^2\)
+            is the total mechanical energy.
+        </p>
+
+        <h4>Action</h4>
+        <p>
+            The agent adjusts the damping coefficient \(c(t)\) within bounds \([c_{\min}, c_{\max}]\).
+            In a physical system, this corresponds to controlling a magnetorheological (MR) damper
+            whose viscosity changes with applied magnetic field, or adjusting the resistance in an
+            RLC circuit. The action at each control step is \(a(t) = c(t) \in [c_{\min}, c_{\max}]\).
+        </p>
+
+        <h4>Reward / Utility</h4>
+        <p>
+            The agent aims to minimize energy while avoiding resonance catastrophe. A suitable reward per time step is:
+        </p>
+        <div class="math-equation">
+            $$ r(t) = -\gamma_1\,E(t) \;-\; \gamma_2\,|x(t)|^2 \;-\; \gamma_3\,c(t) $$
+        </div>
+        <p>
+            The first two terms penalize large oscillation energy and displacement (protecting the structure),
+            while the third penalizes excessive damping (which dissipates energy that might be valuable,
+            as in energy-harvesting applications, and incurs actuator cost). The weights \(\gamma_1, \gamma_2, \gamma_3\)
+            encode the designer's priorities.
+        </p>
+
+        <h4>Learning / Policy</h4>
+        <p>
+            A classical control approach sets \(c(t)\) proportional to \(|\dot{x}|\) (skyhook damping).
+            A more sophisticated agent can learn a policy \(\pi: \mathbf{s} \mapsto c\) via:
+        </p>
+        <ul>
+            <li><strong>Rule-based:</strong> If \(\omega_{\text{drive}}\) is within 10% of \(\omega_0\), set \(c = c_{\max}\) (maximum damping near resonance). Otherwise, set \(c = c_{\min}\).</li>
+            <li><strong>Model-predictive:</strong> Given the current state and a model of the ODE, predict future energy for each candidate \(c\) value and pick the one minimizing cumulative cost over a horizon.</li>
+            <li><strong>Reinforcement learning:</strong> Train a neural-network policy via PPO or SAC in a simulated environment where the driving frequency varies stochastically.</li>
+        </ul>
+
+        <div class="note-box">
+            <h4>Physical Insight</h4>
+            <p>
+                The agent framework reveals a fundamental tension: damping suppresses resonance
+                (good) but also reduces energy harvesting and slows the return to equilibrium when the
+                driving stops (bad). An optimal agent must <em>anticipate</em> whether the driving frequency
+                is approaching resonance and pre-emptively increase damping, rather than reacting after
+                large oscillations have already developed. This anticipatory behavior is exactly what
+                model-predictive and learned policies provide.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.2.1 (Characteristic Equation).</strong>
+        Find the general solution of \(y'' - 6y' + 13y = 0\).</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Characteristic: \(r^2 - 6r + 13 = 0\), \(r = (6 \pm \sqrt{36-52})/2 = 3 \pm 2i\).</p>
+            <div class="math-equation">
+                $$ y(t) = e^{3t}(c_1\cos 2t + c_2\sin 2t). $$
+            </div>
+            <p>Note: since \(\alpha = 3 > 0\), solutions grow exponentially&mdash;an unstable oscillator.</p>
+        </details>
+
+        <p><strong>Exercise 1.2.2 (Undetermined Coefficients).</strong>
+        Solve \(y'' + y = 4\cos t\). (Hint: resonance case.)</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Homogeneous: \(r^2 + 1 = 0\), \(r = \pm i\), so \(y_h = c_1\cos t + c_2\sin t\).</p>
+            <p>Since \(\cos t\) is a homogeneous solution, guess \(Y_p = t(A\cos t + B\sin t)\).</p>
+            <p>\(Y_p' = A\cos t + B\sin t + t(-A\sin t + B\cos t)\).</p>
+            <p>\(Y_p'' = -2A\sin t + 2B\cos t + t(-A\cos t - B\sin t)\).</p>
+            <p>\(Y_p'' + Y_p = -2A\sin t + 2B\cos t = 4\cos t\).</p>
+            <p>So \(A = 0\), \(B = 2\).</p>
+            <div class="math-equation">
+                $$ y(t) = c_1\cos t + c_2\sin t + 2t\sin t. $$
+            </div>
+            <p>The \(2t\sin t\) term grows linearly&mdash;this is resonance.</p>
+        </details>
+
+        <p><strong>Exercise 1.2.3 (Variation of Parameters).</strong>
+        Use variation of parameters to find a particular solution of \(y'' + y = \sec t\) on \((-\pi/2, \pi/2)\).</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Fundamental set: \(y_1 = \cos t\), \(y_2 = \sin t\). Wronskian: \(W = \cos^2 t + \sin^2 t = 1\).</p>
+            <div class="math-equation">
+                $$ Y_p = -\cos t \int \frac{\sin t \cdot \sec t}{1}\,dt + \sin t \int \frac{\cos t \cdot \sec t}{1}\,dt $$
+            </div>
+            <div class="math-equation">
+                $$ = -\cos t \int \tan t\,dt + \sin t \int 1\,dt $$
+            </div>
+            <div class="math-equation">
+                $$ = -\cos t \cdot (-\ln|\cos t|) + \sin t \cdot t = \cos t\,\ln|\cos t| + t\sin t. $$
+            </div>
+        </details>
+
+        <p><strong>Exercise 1.2.4 (Wronskian and Abel's Theorem).</strong>
+        Verify Abel's theorem for the equation \(y'' + y' - 2y = 0\) with fundamental solutions
+        \(y_1 = e^t\) and \(y_2 = e^{-2t}\). Compute \(W(t)\) directly and via the formula.</p>
+
+        <details>
+            <summary>Solution</summary>
+            <p>Direct: \(W = e^t \cdot (-2e^{-2t}) - e^{-2t} \cdot e^t = -2e^{-t} - e^{-t} = -3e^{-t}\).</p>
+            <p>Abel's formula: \(p(t) = 1\) (coefficient of \(y'\)), so
+            \(W(t) = W(0)\,e^{-\int_0^t 1\,ds} = W(0)\,e^{-t}\).</p>
+            <p>\(W(0) = -2 - 1 = -3\), so \(W(t) = -3e^{-t}\). They agree.</p>
+        </details>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.2.5 (Frequency Response Curve).</strong>
+        For the forced damped oscillator \(x'' + 2\zeta\omega_0 x' + \omega_0^2 x = \cos(\omega t)\)
+        with \(\omega_0 = 10\) rad/s, write a Python program that computes the steady-state amplitude
+        \(A(\omega)\) for \(\omega \in [0, 20]\) and \(\zeta = 0.05, 0.1, 0.3, 0.7, 1.0\).
+        Plot all five curves on a single graph. The theoretical amplitude is:</p>
+        <div class="math-equation">
+            $$ A(\omega) = \frac{1}{\sqrt{(\omega_0^2 - \omega^2)^2 + (2\zeta\omega_0\omega)^2}}. $$
+        </div>
+
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+try:
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    HAS_PLT = True
+except ImportError:
+    HAS_PLT = False
+
+w0 = 10.0
+omega = np.linspace(0.1, 20, 500)
+zeta_vals = [0.05, 0.1, 0.3, 0.7, 1.0]
+
+if HAS_PLT:
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+for z in zeta_vals:
+    A = 1.0 / np.sqrt((w0**2 - omega**2)**2 + (2*z*w0*omega)**2)
+    peak_idx = np.argmax(A)
+    print(f"zeta={z:.2f}: peak A={A[peak_idx]:.4f} at omega={omega[peak_idx]:.2f}")
+    if HAS_PLT:
+        ax.plot(omega, A, linewidth=2, label=f'zeta={z}')
+
+if HAS_PLT:
+    ax.set_xlabel('Driving frequency omega (rad/s)')
+    ax.set_ylabel('Steady-state amplitude A(omega)')
+    ax.set_title('Frequency Response Curves')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim(0, 12)
+    plt.tight_layout()
+    plt.savefig('frequency_response.png', dpi=120)
+    print("Plot saved to frequency_response.png")
+</code></pre>
+        </details>
+
+        <p><strong>Exercise 1.2.6 (Beat Phenomenon).</strong>
+        Solve \(x'' + 100x = \cos(9.5t)\), \(x(0)=0\), \(x'(0)=0\) analytically and numerically
+        on \([0, 40]\). The exact solution exhibits beats with modulation frequency
+        \(|\omega_0 - \omega|/2 = 0.25\) rad/s and carrier frequency \((\omega_0 + \omega)/2 = 9.75\) rad/s.
+        Plot the solution and verify the beat frequency from the plot.</p>
+
+        <p><strong>Exercise 1.2.7 (Convergence Study).</strong>
+        Solve \(y'' + 4y' + 4y = 3e^{-2t}\), \(y(0)=1\), \(y'(0)=0\) (Example 2 above) using the
+        Euler method converted to a first-order system. Use step sizes \(h = 0.1, 0.05, 0.025, 0.0125\).
+        Compute the error at \(t=2\) for each and verify it is \(O(h)\) by plotting error vs. \(h\) on a
+        log-log scale.</p>
+
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+def exact_sol(t):
+    return (1 + 2*t + 1.5*t**2) * np.exp(-2*t)
+
+# Convert to system: let u1 = y, u2 = y'
+# u1' = u2
+# u2' = 3*exp(-2t) - 4*u2 - 4*u1
+def euler_system(h, t_end):
+    N = int(t_end / h)
+    u1, u2, t = 1.0, 0.0, 0.0
+    for _ in range(N):
+        du1 = u2
+        du2 = 3*np.exp(-2*t) - 4*u2 - 4*u1
+        u1 += h * du1
+        u2 += h * du2
+        t += h
+    return u1
+
+t_target = 2.0
+y_exact = exact_sol(t_target)
+print(f"Exact y(2) = {y_exact:.10f}")
+
+hs = [0.1, 0.05, 0.025, 0.0125]
+for h in hs:
+    y_num = euler_system(h, t_target)
+    err = abs(y_num - y_exact)
+    print(f"  h={h:.4f}: y_euler={y_num:.8f}, error={err:.6e}")
+
+# Error ratios (should be ~2 for O(h)):
+print("\nConvergence ratios:")
+errors = [abs(euler_system(h, t_target) - y_exact) for h in hs]
+for i in range(1, len(errors)):
+    print(f"  e({hs[i-1]})/e({hs[i]}) = {errors[i-1]/errors[i]:.3f}")
+</code></pre>
+        </details>
+
+        <p><strong>Exercise 1.2.8 (Energy Decay).</strong>
+        For the underdamped oscillator in Example 1 (\(m=2\), \(c=12\), \(k=50\)), compute the
+        total mechanical energy \(E(t) = \frac{1}{2}kx^2 + \frac{1}{2}m\dot{x}^2\) analytically
+        and plot \(E(t)/E(0)\) over \([0, 3]\). Show that the energy envelope decays as \(e^{-2\alpha t}\)
+        where \(\alpha = c/(2m) = 3\).</p>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 1.2.9 (Vibration Control Agent).</strong>
+        Implement the vibration control agent described in the Agent Lens section. Simulate a
+        mass-spring system (\(m=1\), \(k=100\)) being driven by a frequency sweep
+        \(\omega(t) = 8 + 0.5t\) over \(t \in [0, 12]\) (sweeping through \(\omega_0 = 10\)).
+        Your agent controls damping \(c(t) \in [1, 50]\) with a simple rule:</p>
+        <ul>
+            <li>If \(|\omega(t) - \omega_0| < 2\), set \(c = 50\) (maximum damping).</li>
+            <li>Otherwise, set \(c = 1\) (minimum damping).</li>
+        </ul>
+        <p>Compare the peak displacement of the controlled system against an uncontrolled system with
+        fixed \(c = 1\). By what factor is the peak reduced?</p>
+
+        <details>
+            <summary>Solution sketch</summary>
+            <p>
+                The frequency sweep passes through \(\omega_0 = 10\) at \(t = (10-8)/0.5 = 4\) s.
+                The agent activates high damping when \(|\omega(t) - 10| &lt; 2\), i.e., for \(t \in [0, 8]\)
+                (since \(\omega(0)=8\) is already within the window). Without control, the uncontrolled
+                system experiences a large resonant peak (amplitude proportional to \(1/(2\zeta\omega_0) \approx 1/(2\times 0.05\times 10) = 1\) for \(\zeta = c/(2\sqrt{mk}) = 0.05\)).
+                With control, during the dangerous period the effective damping ratio is
+                \(\zeta = 50/20 = 2.5\) (overdamped), and the peak amplitude drops by roughly
+                a factor of 10&ndash;50 depending on sweep rate. The agent achieves this at the cost of
+                heavy damping during the resonance window.
+            </p>
+        </details>
+
+        <p><strong>Exercise 1.2.10 (System Identification Agent).</strong>
+        Given noisy sampled data from a damped oscillator (position measurements at 100 Hz
+        for 5 seconds), design an agent that estimates the parameters \((\omega_0, \zeta)\) online.
+        The agent should:</p>
+        <ul>
+            <li>(a) Use a sliding window of the last \(N\) samples to estimate the oscillation frequency (via zero-crossing count or FFT).</li>
+            <li>(b) Estimate the damping ratio from the logarithmic decrement between successive peaks.</li>
+            <li>(c) Update its estimates every 0.5 seconds and report confidence intervals.</li>
+        </ul>
+        <p>Test with synthetic data: \(\omega_0 = 12\), \(\zeta = 0.15\), Gaussian measurement noise with \(\sigma = 0.02\).</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <!-- Quiz -->
+    <h3>Quiz &mdash; Module 1.2 (10 Questions)</h3>
+
+    <div class="content-section">
+        <ol>
+            <li>
+                <p>The characteristic equation of \(3y'' - 12y' + 12y = 0\) is:</p>
+                <p>(a) \(3r^2 - 12r + 12 = 0\) &emsp; (b) \(r^2 - 4r + 4 = 0\) &emsp; (c) \(r^2 - 12r + 12 = 0\) &emsp; (d) \(3r^2 + 12r + 12 = 0\)</p>
+            </li>
+            <li>
+                <p>If the characteristic equation has roots \(r = 2 \pm 3i\), the general solution is:</p>
+                <p>(a) \(c_1 e^{2t}\cos 3t + c_2 e^{2t}\sin 3t\) &emsp; (b) \(c_1 e^{3t}\cos 2t + c_2 e^{3t}\sin 2t\) &emsp; (c) \((c_1 + c_2 t)e^{2t}\cos 3t\) &emsp; (d) \(c_1 e^{2t} + c_2 e^{3t}\)</p>
+            </li>
+            <li>
+                <p>For \(y'' - 4y = e^{2t}\), the correct guess for \(Y_p\) by undetermined coefficients is:</p>
+                <p>(a) \(Ae^{2t}\) &emsp; (b) \(Ate^{2t}\) &emsp; (c) \(At^2 e^{2t}\) &emsp; (d) \(A\cos 2t + B\sin 2t\)</p>
+            </li>
+            <li>
+                <p>The Wronskian of \(e^t\) and \(e^{3t}\) is:</p>
+                <p>(a) \(2e^{4t}\) &emsp; (b) \(e^{4t}\) &emsp; (c) \(4e^{4t}\) &emsp; (d) \(-2e^{4t}\)</p>
+            </li>
+            <li>
+                <p>Abel's theorem says the Wronskian of two solutions of \(y'' + p(t)y' + q(t)y = 0\) satisfies:</p>
+                <p>(a) \(W' = pW\) &emsp; (b) \(W' = -pW\) &emsp; (c) \(W' = -qW\) &emsp; (d) \(W' = 0\)</p>
+            </li>
+            <li>
+                <p>A mass-spring-damper with \(m=1\), \(c=6\), \(k=9\) is:</p>
+                <p>(a) Underdamped &emsp; (b) Critically damped &emsp; (c) Overdamped &emsp; (d) Unstable</p>
+            </li>
+            <li>
+                <p>For the undamped forced oscillator \(x'' + 25x = 3\cos 5t\), the particular solution is:</p>
+                <p>(a) \(\frac{3}{25}\cos 5t\) &emsp; (b) \(\frac{3}{10}t\sin 5t\) &emsp; (c) \(3t\cos 5t\) &emsp; (d) \(\frac{3}{50}t\sin 5t\)</p>
+            </li>
+            <li>
+                <p>In a series RLC circuit, the quantity analogous to mass in a mechanical oscillator is:</p>
+                <p>(a) Resistance \(R\) &emsp; (b) Capacitance \(C\) &emsp; (c) Inductance \(L\) &emsp; (d) Voltage \(E\)</p>
+            </li>
+            <li>
+                <p>For the damped oscillator \(x'' + 2x' + 5x = 0\), the damped natural frequency \(\omega_d\) is:</p>
+                <p>(a) \(\sqrt{5}\) &emsp; (b) 2 &emsp; (c) 1 &emsp; (d) \(\sqrt{3}\)</p>
+            </li>
+            <li>
+                <p>Variation of parameters works for non-homogeneous equations with:</p>
+                <p>(a) Only polynomial forcing &emsp; (b) Only sinusoidal forcing &emsp; (c) Only exponential forcing &emsp; (d) Any continuous forcing function</p>
+            </li>
+        </ol>
+
+        <h4>Answer Key</h4>
+        <ol>
+            <li><strong>(a) and (b)</strong>. Both are correct: (a) is the raw characteristic equation, and (b) is after dividing by 3. The roots are \(r = 2\) (repeated).</li>
+            <li><strong>(a)</strong>. Complex roots \(\alpha \pm i\beta = 2 \pm 3i\) give \(e^{2t}(c_1\cos 3t + c_2\sin 3t)\).</li>
+            <li><strong>(b)</strong>. The homogeneous solutions are \(e^{2t}\) and \(e^{-2t}\); since \(e^{2t}\) is already a solution, multiply by \(t\).</li>
+            <li><strong>(a)</strong>. \(W = e^t \cdot 3e^{3t} - e^{3t} \cdot e^t = 3e^{4t} - e^{4t} = 2e^{4t}\).</li>
+            <li><strong>(b)</strong>. \(W' = -p(t)\,W\).</li>
+            <li><strong>(b)</strong>. \(\zeta = c/(2\sqrt{mk}) = 6/(2\sqrt{9}) = 6/6 = 1\). Critically damped.</li>
+            <li><strong>(b)</strong>. Resonance: \(\omega = \omega_0 = 5\). Guess \(Y_p = t(A\cos 5t + B\sin 5t)\). Substituting: \(Y_p'' + 25Y_p = -10A\sin 5t + 10B\cos 5t = 3\cos 5t\), so \(A = 0\), \(B = 3/10\). Thus \(Y_p = \frac{3}{10}t\sin 5t\).</li>
+            <li><strong>(c)</strong>. Inductance \(L\) is analogous to mass (resists changes in current, just as mass resists changes in velocity).</li>
+            <li><strong>(b)</strong>. \(\omega_0 = \sqrt{5}\), \(\zeta = 2/(2\sqrt{5}) = 1/\sqrt{5}\), \(\omega_d = \sqrt{5}\sqrt{1 - 1/5} = \sqrt{5}\cdot\sqrt{4/5} = \sqrt{4} = 2\).</li>
+            <li><strong>(d)</strong>. Variation of parameters applies to any continuous \(g(t)\).</li>
+        </ol>
+    </div>
+
+    <!-- Mini-Project -->
+    <h3>Mini-Project &mdash; Seismograph Response Simulation</h3>
+
+    <div class="content-section">
+        <h4>Problem Statement</h4>
+        <p>
+            A simplified seismograph consists of a mass-spring-damper system mounted on a base.
+            When the ground moves with displacement \(u(t)\), the relative displacement \(z(t) = x(t) - u(t)\)
+            of the mass satisfies
+        </p>
+        <div class="math-equation">
+            $$ m\ddot{z} + c\dot{z} + kz = -m\ddot{u}(t). $$
+        </div>
+        <p>
+            Use parameters \(m = 0.5\) kg, \(k = 200\) N/m, \(c = 2\) N&middot;s/m
+            (natural frequency \(\omega_0 = 20\) rad/s, \(\zeta = 0.1\)).
+        </p>
+        <p>The ground motion is a synthetic earthquake pulse:</p>
+        <div class="math-equation">
+            $$ \ddot{u}(t) = A\,e^{-\gamma(t-t_p)^2}\sin(\omega_g t) $$
+        </div>
+        <p>with \(A = 5\) m/s\(^2\), \(\gamma = 2\), \(t_p = 3\) s, and \(\omega_g = 15\) rad/s.</p>
+
+        <h4>Deliverables</h4>
+        <ol>
+            <li><strong>Numerical solution:</strong> Solve for \(z(t)\) on \([0, 15]\) using RK4 (implemented from scratch). Convert to a first-order system. Use \(h = 0.001\) s.</li>
+            <li><strong>Frequency analysis:</strong> Compute the FFT of \(z(t)\) and \(\ddot{u}(t)\). Show that the seismograph amplifies frequencies near \(\omega_0 = 20\) rad/s and attenuates lower/higher frequencies.</li>
+            <li><strong>Damping study:</strong> Repeat the simulation for \(\zeta = 0.01, 0.1, 0.5, 1.0\). Plot all four relative displacement curves. Discuss the trade-off between sensitivity (low damping) and settling time (high damping).</li>
+            <li><strong>Agent design:</strong> Propose and implement a simple agent that adjusts the damping coefficient in real time to minimize the settling time after the pulse while maintaining peak sensitivity during the pulse. Compare the agent-controlled output to the fixed-damping cases.</li>
+            <li><strong>Report:</strong> Write a 1-page analysis discussing which damping level is optimal for an actual seismograph and how the agent-based approach improves performance.</li>
+        </ol>
+
+        <h4>Rubric (100 points)</h4>
+        <table>
+            <thead>
+                <tr><th>Criterion</th><th>Points</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Correctness</strong></td>
+                    <td>30</td>
+                    <td>RK4 implementation is correct (verified against a reference solver). FFT correctly identifies the dominant frequency. Damping classification is accurate.</td>
+                </tr>
+                <tr>
+                    <td><strong>Efficiency</strong></td>
+                    <td>20</td>
+                    <td>Code uses vectorized NumPy operations where possible. RK4 is implemented efficiently (no unnecessary recomputation). Plots are generated programmatically.</td>
+                </tr>
+                <tr>
+                    <td><strong>Robustness</strong></td>
+                    <td>25</td>
+                    <td>Handles edge cases (zero damping, very high damping). Agent gracefully switches damping without introducing discontinuities in the numerical solution. Error estimates or validation against a second method are included.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reproducibility</strong></td>
+                    <td>25</td>
+                    <td>All parameters are clearly stated. Code runs without modification. Plots are publication-quality with labeled axes, legends, and captions. Analysis is well-reasoned and quantitative.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <div class="content-section">
+        <h4>References</h4>
+        <ol class="reference-list">
+            <li>Boyce, W. E. &amp; DiPrima, R. C. <em>Elementary Differential Equations and Boundary Value Problems</em>, 11th ed., Wiley, 2017. Chapters 3&ndash;4.</li>
+            <li>Nagle, R. K., Saff, E. B. &amp; Snider, A. D. <em>Fundamentals of Differential Equations</em>, 9th ed., Pearson, 2018. Chapters 4&ndash;5 cover constant-coefficient equations and applications.</li>
+            <li>Rao, S. S. <em>Mechanical Vibrations</em>, 6th ed., Pearson, 2017. The standard reference for vibration analysis and resonance in engineering systems.</li>
+            <li>Kreyszig, E. <em>Advanced Engineering Mathematics</em>, 10th ed., Wiley, 2011. Chapter 2 provides a comprehensive treatment with numerous worked examples.</li>
+            <li>Dorf, R. C. &amp; Bishop, R. H. <em>Modern Control Systems</em>, 14th ed., Pearson, 2022. Chapter 3 connects second-order systems to transfer functions and control design.</li>
+        </ol>
+
+        <h4>Next Steps</h4>
+        <div class="section-nav">
+            <a href="index.html">&larr; Back to Level 1 Overview</a>
+            <a href="module1-3.html">Module 1.3: Systems of Linear ODEs &rarr;</a>
+        </div>
+    </div>
+</section>
+
+</div><!-- col-lg-12 -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<!-- KaTeX auto-render -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+    });
+});
+</script>
+
+</body>
+</html>

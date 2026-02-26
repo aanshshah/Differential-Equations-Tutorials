@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 2.1: Scalar PDEs and Classification — elliptic, parabolic, hyperbolic PDEs, separation of variables, Fourier series">
+    <title>Module 2.1 — Scalar PDEs and Classification</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 2 — PDEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module2-1.html" aria-current="page">2.1 Scalar PDEs</a>
+      <a href="module2-2.html">2.2 Numerical Methods</a>
+      <a href="module2-3.html">2.3 Stochastic Models</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:1rem;color:var(--mf-muted);margin-bottom:0.25rem;">Module 2.1</p>
+        <h1>Scalar PDEs and Classification</h1>
+    </div>
+
+    <div class="content-section" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+        <div>
+            <strong>Difficulty:</strong> Intermediate<br>
+            <strong>Estimated Time:</strong> 5 -- 6 hours<br>
+        </div>
+        <div>
+            <strong>Prerequisites:</strong>
+            <ul style="margin:0.25rem 0 0 1.25rem;">
+                <li><a href="../level1/module1-3.html">Module 1.3 — Systems of ODEs</a></li>
+                <li><a href="../level0/index.html">Module 0.1 — Calculus Foundations</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="intro-box">
+        <h2>Why This Matters</h2>
+        <p>
+            Partial differential equations are the mathematical language of continuum physics. Every model of heat conduction, sound propagation, fluid flow, electromagnetic radiation, and quantum mechanics ultimately reduces to a PDE. Classifying a PDE as elliptic, parabolic, or hyperbolic is not merely a taxonomic exercise: the classification determines which boundary and initial conditions produce a well-posed problem, which solution techniques apply, and which numerical schemes will converge. Mastering this classification and the canonical solution strategies (separation of variables, Fourier series, d'Alembert's formula) gives you a toolkit that transfers directly to every applied science and engineering discipline. Furthermore, understanding well-posedness in the sense of Hadamard guards against wasting effort on ill-posed formulations that no algorithm can salvage.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="learning-objectives">
+        <h4>Learning Objectives</h4>
+        <p>After completing this module you will be able to:</p>
+        <ol>
+            <li>Classify a second-order linear PDE as elliptic, parabolic, or hyperbolic using the discriminant of its principal part.</li>
+            <li>Derive the one-dimensional heat equation from conservation of energy and Fourier's law.</li>
+            <li>Solve the heat equation on a finite interval by separation of variables and Fourier sine series.</li>
+            <li>State and apply d'Alembert's formula for the one-dimensional wave equation on the real line.</li>
+            <li>Compute standing-wave modes of the vibrating string with fixed endpoints.</li>
+            <li>Identify harmonic functions and verify solutions to Laplace's equation in two dimensions.</li>
+            <li>Construct Fourier series (sine, cosine, full) to satisfy prescribed boundary data.</li>
+            <li>Explain the three Hadamard conditions for well-posedness and give counterexamples when each fails.</li>
+            <li>Apply the maximum principle to bound harmonic functions without solving the PDE explicitly.</li>
+            <li>Prove uniqueness of the heat equation solution via the energy method.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ---- Definitions ---- -->
+    <h3>Key Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.1 — Second-Order Linear PDE</h4>
+        <p>A <strong>second-order linear PDE</strong> in two independent variables \(x,y\) is an equation of the form</p>
+        $$ A\,u_{xx} + 2B\,u_{xy} + C\,u_{yy} + D\,u_x + E\,u_y + F\,u = G, $$
+        <p>where \(A,B,C,D,E,F,G\) may depend on \(x\) and \(y\) but not on \(u\) or its derivatives.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.2 — Classification by Discriminant</h4>
+        <p>The <strong>discriminant</strong> of the principal part is \(\Delta = B^2 - AC\). The PDE is classified at each point as:</p>
+        <ul>
+            <li><strong>Elliptic</strong> if \(\Delta &lt; 0\) (e.g., Laplace's equation).</li>
+            <li><strong>Parabolic</strong> if \(\Delta = 0\) (e.g., the heat equation).</li>
+            <li><strong>Hyperbolic</strong> if \(\Delta &gt; 0\) (e.g., the wave equation).</li>
+        </ul>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.3 — Harmonic Function</h4>
+        <p>A twice continuously differentiable function \(u : \Omega \to \mathbb{R}\) is <strong>harmonic</strong> on the open set \(\Omega\) if it satisfies Laplace's equation everywhere in \(\Omega\):</p>
+        $$ \nabla^2 u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0. $$
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.4 — Well-Posedness (Hadamard)</h4>
+        <p>A problem consisting of a PDE together with boundary and/or initial conditions is <strong>well-posed</strong> in the sense of Hadamard if:</p>
+        <ol>
+            <li><strong>Existence:</strong> at least one solution exists.</li>
+            <li><strong>Uniqueness:</strong> there is at most one solution.</li>
+            <li><strong>Continuous dependence on data:</strong> small changes in the data produce small changes in the solution.</li>
+        </ol>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.5 — Fourier Sine Series</h4>
+        <p>Let \(f : [0,L] \to \mathbb{R}\) be piecewise smooth. Its <strong>Fourier sine series</strong> is</p>
+        $$ f(x) \sim \sum_{n=1}^{\infty} b_n \sin\!\left(\frac{n\pi x}{L}\right), \qquad b_n = \frac{2}{L}\int_0^L f(x)\sin\!\left(\frac{n\pi x}{L}\right)dx. $$
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.1.6 — Separation of Variables Ansatz</h4>
+        <p>The <strong>separation of variables</strong> technique assumes a product solution \(u(x,t) = X(x)\,T(t)\), substitutes into the PDE, and separates the resulting expression into two ODEs, each equal to a constant \(-\lambda\) called the <strong>separation constant</strong>.</p>
+    </div>
+
+    <!-- ---- Theorems ---- -->
+    <h3>Key Theorems</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.1.1 — Maximum Principle for Harmonic Functions</h4>
+        <p>Let \(\Omega \subset \mathbb{R}^n\) be a bounded, connected open set and let \(u \in C^2(\Omega) \cap C(\overline{\Omega})\) be harmonic in \(\Omega\). Then</p>
+        $$ \max_{\overline{\Omega}} u = \max_{\partial\Omega} u. $$
+        <p>In particular, a non-constant harmonic function cannot attain its maximum in the interior of \(\Omega\).</p>
+        <div class="proof-box">
+            <p><strong>Proof sketch.</strong> Suppose \(u\) attains its maximum at an interior point \(x_0 \in \Omega\). By the mean-value property of harmonic functions, \(u(x_0)\) equals the average of \(u\) over any ball \(B_r(x_0) \subset \Omega\). Since \(u(x_0)\) is the maximum, every value in the ball must equal \(u(x_0)\). By connectedness, \(u\) is constant on \(\Omega\), contradicting the hypothesis.</p>
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.1.2 — Uniqueness for the Heat Equation via the Energy Method</h4>
+        <p>Consider the heat equation \(u_t = k\,u_{xx}\) on \((0,L)\times(0,\infty)\) with initial condition \(u(x,0)=f(x)\) and homogeneous Dirichlet boundary conditions \(u(0,t)=u(L,t)=0\). If \(u_1\) and \(u_2\) are two classical solutions, then \(u_1 \equiv u_2\).</p>
+        <div class="proof-box">
+            <p><strong>Proof.</strong> Let \(w = u_1 - u_2\). Then \(w\) satisfies \(w_t = k\,w_{xx}\) with \(w(x,0)=0\) and \(w(0,t)=w(L,t)=0\). Define the energy</p>
+            $$ E(t) = \frac{1}{2}\int_0^L w(x,t)^2\,dx. $$
+            <p>Then \(E(0)=0\) and</p>
+            $$ E'(t) = \int_0^L w\,w_t\,dx = k\int_0^L w\,w_{xx}\,dx = -k\int_0^L w_x^2\,dx \leq 0, $$
+            <p>where we integrated by parts and used the boundary conditions. Since \(E(t)\geq 0\) and \(E'(t)\leq 0\) with \(E(0)=0\), we conclude \(E(t)=0\) for all \(t\geq 0\), hence \(w\equiv 0\).</p>
+        </div>
+    </div>
+
+    <!-- ---- Misconceptions ---- -->
+    <h3>Common Misconceptions</h3>
+
+    <div class="warning-box">
+        <h4>Misconception 1: "Classification is a global property of the equation."</h4>
+        <p>For equations with variable coefficients, the type can change from point to point. The Tricomi equation \(y\,u_{xx}+u_{yy}=0\) is elliptic for \(y>0\), parabolic on \(y=0\), and hyperbolic for \(y&lt;0\).</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 2: "Every PDE has a solution expressible in closed form."</h4>
+        <p>Separation of variables works only for special geometries and boundary conditions. Most PDEs arising in practice must be solved numerically. The technique in this module provides insight and benchmarks, not a universal solver.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 3: "The Fourier series of a function always converges uniformly."</h4>
+        <p>At discontinuities, the Fourier series converges to the midpoint of the jump and exhibits the Gibbs phenomenon: oscillations of roughly 9% overshoot that do not disappear as more terms are added, although they become narrower.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 4: "The wave equation models any vibrating system."</h4>
+        <p>The classical wave equation \(u_{tt}=c^2 u_{xx}\) assumes small-amplitude vibrations of a perfectly flexible, uniform string. Real vibrating beams obey the biharmonic equation \(u_{tt}+\gamma^2 u_{xxxx}=0\); real membranes involve the 2D wave equation with tension dependent on geometry.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 5: "Well-posedness means the problem is easy to solve numerically."</h4>
+        <p>Well-posedness (Hadamard) is a necessary condition for a good numerical scheme, but not sufficient. A well-posed problem may still be ill-conditioned, so that floating-point perturbations are amplified. Stability analysis of the numerical scheme is a separate requirement (see Module 2.2).</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <div class="example-box">
+        <h4>Example 2.1.1 — Heat Equation on a Rod</h4>
+        <p><strong>Problem.</strong> Solve the initial-boundary value problem</p>
+        $$ u_t = k\,u_{xx}, \quad 0 < x < L,\; t > 0, $$
+        $$ u(0,t)=0,\quad u(L,t)=0,\quad u(x,0)=f(x)=x(L-x). $$
+
+        <p><strong>Step 1 — Separation of variables.</strong> Assume \(u(x,t)=X(x)T(t)\). Substituting:</p>
+        $$ X(x)T'(t) = k\,X''(x)T(t) \implies \frac{T'}{kT} = \frac{X''}{X} = -\lambda. $$
+
+        <p><strong>Step 2 — Spatial ODE.</strong> \(X'' + \lambda X = 0\) with \(X(0)=X(L)=0\). Non-trivial solutions require \(\lambda_n = (n\pi/L)^2\) with eigenfunctions \(X_n(x) = \sin(n\pi x/L)\), \(n=1,2,3,\ldots\)</p>
+
+        <p><strong>Step 3 — Temporal ODE.</strong> \(T' + k\lambda_n T = 0 \implies T_n(t) = e^{-k(n\pi/L)^2 t}\).</p>
+
+        <p><strong>Step 4 — Superposition.</strong></p>
+        $$ u(x,t) = \sum_{n=1}^{\infty} b_n \sin\!\left(\frac{n\pi x}{L}\right) e^{-k(n\pi/L)^2 t}. $$
+
+        <p><strong>Step 5 — Fourier coefficients.</strong></p>
+        $$ b_n = \frac{2}{L}\int_0^L x(L-x)\sin\!\left(\frac{n\pi x}{L}\right)dx. $$
+        <p>Integration by parts (twice) gives:</p>
+        $$ b_n = \frac{4L^2}{n^3\pi^3}\bigl[1-(-1)^n\bigr] = \begin{cases} \dfrac{8L^2}{n^3\pi^3} & n \text{ odd},\\[4pt] 0 & n \text{ even}.\end{cases} $$
+
+        <p><strong>Final solution:</strong></p>
+        $$ u(x,t) = \frac{8L^2}{\pi^3}\sum_{\substack{n=1,3,5,\ldots}}^{\infty} \frac{1}{n^3}\sin\!\left(\frac{n\pi x}{L}\right)e^{-k(n\pi/L)^2 t}. $$
+    </div>
+
+    <div class="example-box">
+        <h4>Example 2.1.2 — D'Alembert's Solution of the Wave Equation</h4>
+        <p><strong>Problem.</strong> Solve</p>
+        $$ u_{tt} = c^2\,u_{xx}, \quad -\infty < x < \infty,\; t > 0, $$
+        $$ u(x,0) = \phi(x), \quad u_t(x,0)=\psi(x). $$
+
+        <p><strong>Step 1 — Change of variables.</strong> Let \(\xi = x-ct\) and \(\eta = x+ct\). The PDE becomes \(u_{\xi\eta}=0\), whose general solution is \(u = F(\xi)+G(\eta) = F(x-ct)+G(x+ct)\).</p>
+
+        <p><strong>Step 2 — Apply initial conditions.</strong></p>
+        $$ F(x)+G(x) = \phi(x), $$
+        $$ -c\,F'(x)+c\,G'(x) = \psi(x). $$
+
+        <p><strong>Step 3 — Integrate the second equation:</strong></p>
+        $$ G(x)-F(x) = \frac{1}{c}\int_0^x \psi(s)\,ds + K. $$
+
+        <p><strong>Step 4 — Solve for \(F\) and \(G\):</strong></p>
+        $$ F(x) = \frac{1}{2}\phi(x) - \frac{1}{2c}\int_0^x \psi(s)\,ds - \frac{K}{2}, $$
+        $$ G(x) = \frac{1}{2}\phi(x) + \frac{1}{2c}\int_0^x \psi(s)\,ds + \frac{K}{2}. $$
+
+        <p><strong>D'Alembert's formula:</strong></p>
+        $$ u(x,t) = \frac{1}{2}\bigl[\phi(x-ct)+\phi(x+ct)\bigr] + \frac{1}{2c}\int_{x-ct}^{x+ct}\psi(s)\,ds. $$
+
+        <p>The first term represents two copies of the initial displacement traveling in opposite directions at speed \(c\). The second term accumulates the effect of the initial velocity over the domain of dependence \([x-ct,\,x+ct]\).</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example 2.1.3 — Classifying a PDE</h4>
+        <p><strong>Problem.</strong> Classify the PDE \(3u_{xx}+4u_{xy}+u_{yy}-2u_x+u=0\).</p>
+
+        <p><strong>Step 1 — Identify coefficients:</strong> \(A=3\), \(2B=4\) so \(B=2\), \(C=1\).</p>
+        <p><strong>Step 2 — Compute discriminant:</strong> \(\Delta=B^2-AC=4-3=1>0\).</p>
+        <p><strong>Conclusion:</strong> The equation is <strong>hyperbolic</strong> at every point (since the coefficients are constant).</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+
+    <div class="interactive-highlight">
+        <h4>Lab: Fourier Series Approximation of a Square Wave</h4>
+        <p>The square wave on \([-\pi,\pi]\) defined by \(f(x)=\begin{cases}1&0&lt;x&lt;\pi\\-1&-\pi&lt;x&lt;0\end{cases}\) has the Fourier series</p>
+        $$ f(x) \sim \frac{4}{\pi}\sum_{k=0}^{\infty}\frac{1}{2k+1}\sin\bigl((2k+1)x\bigr). $$
+        <p>The code below plots partial sums for increasing \(N\) so you can observe convergence and the Gibbs phenomenon near the discontinuities.</p>
+
+        <div class="code-editor-container">
+            <textarea class="code-editor" id="fourier-code" rows="28">
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(-np.pi, np.pi, 1000)
+
+def square_wave(x):
+    """Exact square wave."""
+    return np.sign(np.sin(x))
+
+def fourier_partial_sum(x, N):
+    """Partial sum of the Fourier sine series with N odd terms."""
+    s = np.zeros_like(x)
+    for k in range(N):
+        n = 2 * k + 1
+        s += (1.0 / n) * np.sin(n * x)
+    return (4.0 / np.pi) * s
+
+fig, axes = plt.subplots(2, 2, figsize=(10, 7))
+terms_list = [1, 3, 9, 49]
+
+for ax, N in zip(axes.flat, terms_list):
+    ax.plot(x, square_wave(x), 'k--', linewidth=0.8, label='Exact')
+    ax.plot(x, fourier_partial_sum(x, N), 'b-', linewidth=1.5,
+            label=f'N = {N} odd terms')
+    ax.set_title(f'Fourier partial sum  (N = {N})')
+    ax.set_xlim(-np.pi, np.pi)
+    ax.set_ylim(-1.4, 1.4)
+    ax.legend(fontsize=8)
+    ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('fourier_convergence.png', dpi=120)
+plt.show()
+print("Observe the ~9% Gibbs overshoot persisting near x=0 and x=pi.")
+            </textarea>
+            <div class="code-buttons">
+                <button class="btn btn-success" onclick="alert('Copy this code into a Python environment (Jupyter, Colab, or local) to run it.')">Run Code</button>
+                <button class="btn btn-default" onclick="document.getElementById('fourier-code').value=document.getElementById('fourier-code').defaultValue">Reset</button>
+            </div>
+            <div class="code-output">
+                <p class="output-info">Output will display four plots showing Fourier partial sums with 1, 3, 9, and 49 odd terms converging to the square wave.</p>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <h4>Exploration Ideas</h4>
+            <ul>
+                <li>Increase \(N\) to 200. Does the overshoot shrink or merely narrow?</li>
+                <li>Replace the square wave with a sawtooth \(f(x)=x\) and recompute the Fourier series.</li>
+                <li>Plot the pointwise error \(|f(x)-S_N(x)|\) and verify that convergence is slowest at the discontinuity.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <h2>Agent Lens: PDE Model Selection Agent</h2>
+
+    <div class="content-section" style="border-left:4px solid var(--secondary-color);">
+        <p>We frame PDE classification as a reinforcement-learning problem. An autonomous agent observes physical phenomena and must select the correct mathematical model and boundary conditions.</p>
+
+        <h4>State</h4>
+        <p>The agent's state is a feature vector describing the observed physical system:</p>
+        <ul>
+            <li>Type of conserved quantity (energy, mass, momentum).</li>
+            <li>Presence or absence of a time derivative: steady-state vs. transient.</li>
+            <li>Number of spatial dimensions and symmetry properties.</li>
+            <li>Character of the source term (zero, constant, spatially varying).</li>
+            <li>Nature of the domain boundary (closed surface, infinite extent, semi-infinite strip).</li>
+        </ul>
+
+        <h4>Action</h4>
+        <p>The agent selects from a discrete action space:</p>
+        <ul>
+            <li><strong>PDE type:</strong> elliptic (Laplace/Poisson), parabolic (heat/diffusion), or hyperbolic (wave).</li>
+            <li><strong>Boundary conditions:</strong> Dirichlet, Neumann, Robin, periodic, or radiation conditions.</li>
+            <li><strong>Solution strategy:</strong> separation of variables, integral transform, Green's function, or direct numerical discretisation.</li>
+        </ul>
+
+        <h4>Reward</h4>
+        <ul>
+            <li><strong>+10</strong> for correctly classifying the PDE type.</li>
+            <li><strong>+5</strong> for choosing boundary conditions that make the problem well-posed (Hadamard conditions satisfied).</li>
+            <li><strong>+3</strong> for selecting a solution strategy that yields a convergent answer within a computational budget.</li>
+            <li><strong>-10</strong> for an ill-posed formulation (e.g., specifying initial conditions for Laplace's equation in a bounded domain).</li>
+            <li><strong>-5</strong> for misclassification (e.g., treating a parabolic problem as hyperbolic).</li>
+        </ul>
+
+        <h4>Learning</h4>
+        <p>Over many episodes the agent discovers the mapping between physical features and PDE type. It learns, for instance, that the presence of a single first-order time derivative with a second-order spatial derivative signals a parabolic equation, while two time derivatives signal a hyperbolic one. It also learns that elliptic equations require boundary data on the entire boundary (no initial conditions), while parabolic equations need an initial condition plus boundary data, and hyperbolic equations need initial data for both \(u\) and \(u_t\). The Q-table converges to a policy that simultaneously classifies, poses, and solves PDEs with high reliability.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.1.</strong> Classify each PDE as elliptic, parabolic, or hyperbolic:</p>
+        <ol type="a">
+            <li>\(u_{xx}+u_{yy}=0\)</li>
+            <li>\(u_{xx}-u_{yy}=0\)</li>
+            <li>\(u_{xx}+2u_{xy}+u_{yy}=0\)</li>
+            <li>\(y^2 u_{xx} - 2xy\,u_{xy} + x^2 u_{yy} = 0\) at the point \((1,2)\)</li>
+        </ol>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p><strong>(a)</strong> \(A=1,B=0,C=1\). \(\Delta=0-1=-1<0\). <strong>Elliptic.</strong></p>
+            <p><strong>(b)</strong> \(A=1,B=0,C=-1\). \(\Delta=0+1=1>0\). <strong>Hyperbolic.</strong></p>
+            <p><strong>(c)</strong> \(A=1,B=1,C=1\). \(\Delta=1-1=0\). <strong>Parabolic.</strong></p>
+            <p><strong>(d)</strong> At \((1,2)\): \(A=4,B=-2,C=1\). \(\Delta=4-4=0\). <strong>Parabolic.</strong> (In fact, \(\Delta=0\) for all \((x,y)\neq(0,0)\).)</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.2.</strong> Solve the heat equation \(u_t = u_{xx}\) on \(0<x<\pi\), \(t>0\), with \(u(0,t)=u(\pi,t)=0\) and \(u(x,0)=\sin(x)+3\sin(2x)\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>By linearity and the eigenfunctions of \(-\partial_{xx}\) with Dirichlet BCs:</p>
+            $$ u(x,t) = e^{-t}\sin(x) + 3e^{-4t}\sin(2x). $$
+            <p>The first mode decays with rate 1, the second with rate 4. Higher-frequency modes decay faster.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.3.</strong> Use d'Alembert's formula to solve \(u_{tt}=4u_{xx}\) on \(\mathbb{R}\) with \(u(x,0)=e^{-x^2}\) and \(u_t(x,0)=0\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Here \(c=2\), \(\phi(x)=e^{-x^2}\), \(\psi(x)=0\). D'Alembert gives</p>
+            $$ u(x,t) = \frac{1}{2}\left[e^{-(x-2t)^2}+e^{-(x+2t)^2}\right]. $$
+            <p>Two Gaussian pulses move in opposite directions at speed 2.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.4.</strong> Prove that if \(u\) is harmonic in the disk \(x^2+y^2<1\) and continuous on the closed disk with \(u=\cos^2\theta\) on the boundary, then \(\frac{1}{2}\leq u(x,y)\leq 1\) inside the disk. (Hint: use \(\cos^2\theta=\frac{1}{2}+\frac{1}{2}\cos 2\theta\) and the maximum principle.)</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>On the boundary, \(\min \cos^2\theta = 0\) and \(\max \cos^2\theta = 1\). By the maximum principle, \(0 \leq u \leq 1\) in the closed disk. For a sharper bound: the mean-value property gives \(u(0,0) = \frac{1}{2\pi}\int_0^{2\pi}\cos^2\theta\,d\theta = \frac{1}{2}\). Since \(u\) is harmonic and non-constant, the strong minimum principle ensures \(u > 0\) in the interior. The explicit Poisson-integral solution gives \(u(r,\theta)=\frac{1}{2}+\frac{r^2}{2}\cos 2\theta\), confirming \(\frac{1}{2}-\frac{r^2}{2}\leq u \leq \frac{1}{2}+\frac{r^2}{2}\leq 1\).</p>
+        </div>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.5.</strong> Write a Python function that computes the Fourier sine coefficients \(b_n\) numerically (via <code>scipy.integrate.quad</code>) for an arbitrary function \(f\) on \([0,L]\) and returns the partial sum \(S_N(x)\).</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.6.</strong> Implement the analytic solution of the heat equation from Example 2.1.1 and produce an animation showing how \(u(x,t)\) decays in time for \(L=\pi\), \(k=0.5\). Use at least 20 terms in the series.</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+L, k_coeff = np.pi, 0.5
+x = np.linspace(0, L, 300)
+N_terms = 50
+
+def u_heat(x, t):
+    s = np.zeros_like(x)
+    for m in range(N_terms):
+        n = 2 * m + 1
+        bn = 8 * L**2 / (n**3 * np.pi**3)
+        s += bn * np.sin(n * np.pi * x / L) * np.exp(-k_coeff * (n * np.pi / L)**2 * t)
+    return s
+
+fig, ax = plt.subplots()
+line, = ax.plot(x, u_heat(x, 0), 'b-')
+ax.set_ylim(-0.1, L**2/4 + 0.2)
+ax.set_xlabel('x'); ax.set_ylabel('u(x,t)')
+title = ax.set_title('t = 0.00')
+
+def animate(frame):
+    t = frame * 0.05
+    line.set_ydata(u_heat(x, t))
+    title.set_text(f't = {t:.2f}')
+    return line, title
+
+ani = FuncAnimation(fig, animate, frames=120, interval=50, blit=True)
+plt.show()</code></pre>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.7.</strong> Numerically verify d'Alembert's formula: for \(c=1\), \(\phi(x)=\exp(-10x^2)\), \(\psi(x)=0\), plot the solution at \(t=0,0.5,1,2\) and confirm the two pulses propagate at unit speed.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.8.</strong> Compute and plot the Poisson kernel for the unit disk:</p>
+        $$ P(r,\theta) = \frac{1-r^2}{1-2r\cos\theta+r^2}, $$
+        <p>for \(r=0.3,0.6,0.9,0.99\). Observe how the kernel concentrates as \(r\to 1\).</p>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.9 (Agentic).</strong> Design a decision-tree agent that takes as input the coefficients \((A,B,C)\) of a second-order PDE plus a list of boundary/initial conditions, and outputs: (i) the classification, (ii) whether the problem is well-posed, and (iii) a recommended solution strategy. Test it on at least 10 distinct PDEs from your textbook.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.1.10 (Agentic).</strong> Implement a multi-armed bandit that selects the number of Fourier terms \(N\) to use in the heat-equation solution. The reward is \(-(\text{error} + \alpha\cdot N)\) where error is the \(L^2\) norm against a reference solution with \(N=500\) and \(\alpha\) is a computational cost penalty. Run 1000 episodes and plot the average \(N\) chosen over time.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <h3>Quiz (10 Questions)</h3>
+
+    <div class="quiz-container">
+        <p><strong>Q1.</strong> The PDE \(u_{xx}+u_{yy}+u_{zz}=0\) is:</p>
+        <p>(a) Parabolic &emsp; (b) Hyperbolic &emsp; (c) Elliptic &emsp; (d) None of the above</p>
+
+        <p><strong>Q2.</strong> The discriminant \(\Delta=B^2-AC\) for the wave equation \(u_{tt}=c^2 u_{xx}\) (written as \(c^2 u_{xx}-u_{tt}=0\)) is:</p>
+        <p>(a) \(-c^2\) &emsp; (b) \(0\) &emsp; (c) \(c^2\) &emsp; (d) \(1\)</p>
+
+        <p><strong>Q3.</strong> Separation of variables applied to the heat equation on \([0,L]\) with Dirichlet BCs yields eigenvalues:</p>
+        <p>(a) \(\lambda_n = n\pi/L\) &emsp; (b) \(\lambda_n = (n\pi/L)^2\) &emsp; (c) \(\lambda_n = n^2\) &emsp; (d) \(\lambda_n = e^{-n\pi/L}\)</p>
+
+        <p><strong>Q4.</strong> In d'Alembert's formula, the domain of dependence for the point \((x_0,t_0)\) is:</p>
+        <p>(a) \([x_0-ct_0,\;x_0+ct_0]\) &emsp; (b) \([0,\;ct_0]\) &emsp; (c) All of \(\mathbb{R}\) &emsp; (d) \(\{x_0\}\)</p>
+
+        <p><strong>Q5.</strong> The Gibbs phenomenon states that near a jump discontinuity, the Fourier partial sums overshoot by approximately:</p>
+        <p>(a) 5% &emsp; (b) 9% &emsp; (c) 15% &emsp; (d) The overshoot vanishes as \(N\to\infty\)</p>
+
+        <p><strong>Q6.</strong> A function \(u\) harmonic in a bounded domain \(\Omega\) attains its maximum:</p>
+        <p>(a) At the center of \(\Omega\) &emsp; (b) On the boundary \(\partial\Omega\) &emsp; (c) At a saddle point &emsp; (d) Nowhere</p>
+
+        <p><strong>Q7.</strong> The energy \(E(t)=\frac{1}{2}\int_0^L u^2\,dx\) for the heat equation with homogeneous Dirichlet BCs satisfies:</p>
+        <p>(a) \(E'(t)>0\) &emsp; (b) \(E'(t)=0\) &emsp; (c) \(E'(t)\leq 0\) &emsp; (d) \(E'(t)\) oscillates</p>
+
+        <p><strong>Q8.</strong> Which of the following is NOT one of Hadamard's three conditions for well-posedness?</p>
+        <p>(a) Existence &emsp; (b) Uniqueness &emsp; (c) Continuous dependence on data &emsp; (d) Finite propagation speed</p>
+
+        <p><strong>Q9.</strong> The Fourier sine coefficient \(b_n\) of \(f(x)=1\) on \([0,\pi]\) is:</p>
+        <p>(a) \(\frac{2}{n\pi}[1-(-1)^n]\) &emsp; (b) \(\frac{1}{n}\) &emsp; (c) \(0\) &emsp; (d) \(\frac{2}{\pi}\)</p>
+
+        <p><strong>Q10.</strong> The Tricomi equation \(y\,u_{xx}+u_{yy}=0\) is elliptic when:</p>
+        <p>(a) \(y>0\) &emsp; (b) \(y<0\) &emsp; (c) \(y=0\) &emsp; (d) Always</p>
+    </div>
+
+    <button class="collapsible">Show Answer Key</button>
+    <div class="collapsible-content">
+        <p><strong>Q1:</strong> (c) &emsp; <strong>Q2:</strong> (c) &emsp; <strong>Q3:</strong> (b) &emsp; <strong>Q4:</strong> (a) &emsp; <strong>Q5:</strong> (b)</p>
+        <p><strong>Q6:</strong> (b) &emsp; <strong>Q7:</strong> (c) &emsp; <strong>Q8:</strong> (d) &emsp; <strong>Q9:</strong> (a) &emsp; <strong>Q10:</strong> (a)</p>
+    </div>
+
+    <h3>Mini-Project: PDE Classification and Solution Dashboard</h3>
+
+    <div class="content-section">
+        <p><strong>Objective:</strong> Build a Python program that accepts user-specified coefficients \((A,B,C)\), classifies the PDE, and — for the canonical types — solves and visualises the solution using separation of variables or d'Alembert's formula.</p>
+
+        <h4>Requirements</h4>
+        <ol>
+            <li>Accept \(A,B,C\) and classify the PDE.</li>
+            <li>For the heat equation: solve with user-specified initial condition via Fourier series and animate the decay.</li>
+            <li>For the wave equation: implement d'Alembert's formula and animate traveling waves.</li>
+            <li>For Laplace's equation: solve on a rectangle or disk with user-specified boundary data using Fourier methods and display a contour plot.</li>
+            <li>Report well-posedness diagnostics (are the supplied conditions consistent with the PDE type?).</li>
+        </ol>
+
+        <h4>Rubric</h4>
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Criterion</th><th>Excellent (90--100%)</th><th>Good (70--89%)</th><th>Needs Improvement (&lt;70%)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Correctness</strong></td>
+                    <td>All three PDE types classified correctly; solutions match analytic benchmarks to \(10^{-6}\) relative error with sufficient Fourier terms.</td>
+                    <td>Two of three types handled correctly; minor truncation issues.</td>
+                    <td>Misclassification or incorrect solutions.</td>
+                </tr>
+                <tr>
+                    <td><strong>Efficiency</strong></td>
+                    <td>Vectorised Fourier sums; animation runs at 30+ fps; code profiled and bottlenecks documented.</td>
+                    <td>Runs in reasonable time but uses explicit Python loops.</td>
+                    <td>Unacceptably slow for \(N>20\) terms.</td>
+                </tr>
+                <tr>
+                    <td><strong>Robustness</strong></td>
+                    <td>Handles edge cases (zero coefficients, degenerate BCs) gracefully with informative error messages; input validation present.</td>
+                    <td>Handles typical inputs; crashes on edge cases.</td>
+                    <td>Crashes on valid inputs.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reproducibility</strong></td>
+                    <td>Includes <code>requirements.txt</code>, docstrings, and a README with sample outputs. Random seeds fixed where applicable.</td>
+                    <td>Code runs but lacks documentation.</td>
+                    <td>Missing dependencies or unclear usage.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <div class="reference-list">
+        <ol>
+            <li>Strauss, W. A. (2008). <em>Partial Differential Equations: An Introduction</em>, 2nd ed. Wiley.</li>
+            <li>Evans, L. C. (2010). <em>Partial Differential Equations</em>, 2nd ed. American Mathematical Society.</li>
+            <li>Haberman, R. (2012). <em>Applied Partial Differential Equations</em>, 5th ed. Pearson.</li>
+            <li>Folland, G. B. (1995). <em>Introduction to Partial Differential Equations</em>, 2nd ed. Princeton University Press.</li>
+            <li>Trefethen, L. N. and Bau, D. (1997). <em>Numerical Linear Algebra</em>. SIAM. (For eigenvalue background supporting Fourier analysis.)</li>
+        </ol>
+    </div>
+
+    <div class="section-nav">
+        <a href="index.html">&larr; Back to Level 2 Overview</a>
+        <a href="module2-2.html">Next: Module 2.2 — Numerical PDE Methods &rarr;</a>
+    </div>
+</section>
+
+</div><!-- col -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<script>
+// Collapsible sections
+document.querySelectorAll('.collapsible').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        if(content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        }
+    });
+});
+</script>
+</body>
+</html>

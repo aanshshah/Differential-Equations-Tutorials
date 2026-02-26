@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 3.4: Agent-Based Control and Reinforcement Learning for Dynamical Systems — Q-learning, policy gradient, and PID control for the damped pendulum.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 3.4: Agent-Based Control and RL for Dynamical Systems</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 3 &mdash; AI-Driven DEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module3-1.html">3.1</a>
+      <a href="module3-2.html">3.2</a>
+      <a href="module3-3.html">3.3</a>
+      <a href="module3-4.html" aria-current="page">3.4</a>
+      <a href="module3-5.html">3.5</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block" style="margin-top:2rem;">
+    <div class="page-title">
+        <p style="font-size:0.95rem; color:var(--mf-muted); margin-bottom:0.25rem;">Module 3.4 &mdash; Flagship Module</p>
+        <h1>Agent-Based Control and Reinforcement Learning for Dynamical Systems</h1>
+        <p style="font-size:1.1rem; color:var(--mf-muted);">Bridge differential equations and reinforcement learning: control the damped pendulum with PID, Q-learning, and policy gradient methods.</p>
+    </div>
+    <div class="content-section" style="margin-top:1rem;">
+        <table style="box-shadow:none; margin:0;">
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Difficulty:</strong></td><td style="border:none; padding:0.5rem 1rem;">Advanced</td></tr>
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Estimated Time:</strong></td><td style="border:none; padding:0.5rem 1rem;">5&ndash;6 hours</td></tr>
+        </table>
+        <h4 style="margin-top:1.5rem;">Prerequisites</h4>
+        <ul>
+            <li><a href="../level1/module1-1.html">Modules 1.1&ndash;1.4</a>: ODE fundamentals, numerical solvers</li>
+            <li><a href="module3-1.html">Module 3.1</a>: Neural Differential Equations</li>
+            <li>Basic probability (expectations, sampling)</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="content-section">
+        <h2>Why This Matters</h2>
+        <p>Every controlled dynamical system is an ODE with a control input: $\dot{x} = f(x, u)$, where $x$ is the state and $u$ is the control. Classical control theory (PID, LQR, MPC) designs $u$ using analytical models. Reinforcement learning (RL) learns $u$ from interaction with the system, requiring no explicit model.</p>
+        <p>This module makes the connection concrete using a single physical system&mdash;the <strong>damped pendulum</strong>&mdash;controlled by three paradigms: PID (hand-crafted), Q-learning (tabular value-based), and REINFORCE (policy gradient). By solving the same task three ways, you see exactly where each approach shines and where it fails. The pendulum swing-up problem is a canonical benchmark in control and RL that captures the essential challenges: nonlinearity, underactuation, and the exploration-exploitation trade-off.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="content-section">
+        <h2>Learning Objectives</h2>
+        <ol>
+            <li>Derive the controlled pendulum ODE from Newton&rsquo;s second law.</li>
+            <li>Implement the pendulum environment with RK4 integration.</li>
+            <li>Design and implement a PID controller with gains $K_p = 10$, $K_i = 0.1$, $K_d = 2$.</li>
+            <li>Define the Markov Decision Process (MDP) formulation of the pendulum control problem.</li>
+            <li>State the Bellman optimality equation and explain its role in Q-learning.</li>
+            <li>Implement Q-learning with a $20 \times 20 \times 5$ table and $\varepsilon$-greedy exploration.</li>
+            <li>Implement the REINFORCE policy gradient algorithm with a softmax policy.</li>
+            <li>Compare PID, Q-learning, and REINFORCE on cumulative reward, stability, and sample efficiency.</li>
+            <li>Design reward functions that encode physical objectives (swing-up, stabilization, energy minimization).</li>
+            <li>Explain when RL outperforms classical control and when classical control is sufficient.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <div class="content-section">
+        <h2>Core Concepts</h2>
+
+        <h3>The Damped Pendulum Environment</h3>
+        <p>The governing ODE is:</p>
+        $$\ddot{\theta} + b\dot{\theta} + \frac{g}{L}\sin(\theta) = \frac{u}{mL^2}$$
+        <p>with parameters: $g = 9.81$ m/s$^2$, $L = 1.0$ m, $m = 1.0$ kg, $b = 0.1$ (damping coefficient), $\Delta t = 0.05$ s.</p>
+        <p>State: $(\theta, \omega)$ where $\omega = \dot{\theta}$. Written as a first-order system:</p>
+        $$\dot{\theta} = \omega, \quad \dot{\omega} = -b\omega - \frac{g}{L}\sin(\theta) + \frac{u}{mL^2}$$
+        <p>Goal: swing up from $\theta = \pi$ (hanging down) to $\theta = 0$ (upright) and stabilize.</p>
+        <p>Reward: $r = -(\theta^2 + 0.1\omega^2 + 0.001u^2)$ at each step.</p>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.1 (Markov Decision Process).</strong>
+            An MDP is a tuple $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$ where $\mathcal{S}$ is the state space, $\mathcal{A}$ is the action space, $P(s'|s,a)$ is the transition probability, $R(s,a)$ is the reward function, and $\gamma \in [0,1)$ is the discount factor. The pendulum MDP has continuous states $(\theta, \omega)$, discrete actions $u \in \{-2, -1, 0, +1, +2\}$ N&middot;m, deterministic transitions (ODE integration), and $\gamma = 0.99$.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.2 (State-Action Value Function).</strong>
+            The <em>Q-function</em> $Q^\pi(s,a)$ is the expected cumulative discounted reward starting from state $s$, taking action $a$, and following policy $\pi$ thereafter:
+            $$Q^\pi(s,a) = \mathbb{E}_\pi\!\left[\sum_{k=0}^{\infty}\gamma^k R(s_k, a_k) \;\middle|\; s_0 = s, a_0 = a\right]$$
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.3 (Policy).</strong>
+            A <em>policy</em> $\pi(a|s)$ maps states to a probability distribution over actions. A <em>deterministic policy</em> outputs a single action: $a = \pi(s)$. A <em>stochastic policy</em> samples: $a \sim \pi(\cdot|s)$. PID is a deterministic policy; softmax Q-learning uses a stochastic policy during training.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.4 (Bellman Optimality Equation).</strong>
+            The optimal Q-function satisfies:
+            $$Q^*(s,a) = R(s,a) + \gamma \sum_{s'} P(s'|s,a) \max_{a'} Q^*(s', a')$$
+            For the deterministic pendulum, $P(s'|s,a) = 1$ for the unique next state from ODE integration, so:
+            $$Q^*(s,a) = R(s,a) + \gamma \max_{a'} Q^*(s', a')$$
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.5 (Temporal Difference Learning).</strong>
+            <em>TD learning</em> updates the value estimate using the bootstrapped target:
+            $$Q(s,a) \leftarrow Q(s,a) + \alpha\!\left[R(s,a) + \gamma \max_{a'} Q(s',a') - Q(s,a)\right]$$
+            where $\alpha$ is the learning rate. This is the Q-learning update rule.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.6 (PID Controller).</strong>
+            A PID controller computes the control input as:
+            $$u(t) = K_p e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \dot{e}(t)$$
+            where $e(t) = \theta_{\text{target}} - \theta(t)$ is the tracking error. Discretized: $u_n = K_p e_n + K_i \sum_{k=0}^{n} e_k \Delta t + K_d \frac{e_n - e_{n-1}}{\Delta t}$.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.7 (Policy Gradient Theorem).</strong>
+            For a parameterized policy $\pi_\theta(a|s)$, the gradient of the expected return $J(\theta) = \mathbb{E}_{\pi_\theta}[\sum_t \gamma^t R_t]$ is:
+            $$\nabla_\theta J(\theta) = \mathbb{E}_{\pi_\theta}\!\left[\sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t|s_t) \cdot G_t\right]$$
+            where $G_t = \sum_{k=t}^{T} \gamma^{k-t} R_k$ is the return-to-go from step $t$.
+        </div>
+
+        <div class="definition-box">
+            <strong>Definition 3.4.8 (Reward Shaping).</strong>
+            <em>Reward shaping</em> adds an auxiliary reward term $F(s, s')$ to the original reward to guide learning without changing the optimal policy. A common form is potential-based shaping: $F(s, s') = \gamma \Phi(s') - \Phi(s)$ for some potential function $\Phi$.
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.4.1 (Bellman Optimality).</strong>
+            The optimal value function $Q^*$ is the unique fixed point of the Bellman optimality operator $\mathcal{T}^*$:
+            $$(\mathcal{T}^* Q)(s,a) = R(s,a) + \gamma \mathbb{E}_{s'}\!\left[\max_{a'} Q(s',a')\right]$$
+            Furthermore, $Q^*$ defines an optimal policy: $\pi^*(s) = \arg\max_a Q^*(s,a)$.
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.4.2 (Policy Gradient Theorem, Sutton et al. 2000).</strong>
+            For any differentiable policy $\pi_\theta$, the gradient of the expected return is:
+            $$\nabla_\theta J(\theta) = \mathbb{E}_{s \sim d^\pi, a \sim \pi_\theta}\!\left[Q^{\pi_\theta}(s,a) \nabla_\theta \log \pi_\theta(a|s)\right]$$
+            where $d^\pi$ is the stationary state distribution under $\pi_\theta$. REINFORCE uses the sample return $G_t$ as an unbiased estimate of $Q^{\pi_\theta}$.
+        </div>
+        <div class="proof-box">
+            <strong>Proof sketch.</strong> Start with $J(\theta) = \mathbb{E}_{s_0}[V^{\pi_\theta}(s_0)]$. Expand $V$ using the policy: $V(s) = \sum_a \pi_\theta(a|s)Q(s,a)$. Differentiate w.r.t. $\theta$ using the product rule (the $\nabla Q$ terms telescope via recursion), yielding the result.
+        </div>
+
+        <div class="theorem-box">
+            <strong>Theorem 3.4.3 (Convergence of Q-Learning).</strong>
+            Q-learning converges to $Q^*$ with probability 1 provided: (1) every state-action pair is visited infinitely often, (2) the learning rate $\alpha_n$ satisfies $\sum \alpha_n = \infty$ and $\sum \alpha_n^2 < \infty$ (Robbins-Monro conditions), and (3) the MDP has bounded rewards.
+        </div>
+
+        <h3>Common Misconceptions</h3>
+
+        <div class="warning-box">
+            <strong>Misconception 1: &ldquo;RL always outperforms classical control.&rdquo;</strong>
+            For known linear systems with quadratic cost, LQR is provably optimal with a single matrix computation. PID controllers with well-tuned gains perform well for many engineering problems. RL excels when the dynamics are unknown, highly nonlinear, or when the cost function is complex.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 2: &ldquo;Q-learning works well with continuous states directly.&rdquo;</strong>
+            Tabular Q-learning requires a finite state space. With continuous states, the table must be discretized, which suffers from the curse of dimensionality. For high-dimensional continuous states, function approximation (Deep Q-Networks) is needed.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 3: &ldquo;More exploration is always better.&rdquo;</strong>
+            Too much exploration ($\varepsilon$ too high) wastes time on random actions and slows convergence. Too little exploration ($\varepsilon$ too low) causes the agent to get stuck in suboptimal policies. The $\varepsilon$-decay schedule balances this trade-off.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 4: &ldquo;The reward function doesn&rsquo;t matter much.&rdquo;</strong>
+            Reward design is critical. A reward that only penalizes angle $\theta$ (ignoring velocity $\omega$) can produce bang-bang oscillations. Including $\omega^2$ and $u^2$ terms produces smooth, energy-efficient control.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 5: &ldquo;PID controllers can&rsquo;t handle nonlinear systems at all.&rdquo;</strong>
+            PID controllers work well near a linearization point. For the pendulum near $\theta = 0$, PID stabilizes effectively. PID fails for the full swing-up because $\sin(\theta)$ is far from linear when $\theta \approx \pi$.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 6: &ldquo;Policy gradient methods are always better than value-based methods.&rdquo;</strong>
+            Policy gradient has high variance and often requires millions of samples. Q-learning is more sample-efficient for discrete, low-dimensional action spaces. The best choice depends on the problem structure.
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <div class="content-section">
+        <h2>Worked Examples</h2>
+
+        <div class="example-box">
+            <h3>Example 1: PID Controller Design</h3>
+            <p>Linearize the pendulum around $\theta = 0$: $\sin(\theta) \approx \theta$, so $\ddot{\theta} + 0.1\dot{\theta} + 9.81\theta = u$.</p>
+            <p>Choose PID gains: $K_p = 10$, $K_i = 0.1$, $K_d = 2$. Target: $\theta_{\text{target}} = 0$.</p>
+            <p><strong>Step-by-step from $\theta_0 = 0.5$, $\omega_0 = 0$, $\Delta t = 0.05$:</strong></p>
+            <p><strong>Step 0:</strong> $e_0 = 0 - 0.5 = -0.5$, integral $= -0.5 \times 0.05 = -0.025$, derivative $= -0.5/0.05 = -10$.<br>
+            $u_0 = 10(-0.5) + 0.1(-0.025) + 2(-10) = -5.0 - 0.0025 - 20.0 = -25.003$. Clamp to $u_0 = -2$ (discrete).</p>
+            <p><strong>Step 1:</strong> Integrate ODE with $u = -2$: $\omega_1 = 0 + 0.05(-0.1 \times 0 - 9.81 \times 0.479 - 2) = -0.335$, $\theta_1 = 0.5 + 0.05(-0.335) = 0.483$.<br>
+            $e_1 = -0.483$, integral $= -0.025 + (-0.483)(0.05) = -0.049$, deriv $= (-0.483 + 0.5)/0.05 = 0.34$.<br>
+            $u_1 = 10(-0.483) + 0.1(-0.049) + 2(0.34) = -4.83 - 0.005 + 0.68 = -4.155$. Clamp: $u_1 = -2$.</p>
+            <p>The PID controller generates large torques near the setpoint. After about 50 steps (2.5 seconds), the pendulum stabilizes near $\theta = 0$. PID works well for stabilization but cannot perform the full swing-up from $\theta = \pi$.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 2: Q-Learning Update Step</h3>
+            <p>Discretize: $\theta \in [-\pi, \pi]$ into 20 bins (bin width $= \pi/10$), $\omega \in [-8, 8]$ into 20 bins (bin width $= 0.8$). Actions: $\{-2, -1, 0, +1, +2\}$.</p>
+            <p><strong>One Q-learning step:</strong></p>
+            <ol>
+                <li><strong>Observe state:</strong> $\theta = 2.8$, $\omega = -1.5$. Bins: $i_\theta = \lfloor(2.8 + \pi)/(2\pi/20)\rfloor = 18$, $i_\omega = \lfloor(-1.5 + 8)/0.8\rfloor = 8$.</li>
+                <li><strong>Choose action ($\varepsilon$-greedy):</strong> With $\varepsilon = 0.1$, probability 0.9 pick $a^* = \arg\max_a Q[18, 8, a]$. Suppose $Q[18, 8, :] = [-3.2, -2.1, -2.8, -1.5, -2.0]$. Then $a^* = 3$ (action $+1$ N&middot;m).</li>
+                <li><strong>Execute action:</strong> Integrate pendulum with $u = +1$ for $\Delta t = 0.05$. Get $\theta' = 2.73$, $\omega' = -1.82$. Reward: $r = -(2.8^2 + 0.1(1.5)^2 + 0.001(1)^2) = -(7.84 + 0.225 + 0.001) = -8.066$.</li>
+                <li><strong>Compute bins for next state:</strong> $i'_\theta = 18$, $i'_\omega = 7$.</li>
+                <li><strong>Update Q:</strong> With $\alpha = 0.1$, $\gamma = 0.99$: $Q[18, 8, 3] \leftarrow -1.5 + 0.1[-8.066 + 0.99 \times \max_a Q[18, 7, a] - (-1.5)]$.</li>
+            </ol>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 3: REINFORCE Gradient Computation</h3>
+            <p>Softmax policy over 5 actions with linear features: $\pi_\theta(a|s) = \frac{\exp(\theta_a^T \phi(s))}{\sum_{a'}\exp(\theta_{a'}^T \phi(s))}$ where $\phi(s) = [\theta, \omega, 1]^T$.</p>
+            <p><strong>One trajectory of 3 steps:</strong></p>
+            <ol>
+                <li>$s_0 = (2.5, 0)$, $a_0 = +2$, $r_0 = -6.25$</li>
+                <li>$s_1 = (2.3, -0.8)$, $a_1 = +1$, $r_1 = -5.35$</li>
+                <li>$s_2 = (2.0, -1.2)$, $a_2 = +2$, $r_2 = -4.14$</li>
+            </ol>
+            <p><strong>Returns (no discounting for simplicity):</strong> $G_0 = -6.25 - 5.35 - 4.14 = -15.74$, $G_1 = -5.35 - 4.14 = -9.49$, $G_2 = -4.14$.</p>
+            <p><strong>Gradient:</strong> $\nabla_\theta J \approx \sum_{t=0}^{2} G_t \nabla_\theta \log \pi_\theta(a_t|s_t)$.</p>
+            <p>For softmax: $\nabla_\theta \log \pi_\theta(a|s) = \phi(s)(e_a - \pi_\theta(\cdot|s))$ where $e_a$ is the one-hot vector for action $a$. The large negative returns push probability <em>away</em> from actions taken in high-cost states.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LABS                                     -->
+<!-- ============================================================ -->
+<section id="code-labs">
+    <div class="content-section">
+        <h2>Interactive Code Labs</h2>
+
+        <!-- CODE LAB 1: PID -->
+        <div class="interactive-highlight">
+            <h3>Code Lab 1: PID Controller for the Pendulum</h3>
+
+            <div class="code-editor-container">
+<pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ── Pendulum Environment ─────────────────────────────────────
+class Pendulum:
+    """Damped pendulum: theta'' + b*theta' + (g/L)*sin(theta) = u/(m*L^2)"""
+    def __init__(self):
+        self.g = 9.81; self.L = 1.0; self.m = 1.0; self.b = 0.1
+        self.dt = 0.05
+        self.reset()
+
+    def reset(self):
+        self.theta = np.pi  # hanging down
+        self.omega = 0.0
+        return np.array([self.theta, self.omega])
+
+    def _dynamics(self, theta, omega, u):
+        dtheta = omega
+        domega = -self.b * omega - (self.g / self.L) * np.sin(theta) + u / (self.m * self.L**2)
+        return dtheta, domega
+
+    def step(self, u):
+        u = np.clip(u, -2.0, 2.0)
+        # RK4 integration
+        th, om = self.theta, self.omega
+        k1_th, k1_om = self._dynamics(th, om, u)
+        k2_th, k2_om = self._dynamics(th + 0.5*self.dt*k1_th, om + 0.5*self.dt*k1_om, u)
+        k3_th, k3_om = self._dynamics(th + 0.5*self.dt*k2_th, om + 0.5*self.dt*k2_om, u)
+        k4_th, k4_om = self._dynamics(th + self.dt*k3_th, om + self.dt*k3_om, u)
+        self.theta += (self.dt / 6) * (k1_th + 2*k2_th + 2*k3_th + k4_th)
+        self.omega += (self.dt / 6) * (k1_om + 2*k2_om + 2*k3_om + k4_om)
+        # Wrap theta to [-pi, pi]
+        self.theta = ((self.theta + np.pi) % (2*np.pi)) - np.pi
+        reward = -(self.theta**2 + 0.1*self.omega**2 + 0.001*u**2)
+        return np.array([self.theta, self.omega]), reward
+
+# ── PID Controller ───────────────────────────────────────────
+class PIDController:
+    def __init__(self, Kp=10.0, Ki=0.1, Kd=2.0, dt=0.05):
+        self.Kp, self.Ki, self.Kd, self.dt = Kp, Ki, Kd, dt
+        self.integral = 0.0
+        self.prev_error = 0.0
+
+    def reset(self):
+        self.integral = 0.0
+        self.prev_error = 0.0
+
+    def compute(self, theta, target=0.0):
+        error = target - theta
+        # Wrap error to [-pi, pi]
+        error = ((error + np.pi) % (2*np.pi)) - np.pi
+        self.integral += error * self.dt
+        derivative = (error - self.prev_error) / self.dt
+        self.prev_error = error
+        u = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        return np.clip(u, -2.0, 2.0)
+
+# ── Run PID simulation ──────────────────────────────────────
+env = Pendulum()
+pid = PIDController(Kp=10.0, Ki=0.1, Kd=2.0)
+state = env.reset()
+pid.reset()
+
+n_steps = 500
+thetas, omegas, controls, rewards = [], [], [], []
+
+for t in range(n_steps):
+    u = pid.compute(state[0])
+    state, r = env.step(u)
+    thetas.append(state[0]); omegas.append(state[1])
+    controls.append(u); rewards.append(r)
+
+time = np.arange(n_steps) * env.dt
+fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+axes[0].plot(time, thetas, 'b-', lw=1.5)
+axes[0].axhline(0, color='r', ls='--', alpha=0.5, label='target')
+axes[0].set_ylabel('theta (rad)'); axes[0].legend(); axes[0].set_title('PID Control of Damped Pendulum')
+axes[0].grid(True, alpha=0.3)
+
+axes[1].plot(time, omegas, 'g-', lw=1.5)
+axes[1].set_ylabel('omega (rad/s)'); axes[1].grid(True, alpha=0.3)
+
+axes[2].plot(time, controls, 'r-', lw=1.5)
+axes[2].set_ylabel('u (N*m)'); axes[2].set_xlabel('Time (s)')
+axes[2].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+print(f"Total reward: {sum(rewards):.1f}")
+print(f"Final theta: {thetas[-1]:.4f} rad, Final omega: {omegas[-1]:.4f} rad/s")
+</code></pre>
+            </div>
+
+            <p><strong>Exploration ideas:</strong></p>
+            <ul>
+                <li>Change starting position from $\pi$ (bottom) to $0.5$ (near top). Does PID succeed now?</li>
+                <li>Increase $K_p$ to 50. What happens?</li>
+                <li>Remove the integral term ($K_i = 0$). Is there steady-state error?</li>
+            </ul>
+        </div>
+
+        <!-- CODE LAB 2: Q-LEARNING -->
+        <div class="interactive-highlight">
+            <h3>Code Lab 2: Q-Learning Agent</h3>
+
+            <div class="code-editor-container">
+<pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ── Pendulum Environment (same as Code Lab 1) ───────────────
+class Pendulum:
+    def __init__(self):
+        self.g = 9.81; self.L = 1.0; self.m = 1.0; self.b = 0.1
+        self.dt = 0.05
+        self.reset()
+    def reset(self):
+        self.theta = np.pi; self.omega = 0.0
+        return np.array([self.theta, self.omega])
+    def _dynamics(self, theta, omega, u):
+        return omega, -self.b*omega - (self.g/self.L)*np.sin(theta) + u/(self.m*self.L**2)
+    def step(self, u):
+        u = np.clip(u, -2.0, 2.0)
+        th, om = self.theta, self.omega
+        k1t, k1o = self._dynamics(th, om, u)
+        k2t, k2o = self._dynamics(th+0.5*self.dt*k1t, om+0.5*self.dt*k1o, u)
+        k3t, k3o = self._dynamics(th+0.5*self.dt*k2t, om+0.5*self.dt*k2o, u)
+        k4t, k4o = self._dynamics(th+self.dt*k3t, om+self.dt*k3o, u)
+        self.theta += (self.dt/6)*(k1t+2*k2t+2*k3t+k4t)
+        self.omega += (self.dt/6)*(k1o+2*k2o+2*k3o+k4o)
+        self.theta = ((self.theta+np.pi)%(2*np.pi))-np.pi
+        self.omega = np.clip(self.omega, -8.0, 8.0)
+        reward = -(self.theta**2 + 0.1*self.omega**2 + 0.001*u**2)
+        return np.array([self.theta, self.omega]), reward
+
+# ── Q-Learning Setup ─────────────────────────────────────────
+n_theta_bins = 20
+n_omega_bins = 20
+actions = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+n_actions = len(actions)
+
+Q = np.zeros((n_theta_bins, n_omega_bins, n_actions))
+
+def discretize(theta, omega):
+    i_th = int(np.clip((theta + np.pi) / (2*np.pi) * n_theta_bins, 0, n_theta_bins - 1))
+    i_om = int(np.clip((omega + 8.0) / 16.0 * n_omega_bins, 0, n_omega_bins - 1))
+    return i_th, i_om
+
+# ── Training ─────────────────────────────────────────────────
+alpha = 0.1      # learning rate
+gamma = 0.99     # discount factor
+n_episodes = 500
+max_steps = 200
+
+eps_start = 1.0
+eps_end = 0.01
+episode_rewards = []
+
+env = Pendulum()
+
+for ep in range(n_episodes):
+    state = env.reset()
+    eps = eps_start - (eps_start - eps_end) * ep / n_episodes
+    total_reward = 0
+
+    for step in range(max_steps):
+        i_th, i_om = discretize(state[0], state[1])
+
+        # Epsilon-greedy action selection
+        if np.random.rand() &lt; eps:
+            a_idx = np.random.randint(n_actions)
+        else:
+            a_idx = np.argmax(Q[i_th, i_om, :])
+
+        u = actions[a_idx]
+        next_state, reward = env.step(u)
+        total_reward += reward
+
+        # Q-learning update
+        ni_th, ni_om = discretize(next_state[0], next_state[1])
+        td_target = reward + gamma * np.max(Q[ni_th, ni_om, :])
+        Q[i_th, i_om, a_idx] += alpha * (td_target - Q[i_th, i_om, a_idx])
+
+        state = next_state
+
+    episode_rewards.append(total_reward)
+    if (ep + 1) % 100 == 0:
+        avg = np.mean(episode_rewards[-50:])
+        print(f"Episode {ep+1}: avg reward (last 50) = {avg:.1f}, eps = {eps:.3f}")
+
+# ── Evaluate learned policy ──────────────────────────────────
+state = env.reset()
+q_thetas, q_omegas, q_controls, q_rewards = [], [], [], []
+for step in range(500):
+    i_th, i_om = discretize(state[0], state[1])
+    a_idx = np.argmax(Q[i_th, i_om, :])
+    u = actions[a_idx]
+    state, r = env.step(u)
+    q_thetas.append(state[0]); q_omegas.append(state[1])
+    q_controls.append(u); q_rewards.append(r)
+
+# ── PID baseline for comparison ──────────────────────────────
+class PIDController:
+    def __init__(self, Kp=10.0, Ki=0.1, Kd=2.0, dt=0.05):
+        self.Kp, self.Ki, self.Kd, self.dt = Kp, Ki, Kd, dt
+        self.integral = 0.0; self.prev_error = 0.0
+    def reset(self): self.integral = 0.0; self.prev_error = 0.0
+    def compute(self, theta):
+        error = ((0 - theta + np.pi) % (2*np.pi)) - np.pi
+        self.integral += error * self.dt
+        deriv = (error - self.prev_error) / self.dt
+        self.prev_error = error
+        return np.clip(self.Kp*error + self.Ki*self.integral + self.Kd*deriv, -2, 2)
+
+env2 = Pendulum(); pid = PIDController(); state2 = env2.reset(); pid.reset()
+pid_thetas = []
+for _ in range(500):
+    u = pid.compute(state2[0])
+    state2, _ = env2.step(u)
+    pid_thetas.append(state2[0])
+
+# ── Plots ────────────────────────────────────────────────────
+time = np.arange(500) * 0.05
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+
+# Training curve
+axes[0,0].plot(episode_rewards, alpha=0.3, color='blue')
+# Smoothed
+window = 20
+smoothed = np.convolve(episode_rewards, np.ones(window)/window, mode='valid')
+axes[0,0].plot(range(window-1, n_episodes), smoothed, 'b-', lw=2)
+axes[0,0].set_xlabel('Episode'); axes[0,0].set_ylabel('Total Reward')
+axes[0,0].set_title('Q-Learning Training'); axes[0,0].grid(True, alpha=0.3)
+
+# Q-learning vs PID trajectories
+axes[0,1].plot(time, q_thetas, 'b-', lw=1.5, label='Q-Learning')
+axes[0,1].plot(time, pid_thetas, 'r--', lw=1.5, label='PID')
+axes[0,1].axhline(0, color='k', ls=':', alpha=0.3)
+axes[0,1].set_xlabel('Time (s)'); axes[0,1].set_ylabel('theta (rad)')
+axes[0,1].legend(); axes[0,1].set_title('Evaluation: theta(t)')
+axes[0,1].grid(True, alpha=0.3)
+
+# Q-learning controls
+axes[1,0].plot(time, q_controls, 'b-', lw=1)
+axes[1,0].set_xlabel('Time (s)'); axes[1,0].set_ylabel('u (N*m)')
+axes[1,0].set_title('Q-Learning Control Input'); axes[1,0].grid(True, alpha=0.3)
+
+# Q-table heatmap (best action per state)
+best_actions = np.argmax(Q, axis=2)
+im = axes[1,1].imshow(best_actions.T, origin='lower', aspect='auto',
+                       extent=[-np.pi, np.pi, -8, 8], cmap='RdYlBu')
+plt.colorbar(im, ax=axes[1,1], label='Best action index')
+axes[1,1].set_xlabel('theta'); axes[1,1].set_ylabel('omega')
+axes[1,1].set_title('Learned Policy (Q-table)')
+
+plt.tight_layout()
+plt.show()
+
+print(f"Q-learning total reward: {sum(q_rewards):.1f}")
+print(f"Q-learning final theta: {q_thetas[-1]:.4f}")
+</code></pre>
+            </div>
+
+            <p><strong>Exploration ideas:</strong></p>
+            <ul>
+                <li>Increase the Q-table resolution to $40 \times 40 \times 5$. Does performance improve? How does training time change?</li>
+                <li>Try different $\varepsilon$ decay schedules (exponential vs linear). Which converges faster?</li>
+                <li>Modify the reward to $r = \cos(\theta) - 1$ (maximum at $\theta = 0$). How does the learned policy change?</li>
+                <li>Add a continuous action baseline using the same Q-learning but with actions $\{-2, -1.5, -1, \ldots, 1.5, 2\}$ (9 actions).</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <div class="content-section">
+        <h2>Agent Lens: From ODE to MDP &mdash; The Complete Picture</h2>
+
+        <p>This module <em>is</em> the agent module. The Agent Lens here synthesizes the ODE-to-MDP mapping that has appeared as a sidebar throughout the curriculum.</p>
+
+        <h3>The Explicit Mapping</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr><th>ODE Concept</th><th>MDP Concept</th><th>Pendulum Instance</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>State $x(t)$</td><td>State $s_t$</td><td>$(\theta_t, \omega_t)$</td></tr>
+                <tr><td>Control input $u(t)$</td><td>Action $a_t$</td><td>Torque $\in \{-2, -1, 0, +1, +2\}$</td></tr>
+                <tr><td>ODE integration $x(t+\Delta t)$</td><td>Transition $P(s_{t+1}|s_t,a_t)$</td><td>RK4 step of pendulum ODE</td></tr>
+                <tr><td>Cost functional $J = \int_0^T c(x,u)\,dt$</td><td>Cumulative reward $\sum \gamma^t r_t$</td><td>$\sum -(\theta^2 + 0.1\omega^2 + 0.001u^2)$</td></tr>
+                <tr><td>Optimal control law $u^*(x)$</td><td>Optimal policy $\pi^*(s)$</td><td>$\arg\max_a Q^*(s,a)$</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Controller Comparison</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Property</th><th>PID</th><th>Q-Learning</th><th>Policy Gradient</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Requires model?</td><td>Yes (linearized)</td><td>No</td><td>No</td></tr>
+                <tr><td>Sample efficiency</td><td>N/A (no training)</td><td>Moderate</td><td>Low</td></tr>
+                <tr><td>Handles nonlinearity</td><td>Near setpoint only</td><td>Yes (via discretization)</td><td>Yes</td></tr>
+                <tr><td>Stability guarantees</td><td>Yes (Lyapunov)</td><td>Asymptotic only</td><td>None in general</td></tr>
+                <tr><td>Continuous actions</td><td>Natural</td><td>Requires discretization</td><td>Natural</td></tr>
+                <tr><td>Swing-up capable?</td><td>No (from $\pi$)</td><td>Yes (with enough training)</td><td>Yes (with enough training)</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>When RL outperforms classical control:</strong> unknown dynamics, high-dimensional state spaces, complex nonlinear constraints, when the cost function is hard to express analytically, and when the system changes over time (online adaptation).</p>
+        <p><strong>When classical control is sufficient:</strong> known linear (or mildly nonlinear) dynamics, need for formal stability guarantees, real-time hard constraints, and when interpretability is critical.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <div class="content-section">
+        <h2>Exercises</h2>
+
+        <h3>Analytical</h3>
+
+        <p><strong>Exercise 1.</strong> Derive the Bellman equation for the pendulum MDP with $\gamma = 0.99$ and the reward $r = -(\theta^2 + 0.1\omega^2 + 0.001u^2)$. Write it explicitly for state $(\theta, \omega)$ and action $u$.</p>
+        <details><summary>Solution</summary>
+            <p>$Q^*(\theta, \omega, u) = -(\theta^2 + 0.1\omega^2 + 0.001u^2) + 0.99 \max_{u'} Q^*(\theta', \omega', u')$ where $(\theta', \omega')$ is obtained by one RK4 step of the pendulum ODE with torque $u$.</p>
+        </details>
+
+        <p><strong>Exercise 2.</strong> Linearize the pendulum around $\theta = 0$ and compute the transfer function $G(s) = \Theta(s)/U(s)$ in the Laplace domain.</p>
+        <details><summary>Solution</summary>
+            <p>Linearized: $\ddot{\theta} + 0.1\dot{\theta} + 9.81\theta = u$. Taking Laplace transforms: $(s^2 + 0.1s + 9.81)\Theta(s) = U(s)$. So $G(s) = 1/(s^2 + 0.1s + 9.81)$.</p>
+        </details>
+
+        <p><strong>Exercise 3.</strong> Show that the reward $r = -(\theta^2 + 0.1\omega^2 + 0.001u^2)$ is equivalent to a quadratic cost in LQR form $c = x^T Q x + u^T R u$ and identify $Q$ and $R$.</p>
+        <details><summary>Solution</summary>
+            <p>With $x = [\theta, \omega]^T$: $Q = \begin{pmatrix}1 & 0\\0 & 0.1\end{pmatrix}$, $R = [0.001]$. The reward is $r = -(x^T Q x + u^T R u)$.</p>
+        </details>
+
+        <p><strong>Exercise 4.</strong> For the softmax policy $\pi_\theta(a|s) \propto \exp(\theta_a^T \phi(s))$, compute $\nabla_{\theta_a} \log \pi_\theta(a|s)$ and verify it equals $\phi(s)(1 - \pi_\theta(a|s))$.</p>
+        <details><summary>Solution</summary>
+            <p>$\log \pi_\theta(a|s) = \theta_a^T \phi(s) - \log \sum_{a'} \exp(\theta_{a'}^T \phi(s))$. $\nabla_{\theta_a} \log \pi_\theta(a|s) = \phi(s) - \pi_\theta(a|s)\phi(s) = \phi(s)(1 - \pi_\theta(a|s))$.</p>
+        </details>
+
+        <h3>Computational</h3>
+
+        <p><strong>Exercise 5.</strong> Implement SARSA (on-policy TD) for the pendulum and compare its learning curve with Q-learning (off-policy). Run 500 episodes with the same hyperparameters.</p>
+
+        <p><strong>Exercise 6.</strong> Implement a simple actor-critic: use the Q-table as the critic and a softmax policy (parameterized by a weight matrix) as the actor. Train for 500 episodes.</p>
+
+        <p><strong>Exercise 7.</strong> Tune the PID gains by grid search over $K_p \in \{5, 10, 20, 50\}$, $K_d \in \{1, 2, 5\}$ (fix $K_i = 0.1$). Starting from $\theta = 0.3$ (near upright), report the gains that minimize settling time.</p>
+
+        <p><strong>Exercise 8.</strong> Run Q-learning with $\gamma = 0.9, 0.95, 0.99, 0.999$ and compare total reward after 500 episodes. Plot learning curves for all four values.</p>
+
+        <h3>Agentic</h3>
+
+        <p><strong>Exercise 9.</strong> Design a multi-objective reward function that balances swing-up speed, energy efficiency, and stabilization accuracy. Parameterize it as $r = -w_1 \theta^2 - w_2 \omega^2 - w_3 u^2$ and search over $(w_1, w_2, w_3)$ to find weights that achieve swing-up within 200 steps while keeping $\sum u^2$ below a threshold.</p>
+
+        <p><strong>Exercise 10.</strong> Implement curriculum learning for the pendulum: first train the agent starting from $\theta = 0.5$ (easy), then gradually increase the starting angle to $\pi$ (hard) over the course of training. Compare with training from $\pi$ throughout.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <div class="content-section">
+        <h2>Assessment</h2>
+
+        <h3>Quiz</h3>
+        <div class="quiz-container">
+            <p><strong>Q1.</strong> What are the five components of an MDP?</p>
+            <details><summary>Answer</summary><p>State space $\mathcal{S}$, action space $\mathcal{A}$, transition function $P(s'|s,a)$, reward function $R(s,a)$, discount factor $\gamma$.</p></details>
+
+            <p><strong>Q2.</strong> What does the Q-function $Q^\pi(s,a)$ represent?</p>
+            <details><summary>Answer</summary><p>The expected cumulative discounted reward when taking action $a$ in state $s$ and following policy $\pi$ thereafter.</p></details>
+
+            <p><strong>Q3.</strong> Why does tabular Q-learning require discretization of the pendulum state?</p>
+            <details><summary>Answer</summary><p>A Q-table has a finite number of entries. Continuous states $(\theta, \omega)$ must be mapped to discrete bins to index into the table.</p></details>
+
+            <p><strong>Q4.</strong> What is $\varepsilon$-greedy exploration?</p>
+            <details><summary>Answer</summary><p>With probability $\varepsilon$, choose a random action; with probability $1-\varepsilon$, choose the greedy action $\arg\max_a Q(s,a)$. $\varepsilon$ is decayed during training.</p></details>
+
+            <p><strong>Q5.</strong> Why can&rsquo;t PID swing up the pendulum from $\theta = \pi$?</p>
+            <details><summary>Answer</summary><p>PID is designed for linearized dynamics near $\theta = 0$. At $\theta = \pi$, $\sin(\theta) \approx \theta$ is invalid; the linearized controller does not produce the correct sequence of pushes needed for swing-up.</p></details>
+
+            <p><strong>Q6.</strong> What is the role of the discount factor $\gamma$?</p>
+            <details><summary>Answer</summary><p>$\gamma$ controls how much the agent values future rewards versus immediate rewards. $\gamma = 0$: purely myopic. $\gamma \to 1$: values long-term outcomes equally. For the pendulum, $\gamma = 0.99$ encourages the agent to plan ahead for swing-up.</p></details>
+
+            <p><strong>Q7.</strong> What is the REINFORCE gradient estimate?</p>
+            <details><summary>Answer</summary><p>$\nabla_\theta J \approx \sum_t G_t \nabla_\theta \log \pi_\theta(a_t|s_t)$ where $G_t = \sum_{k=t}^T \gamma^{k-t} r_k$ is the return-to-go.</p></details>
+
+            <p><strong>Q8.</strong> What are the Robbins-Monro conditions for Q-learning convergence?</p>
+            <details><summary>Answer</summary><p>The learning rate sequence must satisfy $\sum_n \alpha_n = \infty$ (visit each state-action infinitely) and $\sum_n \alpha_n^2 < \infty$ (variance decreases). A constant $\alpha = 0.1$ does not formally satisfy these, but works well in practice for finite problems.</p></details>
+
+            <p><strong>Q9.</strong> Why is reward shaping important for the pendulum?</p>
+            <details><summary>Answer</summary><p>Without velocity and control penalties ($\omega^2$ and $u^2$ terms), the agent may learn bang-bang control that rapidly oscillates the torque, producing physically undesirable behaviour. Reward shaping encodes physical preferences (smooth control, energy efficiency).</p></details>
+
+            <p><strong>Q10.</strong> Name one advantage and one disadvantage of policy gradient vs Q-learning.</p>
+            <details><summary>Answer</summary><p>Advantage: policy gradient handles continuous actions naturally. Disadvantage: high variance in gradient estimates requires many samples for convergence.</p></details>
+        </div>
+
+        <h3>Mini-Project: Control Tournament</h3>
+        <p>Implement PID, Q-learning, and REINFORCE for the damped pendulum. Run a controlled comparison.</p>
+        <ol>
+            <li>Train Q-learning and REINFORCE for 500 episodes each</li>
+            <li>Evaluate each controller for 100 episodes from random initial states $\theta \sim \text{Uniform}[-\pi, \pi]$</li>
+            <li>Record: mean cumulative reward, success rate (reaches $|\theta| < 0.1$ within 200 steps), computation time</li>
+            <li>Produce a comparison table and learning curves</li>
+        </ol>
+
+        <table class="comparison-table">
+            <thead><tr><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>Correctness</td><td>30%</td><td>All three controllers are correctly implemented and produce reasonable behaviour</td></tr>
+                <tr><td>Fair comparison</td><td>25%</td><td>Evaluation uses identical initial conditions and environment settings</td></tr>
+                <tr><td>Analysis</td><td>20%</td><td>Discusses strengths/weaknesses of each approach with evidence</td></tr>
+                <tr><td>Visualization</td><td>15%</td><td>Clear learning curves, trajectory comparisons, and summary table</td></tr>
+                <tr><td>Code quality</td><td>10%</td><td>Modular code with shared environment class</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <div class="content-section">
+        <h2>References &amp; Next Steps</h2>
+
+        <h3>References</h3>
+        <ol>
+            <li>Sutton, R. S. &amp; Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em>, 2nd ed. MIT Press.</li>
+            <li>Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., Silver, D., &amp; Wierstra, D. (2016). &ldquo;Continuous control with deep reinforcement learning.&rdquo; <em>ICLR 2016</em>.</li>
+            <li>Doya, K. (2000). &ldquo;Reinforcement learning in continuous time and space.&rdquo; <em>Neural Computation</em>, 12(1), 219&ndash;245.</li>
+            <li>&Aring;str&ouml;m, K. J. &amp; Murray, R. M. (2008). <em>Feedback Systems: An Introduction for Scientists and Engineers</em>. Princeton University Press.</li>
+            <li>Sutton, R. S., McAllester, D., Singh, S., &amp; Mansour, Y. (2000). &ldquo;Policy gradient methods for reinforcement learning with function approximation.&rdquo; <em>NeurIPS 2000</em>.</li>
+            <li>Williams, R. J. (1992). &ldquo;Simple statistical gradient-following algorithms for connectionist reinforcement learning.&rdquo; <em>Machine Learning</em>, 8, 229&ndash;256.</li>
+        </ol>
+
+        <h3>Next Steps</h3>
+        <ul>
+            <li><strong><a href="module3-5.html">Module 3.5: Data-Driven Discovery</a></strong> &mdash; discover unknown differential equations from measurement data.</li>
+            <li><strong><a href="../level4/project4-1.html">Project 4.1</a></strong> &mdash; apply the agent-based control paradigm to a multi-body physical simulation.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Bottom navigation -->
+<div style="display:flex; justify-content:space-between; margin-top:3rem; padding:1.5rem 0; border-top:1px solid var(--mf-border);">
+    <a href="module3-3.html" style="color:var(--mf-accent);">&larr; Module 3.3: Neural Operators</a>
+    <a href="module3-5.html" style="color:var(--mf-accent);">Module 3.5: Data-Driven Discovery &rarr;</a>
+</div>
+
+</div></div></div></div></div></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 3.5: Data-Driven Discovery of Unknown Equations — SINDy, symbolic regression, and sparse identification of dynamical systems.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 3.5: Data-Driven Discovery of Unknown Equations</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 3 &mdash; AI-Driven DEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module3-1.html">3.1</a>
+      <a href="module3-2.html">3.2</a>
+      <a href="module3-3.html">3.3</a>
+      <a href="module3-4.html">3.4</a>
+      <a href="module3-5.html" aria-current="page">3.5</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (i): TITLE BLOCK
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="title-block" style="margin-top:2rem;">
+    <div class="page-title">
+        <h1>Module 3.5: Data-Driven Discovery of Unknown Equations</h1>
+        <p style="font-size:1.1rem; color: var(--mf-muted);">
+            When governing equations are unknown, discover them from data &mdash; use SINDy, sparse regression,
+            and symbolic regression to extract interpretable dynamical systems from time-series measurements.
+        </p>
+    </div>
+    <div class="prerequisites-alert">
+        <strong>Module 1.1&ndash;1.3</strong> (First- and second-order ODEs, systems of ODEs),
+        <strong>Module 0.1</strong> (Linear algebra), and familiarity with least squares ($\min_\xi \|\Theta\xi - \dot{X}\|_2^2$).
+        <br><em>Difficulty:</em> Advanced &nbsp;|&nbsp; <em>Estimated time:</em> 4&ndash;5 hours
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (ii): WHY THIS MATTERS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="why-this-matters" style="margin-top:2.5rem;">
+    <h2>Why This Matters</h2>
+    <hr>
+    <p>
+        Classical differential equations assume you already know the governing law:
+        $\dot{y} = -ky$, $\ddot{x} + \omega^2 x = 0$, and so on. But in many real-world
+        settings&mdash;cell biology, climate science, epidemiology, materials
+        engineering&mdash;the true equations are <em>unknown</em>. All you have is
+        time-series data measured from the system.
+    </p>
+    <p>
+        <strong>Sparse Identification of Nonlinear Dynamics (SINDy)</strong>, introduced by
+        Brunton, Proctor, and Kutz (2016), attacks this problem head-on. The idea is
+        strikingly simple: construct a library of candidate functions (polynomials,
+        trigonometric terms, etc.), then use sparse regression to select the few terms that
+        actually appear in the governing equation. The result is an interpretable, parsimonious
+        differential equation discovered entirely from data.
+    </p>
+    <p>
+        <strong>Symbolic regression</strong> takes a complementary approach: search over the
+        space of all mathematical expressions using genetic programming or reinforcement
+        learning. Systems like Eureqa (Schmidt &amp; Lipson, 2009) and AI Feynman (Udrescu
+        &amp; Tegmark, 2020) have rediscovered known physical laws from data alone.
+    </p>
+    <p>
+        This is the frontier of scientific machine learning: <em>automated scientific
+        discovery</em>. Instead of a human scientist hypothesising equations and testing them,
+        the algorithm discovers the equations directly. This module develops the mathematical
+        foundations, derives the key results, and provides a complete working implementation.
+    </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (iii): LEARNING OBJECTIVES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="learning-objectives" style="margin-top:2.5rem;">
+    <h2>Learning Objectives</h2>
+    <hr>
+    <p>After completing this module you will be able to:</p>
+    <ol>
+        <li>Construct a candidate library $\Theta(\mathbf{X})$ of nonlinear functions from state measurements.</li>
+        <li>Formulate the equation discovery problem as sparse regression: $\dot{\mathbf{X}} = \Theta(\mathbf{X})\,\Xi$.</li>
+        <li>Implement Sequential Thresholded Least Squares (STLS) and explain how it promotes sparsity.</li>
+        <li>Apply SINDy to the Lotka&ndash;Volterra predator&ndash;prey system and recover the true coefficients.</li>
+        <li>Quantify the effect of measurement noise on equation discovery and apply smoothing as preprocessing.</li>
+        <li>Select the sparsity threshold $\tau$ using cross-validation and information criteria (AIC/BIC).</li>
+        <li>Describe how symbolic regression searches expression space via genetic programming.</li>
+        <li>Compare data-driven equation discovery with physics-based modelling in interpretability, generalisability, and data requirements.</li>
+        <li>Assess discovered equations by forward simulation and residual analysis.</li>
+        <li>Design an active-experimentation strategy to gather maximally informative data.</li>
+    </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (iv): CORE CONCEPTS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="core-concepts" style="margin-top:2.5rem;">
+    <h2>Core Concepts</h2>
+    <hr>
+    <h3 id="definitions">Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.1 &mdash; Candidate Library $\Theta(\mathbf{X})$</h4>
+        <p>Given state measurements $\mathbf{X} \in \mathbb{R}^{m \times n}$ (where $m$ is the number of
+        time samples and $n$ is the state dimension), the <strong>candidate library</strong> is the matrix</p>
+        <div class="math-equation">
+            $$\Theta(\mathbf{X}) = \begin{bmatrix} \mathbf{1} & \mathbf{X} & \mathbf{X}^{P_2} & \mathbf{X}^{P_3} & \cdots & \sin(\mathbf{X}) & \cdots \end{bmatrix} \in \mathbb{R}^{m \times p},$$
+        </div>
+        <p>where each column is a candidate function evaluated at all $m$ time points. $\mathbf{X}^{P_k}$
+        denotes all $k$th-order polynomial combinations of the state variables. For a 2D system with
+        states $(x, y)$ and polynomials up to degree 2, the library columns are
+        $[1,\; x,\; y,\; x^2,\; xy,\; y^2]$.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.2 &mdash; Sparse Regression for Dynamics</h4>
+        <p>The equation discovery problem is cast as: find a sparse coefficient matrix
+        $\Xi \in \mathbb{R}^{p \times n}$ such that</p>
+        <div class="math-equation">
+            $$\dot{\mathbf{X}} \approx \Theta(\mathbf{X})\,\Xi.$$
+        </div>
+        <p>Each column $\boldsymbol{\xi}_k$ of $\Xi$ contains the coefficients for the $k$th
+        state variable. Sparsity means most entries of $\Xi$ are exactly zero, so only a few
+        candidate functions appear in each discovered equation.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.3 &mdash; Sequential Thresholded Least Squares (STLS)</h4>
+        <p>STLS is an iterative algorithm for finding sparse solutions to
+        $\dot{\mathbf{X}} = \Theta\,\Xi$:</p>
+        <ol>
+            <li><strong>Initialise:</strong> Solve $\Xi^{(0)} = \arg\min_\Xi \|\dot{\mathbf{X}} - \Theta\Xi\|_F^2$ by ordinary least squares.</li>
+            <li><strong>Threshold:</strong> Set all entries $|\Xi^{(k)}_{ij}| < \tau$ to zero.</li>
+            <li><strong>Re-solve:</strong> For each column, re-fit the least-squares problem using only the surviving (non-zero) candidate terms.</li>
+            <li><strong>Repeat</strong> steps 2&ndash;3 until convergence (the sparsity pattern stabilises).</li>
+        </ol>
+        <p>The threshold $\tau > 0$ is a hyperparameter controlling the sparsity level.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.4 &mdash; Pareto Front (Accuracy vs. Complexity)</h4>
+        <p>The <strong>Pareto front</strong> is the set of models for which no other model is simultaneously more accurate (lower $\|\dot{\mathbf{X}} - \Theta\Xi\|$) and less complex (fewer non-zero terms $\|\Xi\|_0$). Selecting a model on this front balances parsimony against fidelity.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.5 &mdash; Symbolic Regression</h4>
+        <p>Searches the space of all closed-form expressions to find $\dot{x} = f(x_1, x_2, \ldots)$ fitting observed data. Unlike standard regression (fixed form), symbolic regression discovers both the <em>structure</em> and <em>parameters</em> simultaneously, using operators ($+, -, \times, \div$), elementary functions ($\sin, \cos, \exp, \log$), constants, and state variables.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 3.5.6 &mdash; Genetic Programming for Equation Search</h4>
+        <p>Represents candidate equations as expression trees and evolves a population over generations. <strong>Selection</strong> favours low-error, small trees. <strong>Crossover</strong> swaps subtrees between parents. <strong>Mutation</strong> randomly modifies nodes. This powers tools like Eureqa and PySR.</p>
+    </div>
+
+    <h3 id="theorems" style="margin-top:2rem;">Theorems and Key Results</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 3.5.1 &mdash; Sparse Recovery via Mutual Incoherence</h4>
+        <p><em>(Donoho &amp; Huo, 2001; Tropp, 2004)</em></p>
+        <p>Let $\Theta \in \mathbb{R}^{m \times p}$ be the candidate library with columns normalised
+        to unit $\ell_2$-norm. Define the <strong>mutual coherence</strong></p>
+        <div class="math-equation">
+            $$\mu(\Theta) = \max_{i \neq j} \frac{|\langle \boldsymbol{\theta}_i, \boldsymbol{\theta}_j \rangle|}{\|\boldsymbol{\theta}_i\| \|\boldsymbol{\theta}_j\|}.$$
+        </div>
+        <p>If the true coefficient vector $\boldsymbol{\xi}^*$ has at most $s$ non-zero entries and</p>
+        <div class="math-equation">$$s < \tfrac{1}{2}\left(1 + \frac{1}{\mu(\Theta)}\right),$$</div>
+        <p>then $\boldsymbol{\xi}^*$ is the unique sparsest solution to $\dot{\mathbf{x}} = \Theta\boldsymbol{\xi}$,
+        and it can be recovered exactly by $\ell_1$-minimisation (basis pursuit) or greedy algorithms
+        (OMP). In practice, SINDy succeeds when the library columns corresponding to the true terms are
+        sufficiently distinct from those that should not appear.</p>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 3.5.2 &mdash; Convergence of STLS</h4>
+        <p><em>(Zhang &amp; Schaeffer, 2019)</em></p>
+        <p>Consider the STLS iteration applied to $\dot{\mathbf{x}} = \Theta\boldsymbol{\xi}$ with
+        threshold $\tau$. If the candidate library $\Theta$ satisfies a restricted isometry property
+        (RIP) with constant $\delta_{2s} < \sqrt{2} - 1$ for sparsity level $s$, and the minimum
+        magnitude of the true non-zero coefficients satisfies $|\xi^*_j| > 2\tau$ for all active
+        terms, then STLS converges in at most $s$ iterations to the correct sparsity pattern, and
+        the recovered coefficients satisfy</p>
+        <div class="math-equation">
+            $$\|\hat{\boldsymbol{\xi}} - \boldsymbol{\xi}^*\|_2 \leq C \cdot \frac{\|\text{noise}\|_2}{\sigma_{\min}(\Theta_S)},$$
+        </div>
+        <p>where $\Theta_S$ is the submatrix of $\Theta$ restricted to the true support $S$ and
+        $C$ is a constant depending on the RIP constant.</p>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 3.5.3 &mdash; Information-Theoretic Limits of Equation Discovery</h4>
+        <p>For a library of $p$ candidate functions and true sparsity $s$, the minimum number of
+        data samples $m$ required to uniquely identify the governing equation scales as</p>
+        <div class="math-equation">
+            $$m = \Omega\!\left(s \log \frac{p}{s}\right).$$
+        </div>
+        <p>This is a fundamental lower bound from compressed sensing theory (Cand&egrave;s &amp;
+        Tao, 2005). With $p = 6$ candidate functions and $s = 2$ active terms (as in
+        Lotka&ndash;Volterra), the theoretical minimum is on the order of
+        $m \approx 2 \log 3 \approx 2.2$ samples&mdash;but in practice, noise, numerical
+        differentiation errors, and coherence between library columns require $m$ to be
+        substantially larger (typically $m \geq 10s$ to $100s$).</p>
+    </div>
+
+    <h3 id="misconceptions" style="margin-top:2rem;">Common Misconceptions</h3>
+
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 1: &ldquo;SINDy always finds the correct equations.&rdquo;</strong><br>
+        <em>Reality:</em> SINDy can only discover terms present in the library. If the true dynamics involve $\sin(x)$ but the library contains only polynomials, SINDy returns a polynomial approximation. Noise and poor threshold selection also cause errors.
+    </div>
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 2: &ldquo;More candidate functions are always better.&rdquo;</strong><br>
+        <em>Reality:</em> Expanding the library increases mutual coherence $\mu(\Theta)$, making sparse recovery harder. A library of 100 terms when only 3 are active is much harder than a library of 10. Domain knowledge to constrain the library is extremely valuable.
+    </div>
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 3: &ldquo;Noise doesn't affect SINDy much.&rdquo;</strong><br>
+        <em>Reality:</em> SINDy requires computing derivatives, which amplifies noise: if measurement noise is $O(\epsilon)$, derivative noise is $O(\epsilon/\Delta t)$. Smoothing (Savitzky&ndash;Golay) or integral formulations (weak SINDy) are essential for noisy data.
+    </div>
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 4: &ldquo;Symbolic regression is just curve fitting.&rdquo;</strong><br>
+        <em>Reality:</em> Curve fitting assumes a fixed form and optimises parameters. Symbolic regression discovers both the functional form and parameters, searching over all mathematical expressions&mdash;a combinatorially vast space.
+    </div>
+    <div class="important-note" style="margin-bottom:1.5rem;">
+        <strong>Misconception 5: &ldquo;You need millions of data points.&rdquo;</strong><br>
+        <em>Reality:</em> Compressed sensing shows data scales as $O(s \log(p/s))$&mdash;tens to hundreds of points. The key is <em>richness</em>: sampling diverse states matters more than sheer volume.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (v): WORKED EXAMPLES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="worked-examples" style="margin-top:2.5rem;">
+    <h2>Worked Examples</h2>
+    <hr>
+    <div class="academic-box">
+        <h4>Example 3.5.1 &mdash; SINDy for the Lotka&ndash;Volterra System</h4>
+        <p>The Lotka&ndash;Volterra equations: $\dot{x} = \alpha x - \beta xy$, $\dot{y} = \delta xy - \gamma y$ with $\alpha=1.0$, $\beta=0.1$, $\delta=0.075$, $\gamma=1.5$.</p>
+        <p><strong>Step 1 &mdash; Generate data.</strong> Integrate from $(x_0,y_0)=(10,5)$ over $t\in[0,20]$ with $m=2000$ points via RK45, producing $\mathbf{X}\in\mathbb{R}^{2000\times 2}$.</p>
+        <p><strong>Step 2 &mdash; Compute derivatives.</strong> Fourth-order centred finite differences: $\dot{x}_i \approx (-x_{i+2}+8x_{i+1}-8x_{i-1}+x_{i-2})/(12\Delta t)$.</p>
+        <p><strong>Step 3 &mdash; Build library.</strong> $\Theta = [1,\;x,\;y,\;x^2,\;xy,\;y^2] \in \mathbb{R}^{1996\times 6}$ (4 boundary rows lost).</p>
+        <p><strong>Step 4 &mdash; STLS ($\tau=0.05$).</strong> Initial least squares for $\dot{x}$: $\boldsymbol{\xi}_1^{(0)} = [0.0002,\;1.0001,\;{-0.0003},\;{-0.0000},\;{-0.1000},\;0.0001]$. After thresholding, surviving terms: $x$ and $xy$. Re-solve: $\hat{\boldsymbol{\xi}}_1 = [1.0000,\;{-0.1000}]$. Converged in 1 iteration.</p>
+        <p><strong>Result:</strong> $\dot{x} = 1.000\,x - 0.100\,xy$, $\dot{y} = 0.075\,xy - 1.500\,y$. Exact recovery of both equations.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Example 3.5.2 &mdash; Effect of the Threshold $\tau$</h4>
+        <table class="comparison-table">
+            <thead><tr><th>$\tau$</th><th>Discovered $\dot{x}$</th><th>Terms</th><th>Residual</th></tr></thead>
+            <tbody>
+                <tr><td>0.001</td><td>$0.0002 + 1.0001x - 0.0003y - 0.1000xy + 0.0001y^2$</td><td>5</td><td>$2.1\times10^{-6}$</td></tr>
+                <tr><td>0.05</td><td>$1.0000x - 0.1000xy$</td><td>2</td><td>$3.4\times10^{-6}$</td></tr>
+                <tr><td>0.5</td><td>$1.0000x$</td><td>1</td><td>$0.47$</td></tr>
+                <tr><td>2.0</td><td>$0$ (empty)</td><td>0</td><td>$1.82$</td></tr>
+            </tbody>
+        </table>
+        <p>At $\tau=0.001$: overfitting (spurious terms). At $\tau=0.05$: exact recovery. At $\tau=0.5$: underfitting ($xy$ interaction removed). The threshold must separate true coefficient magnitudes ($\geq 0.075$) from the noise floor ($\leq 0.001$).</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Example 3.5.3 &mdash; SINDy with Measurement Noise</h4>
+        <p><strong>1% noise:</strong> Derivative SNR $\approx 50$. STLS with $\tau=0.05$ recovers the correct pattern; coefficients slightly perturbed: $\dot{x}\approx 0.998x - 0.0999xy$.</p>
+        <p><strong>5% noise:</strong> Derivative SNR $\approx 10$. Direct finite differences yield a spurious $x^2$ term. After Savitzky&ndash;Golay smoothing (window 21, order 3): $\dot{x}\approx 0.996x - 0.100xy$. Correct equation recovered.</p>
+        <p><strong>Lesson:</strong> Always smooth data before SINDy. Alternatives include integral formulations (weak SINDy) that avoid differentiation entirely.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (vi): INTERACTIVE CODE LAB
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="code-lab" style="margin-top:2.5rem;">
+    <h2>Interactive Code Lab: SINDy for Lotka&ndash;Volterra Discovery</h2>
+    <hr>
+    <p>Complete NumPy/SciPy implementation: generate data, build library, run STLS, compare discovered vs. true equations.</p>
+    <div class="code-lab-container">
+        <textarea id="sindy-lv-code" class="code-input" rows="85" spellcheck="false">
+import numpy as np
+from scipy.integrate import solve_ivp
+
+# ── 1. Generate Lotka-Volterra trajectory ──
+alpha, beta, delta, gamma_param = 1.0, 0.1, 0.075, 1.5
+
+def lotka_volterra(t, z):
+    x, y = z
+    return [alpha*x - beta*x*y, delta*x*y - gamma_param*y]
+
+t_eval = np.linspace(0, 20, 2000)
+sol = solve_ivp(lotka_volterra, (0, 20), [10.0, 5.0],
+                t_eval=t_eval, method='RK45', rtol=1e-10, atol=1e-12)
+X = sol.y.T   # (2000, 2)
+t = sol.t
+dt = t[1] - t[0]
+print(f"Generated {X.shape[0]} points, dt={dt:.6f}")
+print(f"x in [{X[:,0].min():.2f}, {X[:,0].max():.2f}], y in [{X[:,1].min():.2f}, {X[:,1].max():.2f}]")
+
+# ── 2. 4th-order centred finite differences ──
+def finite_diff_4th(X, dt):
+    m, n = X.shape
+    dXdt = np.zeros((m - 4, n))
+    for j in range(n):
+        for i in range(2, m - 2):
+            dXdt[i-2, j] = (-X[i+2,j] + 8*X[i+1,j] - 8*X[i-1,j] + X[i-2,j]) / (12*dt)
+    return dXdt
+
+dXdt = finite_diff_4th(X, dt)
+X_tr = X[2:-2, :]   # trimmed to match derivatives
+print(f"Derivative matrix: {dXdt.shape}")
+
+# ── 3. Build candidate library [1, x, y, x^2, xy, y^2] ──
+def build_library(X):
+    x, y = X[:, 0:1], X[:, 1:2]
+    return np.hstack([np.ones((X.shape[0],1)), x, y, x**2, x*y, y**2])
+
+labels = ['1', 'x', 'y', 'x^2', 'xy', 'y^2']
+Theta = build_library(X_tr)
+print(f"Library Theta: {Theta.shape}, columns: {labels}")
+
+# ── 4. Sequential Thresholded Least Squares ──
+def stls(Theta, dXdt, threshold=0.05, max_iter=20):
+    Xi = np.linalg.lstsq(Theta, dXdt, rcond=None)[0]
+    for it in range(max_iter):
+        old = Xi.copy()
+        for j in range(dXdt.shape[1]):
+            small = np.abs(Xi[:, j]) < threshold
+            Xi[small, j] = 0.0
+            big = ~small
+            if np.any(big):
+                Xi[big, j] = np.linalg.lstsq(Theta[:, big], dXdt[:, j], rcond=None)[0]
+        if np.allclose(Xi, old, atol=1e-12):
+            print(f"  STLS converged in {it+1} iterations")
+            break
+    return Xi
+
+print("\n--- STLS (threshold=0.05) ---")
+Xi = stls(Theta, dXdt, threshold=0.05)
+
+# ── 5. Print discovered equations ──
+names = ['dx/dt', 'dy/dt']
+print("\n=== DISCOVERED EQUATIONS ===")
+for j in range(2):
+    terms = [f"{Xi[i,j]:+.4f}*{labels[i]}" for i in range(len(labels)) if abs(Xi[i,j]) > 1e-10]
+    print(f"  {names[j]} = {' '.join(terms) if terms else '0'}")
+
+# ── 6. Compare with true coefficients ──
+true_Xi = np.array([[0,0],[1,0],[0,-1.5],[0,0],[-0.1,0.075],[0,0]])
+print("\n=== COEFFICIENT COMPARISON ===")
+print(f"{'Term':>6} {'True dx':>10} {'Found dx':>10} {'True dy':>10} {'Found dy':>10}")
+print("-" * 52)
+for i, lab in enumerate(labels):
+    print(f"{lab:>6} {true_Xi[i,0]:10.4f} {Xi[i,0]:10.4f} {true_Xi[i,1]:10.4f} {Xi[i,1]:10.4f}")
+print(f"\nRelative error: {np.linalg.norm(Xi-true_Xi)/np.linalg.norm(true_Xi):.2e}")
+
+# ── 7. Validate by forward simulation ──
+def disc_rhs(t, z, Xi):
+    Th = build_library(np.array(z).reshape(1,-1))
+    return (Th @ Xi).flatten()
+
+sol2 = solve_ivp(lambda t,z: disc_rhs(t,z,Xi), (0,20), [10.0,5.0],
+                 t_eval=t_eval, method='RK45', rtol=1e-10, atol=1e-12)
+X_disc = sol2.y.T
+print(f"\nMean abs simulation error: {np.mean(np.abs(X_disc - X)):.2e}")
+
+# ── 8. Trajectory comparison ──
+print("\n=== TRAJECTORY (sampled) ===")
+print(f"{'t':>6} {'x_true':>8} {'x_disc':>8} {'y_true':>8} {'y_disc':>8}")
+for i in np.linspace(0, len(t_eval)-1, 12, dtype=int):
+    print(f"{t_eval[i]:6.1f} {X[i,0]:8.3f} {X_disc[i,0]:8.3f} {X[i,1]:8.3f} {X_disc[i,1]:8.3f}")
+
+# ── 9. Text-based coefficient bar chart ──
+for j, nm in enumerate(names):
+    print(f"\n=== COEFFICIENTS: {nm} ===")
+    mx = max(max(abs(true_Xi[:,j])), max(abs(Xi[:,j])), 0.01)
+    for i, lab in enumerate(labels):
+        bt = int(abs(true_Xi[i,j])/mx*25)
+        bd = int(abs(Xi[i,j])/mx*25)
+        print(f"  {lab:>4} true: {'#'*bt:<25s} ({true_Xi[i,j]:+.4f})")
+        print(f"       disc: {'#'*bd:<25s} ({Xi[i,j]:+.4f})")
+
+print("\nExplore: try threshold=0.001 or 0.5, or add noise:")
+print("  X += 0.01*np.std(X,axis=0)*np.random.randn(*X.shape)")
+</textarea>
+        <div class="code-buttons">
+            <button class="btn btn-default" onclick="alert('To run this code, use the Pyodide runner integrated in the main site, or copy into a Python environment.')">Run Code</button>
+            <button class="btn btn-default" onclick="document.getElementById('sindy-lv-code').value=document.getElementById('sindy-lv-code').defaultValue">Reset</button>
+        </div>
+        <div class="code-output" id="sindy-lv-output">
+            <pre class="output-info">Click "Run Code" to execute. Expected: STLS converges in 1-2 iterations,
+discovered equations match dx/dt = 1.0*x - 0.1*xy and dy/dt = 0.075*xy - 1.5*y,
+relative coefficient error on the order of 1e-5 or smaller.</pre>
+        </div>
+    </div>
+    <div class="historical-note" style="margin-top:1rem;">
+        For the full Lorenz system example and noise analysis, see
+        <code><a href="../notebooks/equation_discovery_full.ipynb">notebooks/equation_discovery_full.ipynb</a></code>.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (vii): AGENT LENS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="agent-lens" style="margin-top:2.5rem;">
+    <h2>Agent Lens: The Equation Discovery Agent</h2>
+    <hr>
+    <div class="application-example">
+        <h5>Reinforcement Learning Analogy</h5>
+        <table class="comparison-table">
+            <thead><tr><th>RL Concept</th><th>Equation Discovery Counterpart</th></tr></thead>
+            <tbody>
+                <tr><td><strong>State</strong> $s_t$</td><td>Current candidate equations, library of functions, available data, noise estimate, residual errors</td></tr>
+                <tr><td><strong>Action</strong> $a_t$</td><td>Choose candidate functions for library, select threshold $\tau$, decide whether to collect more data, apply preprocessing (smoothing, subsampling)</td></tr>
+                <tr><td><strong>Reward</strong> $r_t$</td><td>Parsimony (fewer terms) + accuracy (low residual) + predictive power (forward simulation matches held-out data)</td></tr>
+                <tr><td><strong>Policy</strong> $\pi_\theta$</td><td>Bayesian model selection (BIC/AIC), cross-validation for $\tau$, active experimentation (perturb system for informative data)</td></tr>
+                <tr><td><strong>Episode</strong></td><td>One complete SINDy run: library construction, STLS, validation</td></tr>
+                <tr><td><strong>Environment</strong></td><td>The unknown dynamical system from which data is measured</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <h3>Why this perspective is powerful</h3>
+    <p><strong>Active experimentation.</strong> A passive agent uses available data. An active agent <em>designs experiments</em>&mdash;choosing initial conditions and perturbations that maximise distinguishability between candidate models. If two candidate equations produce identical predictions in the current regime, the agent perturbs the system into a regime where they differ.</p>
+    <p><strong>Model selection as exploration&ndash;exploitation.</strong> Exploitation: commit to the current best model. Exploration: test alternatives (different terms, thresholds). AIC/BIC and cross-validation balance this trade-off.</p>
+    <p><strong>Hierarchical discovery.</strong> Low level: run SINDy with fixed library and $\tau$. Mid level: select library composition and $\tau$. High level: decide whether to collect more data, switch to symbolic regression, or declare the equation discovered. This mirrors how human scientists approach equation discovery.</p>
+    <div class="historical-note">
+        Automated scientific discovery dates to BACON (Langley et al., 1987), which rediscovered Kepler's third law from numerical data. Modern SINDy and symbolic regression continue this tradition with vastly more powerful algorithms.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (viii): EXERCISES
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="exercises" style="margin-top:2.5rem;">
+    <h2>Exercises</h2>
+    <hr>
+    <h3>Analytical Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.1 (Library Size)</h4>
+        <p>Show that a polynomial library up to degree $d$ in $n$ variables has $\binom{n+d}{d}$ columns. Compute for $n=3$, $d=3$.</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>The total number of monomials up to degree $d$ in $n$ variables is $\sum_{k=0}^{d}\binom{n+k-1}{k} = \binom{n+d}{d}$. For $n=3$, $d=3$: $\binom{6}{3}=20$ columns (1 constant + 3 linear + 6 quadratic + 10 cubic).</p>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.2 (Mutual Coherence)</h4>
+        <p>Compute $\mu(\Theta)$ for $\Theta=[1,\,x,\,x^2]$ with $x_i=i/m$, $m=100$. Which column pair has highest coherence?</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>After normalising columns: $\langle\hat{\mathbf{1}},\hat{x}\rangle\approx 0.866$, $\langle\hat{\mathbf{1}},\hat{x}^2\rangle\approx 0.745$, $\langle\hat{x},\hat{x}^2\rangle\approx 0.968$. So $\mu\approx 0.968$, from the $(x,x^2)$ pair. This high coherence illustrates why polynomial libraries make sparse recovery harder. Centring and normalising the data reduces coherence.</p>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.3 (Noise Amplification)</h4>
+        <p>With measured $\tilde{x}_i = x_i + \epsilon_i$ ($\epsilon_i$ i.i.d., variance $\sigma^2$) and first-order differences $\dot{\tilde{x}}_i=(\tilde{x}_{i+1}-\tilde{x}_i)/\Delta t$, show the derivative noise variance is $2\sigma^2/(\Delta t)^2$.</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>$\dot{\tilde{x}}_i = \dot{x}_i + (\epsilon_{i+1}-\epsilon_i)/\Delta t$. Since $\epsilon_{i+1},\epsilon_i$ are independent: $\text{Var}((\epsilon_{i+1}-\epsilon_i)/\Delta t) = 2\sigma^2/(\Delta t)^2$. For $\Delta t=0.01$, $\sigma=0.01$: derivative noise std $=\sqrt{2}\approx 1.41$, which can dominate the signal.</p>
+        </div>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.4 (BIC Model Selection)</h4>
+        <p>With $m=1996$ points, compute BIC $= m\ln(\text{RSS}/m)+k\ln(m)$ for: (a) 2-term model ($k=2$, RSS $=6.8\times10^{-6}$) and (b) 5-term model ($k=5$, RSS $=4.2\times10^{-6}$). Which does BIC prefer?</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>BIC$_2 = 1996\ln(3.41\times10^{-9})+2(7.60)=-38{,}907$. BIC$_5 = 1996\ln(2.10\times10^{-9})+5(7.60)=-39{,}842$. BIC$_5$ is slightly lower, but the 3 extra terms have coefficients $&lt;0.001$ (noise artefacts). Cross-validation alongside BIC robustly selects the 2-term model.</p>
+        </div>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.5 (SINDy for Harmonic Oscillator)</h4>
+        <p>Apply SINDy to $\dot{x}=v$, $\dot{v}=-\omega^2 x$ with $\omega=2$, $(x_0,v_0)=(1,0)$, $t\in[0,10]$, library $[1,x,v,x^2,xv,v^2]$, $\tau=0.1$. Report discovered equations and coefficient errors.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.6 (Threshold Sweep)</h4>
+        <p>Sweep $\tau\in[0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0]$ on Lotka&ndash;Volterra data. Record non-zero terms and simulation error for each. Plot the Pareto front and identify the optimal $\tau$.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.7 (Noise Robustness)</h4>
+        <p>Add noise $\sigma\in[0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.1]$ (fraction of signal std). Run SINDy with and without Savitzky&ndash;Golay smoothing (window 21, order 3). Report coefficient error and whether the correct sparsity pattern is recovered.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.8 (Lorenz System)</h4>
+        <p>Discover the Lorenz system ($\sigma=10$, $\rho=28$, $\beta=8/3$) using degree-2 polynomials (20 columns for 3 variables). Apply SINDy with $\tau=0.1$ and verify correct recovery.</p>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.9 (Active Experiment Agent)</h4>
+        <p>Design an agent that discovers Lotka&ndash;Volterra using minimum data. The agent chooses initial conditions for each experiment: (1) Run SINDy. (2) Identify ambiguous terms (coefficients near $\tau$). (3) Choose $(x_0,y_0)$ maximising Fisher information for ambiguous terms. (4) Collect data and append. (5) Repeat until stable for 3 iterations. Compare total data vs. a single trajectory.</p>
+    </div>
+
+    <div class="academic-box">
+        <h4>Exercise 3.5.10 (Cross-Validation Model Selection)</h4>
+        <p>Implement an agent that selects $\tau$ via 5-fold temporal cross-validation: for each $\tau\in[0.001,0.005,0.01,0.02,0.05,0.1,0.2,0.5]$, train SINDy on 4 folds, validate by forward simulation on the held-out fold. Select minimum-error $\tau$, re-train on all data. Test on 2% noisy Lotka&ndash;Volterra data.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (ix): ASSESSMENT
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="assessment" style="margin-top:2.5rem;">
+    <h2>Assessment</h2>
+    <hr>
+    <h3>Concept Quiz</h3>
+
+    <div class="academic-box">
+        <p><strong>Q1.</strong> What does each column of the candidate library $\Theta$ represent?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>A candidate nonlinear function (e.g., $1$, $x$, $xy$, $y^2$) evaluated at all $m$ measurement times. Sparse regression selects which functions actually appear in the governing equation.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q2.</strong> Why does STLS iterate rather than threshold once?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Removing terms changes the least-squares fit, potentially revealing additional small coefficients. Iteration continues until the sparsity pattern stabilises, ensuring self-consistency.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q3.</strong> What happens if the true dynamics involve $\sin(x)$ but the library contains only polynomials?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>SINDy returns a polynomial approximation ($x - x^3/6 + \cdots$), inaccurate outside the training data range. SINDy can only discover terms present in its library.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q4.</strong> How does mutual coherence $\mu(\Theta)$ affect sparse recovery?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Higher $\mu$ means columns are more similar, making it harder to distinguish active from inactive terms. Theorem 3.5.1 requires $s < \frac{1}{2}(1+1/\mu)$; near $\mu=1$, only $s=1$ can be recovered.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q5.</strong> Why is numerical differentiation problematic for noisy data?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Derivative noise variance scales as $O(\sigma^2/(\Delta t)^2)$. Small $\Delta t$ (needed for accuracy) amplifies noise severely. Smoothing or integral formulations (weak SINDy) mitigate this.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q6.</strong> What is the key difference between SINDy and symbolic regression?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>SINDy searches a fixed, pre-specified library via sparse regression. Symbolic regression searches the entire space of mathematical expressions via combinatorial optimisation. SINDy is faster with a good library; symbolic regression is more flexible but computationally expensive.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q7.</strong> How many data points are needed for a 3-term equation from 20 candidates (Theorem 3.5.3)?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Theoretical lower bound: $m=\Omega(3\log(20/3))\approx 6$. In practice, noise requires $m\geq 30$&ndash;$300$ for reliable recovery.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q8.</strong> What role does the Pareto front play in equation discovery?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>It displays the accuracy&ndash;complexity trade-off. Models on the front are non-dominated. A sharp &ldquo;knee&rdquo; typically indicates the true equation complexity.</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q9.</strong> How does cross-validation select $\tau$?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Split data into temporal folds. For each $\tau$, train SINDy on training folds, forward-simulate on validation fold, measure prediction error. Select $\tau$ with lowest average error, avoiding overfitting (small $\tau$) and underfitting (large $\tau$).</p></div>
+    </div>
+    <div class="academic-box">
+        <p><strong>Q10.</strong> Why is forward simulation a stronger test than residual error?</p>
+        <button class="collapsible">Show Answer</button>
+        <div class="collapsible-content"><p>Residual error measures instantaneous fit. Forward simulation integrates over time, compounding errors. A model with low residual but wrong dynamics diverges during simulation. It tests actual long-term behaviour.</p></div>
+    </div>
+
+    <h3 style="margin-top:2rem;">Mini-Project: Discover the Governing Equations</h3>
+    <div class="academic-box">
+        <p><strong>Scenario:</strong> Mystery time-series from a damped oscillator $y''+by'+ky=0$ with unknown $b,k$. Position $y(t)$ at 500 points over $t\in[0,15]$.</p>
+        <p><strong>Tasks:</strong> (1) Convert to first-order system: $\dot{y}_1=y_2$, $\dot{y}_2=-ky_1-by_2$. (2) Estimate velocity via finite differences. (3) Build library $[1,y_1,y_2,y_1^2,y_1 y_2,y_2^2]$, apply SINDy. (4) Report $b$ and $k$. (5) Validate by forward simulation. (6) Compare SINDy with direct least squares on $\ddot{y}=-b\dot{y}-ky$.</p>
+        <p><strong>Test data:</strong> $b=0.3$, $k=4.0$, $(y_0,\dot{y}_0)=(2.0,0)$.</p>
+        <table class="comparison-table">
+            <thead><tr><th>Criterion</th><th>Excellent</th><th>Good</th><th>Needs Work</th></tr></thead>
+            <tbody>
+                <tr><td>Equation form</td><td>Both correct, no spurious terms</td><td>Correct with 1&ndash;2 small spurious terms</td><td>Incorrect or missing terms</td></tr>
+                <tr><td>Coefficient accuracy</td><td>Relative error $&lt;1\%$</td><td>$&lt;5\%$</td><td>$&gt;5\%$</td></tr>
+                <tr><td>Forward simulation</td><td>Matches full $[0,15]$</td><td>Matches $[0,10]$, drifts later</td><td>Diverges within $[0,5]$</td></tr>
+                <tr><td>Method comparison</td><td>Quantitative with error analysis</td><td>Qualitative comparison</td><td>No comparison</td></tr>
+                <tr><td>Code quality</td><td>Clean, commented, modular</td><td>Functional with comments</td><td>Unclear or incomplete</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SECTION (x): REFERENCES & NEXT STEPS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="references" style="margin-top:2.5rem;">
+    <h2>References &amp; Next Steps</h2>
+    <hr>
+    <div class="application-example">
+        <h5>Key References</h5>
+        <ul>
+            <li><strong>Brunton, Proctor &amp; Kutz</strong> (2016). &ldquo;Discovering governing equations from data by sparse identification of nonlinear dynamical systems.&rdquo; <em>PNAS</em> 113(15), 3932&ndash;3937.</li>
+            <li><strong>Champion, Lusch, Kutz &amp; Brunton</strong> (2019). &ldquo;Data-driven discovery of coordinates and governing equations.&rdquo; <em>PNAS</em> 116(45), 22445&ndash;22451.</li>
+            <li><strong>Udrescu &amp; Tegmark</strong> (2020). &ldquo;AI Feynman: A physics-inspired method for symbolic regression.&rdquo; <em>Science Advances</em> 6(16), eaay2631.</li>
+            <li><strong>Schmidt &amp; Lipson</strong> (2009). &ldquo;Distilling free-form natural laws from experimental data.&rdquo; <em>Science</em> 324(5923), 81&ndash;85.</li>
+            <li><strong>Cand&egrave;s &amp; Tao</strong> (2005). &ldquo;Decoding by linear programming.&rdquo; <em>IEEE Trans. Info. Theory</em> 51(12), 4203&ndash;4215.</li>
+        </ul>
+    </div>
+    <div class="application-example" style="margin-top:1rem;">
+        <h5>Further Resources</h5>
+        <ul>
+            <li><strong>Notebook:</strong> <a href="../notebooks/equation_discovery_full.ipynb"><code>notebooks/equation_discovery_full.ipynb</code></a> &mdash; Lorenz system, noise robustness, Savitzky&ndash;Golay preprocessing, symbolic regression comparison.</li>
+            <li><strong>PySINDy:</strong> Open-source SINDy implementation with constrained regression, ensemble methods, and weak formulation (<code>pysindy.readthedocs.io</code>).</li>
+            <li><strong>PySR:</strong> Symbolic regression via multi-population evolutionary search (<code>astroautomata.com/PySR</code>).</li>
+        </ul>
+    </div>
+    <div style="margin-top:2rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <a href="module3-4.html" class="btn btn-default">&larr; Back to Module 3.4</a>
+        <a href="../level4/project4-1.html" class="btn btn-default">Next: Level 4 &mdash; Project 4.1 &rarr;</a>
+    </div>
+</section>
+
+</div><!-- col-lg-12 -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var coll = document.getElementsByClassName("collapsible");
+    for (var i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) { content.style.maxHeight = null; }
+            else { content.style.maxHeight = content.scrollHeight + "px"; }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

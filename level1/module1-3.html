@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 1.3: Systems of Linear ODEs — eigenvalue methods, phase portraits, stability classification, and matrix exponentials.">
+    <meta name="author" content="">
+
+    <title>Module 1.3: Systems of Linear ODEs</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '\\(', right: '\\)', display: false}
+            ]
+        });"></script>
+
+    <style>
+        .module-title-block {
+            border-bottom: 2px solid var(--mf-border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .module-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 0.75rem; font-size: 0.92rem; color: var(--mf-muted); }
+        .module-meta span { white-space: nowrap; }
+        .section-heading { margin-top: 3rem; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--mf-border); }
+        .why-box { background: var(--mf-paper); border-left: 3px solid var(--mf-accent); padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+        .obj-list li { margin-bottom: 0.4rem; }
+        .def-block, .thm-block, .misc-block { background: var(--mf-paper); border: 1px solid var(--mf-border); padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
+        .def-block h4, .thm-block h4, .misc-block h4 { margin-top: 0; font-size: 1.05rem; }
+        .thm-block { border-left: 3px solid var(--mf-accent); }
+        .misc-block { border-left: 3px solid #b45309; }
+        .worked-example { background: #fafaf7; border: 1px solid var(--mf-border); padding: 1.5rem; margin: 1.5rem 0; }
+        .worked-example h4 { margin-top: 0; }
+        .code-lab { background: var(--mf-paper); border: 1px solid var(--mf-border); padding: 1.5rem; margin: 1.5rem 0; }
+        .agent-lens { background: #eef2ff; border: 1px solid #c7d2fe; padding: 1.5rem; margin: 1.5rem 0; }
+        .exercise-block { background: var(--mf-paper); border: 1px solid var(--mf-border); padding: 1rem 1.25rem; margin: 0.75rem 0; }
+        .solution-toggle { cursor: pointer; color: var(--mf-accent); border: none; background: none; font-size: 0.9rem; padding: 0; margin-top: 0.5rem; }
+        .solution-content { display: none; margin-top: 0.75rem; padding: 0.75rem; background: #fafaf7; border-left: 2px solid var(--mf-border); }
+        .quiz-item { background: var(--mf-paper); border: 1px solid var(--mf-border); padding: 1rem 1.25rem; margin: 0.75rem 0; }
+        .rubric-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .rubric-table th, .rubric-table td { border: 1px solid var(--mf-border); padding: 0.6rem 0.8rem; text-align: left; font-size: 0.92rem; }
+        .rubric-table th { background: var(--mf-paper); }
+        .nav-bottom { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--mf-border); }
+        .nav-bottom a { color: var(--mf-accent); text-decoration: none; font-size: 0.95rem; }
+        .nav-bottom a:hover { text-decoration: underline; }
+    </style>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+    <div class="lesson-static-header-inner">
+        <a class="lesson-static-brand" href="index.html">Level 1 &mdash; ODEs</a>
+        <nav class="lesson-static-links" aria-label="Module navigation">
+            <a href="../index.html">Home</a>
+            <a href="index.html">Overview</a>
+            <a href="module1-1.html">1.1</a>
+            <a href="module1-2.html">1.2</a>
+            <a href="module1-3.html" aria-current="page">1.3</a>
+            <a href="module1-4.html">1.4</a>
+        </nav>
+    </div>
+</header>
+
+<div id="wrapper">
+<div class="container-fluid" style="max-width:960px;">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<div class="module-title-block">
+    <p style="color:var(--mf-muted);margin-bottom:0.2rem;font-size:0.9rem;">Module 1.3</p>
+    <h1 style="margin-bottom:0.3rem;">Systems of Linear ODEs</h1>
+    <div class="module-meta">
+        <span>Difficulty: Intermediate</span>
+        <span>Estimated time: 4 &ndash; 5 hours</span>
+    </div>
+    <div class="module-meta">
+        <span>Prerequisites: <a href="module1-2.html">Module 1.2</a> (Second-Order ODEs), <a href="../level0/module0-1.html">Module 0.1</a> (Linear Algebra Essentials)</span>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Why This Matters</h2>
+<div class="why-box">
+    <p>
+        Almost every real-world dynamical system involves <em>multiple interacting quantities</em>: voltages and currents in a circuit, concentrations of reactants in a chemical network, positions and velocities of coupled masses. A single scalar ODE cannot capture these interactions. By writing the governing equations as a <strong>system</strong> \(\mathbf{x}' = A\mathbf{x}\), we unlock the full power of linear algebra &mdash; eigenvalues reveal natural modes, eigenvectors define invariant directions, and the matrix exponential gives a closed-form solution in one stroke. Phase portraits then let us <em>see</em> qualitative behaviour without solving a single equation: nodes, saddles, spirals, and centers emerge directly from the spectrum of \(A\). In reinforcement learning and control, the same eigenvalue structure determines whether a policy converges, oscillates, or diverges &mdash; making this module a direct bridge between classical mathematics and modern AI.
+    </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Learning Objectives</h2>
+<p>By the end of this module you will be able to:</p>
+<ol class="obj-list">
+    <li>Convert a coupled system of linear ODEs into matrix&ndash;vector form \(\mathbf{x}' = A\mathbf{x}\).</li>
+    <li>Compute eigenvalues and eigenvectors of \(2\times 2\) and \(3\times 3\) coefficient matrices by hand.</li>
+    <li>Construct the general solution using the eigenvalue method for real distinct, repeated, and complex eigenvalues.</li>
+    <li>Sketch phase portraits for all canonical types: stable/unstable node, saddle, stable/unstable spiral, center.</li>
+    <li>Classify equilibrium points as stable, unstable, or asymptotically stable using eigenvalue criteria.</li>
+    <li>State the Spectral Classification Theorem and the Hartman&ndash;Grobman Theorem, and explain their significance.</li>
+    <li>Compute the matrix exponential \(e^{At}\) for diagonalisable and defective \(2\times 2\) matrices.</li>
+    <li>Model a coupled spring&ndash;mass system as a first-order linear system and interpret its normal modes.</li>
+    <li>Implement eigenvalue computation and phase-portrait plotting in Python.</li>
+    <li>Interpret phase portraits through the lens of an agent navigating a policy landscape.</li>
+</ol>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Core Concepts</h2>
+
+<!-- ---- Definitions ---- -->
+<h3>Definitions</h3>
+
+<div class="def-block">
+    <h4>Definition 1.3.1 &mdash; Linear System of ODEs</h4>
+    <p>A <em>first-order linear system</em> is a set of \(n\) coupled equations</p>
+    $$ \mathbf{x}'(t) = A(t)\,\mathbf{x}(t) + \mathbf{g}(t), \qquad \mathbf{x}(t)\in\mathbb{R}^n, $$
+    <p>where \(A(t)\) is an \(n\times n\) matrix-valued function and \(\mathbf{g}(t)\) is a vector-valued forcing. When \(A\) is constant and \(\mathbf{g}=\mathbf{0}\) we write \(\mathbf{x}'=A\mathbf{x}\) and call the system <em>autonomous and homogeneous</em>.</p>
+</div>
+
+<div class="def-block">
+    <h4>Definition 1.3.2 &mdash; Fundamental Matrix</h4>
+    <p>A matrix \(\Phi(t)\in\mathbb{R}^{n\times n}\) whose columns are \(n\) linearly independent solutions of \(\mathbf{x}'=A\mathbf{x}\) is called a <em>fundamental matrix</em>. It satisfies \(\Phi'(t)=A\,\Phi(t)\). If additionally \(\Phi(0)=I\), then \(\Phi(t)=e^{At}\).</p>
+</div>
+
+<div class="def-block">
+    <h4>Definition 1.3.3 &mdash; Matrix Exponential</h4>
+    <p>The <em>matrix exponential</em> of \(A\in\mathbb{R}^{n\times n}\) is defined by the convergent power series</p>
+    $$ e^{At} = \sum_{k=0}^{\infty} \frac{(At)^k}{k!} = I + At + \frac{A^2 t^2}{2!} + \cdots $$
+    <p>It gives the unique solution \(\mathbf{x}(t)=e^{At}\mathbf{x}_0\) to the initial-value problem \(\mathbf{x}'=A\mathbf{x},\;\mathbf{x}(0)=\mathbf{x}_0\).</p>
+</div>
+
+<div class="def-block">
+    <h4>Definition 1.3.4 &mdash; Phase Portrait</h4>
+    <p>The <em>phase portrait</em> of \(\mathbf{x}'=A\mathbf{x}\) in \(\mathbb{R}^2\) is the family of solution curves (trajectories) plotted in the \((x_1,x_2)\)-plane, together with the direction field. The origin is the unique equilibrium point when \(\det A\neq 0\).</p>
+</div>
+
+<div class="def-block">
+    <h4>Definition 1.3.5 &mdash; Stability of an Equilibrium</h4>
+    <p>The equilibrium \(\mathbf{x}^*=\mathbf{0}\) of \(\mathbf{x}'=A\mathbf{x}\) is:</p>
+    <ul>
+        <li><strong>Stable</strong> if for every \(\varepsilon>0\) there exists \(\delta>0\) such that \(\|\mathbf{x}(0)\|<\delta\) implies \(\|\mathbf{x}(t)\|<\varepsilon\) for all \(t\geq 0\).</li>
+        <li><strong>Asymptotically stable</strong> if it is stable and additionally \(\mathbf{x}(t)\to\mathbf{0}\) as \(t\to\infty\).</li>
+        <li><strong>Unstable</strong> if it is not stable.</li>
+    </ul>
+</div>
+
+<div class="def-block">
+    <h4>Definition 1.3.6 &mdash; Normal Modes</h4>
+    <p>In a coupled spring&ndash;mass system with mass matrix \(M\) and stiffness matrix \(K\), the <em>normal modes</em> are the eigenvectors of \(M^{-1}K\), and the corresponding <em>natural frequencies</em> are \(\omega_k = \sqrt{\lambda_k}\), where \(\lambda_k\) are the eigenvalues of \(M^{-1}K\).</p>
+</div>
+
+<!-- ---- Theorems ---- -->
+<h3>Theorems</h3>
+
+<div class="thm-block">
+    <h4>Theorem 1.3.1 &mdash; Spectral Classification of Equilibria (2D)</h4>
+    <p>Let \(A\in\mathbb{R}^{2\times 2}\) with eigenvalues \(\lambda_1,\lambda_2\). Then the phase portrait of \(\mathbf{x}'=A\mathbf{x}\) at the origin is classified as follows:</p>
+    <ul>
+        <li><strong>Stable node:</strong> \(\lambda_1,\lambda_2\) real and both negative.</li>
+        <li><strong>Unstable node:</strong> \(\lambda_1,\lambda_2\) real and both positive.</li>
+        <li><strong>Saddle point:</strong> \(\lambda_1,\lambda_2\) real with opposite signs.</li>
+        <li><strong>Stable spiral:</strong> \(\lambda = \alpha \pm i\beta\) with \(\alpha < 0\).</li>
+        <li><strong>Unstable spiral:</strong> \(\lambda = \alpha \pm i\beta\) with \(\alpha > 0\).</li>
+        <li><strong>Center:</strong> \(\lambda = \pm i\beta\) (purely imaginary).</li>
+    </ul>
+    <p>The origin is asymptotically stable if and only if \(\operatorname{Re}(\lambda_j)<0\) for all \(j\); it is stable (but not asymptotically) if all eigenvalues have \(\operatorname{Re}(\lambda_j)\leq 0\) and every eigenvalue with zero real part is simple.</p>
+</div>
+
+<div class="thm-block">
+    <h4>Theorem 1.3.2 &mdash; Hartman&ndash;Grobman Theorem (Statement)</h4>
+    <p>Let \(\mathbf{x}'=\mathbf{f}(\mathbf{x})\) be a nonlinear autonomous system with a hyperbolic equilibrium at \(\mathbf{x}^*\) (i.e., the Jacobian \(D\mathbf{f}(\mathbf{x}^*)\) has no eigenvalue with zero real part). Then in a neighbourhood of \(\mathbf{x}^*\), the nonlinear flow is <em>topologically conjugate</em> to the linearised flow \(\mathbf{y}'=D\mathbf{f}(\mathbf{x}^*)\,\mathbf{y}\). In other words, the qualitative phase portrait of the linearisation correctly predicts the local behaviour of the nonlinear system near a hyperbolic equilibrium.</p>
+</div>
+
+<!-- ---- Misconceptions ---- -->
+<h3>Common Misconceptions</h3>
+
+<div class="misc-block">
+    <h4>Misconception 1: "Eigenvalues with zero real part mean the system is asymptotically stable."</h4>
+    <p><strong>Correction:</strong> Purely imaginary eigenvalues yield a <em>center</em>, where trajectories are closed orbits and the origin is stable but <strong>not</strong> asymptotically stable. Asymptotic stability requires all eigenvalues to have strictly negative real parts.</p>
+</div>
+
+<div class="misc-block">
+    <h4>Misconception 2: "The matrix exponential \(e^{At}\) equals the matrix with entries \(e^{a_{ij}t}\)."</h4>
+    <p><strong>Correction:</strong> The matrix exponential is defined by the power series \(\sum (At)^k/k!\). Entry-wise exponentiation gives a completely different (and generally wrong) result. The correct computation requires diagonalisation or the Cayley&ndash;Hamilton theorem.</p>
+</div>
+
+<div class="misc-block">
+    <h4>Misconception 3: "A saddle point can be stable."</h4>
+    <p><strong>Correction:</strong> A saddle has eigenvalues of opposite sign, so there is always an unstable manifold along which trajectories escape to infinity. The saddle is therefore always <strong>unstable</strong>, regardless of initial conditions.</p>
+</div>
+
+<div class="misc-block">
+    <h4>Misconception 4: "The phase portrait type can change when you scale \(A\) by a positive constant."</h4>
+    <p><strong>Correction:</strong> Replacing \(A\) by \(cA\) (\(c>0\)) scales all eigenvalues by \(c\), which changes the speed of trajectories but preserves their geometric shape and classification. The topology of the phase portrait is invariant under positive scaling.</p>
+</div>
+
+<div class="misc-block">
+    <h4>Misconception 5: "Repeated eigenvalues always produce a star node."</h4>
+    <p><strong>Correction:</strong> Repeated eigenvalues produce a <em>star node</em> (proper node) only when the eigenspace is two-dimensional, i.e., \(A = \lambda I\). If the geometric multiplicity is one (defective case), the portrait is an <em>improper node</em> (degenerate node) with a single eigenvector direction, and the general solution involves a generalised eigenvector and a \(te^{\lambda t}\) term.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Worked Examples</h2>
+
+<div class="worked-example">
+    <h4>Example 1 &mdash; Eigenvalue Method for a 2&times;2 System</h4>
+    <p><strong>Problem.</strong> Solve the system</p>
+    $$ \mathbf{x}' = \begin{pmatrix} 1 & 3 \\ 1 & -1 \end{pmatrix}\mathbf{x}, \qquad \mathbf{x}(0) = \begin{pmatrix} 4 \\ 0 \end{pmatrix}. $$
+
+    <p><strong>Step 1 &mdash; Find eigenvalues.</strong> The characteristic polynomial is</p>
+    $$ \det(A - \lambda I) = (1-\lambda)(-1-\lambda) - 3 = \lambda^2 - 4 = 0, $$
+    <p>so \(\lambda_1 = 2\) and \(\lambda_2 = -2\). Since these are real and of opposite sign, the origin is a <strong>saddle point</strong>.</p>
+
+    <p><strong>Step 2 &mdash; Find eigenvectors.</strong></p>
+    <ul>
+        <li>\(\lambda_1 = 2\): \((A - 2I)\mathbf{v} = 0\) gives \(-v_1 + 3v_2 = 0\), so \(\mathbf{v}_1 = \begin{pmatrix} 3 \\ 1 \end{pmatrix}\).</li>
+        <li>\(\lambda_2 = -2\): \((A + 2I)\mathbf{v} = 0\) gives \(3v_1 + 3v_2 = 0\), so \(\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}\).</li>
+    </ul>
+
+    <p><strong>Step 3 &mdash; General solution.</strong></p>
+    $$ \mathbf{x}(t) = c_1 e^{2t}\begin{pmatrix} 3 \\ 1 \end{pmatrix} + c_2 e^{-2t}\begin{pmatrix} 1 \\ -1 \end{pmatrix}. $$
+
+    <p><strong>Step 4 &mdash; Apply initial condition.</strong> At \(t=0\):</p>
+    $$ \begin{pmatrix} 4 \\ 0 \end{pmatrix} = c_1 \begin{pmatrix} 3 \\ 1 \end{pmatrix} + c_2 \begin{pmatrix} 1 \\ -1 \end{pmatrix}. $$
+    <p>Solving: \(3c_1 + c_2 = 4\), \(c_1 - c_2 = 0\), so \(c_1 = c_2 = 1\).</p>
+
+    <p><strong>Solution:</strong></p>
+    $$ \mathbf{x}(t) = e^{2t}\begin{pmatrix} 3 \\ 1 \end{pmatrix} + e^{-2t}\begin{pmatrix} 1 \\ -1 \end{pmatrix}. $$
+</div>
+
+<div class="worked-example">
+    <h4>Example 2 &mdash; Complex Eigenvalues and Spiral Portrait</h4>
+    <p><strong>Problem.</strong> Classify the equilibrium and sketch the phase portrait for</p>
+    $$ \mathbf{x}' = \begin{pmatrix} -1 & 2 \\ -2 & -1 \end{pmatrix}\mathbf{x}. $$
+
+    <p><strong>Step 1 &mdash; Eigenvalues.</strong></p>
+    $$ \det(A - \lambda I) = (-1-\lambda)^2 + 4 = \lambda^2 + 2\lambda + 5 = 0 $$
+    $$ \lambda = \frac{-2 \pm \sqrt{4-20}}{2} = -1 \pm 2i. $$
+    <p>The eigenvalues are complex with \(\alpha = -1 < 0\) and \(\beta = 2\). By the Spectral Classification Theorem, the origin is a <strong>stable spiral</strong>.</p>
+
+    <p><strong>Step 2 &mdash; Eigenvector for \(\lambda_1 = -1 + 2i\).</strong></p>
+    $$ (A - \lambda_1 I)\mathbf{v} = \begin{pmatrix} -2i & 2 \\ -2 & -2i \end{pmatrix}\mathbf{v} = 0. $$
+    <p>From the first row: \(-2iv_1 + 2v_2 = 0\), so \(v_2 = iv_1\). Taking \(v_1 = 1\): \(\mathbf{v} = \begin{pmatrix} 1 \\ i \end{pmatrix}\).</p>
+
+    <p><strong>Step 3 &mdash; Real-valued solution.</strong> We write \(\mathbf{v} = \mathbf{a} + i\mathbf{b}\) where \(\mathbf{a} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\) and \(\mathbf{b} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\). The two real solutions are:</p>
+    $$ \mathbf{x}_1(t) = e^{-t}\bigl(\cos 2t\,\mathbf{a} - \sin 2t\,\mathbf{b}\bigr) = e^{-t}\begin{pmatrix} \cos 2t \\ -\sin 2t \end{pmatrix}, $$
+    $$ \mathbf{x}_2(t) = e^{-t}\bigl(\sin 2t\,\mathbf{a} + \cos 2t\,\mathbf{b}\bigr) = e^{-t}\begin{pmatrix} \sin 2t \\ \cos 2t \end{pmatrix}. $$
+
+    <p><strong>General solution:</strong></p>
+    $$ \mathbf{x}(t) = e^{-t}\begin{pmatrix} c_1\cos 2t + c_2\sin 2t \\ -c_1\sin 2t + c_2\cos 2t \end{pmatrix}. $$
+    <p>Trajectories spiral clockwise toward the origin, consistent with a <strong>stable spiral</strong>.</p>
+</div>
+
+<div class="worked-example">
+    <h4>Example 3 &mdash; Matrix Exponential via Diagonalisation</h4>
+    <p><strong>Problem.</strong> Compute \(e^{At}\) for \(A = \begin{pmatrix} 0 & 1 \\ -2 & -3 \end{pmatrix}\).</p>
+
+    <p><strong>Step 1.</strong> Eigenvalues: \(\lambda^2 + 3\lambda + 2 = 0\), so \(\lambda_1 = -1\), \(\lambda_2 = -2\).</p>
+
+    <p><strong>Step 2.</strong> Eigenvectors: \(\mathbf{v}_1 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}\), \(\mathbf{v}_2 = \begin{pmatrix} 1 \\ -2 \end{pmatrix}\).</p>
+
+    <p><strong>Step 3.</strong> Form \(P = \begin{pmatrix} 1 & 1 \\ -1 & -2 \end{pmatrix}\) and \(P^{-1} = \begin{pmatrix} 2 & 1 \\ -1 & -1 \end{pmatrix}\).</p>
+
+    <p><strong>Step 4.</strong> Since \(A = P\,\text{diag}(-1,-2)\,P^{-1}\):</p>
+    $$ e^{At} = P\begin{pmatrix} e^{-t} & 0 \\ 0 & e^{-2t} \end{pmatrix}P^{-1} = \begin{pmatrix} 2e^{-t} - e^{-2t} & e^{-t} - e^{-2t} \\ -2e^{-t} + 2e^{-2t} & -e^{-t} + 2e^{-2t} \end{pmatrix}. $$
+</div>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Interactive Code Lab</h2>
+
+<div class="code-lab">
+    <h4>Code Lab: Eigenvalue Computation and Phase Portrait</h4>
+    <p>The code below computes eigenvalues of a \(2\times 2\) matrix \(A\) and plots the phase portrait with several trajectories. Modify \(A\) to explore different portrait types.</p>
+
+    <div class="code-editor-container">
+        <textarea class="code-editor" id="codeEditor1" rows="38" spellcheck="false">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# --- Define the coefficient matrix ---
+A = np.array([[1, 3],
+              [1, -1]])
+
+# --- Eigenvalue computation ---
+eigenvalues, eigenvectors = np.linalg.eig(A)
+print("Eigenvalues:", eigenvalues)
+print("Eigenvectors (columns):")
+print(eigenvectors)
+
+# --- Classify the equilibrium ---
+re_parts = eigenvalues.real
+im_parts = eigenvalues.imag
+
+if np.all(im_parts == 0):
+    if np.all(re_parts < 0):
+        classification = "Stable Node"
+    elif np.all(re_parts > 0):
+        classification = "Unstable Node"
+    elif re_parts[0] * re_parts[1] < 0:
+        classification = "Saddle Point"
+    else:
+        classification = "Degenerate / Star Node"
+else:
+    alpha = re_parts[0]
+    if alpha < 0:
+        classification = "Stable Spiral"
+    elif alpha > 0:
+        classification = "Unstable Spiral"
+    else:
+        classification = "Center"
+
+print(f"Classification: {classification}")
+
+# --- Phase portrait ---
+fig, ax = plt.subplots(1, 1, figsize=(7, 7))
+
+# Direction field
+xvals = np.linspace(-4, 4, 20)
+yvals = np.linspace(-4, 4, 20)
+X, Y = np.meshgrid(xvals, yvals)
+U = A[0, 0] * X + A[0, 1] * Y
+V = A[1, 0] * X + A[1, 1] * Y
+mag = np.sqrt(U**2 + V**2)
+mag[mag == 0] = 1
+ax.quiver(X, Y, U / mag, V / mag, mag, cmap='coolwarm', alpha=0.5)
+
+# Trajectories from several initial conditions
+dt = 0.01
+T = 5.0
+thetas = np.linspace(0, 2 * np.pi, 12, endpoint=False)
+for theta in thetas:
+    x0 = 3.0 * np.array([np.cos(theta), np.sin(theta)])
+    traj = [x0.copy()]
+    x = x0.copy()
+    for _ in range(int(T / dt)):
+        x = x + dt * A @ x
+        traj.append(x.copy())
+        if np.linalg.norm(x) > 10:
+            break
+    traj = np.array(traj)
+    ax.plot(traj[:, 0], traj[:, 1], linewidth=0.8)
+
+# Plot eigenvector directions (real eigenvalues only)
+if np.all(im_parts == 0):
+    for j in range(2):
+        v = eigenvectors[:, j]
+        ax.plot([-4*v[0], 4*v[0]], [-4*v[1], 4*v[1]],
+                'k--', linewidth=1.2, label=f'eigvec {j+1}')
+
+ax.set_xlim(-4, 4)
+ax.set_ylim(-4, 4)
+ax.set_aspect('equal')
+ax.set_xlabel('$x_1$')
+ax.set_ylabel('$x_2$')
+ax.set_title(f"Phase Portrait — {classification}")
+ax.legend(loc='upper left', fontsize=8)
+plt.tight_layout()
+plt.show()
+        </textarea>
+        <div class="code-buttons">
+            <button class="btn btn-default" onclick="copyCode('codeEditor1')">Copy Code</button>
+        </div>
+        <div class="code-output" id="output1">
+            <p style="color:var(--mf-muted);font-size:0.88rem;">Paste into a Jupyter notebook or Python environment with NumPy and Matplotlib.</p>
+        </div>
+    </div>
+
+    <p><strong>Exercises with the code:</strong></p>
+    <ol>
+        <li>Set \(A = \begin{pmatrix} -1 & 2 \\ -2 & -1 \end{pmatrix}\) to observe a stable spiral.</li>
+        <li>Set \(A = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}\) to observe a center (closed orbits).</li>
+        <li>Try \(A = \begin{pmatrix} -3 & 0 \\ 0 & -3 \end{pmatrix}\) for a star node, then \(A = \begin{pmatrix} -3 & 1 \\ 0 & -3 \end{pmatrix}\) for a degenerate node. How do the portraits differ?</li>
+    </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Agent Lens</h2>
+
+<div class="agent-lens">
+    <h4>Phase Portrait as a Policy Landscape</h4>
+
+    <p>Consider a reinforcement-learning agent whose <strong>state</strong> is a vector \(\mathbf{s} = (s_1, s_2) \in \mathbb{R}^2\). The environment dynamics are linear:</p>
+    $$ \mathbf{s}_{t+1} = (I + \Delta t\, A)\,\mathbf{s}_t, $$
+    <p>which is simply the forward Euler discretisation of \(\mathbf{s}' = A\mathbf{s}\). The phase portrait is the agent's <em>policy landscape</em>: each point in state space has a prescribed direction of motion.</p>
+
+    <p><strong>Key analogies:</strong></p>
+    <ul>
+        <li><strong>Trajectories as rollouts.</strong> A trajectory in the phase portrait is a complete episode starting from an initial state. The agent does not choose actions &mdash; the linear dynamics act as a deterministic policy \(\pi(\mathbf{s}) = A\mathbf{s}\).</li>
+        <li><strong>Stability as long-term reward.</strong> If the equilibrium is <em>asymptotically stable</em> (all eigenvalues with negative real part), every rollout converges to zero &mdash; the "goal state." The agent accumulates bounded cumulative reward. An unstable equilibrium corresponds to reward divergence: the agent's state blows up.</li>
+        <li><strong>Eigenvalues as convergence rates.</strong> The dominant eigenvalue determines how fast the agent reaches its goal. A spiral (complex eigenvalues) means the agent oscillates before settling; a node (real eigenvalues) means monotone approach along principal directions.</li>
+        <li><strong>Saddle points as partial policies.</strong> A saddle has one attracting and one repelling direction. An agent on the stable manifold reaches the goal, but any perturbation pushes it along the unstable manifold &mdash; a brittle policy that fails under noise.</li>
+        <li><strong>Hartman&ndash;Grobman implication.</strong> Near a hyperbolic equilibrium, the local linearisation predicts the agent's behaviour faithfully. This justifies using linear analysis (eigenvalue checks) to verify the stability of a learned policy, even if the true dynamics are nonlinear.</li>
+    </ul>
+
+    <p><strong>Design insight:</strong> When tuning a linear controller \(\mathbf{u} = K\mathbf{s}\), the closed-loop matrix becomes \(A + BK\). The eigenvalue placement problem &mdash; choosing \(K\) so that all eigenvalues of \(A+BK\) have negative real part &mdash; is equivalent to designing a policy that guarantees convergence to the target state. This is the foundation of <em>Linear Quadratic Regulator</em> (LQR) design, a cornerstone of optimal control and model-based RL.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Exercises</h2>
+
+<h3>Analytical Exercises</h3>
+
+<div class="exercise-block">
+    <p><strong>Exercise 1.</strong> Find the general solution of \(\mathbf{x}' = \begin{pmatrix} 3 & -2 \\ 2 & -2 \end{pmatrix}\mathbf{x}\). Classify the equilibrium at the origin.</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol1')">Show Solution</button>
+    <div class="solution-content" id="sol1">
+        <p>Characteristic polynomial: \(\lambda^2 - \lambda - 2 = 0\), so \(\lambda_1 = 2\), \(\lambda_2 = -1\). Opposite signs &mdash; <strong>saddle point</strong>.</p>
+        <p>Eigenvectors: \(\lambda_1=2\): \(\mathbf{v}_1 = \begin{pmatrix} 2 \\ 1 \end{pmatrix}\); \(\lambda_2=-1\): \(\mathbf{v}_2 = \begin{pmatrix} 1 \\ 2 \end{pmatrix}\).</p>
+        $$ \mathbf{x}(t) = c_1 e^{2t}\begin{pmatrix} 2 \\ 1 \end{pmatrix} + c_2 e^{-t}\begin{pmatrix} 1 \\ 2 \end{pmatrix}. $$
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 2.</strong> For the system \(\mathbf{x}' = \begin{pmatrix} 0 & 1 \\ -4 & 0 \end{pmatrix}\mathbf{x}\), find the eigenvalues, write the general solution in real form, and describe the phase portrait.</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol2')">Show Solution</button>
+    <div class="solution-content" id="sol2">
+        <p>\(\lambda^2 + 4 = 0\), so \(\lambda = \pm 2i\). Purely imaginary &mdash; the origin is a <strong>center</strong>.</p>
+        $$ \mathbf{x}(t) = c_1 \begin{pmatrix} \cos 2t \\ -2\sin 2t \end{pmatrix} + c_2 \begin{pmatrix} \sin 2t \\ 2\cos 2t \end{pmatrix}. $$
+        <p>Trajectories are closed ellipses centred at the origin. The system is stable but not asymptotically stable.</p>
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 3.</strong> Compute the matrix exponential \(e^{At}\) for \(A = \begin{pmatrix} -2 & 1 \\ 0 & -2 \end{pmatrix}\) (a defective matrix with a repeated eigenvalue \(\lambda = -2\)).</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol3')">Show Solution</button>
+    <div class="solution-content" id="sol3">
+        <p>Since \(A = -2I + N\) where \(N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\) is nilpotent (\(N^2 = 0\)), we have:</p>
+        $$ e^{At} = e^{-2t}\,e^{Nt} = e^{-2t}(I + Nt) = e^{-2t}\begin{pmatrix} 1 & t \\ 0 & 1 \end{pmatrix}. $$
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 4.</strong> A \(3\times 3\) system has coefficient matrix \(A = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ -6 & -11 & -6 \end{pmatrix}\). Find the eigenvalues and write the general solution.</p>
+</div>
+
+<h3>Computational Exercises</h3>
+
+<div class="exercise-block">
+    <p><strong>Exercise 5.</strong> Write a Python function that takes a \(2\times 2\) matrix \(A\) and returns a string classifying the equilibrium (node, saddle, spiral, or center, along with stability). Test it on at least four different matrices.</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol5')">Show Solution</button>
+    <div class="solution-content" id="sol5">
+<pre><code>import numpy as np
+
+def classify_equilibrium(A):
+    eigs = np.linalg.eigvals(A)
+    re = eigs.real
+    im = eigs.imag
+    if np.allclose(im, 0):
+        if np.all(re < 0):
+            return "Stable Node"
+        elif np.all(re > 0):
+            return "Unstable Node"
+        elif re[0] * re[1] < 0:
+            return "Saddle Point"
+        else:
+            return "Degenerate Node"
+    else:
+        alpha = re[0]
+        if alpha < -1e-10:
+            return "Stable Spiral"
+        elif alpha > 1e-10:
+            return "Unstable Spiral"
+        else:
+            return "Center"
+
+# Tests
+tests = [
+    np.array([[-1, 0], [0, -2]]),   # Stable Node
+    np.array([[1, 3], [1, -1]]),     # Saddle
+    np.array([[-1, 2], [-2, -1]]),   # Stable Spiral
+    np.array([[0, 1], [-1, 0]]),     # Center
+]
+for M in tests:
+    print(M, "->", classify_equilibrium(M))
+</code></pre>
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 6.</strong> Using <code>scipy.linalg.expm</code>, compute \(e^{At}\) for \(A = \begin{pmatrix} 0 & 1 \\ -2 & -3 \end{pmatrix}\) at \(t = 0, 0.5, 1, 2\) and verify against the closed-form expression from Worked Example 3.</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol6')">Show Solution</button>
+    <div class="solution-content" id="sol6">
+<pre><code>import numpy as np
+from scipy.linalg import expm
+
+A = np.array([[0, 1], [-2, -3]])
+
+def exact_expm(t):
+    return np.array([
+        [2*np.exp(-t) - np.exp(-2*t),   np.exp(-t) - np.exp(-2*t)],
+        [-2*np.exp(-t) + 2*np.exp(-2*t), -np.exp(-t) + 2*np.exp(-2*t)]
+    ])
+
+for t in [0, 0.5, 1.0, 2.0]:
+    numerical = expm(A * t)
+    analytical = exact_expm(t)
+    error = np.max(np.abs(numerical - analytical))
+    print(f"t={t:.1f}, max error = {error:.2e}")
+</code></pre>
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 7.</strong> Model a two-mass, three-spring system with masses \(m_1=m_2=1\) and spring constants \(k_1=k_2=k_3=1\). Write the system as \(\mathbf{x}'=A\mathbf{x}\) with \(\mathbf{x}=(x_1,x_1',x_2,x_2')^T\), compute the natural frequencies, and plot the two normal-mode motions.</p>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 8.</strong> Generate phase portraits for the one-parameter family \(A(\mu) = \begin{pmatrix} \mu & -1 \\ 1 & \mu \end{pmatrix}\) for \(\mu = -1, -0.5, 0, 0.5, 1\). Describe the bifurcation that occurs at \(\mu = 0\).</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol8')">Show Solution</button>
+    <div class="solution-content" id="sol8">
+        <p>Eigenvalues: \(\lambda = \mu \pm i\). For \(\mu < 0\): stable spiral. At \(\mu = 0\): center. For \(\mu > 0\): unstable spiral. This is a <strong>Hopf bifurcation</strong>: the equilibrium transitions from asymptotically stable to unstable as \(\mu\) crosses zero, and in nonlinear systems a limit cycle typically emerges.</p>
+    </div>
+</div>
+
+<h3>Agentic Exercises</h3>
+
+<div class="exercise-block">
+    <p><strong>Exercise 9 (Agentic).</strong> Consider an agent in a 2D environment with linear dynamics \(\mathbf{s}' = A\mathbf{s} + B\mathbf{u}\), where \(A = \begin{pmatrix} 0 & 1 \\ 2 & 0 \end{pmatrix}\), \(B = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\), and the agent's policy is \(\mathbf{u} = K\mathbf{s}\) with \(K = (k_1, k_2)\). Find the values of \(k_1, k_2\) such that the closed-loop matrix \(A + BK\) has eigenvalues at \(-1\) and \(-2\). Verify by plotting the closed-loop phase portrait.</p>
+    <button class="solution-toggle" onclick="toggleSolution('sol9')">Show Solution</button>
+    <div class="solution-content" id="sol9">
+        <p>Closed-loop: \(A + BK = \begin{pmatrix} 0 & 1 \\ 2+k_1 & k_2 \end{pmatrix}\). We need \(\text{tr} = k_2 = -3\) and \(\det = -(2+k_1) = 2\), so \(k_1 = -4\), \(k_2 = -3\). The gain is \(K = (-4, -3)\).</p>
+    </div>
+</div>
+
+<div class="exercise-block">
+    <p><strong>Exercise 10 (Agentic).</strong> An agent observes the state of a coupled spring&ndash;mass system and must predict whether the system will return to rest (asymptotically stable) or oscillate forever (center). Design a simple classifier that takes the \(4\times 4\) state matrix \(A\) as input, computes eigenvalues, and outputs "converges" or "oscillates." Implement it in Python and test on three different spring configurations with varying damping coefficients.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<h2 class="section-heading">Assessment</h2>
+
+<h3>Quiz (10 Questions)</h3>
+
+<div class="quiz-item">
+    <p><strong>Q1.</strong> The eigenvalues of a \(2\times 2\) matrix are \(\lambda = -3 \pm 4i\). The origin is:</p>
+    <p>(a) An unstable spiral &nbsp; (b) A stable spiral &nbsp; (c) A center &nbsp; (d) A saddle</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q2.</strong> If both eigenvalues of \(A\) are real and negative, trajectories approach the origin along:</p>
+    <p>(a) Spirals &nbsp; (b) Straight lines parallel to eigenvectors &nbsp; (c) Circles &nbsp; (d) Hyperbolas</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q3.</strong> A saddle point has eigenvalues \(\lambda_1 = 3\), \(\lambda_2 = -1\). The <em>stable manifold</em> is tangent to:</p>
+    <p>(a) The eigenvector for \(\lambda_1 = 3\) &nbsp; (b) The eigenvector for \(\lambda_2 = -1\) &nbsp; (c) Neither &nbsp; (d) Both</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q4.</strong> Which of the following is true about the matrix exponential?</p>
+    <p>(a) \(e^{A+B} = e^A e^B\) always &nbsp; (b) \(e^{A+B} = e^A e^B\) iff \(AB = BA\) &nbsp; (c) \(e^{At}\) is always symmetric &nbsp; (d) \(e^{At}\) can be singular</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q5.</strong> The Hartman&ndash;Grobman theorem applies when the equilibrium is:</p>
+    <p>(a) Any equilibrium &nbsp; (b) Hyperbolic (no eigenvalues on imaginary axis) &nbsp; (c) A center &nbsp; (d) Asymptotically stable only</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q6.</strong> A \(2\times 2\) system has \(\text{tr}(A) = 0\) and \(\det(A) > 0\). The origin is:</p>
+    <p>(a) A saddle &nbsp; (b) An unstable node &nbsp; (c) A center &nbsp; (d) A stable spiral</p>
+    <p><em>Answer: (c). &nbsp; Eigenvalues: \(\lambda = \pm\sqrt{-\det A}\,i\), purely imaginary.</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q7.</strong> For the defective matrix \(A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}\), the solution \(\mathbf{x}(t)\) involves:</p>
+    <p>(a) Only \(e^{2t}\) terms &nbsp; (b) \(e^{2t}\) and \(te^{2t}\) terms &nbsp; (c) \(\sin\) and \(\cos\) terms &nbsp; (d) Polynomial terms only</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q8.</strong> In a coupled mass-spring system with no damping, the eigenvalues of the state matrix are:</p>
+    <p>(a) All real and negative &nbsp; (b) All real and positive &nbsp; (c) Purely imaginary &nbsp; (d) Complex with negative real part</p>
+    <p><em>Answer: (c)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q9.</strong> If \(\mathbf{x}' = A\mathbf{x}\) has the solution \(\mathbf{x}(t) = e^{At}\mathbf{x}_0\), then \(e^{A \cdot 0}\) equals:</p>
+    <p>(a) \(A\) &nbsp; (b) \(0\) &nbsp; (c) \(I\) &nbsp; (d) \(A^{-1}\)</p>
+    <p><em>Answer: (c)</em></p>
+</div>
+
+<div class="quiz-item">
+    <p><strong>Q10.</strong> An agent with linear dynamics \(\mathbf{s}' = (A+BK)\mathbf{s}\) will converge to the goal state if and only if:</p>
+    <p>(a) \(A+BK\) is invertible &nbsp; (b) All eigenvalues of \(A+BK\) have negative real part &nbsp; (c) \(K = -A\) &nbsp; (d) \(\det(A+BK) > 0\)</p>
+    <p><em>Answer: (b)</em></p>
+</div>
+
+<h3>Mini-Project: Phase Portrait Explorer</h3>
+
+<p><strong>Task:</strong> Build a Python program (or Jupyter notebook) that does the following:</p>
+<ol>
+    <li>Accepts a \(2\times 2\) matrix \(A\) as input (either hard-coded or via user input).</li>
+    <li>Computes eigenvalues, eigenvectors, and classifies the equilibrium type.</li>
+    <li>Plots the phase portrait with at least 12 trajectories, the direction field, and eigenvector lines (for real eigenvalues).</li>
+    <li>Computes and displays the matrix exponential \(e^{At}\) at \(t = 1\).</li>
+    <li>Includes a "damping slider": for a parameterised matrix \(A(\mu)\), generates an animation or side-by-side plots showing how the portrait changes as \(\mu\) varies (demonstrating a bifurcation).</li>
+</ol>
+
+<table class="rubric-table">
+    <thead>
+        <tr><th>Criterion</th><th>Excellent (5)</th><th>Good (3&ndash;4)</th><th>Needs Work (1&ndash;2)</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Eigenvalue computation &amp; classification</td>
+            <td>Correct for all cases (real, complex, repeated); clear output</td>
+            <td>Correct for most cases; minor labelling issues</td>
+            <td>Errors in eigenvalue computation or classification</td>
+        </tr>
+        <tr>
+            <td>Phase portrait quality</td>
+            <td>Clear trajectories, direction field, eigenvector lines; correct orientation</td>
+            <td>Trajectories plotted but missing direction field or eigenvectors</td>
+            <td>Incorrect or unreadable portrait</td>
+        </tr>
+        <tr>
+            <td>Matrix exponential</td>
+            <td>Correct computation; verified against analytical formula</td>
+            <td>Correct numerical result without verification</td>
+            <td>Missing or incorrect</td>
+        </tr>
+        <tr>
+            <td>Bifurcation exploration</td>
+            <td>Smooth animation or clear multi-panel figure; bifurcation correctly identified</td>
+            <td>Static plots for a few parameter values</td>
+            <td>No parameterisation attempted</td>
+        </tr>
+        <tr>
+            <td>Code quality &amp; documentation</td>
+            <td>Clean, well-commented, modular code; README or docstrings</td>
+            <td>Working code with some comments</td>
+            <td>Disorganised or undocumented code</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<h2 class="section-heading">References &amp; Next Steps</h2>
+
+<h3>References</h3>
+<ul>
+    <li>Hirsch, M. W., Smale, S., &amp; Devaney, R. L. (2013). <em>Differential Equations, Dynamical Systems, and an Introduction to Chaos</em> (3rd ed.). Academic Press. Chapters 2&ndash;5.</li>
+    <li>Strogatz, S. H. (2015). <em>Nonlinear Dynamics and Chaos</em> (2nd ed.). Westview Press. Chapters 5&ndash;6.</li>
+    <li>Boyce, W. E., DiPrima, R. C., &amp; Meade, D. B. (2017). <em>Elementary Differential Equations and Boundary Value Problems</em> (11th ed.). Wiley. Chapter 7.</li>
+    <li>Teschl, G. (2012). <em>Ordinary Differential Equations and Dynamical Systems</em>. AMS Graduate Studies in Mathematics, Vol. 140. Chapters 3&ndash;4. (Free online.)</li>
+    <li>Brunton, S. L., &amp; Kutz, J. N. (2019). <em>Data-Driven Science and Engineering</em>. Cambridge University Press. Chapter 8 (Linear Control).</li>
+</ul>
+
+<h3>Next Steps</h3>
+<ul>
+    <li><strong>Module 1.4: Numerical ODE Solvers.</strong> Learn to approximate solutions when closed-form expressions are unavailable &mdash; Euler, Runge&ndash;Kutta, adaptive step control, and the "solver as agent" paradigm. <a href="module1-4.html">Go to Module 1.4 &rarr;</a></li>
+    <li><strong>Module 2.1: Introduction to Partial Differential Equations.</strong> Extend from ODE systems to PDEs, where spatial and temporal variables interact. <a href="../level2/module2-1.html">Go to Module 2.1 &rarr;</a></li>
+    <li><strong>Further reading:</strong> For nonlinear systems and the full Hartman&ndash;Grobman proof, see Perko, <em>Differential Equations and Dynamical Systems</em> (Springer).</li>
+</ul>
+
+<!-- Bottom navigation -->
+<div class="nav-bottom">
+    <a href="index.html">&larr; Back to Overview</a>
+    <a href="module1-4.html">Module 1.4: Numerical ODE Solvers &rarr;</a>
+</div>
+
+</div><!-- /container-fluid -->
+</div><!-- /wrapper -->
+
+<script>
+function toggleSolution(id) {
+    var el = document.getElementById(id);
+    if (el.style.display === 'block') {
+        el.style.display = 'none';
+    } else {
+        el.style.display = 'block';
+    }
+}
+
+function copyCode(editorId) {
+    var editor = document.getElementById(editorId);
+    editor.select();
+    document.execCommand('copy');
+    alert('Code copied to clipboard.');
+}
+</script>
+
+</body>
+</html>

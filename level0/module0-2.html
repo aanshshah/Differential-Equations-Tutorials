@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 0.2: Introduction to Differential Equations — Classification, Solutions, and Direction Fields">
+    <meta name="author" content="">
+
+    <title>Module 0.2: Introduction to Differential Equations</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 0 &mdash; Foundations</a>
+    <nav class="lesson-static-links" aria-label="Chapter navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module0-1.html">0.1 Calculus Review</a>
+      <a href="module0-2.html" aria-current="page">0.2 Intro to DEs</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (i) TITLE BLOCK
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="title-block" style="margin-top:2rem;">
+    <p style="font-family:'JetBrains Mono',monospace; color:var(--mf-muted); font-size:0.9rem; margin-bottom:0.25rem;">MODULE 0.2</p>
+    <h1 style="font-family:'Crimson Text',serif; font-size:2.4rem; margin-bottom:0.5rem;">Introduction to Differential Equations</h1>
+
+    <table class="comparison-table" style="max-width:480px; margin:1.5rem 0;">
+        <tbody>
+            <tr><td style="font-weight:600;">Difficulty</td><td>Beginner</td></tr>
+            <tr><td style="font-weight:600;">Estimated Time</td><td>3&ndash;4 hours</td></tr>
+            <tr><td style="font-weight:600;">Prerequisites</td><td><a href="module0-1.html">Module 0.1</a> &mdash; Review of Calculus and Linear Algebra</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (ii) WHY THIS MATTERS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="why-this-matters">
+    <h2>Why This Matters</h2>
+    <div class="academic-box">
+        <p>Nearly every law of nature is written as a differential equation. Newton's second law \(F = ma\) becomes \(m\ddot{x} = F(x, \dot{x}, t)\) the moment you express acceleration as the second derivative of position. The heat equation, Maxwell's equations, the Black-Scholes model, population dynamics, neural network training &mdash; all are differential equations in disguise.</p>
+        <p>Before you can solve any of these, you need a precise vocabulary: What <em>is</em> a differential equation? What does "order" mean? What distinguishes a linear equation from a nonlinear one? What does it mean for a function to be a "solution," and when can you be sure a solution exists and is unique?</p>
+        <p>This module provides that vocabulary. It also introduces the <strong>direction field</strong> &mdash; a visual tool that lets you see the qualitative behaviour of solutions without solving a single equation &mdash; and the <strong>Euler method</strong>, the simplest numerical algorithm for generating approximate solutions. Together, these analytical, visual, and computational perspectives form the lens through which the entire course will be viewed.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (iii) LEARNING OBJECTIVES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="learning-objectives">
+    <h2>Learning Objectives</h2>
+    <p>After completing this module you will be able to:</p>
+    <ol>
+        <li><strong>Define</strong> what a differential equation is and distinguish it from an algebraic equation by identifying the presence of derivatives of an unknown function.</li>
+        <li><strong>Classify</strong> a given differential equation by its order, degree, and type (ODE vs. PDE, linear vs. nonlinear).</li>
+        <li><strong>Distinguish</strong> among general solutions, particular solutions, and singular solutions, and explain the role of arbitrary constants.</li>
+        <li><strong>Formulate</strong> an initial value problem (IVP) by pairing a differential equation with appropriate initial conditions.</li>
+        <li><strong>Verify</strong> that a given function is a solution to a differential equation by substituting it into the equation and confirming the identity.</li>
+        <li><strong>Sketch</strong> a direction field for a first-order ODE \(y' = f(x,y)\) by computing slopes at grid points, and use it to predict qualitative solution behaviour.</li>
+        <li><strong>State</strong> the Picard-Lindel&ouml;f (existence and uniqueness) theorem and identify its hypotheses on the function \(f(x,y)\) and its partial derivative \(\partial f / \partial y\).</li>
+        <li><strong>Determine</strong> whether a given IVP satisfies the hypotheses of the Picard-Lindel&ouml;f theorem and predict whether solutions exist and are unique in a neighbourhood of the initial point.</li>
+        <li><strong>Implement</strong> a direction-field plotter and Euler's method in Python using NumPy, and interpret the numerical output.</li>
+        <li><strong>Explain</strong> the connection between direction fields and agent policies, where the DE prescribes an action (slope) at each state \((x,y)\).</li>
+    </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (iv) CORE CONCEPTS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ── Definitions ── -->
+    <h3>Definitions</h3>
+
+    <div class="definition-box" id="def-de">
+        <h4>Definition 0.2.1 &mdash; Differential Equation</h4>
+        <p>A <strong>differential equation</strong> is an equation that relates an unknown function to one or more of its derivatives. Formally, an equation of the form</p>
+        $$ F\!\bigl(x,\, y,\, y',\, y'',\, \ldots,\, y^{(n)}\bigr) = 0 $$
+        <p>where \(y = y(x)\) is the unknown function, is a differential equation. The independent variable \(x\) typically represents time or a spatial coordinate.</p>
+    </div>
+
+    <div class="definition-box" id="def-order-degree">
+        <h4>Definition 0.2.2 &mdash; Order and Degree</h4>
+        <p>The <strong>order</strong> of a differential equation is the order of the highest derivative that appears. For example, \(y'' + 3y' + 2y = 0\) is second-order because \(y''\) is the highest derivative.</p>
+        <p>The <strong>degree</strong> of a differential equation (when it can be defined) is the exponent of the highest-order derivative after the equation has been cleared of radicals and fractions involving derivatives. For example, \((y'')^3 + y' = x\) has order 2 and degree 3.</p>
+    </div>
+
+    <div class="definition-box" id="def-ode-pde">
+        <h4>Definition 0.2.3 &mdash; ODE vs. PDE</h4>
+        <p>An <strong>ordinary differential equation (ODE)</strong> involves derivatives with respect to a single independent variable:</p>
+        $$ \frac{dy}{dx} + y = e^x. $$
+        <p>A <strong>partial differential equation (PDE)</strong> involves partial derivatives with respect to two or more independent variables:</p>
+        $$ \frac{\partial u}{\partial t} = k\,\frac{\partial^2 u}{\partial x^2} \quad\text{(heat equation)}. $$
+    </div>
+
+    <div class="definition-box" id="def-linear">
+        <h4>Definition 0.2.4 &mdash; Linear vs. Nonlinear</h4>
+        <p>An ODE is <strong>linear</strong> if it can be written in the form</p>
+        $$ a_n(x)\,y^{(n)} + a_{n-1}(x)\,y^{(n-1)} + \cdots + a_1(x)\,y' + a_0(x)\,y = g(x), $$
+        <p>where the coefficients \(a_i(x)\) and the forcing function \(g(x)\) depend only on the independent variable \(x\), and the unknown \(y\) and its derivatives appear only to the first power, with no products like \(y \cdot y'\).</p>
+        <p>Any ODE that cannot be put in this form is <strong>nonlinear</strong>. Examples of nonlinearities: \(y\,y'\), \((y')^2\), \(\sin(y)\), \(e^y\).</p>
+    </div>
+
+    <div class="definition-box" id="def-solution-types">
+        <h4>Definition 0.2.5 &mdash; General, Particular, and Singular Solutions</h4>
+        <p>A <strong>solution</strong> of a differential equation on an interval \(I\) is a function \(y = \phi(x)\) that, when substituted into the equation, produces an identity for all \(x \in I\).</p>
+        <ul>
+            <li><strong>General solution:</strong> A family of solutions containing \(n\) arbitrary constants (where \(n\) is the order of the ODE). For example, \(y = Ce^{-x}\) is the general solution of \(y' + y = 0\).</li>
+            <li><strong>Particular solution:</strong> A specific member of the general solution family obtained by fixing the constants using initial or boundary conditions. For example, if \(y(0)=3\), then \(C=3\) and \(y=3e^{-x}\).</li>
+            <li><strong>Singular solution:</strong> A solution that cannot be obtained from the general solution for any choice of the constants. For example, \(y=0\) can be a singular solution of \((y')^2 = 4y\).</li>
+        </ul>
+    </div>
+
+    <div class="definition-box" id="def-ivp">
+        <h4>Definition 0.2.6 &mdash; Initial Value Problem (IVP)</h4>
+        <p>An <strong>initial value problem</strong> consists of a differential equation together with initial conditions that specify the value of the unknown function (and possibly its derivatives) at a particular point. For a first-order ODE:</p>
+        $$ y' = f(x,y), \qquad y(x_0) = y_0. $$
+        <p>For a second-order ODE:</p>
+        $$ y'' = f(x,y,y'), \qquad y(x_0) = y_0, \quad y'(x_0) = y_1. $$
+        <p>The number of initial conditions equals the order of the equation.</p>
+    </div>
+
+    <div class="definition-box" id="def-direction-field">
+        <h4>Definition 0.2.7 &mdash; Direction Field (Slope Field)</h4>
+        <p>Given a first-order ODE \(y' = f(x,y)\), the <strong>direction field</strong> is the set of all short line segments drawn at points \((x,y)\) in the plane with slope \(f(x,y)\). Each segment indicates the tangent direction a solution curve must follow as it passes through that point. By plotting many such segments on a grid, one obtains a visual map of all possible solution trajectories.</p>
+    </div>
+
+    <!-- ── Theorems / Results ── -->
+    <h3>Theorems and Key Results</h3>
+
+    <div class="theorem-box" id="thm-picard">
+        <h4>Theorem 0.2.1 &mdash; Picard-Lindel&ouml;f (Existence and Uniqueness)</h4>
+        <p>Consider the initial value problem</p>
+        $$ y' = f(x,y), \qquad y(x_0) = y_0. $$
+        <p>If both of the following conditions hold in a rectangle \(R = \{(x,y) : |x-x_0| \le a,\; |y-y_0| \le b\}\):</p>
+        <ol>
+            <li>\(f(x,y)\) is <strong>continuous</strong> on \(R\), and</li>
+            <li>\(\dfrac{\partial f}{\partial y}(x,y)\) exists and is <strong>continuous</strong> on \(R\) (i.e., \(f\) satisfies a <strong>Lipschitz condition</strong> in \(y\)),</li>
+        </ol>
+        <p>then there exists an interval \(|x-x_0| < h\) (for some \(h > 0\)) on which the IVP has a <strong>unique</strong> solution \(y = \phi(x)\).</p>
+
+        <p><strong>What this means in practice:</strong> If \(f\) and \(\partial f/\partial y\) are both continuous near the initial point, you are guaranteed exactly one solution curve through that point. Failure of either condition can lead to non-existence or non-uniqueness.</p>
+    </div>
+
+    <div class="theorem-box" id="thm-superposition">
+        <h4>Theorem 0.2.2 &mdash; Superposition Principle for Linear Homogeneous ODEs</h4>
+        <p>If \(y_1(x)\) and \(y_2(x)\) are solutions of the linear homogeneous equation</p>
+        $$ a_n(x)\,y^{(n)} + \cdots + a_1(x)\,y' + a_0(x)\,y = 0, $$
+        <p>then any linear combination \(y = c_1\,y_1(x) + c_2\,y_2(x)\) is also a solution for arbitrary constants \(c_1, c_2\).</p>
+        <p>This principle does <strong>not</strong> hold for nonlinear equations. For example, \(y_1 = 1\) and \(y_2 = x\) might each satisfy a nonlinear ODE, but \(y_1 + y_2 = 1 + x\) generally will not.</p>
+    </div>
+
+    <div class="theorem-box" id="thm-euler-convergence">
+        <h4>Theorem 0.2.3 &mdash; Convergence of Euler's Method</h4>
+        <p>For the IVP \(y' = f(x,y)\), \(y(x_0) = y_0\), Euler's method generates approximations</p>
+        $$ y_{n+1} = y_n + h\,f(x_n, y_n), \qquad x_{n+1} = x_n + h. $$
+        <p>If \(f\) satisfies a Lipschitz condition in \(y\) and is continuous, the global error at any fixed point \(x^*\) satisfies</p>
+        $$ |y(x^*) - y_N| \le C\,h $$
+        <p>for a constant \(C\) depending on \(f\), the interval length, and the Lipschitz constant. That is, Euler's method is a <strong>first-order</strong> method: halving the step size halves the error (approximately).</p>
+    </div>
+
+    <!-- ── Common Failure Modes / Misconceptions ── -->
+    <h3>Common Failure Modes and Misconceptions</h3>
+
+    <div class="important-note" id="misconception-m1">
+        <strong>Confusing "solving an equation" with "checking a solution."</strong> To verify that \(y = e^{2x}\) solves \(y' - 2y = 0\), compute \(y' = 2e^{2x}\) and substitute: \(2e^{2x} - 2e^{2x} = 0\). This is verification, not derivation. Many students skip this critical sanity check.
+    </div>
+
+    <div class="important-note" id="misconception-m2">
+        <strong>Equating "order" with "degree."</strong> The equation \((y'')^3 + y = 0\) is second-order (because the highest derivative is \(y''\)) but third-degree (because \(y''\) is raised to the power 3). These are distinct classification axes.
+    </div>
+
+    <div class="important-note" id="misconception-m3">
+        <strong>Assuming every DE has a closed-form solution.</strong> Most differential equations cannot be solved in terms of elementary functions. For example, \(y' = e^{y^2}\) has no elementary antiderivative. Numerical and qualitative methods (direction fields, phase portraits) are not "backup plans" &mdash; they are often the primary tools.
+    </div>
+
+    <div class="important-note" id="misconception-m4">
+        <strong>Forgetting the constant of integration yields a family.</strong> The general solution of \(y' = 2x\) is \(y = x^2 + C\), not \(y = x^2\). The single function \(y=x^2\) is only the particular solution with \(C=0\). Omitting the constant means you have discarded infinitely many valid solutions.
+    </div>
+
+    <div class="important-note" id="misconception-m5">
+        <strong>Misapplying the existence-uniqueness theorem.</strong> The IVP \(y' = \sqrt{y},\; y(0)=0\) has \(f(x,y) = \sqrt{y}\) and \(\partial f / \partial y = \frac{1}{2\sqrt{y}}\), which is undefined at \(y=0\). The Picard-Lindel&ouml;f theorem does <em>not</em> guarantee uniqueness here &mdash; and indeed both \(y=0\) and \(y = \frac{x^2}{4}\) (for \(x \ge 0\)) satisfy the IVP. Failing to check the hypotheses leads students to assume uniqueness when it fails.
+    </div>
+
+    <div class="important-note" id="misconception-m6">
+        <strong>Treating direction field arrows as solution curves.</strong> Each small segment in a direction field shows the <em>local slope</em> at one point. A solution curve is a smooth curve that is tangent to these segments everywhere. Students sometimes connect segments end-to-end without maintaining tangency, producing jagged non-solutions.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (v) WORKED EXAMPLES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <!-- Example 1 -->
+    <div class="academic-box" id="example-1">
+        <h4>Example 1: Classification and Verification</h4>
+        <p><strong>Problem.</strong> Classify the equation \(y'' + 4y = \sin(x)\) and verify that \(y_p(x) = \frac{1}{3}\sin(x)\) is a particular solution.</p>
+
+        <h5>Step 1 &mdash; Classification</h5>
+        <ul>
+            <li><strong>Type:</strong> ODE (one independent variable, \(x\)).</li>
+            <li><strong>Order:</strong> 2 (highest derivative is \(y''\)).</li>
+            <li><strong>Degree:</strong> 1 (\(y''\) appears to the first power).</li>
+            <li><strong>Linearity:</strong> Linear. The equation has the form \(a_2 y'' + a_0 y = g(x)\) with \(a_2=1\), \(a_0=4\), \(g(x)=\sin(x)\), and the unknown \(y\) and its derivatives appear only to the first power with no mutual products.</li>
+        </ul>
+
+        <h5>Step 2 &mdash; Verification</h5>
+        <p>Compute derivatives of \(y_p = \frac{1}{3}\sin(x)\):</p>
+        $$ y_p' = \frac{1}{3}\cos(x), \qquad y_p'' = -\frac{1}{3}\sin(x). $$
+        <p>Substitute into the left side:</p>
+        $$ y_p'' + 4y_p = -\frac{1}{3}\sin(x) + 4\cdot\frac{1}{3}\sin(x) = \frac{3}{3}\sin(x) = \sin(x). $$
+        <p>This equals the right side, so \(y_p = \frac{1}{3}\sin(x)\) is indeed a particular solution.</p>
+
+        <h5>Step 3 &mdash; General Solution</h5>
+        <p>The associated homogeneous equation \(y'' + 4y = 0\) has characteristic equation \(r^2 + 4 = 0\), giving \(r = \pm 2i\). The homogeneous solution is \(y_h = c_1\cos(2x) + c_2\sin(2x)\). Therefore the general solution is:</p>
+        $$ y = c_1\cos(2x) + c_2\sin(2x) + \frac{1}{3}\sin(x). $$
+
+        <h5>Interpretation</h5>
+        <p>The general solution contains two arbitrary constants \(c_1, c_2\) because the equation is second-order. The homogeneous part represents free oscillations at the natural frequency \(\omega_n = 2\), while the particular solution represents forced oscillation at the driving frequency \(\omega = 1\). When the driving frequency equals the natural frequency, resonance occurs &mdash; a phenomenon explored in Level 1.</p>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="academic-box" id="example-2">
+        <h4>Example 2: Existence, Uniqueness, and Direction Field Analysis</h4>
+        <p><strong>Problem.</strong> Consider the IVP \(y' = x^2 + y^2,\quad y(0) = 0\). (a) Does the Picard-Lindel&ouml;f theorem guarantee a unique local solution? (b) Describe the direction field qualitatively.</p>
+
+        <h5>Step 1 &mdash; Check Picard-Lindel&ouml;f Hypotheses</h5>
+        <p>Here \(f(x,y) = x^2 + y^2\). This function is a polynomial in \(x\) and \(y\), so it is continuous everywhere. Its partial derivative with respect to \(y\) is</p>
+        $$ \frac{\partial f}{\partial y} = 2y, $$
+        <p>which is also continuous everywhere. Both hypotheses of the Picard-Lindel&ouml;f theorem are satisfied in any rectangle containing \((0,0)\).</p>
+        <p><strong>Conclusion:</strong> There exists a unique solution in some neighbourhood of \(x=0\).</p>
+
+        <h5>Step 2 &mdash; Direction Field Analysis</h5>
+        <p>The slope at any point \((x,y)\) is \(f(x,y) = x^2 + y^2 \ge 0\). This means:</p>
+        <ul>
+            <li>All slopes are non-negative. Solution curves never decrease.</li>
+            <li>At the origin \((0,0)\), the slope is 0 (horizontal tangent).</li>
+            <li>Along the \(y\)-axis (\(x=0\)), the slope is \(y^2\), which is zero at the origin and grows quadratically.</li>
+            <li>As \(|x|\) or \(|y|\) increases, slopes become very steep, suggesting rapid growth.</li>
+        </ul>
+        <p>This equation is a <strong>Riccati equation</strong> and cannot be solved in elementary terms. Its solution is related to Bessel functions and exhibits <strong>finite-time blowup</strong>: the solution \(y(x)\) goes to \(+\infty\) at a finite value of \(x\). The direction field makes this visible &mdash; solution curves curve upward with accelerating steepness.</p>
+
+        <h5>Step 3 &mdash; Euler's Method Approximation</h5>
+        <p>Using step size \(h = 0.1\) starting from \((x_0, y_0) = (0, 0)\):</p>
+        <table class="error-table">
+            <thead><tr><th>\(n\)</th><th>\(x_n\)</th><th>\(y_n\)</th><th>Slope \(f(x_n,y_n)\)</th></tr></thead>
+            <tbody>
+                <tr><td>0</td><td>0.0</td><td>0.0000</td><td>0.0000</td></tr>
+                <tr><td>1</td><td>0.1</td><td>0.0000</td><td>0.0100</td></tr>
+                <tr><td>2</td><td>0.2</td><td>0.0010</td><td>0.0400</td></tr>
+                <tr><td>3</td><td>0.3</td><td>0.0050</td><td>0.0900</td></tr>
+                <tr><td>4</td><td>0.4</td><td>0.0140</td><td>0.1602</td></tr>
+                <tr><td>5</td><td>0.5</td><td>0.0300</td><td>0.2509</td></tr>
+            </tbody>
+        </table>
+        <p>Even this crude approximation shows the solution beginning to curve upward, consistent with the direction field analysis.</p>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="academic-box" id="example-3">
+        <h4>Example 3: Non-Uniqueness When Picard-Lindel&ouml;f Fails</h4>
+        <p><strong>Problem.</strong> Show that the IVP \(y' = 3y^{2/3},\quad y(0) = 0\) has at least two solutions.</p>
+
+        <h5>Step 1 &mdash; Check the Hypotheses</h5>
+        <p>Here \(f(x,y) = 3y^{2/3}\) is continuous for all \(y\), but</p>
+        $$ \frac{\partial f}{\partial y} = 2y^{-1/3}, $$
+        <p>which is <strong>undefined</strong> (and unbounded) at \(y=0\). The Lipschitz condition fails at the initial point. The theorem does not guarantee uniqueness.</p>
+
+        <h5>Step 2 &mdash; Find Two Solutions</h5>
+        <p><strong>Solution 1:</strong> \(y(x) = 0\) for all \(x\). Check: \(y' = 0\) and \(3(0)^{2/3} = 0\). Valid.</p>
+        <p><strong>Solution 2:</strong> Try \(y = (x - c)^3\) for \(x \ge c\), \(y=0\) for \(x < c\). With \(c=0\): let \(y = x^3\). Then \(y' = 3x^2\) and \(3y^{2/3} = 3(x^3)^{2/3} = 3x^2\). Valid for \(x \ge 0\).</p>
+
+        <h5>Step 3 &mdash; Infinitely Many Solutions</h5>
+        <p>In fact, for any \(c \ge 0\), the function</p>
+        $$ y_c(x) = \begin{cases} 0 & \text{if } x \le c, \\ (x-c)^3 & \text{if } x > c \end{cases} $$
+        <p>satisfies the IVP. This gives an <em>infinite family</em> of solutions, all passing through the origin with initial value 0.</p>
+
+        <h5>Interpretation</h5>
+        <p>When the Picard-Lindel&ouml;f hypotheses fail, uniqueness is not guaranteed, and physically this means the model is incomplete &mdash; additional information is needed to determine which trajectory the system actually follows. This is a critical consideration when modelling real systems.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (vi) INTERACTIVE CODE LAB
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+    <p>The following code blocks run in any standard Python 3 environment with NumPy and Matplotlib, or in a Pyodide (browser-based) environment. Copy each block and experiment by changing the ODE, the grid range, or the initial conditions.</p>
+
+    <!-- Code Lab 1: Direction Field Plotter -->
+    <div class="academic-box" id="lab-1">
+        <h4>Lab 1: Direction Field Plotter</h4>
+        <p>This lab plots the direction field for a first-order ODE \(y' = f(x,y)\). Modify the function <code>f</code> to visualise different equations.</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # For non-interactive environments
+import matplotlib.pyplot as plt
+
+def plot_direction_field(f, x_range, y_range, nx=20, ny=20, title="Direction Field"):
+    """
+    Plot the direction field of y' = f(x, y).
+
+    Parameters
+    ----------
+    f : callable
+        Function f(x, y) returning the slope y'.
+    x_range : tuple
+        (x_min, x_max) for the plot domain.
+    y_range : tuple
+        (y_min, y_max) for the plot range.
+    nx, ny : int
+        Number of grid points in each direction.
+    """
+    x = np.linspace(x_range[0], x_range[1], nx)
+    y = np.linspace(y_range[0], y_range[1], ny)
+    X, Y = np.meshgrid(x, y)
+
+    # Compute slopes
+    DY = f(X, Y)
+    DX = np.ones_like(DY)
+
+    # Normalise arrow lengths for uniform appearance
+    N = np.sqrt(DX**2 + DY**2)
+    N[N == 0] = 1  # Avoid division by zero
+    DX_norm = DX / N
+    DY_norm = DY / N
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.quiver(X, Y, DX_norm, DY_norm, N,
+              cmap='coolwarm', angles='xy', scale=30, width=0.003)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title(title)
+    ax.set_xlim(x_range)
+    ax.set_ylim(y_range)
+    ax.set_aspect('equal')
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('direction_field.png', dpi=150)
+    plt.show()
+    print("Direction field saved to direction_field.png")
+
+# === Example: y' = x^2 + y^2 ===
+f = lambda x, y: x**2 + y**2
+plot_direction_field(f, (-2, 2), (-2, 2), title=r"Direction field: $y' = x^2 + y^2$")
+
+# === Try another equation: y' = -y + sin(x) ===
+g = lambda x, y: -y + np.sin(x)
+plot_direction_field(g, (-4, 4), (-3, 3), title=r"Direction field: $y' = -y + \sin(x)$")
+</code></pre>
+        <p><strong>Expected output:</strong> Two direction field plots. The first (\(y' = x^2 + y^2\)) shows all arrows pointing upward with slopes growing rapidly away from the origin. The second (\(y' = -y + \sin(x)\)) shows arrows converging toward a sinusoidal attractor, illustrating stable equilibrium behaviour.</p>
+    </div>
+
+    <!-- Code Lab 2: Euler's Method -->
+    <div class="academic-box" id="lab-2">
+        <h4>Lab 2: Euler's Method with Error Analysis</h4>
+        <p>We implement Euler's method, apply it to the IVP \(y' = -2y,\; y(0)=1\) (whose exact solution is \(y = e^{-2x}\)), and measure how the error depends on the step size \(h\).</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+def euler_method(f, x0, y0, x_end, h):
+    """
+    Solve y' = f(x, y), y(x0) = y0 using Euler's method.
+
+    Returns arrays of x-values and y-values.
+    """
+    n_steps = int((x_end - x0) / h)
+    x = np.zeros(n_steps + 1)
+    y = np.zeros(n_steps + 1)
+    x[0], y[0] = x0, y0
+
+    for i in range(n_steps):
+        y[i+1] = y[i] + h * f(x[i], y[i])
+        x[i+1] = x[i] + h
+
+    return x, y
+
+# Define the ODE and exact solution
+f = lambda x, y: -2 * y
+exact = lambda x: np.exp(-2 * x)
+
+x0, y0, x_end = 0.0, 1.0, 3.0
+
+# --- Plot solutions for different step sizes ---
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+x_exact = np.linspace(x0, x_end, 200)
+ax1.plot(x_exact, exact(x_exact), 'k-', linewidth=2, label='Exact: $y = e^{-2x}$')
+
+step_sizes = [0.5, 0.2, 0.1, 0.05]
+errors_at_end = []
+
+for h in step_sizes:
+    x_euler, y_euler = euler_method(f, x0, y0, x_end, h)
+    ax1.plot(x_euler, y_euler, 'o--', markersize=3, label=f'Euler h={h}')
+    error = abs(y_euler[-1] - exact(x_euler[-1]))
+    errors_at_end.append(error)
+    print(f"h = {h:.3f}: y({x_end}) = {y_euler[-1]:.6f}, "
+          f"exact = {exact(x_end):.6f}, error = {error:.6e}")
+
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_title("Euler's Method: $y' = -2y$, $y(0) = 1$")
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# --- Convergence plot ---
+ax2.loglog(step_sizes, errors_at_end, 'bo-', linewidth=2, label='Measured error')
+ax2.loglog(step_sizes, [s * errors_at_end[0] / step_sizes[0] for s in step_sizes],
+           'r--', label='Slope 1 reference')
+ax2.set_xlabel('Step size h')
+ax2.set_ylabel('|Error at x=3|')
+ax2.set_title('Error vs. Step Size (log-log)')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('euler_convergence.png', dpi=150)
+plt.show()
+print("\nPlot saved to euler_convergence.png")
+print("The log-log slope is approximately 1, confirming first-order convergence.")
+</code></pre>
+        <p><strong>Expected output:</strong> The left panel shows the exact exponential decay alongside Euler approximations that improve as \(h\) decreases. The right panel shows that error vs. step size follows a straight line with slope 1 on a log-log plot, confirming that Euler's method is first-order accurate.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (vii) AGENT LENS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="agent-lens">
+    <h2>Agent Lens</h2>
+    <div class="application-example">
+        <h5>The Direction Field as a Policy Map</h5>
+        <p>A first-order ODE \(y' = f(x,y)\) can be viewed as a <strong>deterministic policy</strong> for an agent navigating a two-dimensional state space. The mapping from reinforcement-learning concepts is exact:</p>
+
+        <table class="comparison-table">
+            <thead><tr><th>RL Concept</th><th>Differential-Equation Analogue</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>State</strong></td>
+                    <td>A point \((x, y)\) in the plane. Here \(x\) plays the role of time and \(y\) is the system's configuration. The full state is the pair \((x,y)\) because the ODE is first-order &mdash; no memory of past values is needed.</td>
+                </tr>
+                <tr>
+                    <td><strong>Action (Policy)</strong></td>
+                    <td>The slope \(f(x,y)\) assigned at each state. This is a <em>deterministic policy</em> \(\pi(x,y) = f(x,y)\): given any state, the policy prescribes exactly one action (the direction of the next infinitesimal step). The direction field is a <strong>visual rendering of the policy</strong>, with each arrow showing the action at that state.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reward / Utility</strong></td>
+                    <td>In an IVP, the "reward" is implicitly defined by the initial condition and the physics encoded in \(f\). A solution curve that satisfies both the ODE (obeys the policy at every point) and the initial condition (starts at the prescribed state) is the optimal trajectory. Deviations from the exact policy (numerical error in Euler's method) incur a "penalty" measured as the global error.</td>
+                </tr>
+                <tr>
+                    <td><strong>Learning / Policy Update</strong></td>
+                    <td>The Picard iteration (the constructive proof behind the Picard-Lindel&ouml;f theorem) is a learning algorithm: starting from an initial guess \(y_0(x) = y_0\), the agent iteratively refines its trajectory via
+                    $$ y_{n+1}(x) = y_0 + \int_{x_0}^{x} f\!\bigl(t, y_n(t)\bigr)\,dt, $$
+                    converging to the true solution. Each iteration reduces the "error" (the Banach fixed-point contraction), exactly like a policy-improvement step. Euler's method is a cruder but computationally cheaper version of this iteration.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Key insight:</strong> Non-uniqueness of solutions (when Picard-Lindel&ouml;f fails) corresponds to a state where the policy is <em>ambiguous</em> &mdash; multiple actions are equally valid. In RL terms, this is a state with multiple optimal actions, requiring additional information (a tie-breaking rule or richer state representation) to select one.</p>
+
+        <p><strong>Higher-order ODEs:</strong> A second-order ODE \(y'' = g(x, y, y')\) requires the state to include both \(y\) and \(y'\). This is analogous to expanding the state representation to include velocity as well as position &mdash; a Markov property requirement.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (viii) EXERCISES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise A1.</strong> Classify each equation by order, degree, type (ODE/PDE), and linearity:</p>
+        <ol style="list-style-type:lower-alpha;">
+            <li>\(y''' - 2y' + y = e^x\)</li>
+            <li>\((y')^2 + y = x\)</li>
+            <li>\(\dfrac{\partial^2 u}{\partial x^2} + \dfrac{\partial^2 u}{\partial y^2} = 0\)</li>
+            <li>\(y\,y'' + (y')^2 = 0\)</li>
+        </ol>
+        <details>
+            <summary>Solution</summary>
+            <p>(a) Order 3, degree 1, ODE, linear (coefficients are constants, \(y\) and derivatives appear to first power).</p>
+            <p>(b) Order 1, degree 2, ODE, nonlinear (\(y'\) is squared).</p>
+            <p>(c) Order 2, degree 1, PDE (two independent variables \(x,y\)), linear. This is Laplace's equation.</p>
+            <p>(d) Order 2, degree 1, ODE, nonlinear (contains the products \(y \cdot y''\) and \((y')^2\)).</p>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A2.</strong> Verify that \(y(x) = c_1 e^x + c_2 e^{-x}\) is the general solution of \(y'' - y = 0\) for arbitrary constants \(c_1, c_2\). Then find the particular solution satisfying \(y(0) = 2\), \(y'(0) = 0\).</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Compute \(y'' = c_1 e^x + c_2 e^{-x}\). Then \(y'' - y = c_1 e^x + c_2 e^{-x} - c_1 e^x - c_2 e^{-x} = 0\). Verified.</p>
+            <p>Apply initial conditions: \(y(0) = c_1 + c_2 = 2\) and \(y'(0) = c_1 - c_2 = 0\). Solving: \(c_1 = 1\), \(c_2 = 1\). The particular solution is \(y = e^x + e^{-x} = 2\cosh(x)\).</p>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A3.</strong> For the IVP \(y' = y^2,\; y(0) = 1\), find the exact solution by separation of variables. At what value of \(x\) does the solution blow up (become infinite)?</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Separate: \(\frac{dy}{y^2} = dx\). Integrate: \(-\frac{1}{y} = x + C\). Apply \(y(0) = 1\): \(-1 = C\). So \(y = \frac{1}{1-x}\).</p>
+            <p>The solution blows up at \(x = 1\). This finite-time blowup is a fundamental phenomenon in nonlinear ODEs.</p>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A4.</strong> Does the Picard-Lindel&ouml;f theorem guarantee a unique solution for the IVP \(y' = \frac{x}{y},\; y(0) = 0\)? Justify your answer carefully.</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Here \(f(x,y) = x/y\), which is undefined (and discontinuous) at \(y=0\). Since the initial condition is \(y(0) = 0\), the function \(f\) is not even continuous at the initial point. The first hypothesis of the Picard-Lindel&ouml;f theorem fails, so the theorem makes no guarantee &mdash; neither existence nor uniqueness is assured by this theorem. (In fact, if we interpret the ODE as \(y\,dy = x\,dx\), we get \(y^2 = x^2 + C\), and with \(y(0)=0\) we get \(y = \pm x\), so there are two solutions, confirming non-uniqueness.)</p>
+        </details>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise C1.</strong> Implement a direction-field plotter for \(y' = y - x^2 + 1\) on the domain \([-1, 4] \times [-1, 4]\). Overlay three Euler-method solution curves starting from \(y(0) = 0\), \(y(0) = 0.5\), and \(y(0) = 2\), all with step size \(h = 0.05\). Do the trajectories converge or diverge?</p>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C2.</strong> For the IVP \(y' = -2y + e^{-x},\; y(0) = 1\), the exact solution is \(y = e^{-x} + 0\cdot e^{-2x} = e^{-x}\) (verify this). Run Euler's method with \(h = 0.1, 0.01, 0.001\) on \([0, 5]\). For each \(h\), compute the maximum absolute error over the interval and verify that the error scales linearly with \(h\).</p>
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+def euler(f, x0, y0, x_end, h):
+    n = int((x_end - x0) / h)
+    x = np.linspace(x0, x_end, n+1)
+    y = np.zeros(n+1)
+    y[0] = y0
+    for i in range(n):
+        y[i+1] = y[i] + h * f(x[i], y[i])
+    return x, y
+
+f = lambda x, y: -2*y + np.exp(-x)
+exact = lambda x: np.exp(-x)
+
+for h in [0.1, 0.01, 0.001]:
+    x, y = euler(f, 0, 1, 5, h)
+    max_err = np.max(np.abs(y - exact(x)))
+    print(f"h = {h:.4f}: max error = {max_err:.6e}")
+# Expected: errors decrease by factor ~10 each time (first-order method).
+</code></pre>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C3.</strong> Write a Python function that, given \(f(x,y)\) and a point \((x_0, y_0)\), checks the Picard-Lindel&ouml;f conditions numerically. Specifically, your function should: (a) evaluate \(f\) at and near the point to check continuity (using finite differences), (b) approximate \(\partial f / \partial y\) using a central difference, and (c) check whether the partial derivative appears bounded near the point. Test on \(f(x,y) = 3y^{2/3}\) at \((0,0)\) and on \(f(x,y) = x^2 + y^2\) at \((0,0)\).</p>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C4.</strong> Implement the <strong>improved Euler method</strong> (Heun's method):</p>
+        $$ k_1 = h\,f(x_n, y_n), \qquad k_2 = h\,f(x_n + h,\; y_n + k_1), \qquad y_{n+1} = y_n + \tfrac{1}{2}(k_1 + k_2). $$
+        <p>Apply it to \(y' = -2y,\; y(0) = 1\) on \([0, 3]\). Compare the error with standard Euler for step sizes \(h = 0.5, 0.2, 0.1, 0.05\). Verify that the improved Euler method is second-order (error scales as \(h^2\)).</p>
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+def improved_euler(f, x0, y0, x_end, h):
+    n = int((x_end - x0) / h)
+    x = np.linspace(x0, x_end, n+1)
+    y = np.zeros(n+1)
+    y[0] = y0
+    for i in range(n):
+        k1 = h * f(x[i], y[i])
+        k2 = h * f(x[i] + h, y[i] + k1)
+        y[i+1] = y[i] + 0.5 * (k1 + k2)
+    return x, y
+
+f = lambda x, y: -2 * y
+exact_end = np.exp(-6)  # y(3)
+
+for h in [0.5, 0.2, 0.1, 0.05]:
+    _, ye = improved_euler(f, 0, 1, 3, h)
+    err = abs(ye[-1] - exact_end)
+    print(f"h = {h:.2f}: error = {err:.6e}")
+# Ratio of errors when h halves should be ~4 (second-order).
+</code></pre>
+        </details>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise G1.</strong> <em>(Policy comparison.)</em> Consider the ODE \(y' = \sin(x) - y\). Treat the direction field as a policy map. Use Python to generate the direction field and overlay two solution trajectories: one starting at \((0, -2)\) and one at \((0, 3)\). Both converge to the same long-term behaviour. In RL terms, this corresponds to a policy with a <strong>single attracting fixed point (or cycle)</strong>. Determine the asymptotic (long-time) behaviour analytically by guessing a particular solution of the form \(y_p = A\sin(x) + B\cos(x)\) and finding \(A\) and \(B\). Interpret: why does every initial condition lead to the same eventual trajectory?</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Substitute \(y_p = A\sin(x) + B\cos(x)\) into \(y' + y = \sin(x)\):</p>
+            $$ A\cos(x) - B\sin(x) + A\sin(x) + B\cos(x) = \sin(x). $$
+            <p>Equating coefficients: \(\sin(x)\colon -B + A = 1\), \(\cos(x)\colon A + B = 0\). Solving: \(A = 1/2\), \(B = -1/2\).</p>
+            <p>So \(y_p = \frac{1}{2}\sin(x) - \frac{1}{2}\cos(x)\). The general solution is \(y = Ce^{-x} + \frac{1}{2}\sin(x) - \frac{1}{2}\cos(x)\).</p>
+            <p>As \(x \to \infty\), \(Ce^{-x} \to 0\) regardless of \(C\), so every trajectory converges to \(y_p\). In RL terms, the exponential decay is the agent "forgetting" its initial state; the attractor \(y_p\) is the unique long-run equilibrium policy.</p>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise G2.</strong> <em>(Exploration and finite-time blowup.)</em> An agent following the policy \(y' = 1 + y^2\) (with \(y(0)=0\)) will reach \(y = +\infty\) in finite time. (a) Solve the ODE exactly. (b) What is the blowup time? (c) Run Euler's method with \(h=0.01\). At what step does the numerical solution first exceed \(10^6\)? (d) In RL language, this is a policy that leads the agent "off a cliff." Design a modified policy \(\tilde{f}(x,y) = \min(1+y^2,\; M)\) with a reward-clipping parameter \(M\). How does the clipped trajectory differ? Plot both.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (ix) ASSESSMENT
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <!-- Quiz -->
+    <h3>Quiz: 10 Questions</h3>
+
+    <div class="academic-box">
+        <ol>
+            <li>The equation \(y''' + xy' - y^2 = \ln(x)\) is:
+                <br>(a) 3rd order, linear &emsp; (b) 3rd order, nonlinear &emsp; (c) 2nd order, nonlinear &emsp; (d) 3rd order, degree 2</li>
+
+            <li>Which of the following is a PDE?
+                <br>(a) \(y'' + y = 0\) &emsp; (b) \(\frac{du}{dt} = -ku\) &emsp; (c) \(u_{xx} + u_{yy} = 0\) &emsp; (d) \(\frac{dy}{dx} = xy\)</li>
+
+            <li>The general solution of a 3rd-order ODE contains how many arbitrary constants?
+                <br>(a) 1 &emsp; (b) 2 &emsp; (c) 3 &emsp; (d) It depends on whether the equation is linear</li>
+
+            <li>To verify that \(y = e^{3x}\) is a solution of \(y' - 3y = 0\), you should:
+                <br>(a) Integrate \(y' - 3y\) &emsp; (b) Compute \(y' = 3e^{3x}\) and check that \(3e^{3x} - 3e^{3x} = 0\) &emsp; (c) Find the general solution first &emsp; (d) Plot the direction field</li>
+
+            <li>The IVP \(y' = y^{1/3},\; y(0) = 0\) fails which hypothesis of Picard-Lindel&ouml;f?
+                <br>(a) \(f\) is not continuous &emsp; (b) \(\partial f/\partial y\) is not continuous at the initial point &emsp; (c) Both hypotheses fail &emsp; (d) Neither hypothesis fails</li>
+
+            <li>A direction field for \(y' = -y\) shows:
+                <br>(a) Horizontal lines everywhere &emsp; (b) Slopes that are negative when \(y > 0\) and positive when \(y < 0\) &emsp; (c) Vertical lines everywhere &emsp; (d) Slopes independent of \(y\)</li>
+
+            <li>Euler's method with step size \(h\) has global error of order:
+                <br>(a) \(h^2\) &emsp; (b) \(h\) &emsp; (c) \(h^{1/2}\) &emsp; (d) \(h^3\)</li>
+
+            <li>A singular solution of a DE is one that:
+                <br>(a) Blows up in finite time &emsp; (b) Cannot be obtained from the general solution for any value of the constants &emsp; (c) Satisfies the homogeneous equation &emsp; (d) Has no derivatives</li>
+
+            <li>The equation \(y' = x + y\) with \(y(0) = 1\) satisfies the Picard-Lindel&ouml;f conditions because:
+                <br>(a) The equation is linear &emsp; (b) \(f(x,y) = x+y\) and \(\partial f/\partial y = 1\) are both continuous everywhere &emsp; (c) The solution can be found by separation of variables &emsp; (d) The direction field has no vertical tangents</li>
+
+            <li>If \(y_1\) and \(y_2\) are solutions of a <em>nonlinear</em> ODE, then \(y_1 + y_2\) is:
+                <br>(a) Always a solution &emsp; (b) Never a solution &emsp; (c) A solution only if \(y_1 = -y_2\) &emsp; (d) Not guaranteed to be a solution</li>
+        </ol>
+
+        <h5>Answer Key</h5>
+        <p>1: (b) &mdash; \(y^2\) makes it nonlinear &emsp; 2: (c) &emsp; 3: (c) &emsp; 4: (b) &emsp; 5: (b) &mdash; \(\partial f/\partial y = \frac{1}{3}y^{-2/3}\) is undefined at \(y=0\) &emsp; 6: (b) &emsp; 7: (b) &emsp; 8: (b) &emsp; 9: (b) &emsp; 10: (d)</p>
+    </div>
+
+    <!-- Mini-Project -->
+    <h3>Mini-Project: Direction Field and Solution Explorer</h3>
+
+    <div class="academic-box">
+        <h4>Project Description</h4>
+        <p>Build a Python script (or Jupyter notebook) that serves as an interactive exploration tool for first-order ODEs. Your tool should:</p>
+        <ol>
+            <li>Accept a user-specified function \(f(x,y)\) (as a Python lambda or string expression) and domain bounds.</li>
+            <li>Plot the direction field.</li>
+            <li>Overlay Euler-method solution curves for user-specified initial conditions (at least 5 different initial conditions on one plot).</li>
+            <li>Compute and display the Euler-method approximation error at \(x=x_{\text{end}}\) for a user-specified exact solution (if known).</li>
+            <li>Automatically check the Picard-Lindel&ouml;f conditions at each initial point: evaluate \(\partial f/\partial y\) numerically and warn if it appears unbounded.</li>
+        </ol>
+        <p>Test your tool on the following three ODEs:</p>
+        <ul>
+            <li>\(y' = -y + \sin(x)\) with initial conditions \(y(0) \in \{-2, -1, 0, 1, 2\}\).</li>
+            <li>\(y' = y^2 - x\) with initial conditions \(y(0) \in \{-1, -0.5, 0, 0.5, 1\}\).</li>
+            <li>\(y' = \sqrt{|y|}\) with initial condition \(y(0) = 0\) (the Picard-Lindel&ouml;f warning should trigger).</li>
+        </ul>
+
+        <h4>Rubric (30 points)</h4>
+        <table class="comparison-table">
+            <thead><tr><th>Criterion</th><th>Points</th><th>Expectations</th></tr></thead>
+            <tbody>
+                <tr><td>Direction field plotting</td><td>6</td><td>Clear, correctly oriented arrows; appropriate grid density; axes labelled.</td></tr>
+                <tr><td>Euler method implementation</td><td>5</td><td>Correct forward-Euler iteration; handles variable step counts; no off-by-one errors.</td></tr>
+                <tr><td>Multiple initial conditions overlay</td><td>4</td><td>At least 5 curves per ODE, each with a distinct colour and legend entry.</td></tr>
+                <tr><td>Error analysis (when exact solution known)</td><td>5</td><td>Error computed and displayed; convergence order verified for at least 3 step sizes.</td></tr>
+                <tr><td>Picard-Lindel&ouml;f condition checker</td><td>5</td><td>Computes \(\partial f/\partial y\) numerically; identifies and warns when the partial derivative is unbounded or undefined; tested on at least one passing and one failing case.</td></tr>
+                <tr><td>Code quality and documentation</td><td>3</td><td>Functions have docstrings; clear variable names; well-structured code.</td></tr>
+                <tr><td>Testing on all three specified ODEs</td><td>2</td><td>All three test cases run with output shown.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (x) REFERENCES & NEXT STEPS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <h3>References</h3>
+    <ol class="reference-list">
+        <li>Boyce, W.E. and DiPrima, R.C. <em>Elementary Differential Equations and Boundary Value Problems</em>, 11th ed. Wiley, 2017. &mdash; Standard introductory text; Chapters 1&ndash;2 cover classification, direction fields, and existence-uniqueness.</li>
+        <li>Tenenbaum, M. and Pollard, H. <em>Ordinary Differential Equations</em>. Dover, 1985. &mdash; Affordable, example-rich reference with thorough treatment of solution verification and classification.</li>
+        <li>Coddington, E.A. and Levinson, N. <em>Theory of Ordinary Differential Equations</em>. McGraw-Hill, 1955. &mdash; Rigorous proof of the Picard-Lindel&ouml;f theorem and its extensions.</li>
+        <li>Butcher, J.C. <em>Numerical Methods for Ordinary Differential Equations</em>, 3rd ed. Wiley, 2016. &mdash; Definitive reference on Euler's method, Runge-Kutta methods, and convergence theory.</li>
+        <li>Strogatz, S.H. <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. Westview Press, 2015. &mdash; Excellent geometric and intuitive treatment of direction fields, phase portraits, and qualitative analysis.</li>
+    </ol>
+
+    <h3>Next Steps</h3>
+    <div class="summary-box">
+        <p>You now have the vocabulary and conceptual framework for differential equations. You know what an ODE is, how to classify it, what constitutes a solution, and when solutions are guaranteed to exist and be unique. You have seen direction fields as visual policy maps and Euler's method as a first computational tool.</p>
+        <p>In the next module you will begin solving first-order ODEs systematically &mdash; separable equations, integrating factors, exact equations, and more. The tools from Module 0.1 (calculus and linear algebra) and the concepts from this module (classification, IVPs, existence-uniqueness) will be used throughout.</p>
+        <p style="margin-top:1rem;">
+            <a href="../level1/module1-1.html" style="font-weight:600;">Next Module: 1.1 &mdash; First-Order Ordinary Differential Equations &rarr;</a>
+        </p>
+        <p>
+            <a href="index.html">Back to Level 0 Overview</a>
+        </p>
+    </div>
+</section>
+
+</div><!-- col -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<!-- KaTeX JS -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+    });
+});
+</script>
+
+</body>
+</html>

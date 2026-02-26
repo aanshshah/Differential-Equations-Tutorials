@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 1.4: Numerical ODE Solvers — Euler, Runge-Kutta, adaptive step-size, and error analysis for numerical solution of ODEs.">
+    <meta name="author" content="Differential Equations Tutorials">
+
+    <title>Module 1.4: Numerical ODE Solvers</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 1 &mdash; ODEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module1-1.html">1.1</a>
+      <a href="module1-2.html">1.2</a>
+      <a href="module1-3.html">1.3</a>
+      <a href="module1-4.html" aria-current="page">1.4</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:0.95rem; color:var(--mf-muted); margin-bottom:0.25rem;">Module 1.4</p>
+        <h1>Numerical ODE Solvers</h1>
+    </div>
+    <div class="content-section" style="margin-top:1rem;">
+        <table style="box-shadow:none; margin:0;">
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Difficulty:</strong></td><td style="border:none; padding:0.5rem 1rem;">Intermediate</td></tr>
+            <tr><td style="border:none; padding:0.5rem 1rem;"><strong>Estimated Time:</strong></td><td style="border:none; padding:0.5rem 1rem;">4&ndash;5 hours</td></tr>
+        </table>
+        <h4 style="margin-top:1.5rem;">Prerequisites</h4>
+        <ul>
+            <li><a href="../level0/module0-1.html">Module 0.1</a>: Calculus (Taylor series, integration)</li>
+            <li><a href="module1-1.html">Module 1.1</a>: First-Order ODEs (existence, uniqueness, analytical solutions for comparison)</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="content-section">
+        <h2>Why This Matters</h2>
+        <p>Most differential equations that arise in science and engineering have no closed-form solution. The Lorenz equations governing atmospheric convection, the Navier-Stokes equations for fluid flow, and the N-body equations of celestial mechanics all require numerical methods. Numerical ODE solvers are the workhorses of computational science: they power weather forecasting, spacecraft trajectory planning, circuit simulation, and molecular dynamics. Understanding how these solvers work&mdash;their accuracy, stability, and computational cost&mdash;is essential for anyone who uses or builds scientific software.</p>
+        <p>This module builds solvers from scratch so you understand exactly what happens inside <code>scipy.integrate.solve_ivp</code> and similar library functions. You will implement forward Euler, the classical fourth-order Runge-Kutta method (RK4), and an adaptive step-size controller, then compare their accuracy and efficiency on concrete test problems.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="content-section">
+        <h2>Learning Objectives</h2>
+        <p>After completing this module you will be able to:</p>
+        <ol>
+            <li>Implement forward Euler&rsquo;s method from a Taylor-series derivation.</li>
+            <li>Implement the classical fourth-order Runge-Kutta method (RK4) and explain the role of each stage.</li>
+            <li>Define local truncation error and global truncation error, and relate them through convergence theory.</li>
+            <li>State the order of accuracy of a method and verify it numerically on a log-log error plot.</li>
+            <li>Explain A-stability and identify which methods are A-stable.</li>
+            <li>Implement adaptive step-size control using embedded Runge-Kutta pairs (RK4/5).</li>
+            <li>Compare solver accuracy versus computational cost for smooth, oscillatory, and near-stiff problems.</li>
+            <li>Use SciPy&rsquo;s <code>solve_ivp</code> with appropriate method selection and tolerance settings.</li>
+            <li>Frame the numerical solver as an agent that chooses step sizes to balance accuracy and cost.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <div class="content-section">
+        <h2>Core Concepts</h2>
+
+        <!-- Definition 1.4.1 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.1 (Forward Euler Method).</strong>
+            Given $y' = f(t, y)$ with $y(t_0) = y_0$ and step size $h$, the <em>forward Euler method</em> computes:
+            $$y_{n+1} = y_n + h\,f(t_n, y_n), \quad t_{n+1} = t_n + h.$$
+            This is an <em>explicit</em> one-step method of order 1.
+        </div>
+
+        <!-- Definition 1.4.2 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.2 (Backward Euler Method).</strong>
+            The <em>backward (implicit) Euler method</em> computes:
+            $$y_{n+1} = y_n + h\,f(t_{n+1}, y_{n+1}).$$
+            Because $y_{n+1}$ appears on both sides, each step requires solving a (generally nonlinear) equation. The method is order 1 but A-stable, making it suitable for stiff problems.
+        </div>
+
+        <!-- Definition 1.4.3 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.3 (Runge-Kutta Method).</strong>
+            An <em>$s$-stage explicit Runge-Kutta method</em> advances the solution by computing $s$ intermediate slopes $k_1, \ldots, k_s$ and combining them:
+            $$k_i = f\!\left(t_n + c_i h,\; y_n + h\sum_{j=1}^{i-1} a_{ij}\,k_j\right), \quad y_{n+1} = y_n + h\sum_{i=1}^{s} b_i\,k_i.$$
+            The coefficients $(a_{ij}, b_i, c_i)$ are collected in a <em>Butcher tableau</em>. The classical RK4 method uses $s = 4$ stages and achieves order 4.
+        </div>
+
+        <!-- Definition 1.4.4 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.4 (Local Truncation Error).</strong>
+            The <em>local truncation error</em> (LTE) of a one-step method is the error introduced in a single step, assuming the previous value is exact:
+            $$\tau_{n+1} = y(t_{n+1}) - \bigl[y(t_n) + h\,\Phi(t_n, y(t_n), h)\bigr]$$
+            where $\Phi$ is the increment function. A method has order $p$ if $\tau_{n+1} = O(h^{p+1})$.
+        </div>
+
+        <!-- Definition 1.4.5 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.5 (Global Truncation Error).</strong>
+            The <em>global truncation error</em> at time $t_n$ is $e_n = y(t_n) - y_n$. It accumulates local errors over all steps. For a method of order $p$ applied over $[t_0, T]$ with step size $h$, the global error satisfies $|e_n| = O(h^p)$ (one order lower than the LTE because errors accumulate over $O(1/h)$ steps).
+        </div>
+
+        <!-- Definition 1.4.6 -->
+        <div class="definition-box">
+            <strong>Definition 1.4.6 (Adaptive Step-Size Control).</strong>
+            An <em>adaptive step-size controller</em> estimates the local error at each step and adjusts $h$ to keep the error within a user-specified tolerance. Given an error estimate $\text{err}$ and tolerance $\text{tol}$, the new step size is:
+            $$h_{\text{new}} = h \cdot \min\!\left(f_{\max},\; \max\!\left(f_{\min},\; S\left(\frac{\text{tol}}{\text{err}}\right)^{1/(p+1)}\right)\right)$$
+            where $S \approx 0.9$ is a safety factor, and $f_{\min}, f_{\max}$ limit how much $h$ can change in one step (typically $f_{\min}=0.2$, $f_{\max}=5.0$).
+        </div>
+
+        <!-- Theorem 1.4.1 -->
+        <div class="theorem-box">
+            <strong>Theorem 1.4.1 (Convergence of Euler&rsquo;s Method).</strong>
+            If $f(t,y)$ is Lipschitz continuous in $y$ with constant $L$ and continuous in $t$, then the global error of the forward Euler method satisfies:
+            $$\max_{0 \le n \le N} |y(t_n) - y_n| \le \frac{M h}{2L}\left(e^{L(T - t_0)} - 1\right)$$
+            where $M = \max |y''(t)|$ on $[t_0, T]$ and $N = (T - t_0)/h$.
+        </div>
+        <div class="proof-box">
+            <strong>Proof sketch.</strong> The LTE of Euler is $\tau_{n+1} = \frac{h^2}{2}y''(\xi_n)$ by Taylor expansion. The global error satisfies $e_{n+1} = (1 + hL)e_n + \frac{Mh^2}{2}$. Iterating and using $(1+hL)^n \le e^{nhL}$ yields the bound.
+        </div>
+
+        <!-- Theorem 1.4.2 -->
+        <div class="theorem-box">
+            <strong>Theorem 1.4.2 (Order Conditions for RK Methods).</strong>
+            An $s$-stage Runge-Kutta method has order $p$ if and only if its Butcher tableau coefficients satisfy a system of algebraic equations derived by matching the Taylor expansion of the exact solution with the numerical increment through order $p$. For orders 1&ndash;4 these are:
+            <ul>
+                <li>Order 1 (1 condition): $\sum b_i = 1$</li>
+                <li>Order 2 (2 conditions): adds $\sum b_i c_i = 1/2$</li>
+                <li>Order 3 (4 conditions): adds $\sum b_i c_i^2 = 1/3$ and $\sum b_i a_{ij} c_j = 1/6$</li>
+                <li>Order 4 (8 conditions): adds four more equations involving products of tableau entries</li>
+            </ul>
+        </div>
+
+        <!-- Theorem 1.4.3 -->
+        <div class="theorem-box">
+            <strong>Theorem 1.4.3 (A-Stability).</strong>
+            A numerical method is <em>A-stable</em> if its stability region contains the entire left half of the complex plane. When applied to the test equation $y' = \lambda y$ with $\text{Re}(\lambda) < 0$, an A-stable method produces $|y_n| \to 0$ as $n \to \infty$ for any step size $h > 0$. Forward Euler is <em>not</em> A-stable (its stability region is the disk $|\lambda h + 1| \le 1$). Backward Euler and the trapezoidal rule are A-stable.
+        </div>
+
+        <h3>Common Misconceptions</h3>
+
+        <div class="warning-box">
+            <strong>Misconception 1: &ldquo;Smaller step size is always better.&rdquo;</strong>
+            Reducing $h$ decreases truncation error but increases the number of steps, amplifying roundoff error. Below a critical $h$, roundoff dominates and accuracy degrades. There is an optimal $h$ that balances truncation and roundoff errors.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 2: &ldquo;RK4 is always the best method.&rdquo;</strong>
+            RK4 is excellent for smooth, non-stiff problems. For stiff systems (where eigenvalues span many orders of magnitude), implicit methods like backward Euler or BDF formulas are far more efficient. For high-accuracy needs, higher-order methods (RK8) or spectral deferred correction may be preferable.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 3: &ldquo;Truncation error and roundoff error are the same.&rdquo;</strong>
+            Truncation error arises from approximating a continuous process with discrete steps&mdash;it depends on $h$ and the method order. Roundoff error arises from finite-precision arithmetic&mdash;it is roughly $O(\epsilon_{\text{mach}}/h)$ per step and is independent of the method.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 4: &ldquo;Order $p$ means the error is exactly $h^p$.&rdquo;</strong>
+            Order $p$ means the global error behaves as $Ch^p$ asymptotically as $h \to 0$, where $C$ depends on the problem. For finite $h$ the actual error may be larger or smaller than $h^p$.
+        </div>
+        <div class="warning-box">
+            <strong>Misconception 5: &ldquo;Adaptive methods always use fewer function evaluations.&rdquo;</strong>
+            Adaptive methods add overhead for error estimation and step rejection. On very smooth problems with uniform behaviour, a well-chosen fixed step size can be more efficient. Adaptive methods shine when the solution has regions of rapid change interspersed with smooth regions.
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <div class="content-section">
+        <h2>Worked Examples</h2>
+
+        <div class="example-box">
+            <h3>Example 1: Euler&rsquo;s Method on $y' = -2y$</h3>
+            <p>Solve $y' = -2y$, $y(0) = 1$ on $[0, 2]$ with $h = 0.5$. The exact solution is $y(t) = e^{-2t}$.</p>
+            <p><strong>Step 0:</strong> $t_0 = 0$, $y_0 = 1$.</p>
+            <p><strong>Step 1:</strong> $f(0, 1) = -2(1) = -2$. $y_1 = 1 + 0.5(-2) = 0.0$. Exact: $y(0.5) = e^{-1} \approx 0.3679$. Error: $0.3679$.</p>
+            <p><strong>Step 2:</strong> $f(0.5, 0) = -2(0) = 0$. $y_2 = 0 + 0.5(0) = 0.0$. Exact: $y(1.0) = e^{-2} \approx 0.1353$. Error: $0.1353$.</p>
+            <p><strong>Step 3:</strong> $f(1.0, 0) = 0$. $y_3 = 0$. Exact: $y(1.5) = e^{-3} \approx 0.0498$. Error: $0.0498$.</p>
+            <p><strong>Step 4:</strong> $f(1.5, 0) = 0$. $y_4 = 0$. Exact: $y(2.0) = e^{-4} \approx 0.0183$. Error: $0.0183$.</p>
+            <p>With $h=0.5$ and $\lambda h = -1$, Euler is on the boundary of its stability region. The solution collapses to zero in one step rather than decaying smoothly. With $h=0.25$ the results improve dramatically: $y_1 = 0.5$, $y_2 = 0.25$, $y_3 = 0.125$, $y_4 = 0.0625$, matching $e^{-2t}$ much better.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 2: RK4 on the Same Problem</h3>
+            <p>Apply the classical RK4 method to $y' = -2y$, $y(0) = 1$ with $h = 0.5$.</p>
+            <p><strong>Step 1</strong> ($t_0 = 0$, $y_0 = 1$):</p>
+            <ul>
+                <li>$k_1 = f(0, 1) = -2$</li>
+                <li>$k_2 = f(0.25,\; 1 + 0.25(-2)) = f(0.25, 0.5) = -1.0$</li>
+                <li>$k_3 = f(0.25,\; 1 + 0.25(-1)) = f(0.25, 0.75) = -1.5$</li>
+                <li>$k_4 = f(0.5,\; 1 + 0.5(-1.5)) = f(0.5, 0.25) = -0.5$</li>
+                <li>$y_1 = 1 + \frac{0.5}{6}(-2 + 2(-1) + 2(-1.5) + (-0.5)) = 1 + \frac{0.5}{6}(-6.5) = 1 - 0.5417 = 0.4583$</li>
+            </ul>
+            <p>Exact: $y(0.5) = 0.3679$. Error: $0.0904$.</p>
+            <p><strong>Step 2</strong> ($t_1 = 0.5$, $y_1 = 0.4583$):</p>
+            <ul>
+                <li>$k_1 = -2(0.4583) = -0.9167$</li>
+                <li>$k_2 = -2(0.4583 + 0.25(-0.9167)) = -2(0.2292) = -0.4583$</li>
+                <li>$k_3 = -2(0.4583 + 0.25(-0.4583)) = -2(0.3438) = -0.6875$</li>
+                <li>$k_4 = -2(0.4583 + 0.5(-0.6875)) = -2(0.1146) = -0.2292$</li>
+                <li>$y_2 = 0.4583 + \frac{0.5}{6}(-0.9167 + 2(-0.4583) + 2(-0.6875) + (-0.2292)) = 0.4583 - 0.2481 = 0.2102$</li>
+            </ul>
+            <p>Exact: $y(1.0) = 0.1353$. Error: $0.0749$.</p>
+            <p>Even with the large step $h=0.5$, RK4 captures the exponential decay far better than Euler. With $h=0.1$, the RK4 error drops to $O(10^{-6})$ while Euler&rsquo;s error is $O(10^{-2})$.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>Example 3: Adaptive Step-Size Selection</h3>
+            <p>Consider the stiff-ish problem $y' = -1000(y - \sin t) + \cos t$, $y(0) = 0$. The exact solution is $y(t) = \sin t + Ce^{-1000t}$ where $C$ is determined by the initial condition. The transient $Ce^{-1000t}$ decays on a timescale of $\sim 0.001$, while the steady-state $\sin t$ varies on a timescale of $\sim 1$.</p>
+            <p>An embedded RK4(5) method computes both a 4th-order and a 5th-order estimate at each step. The difference gives an error estimate:</p>
+            <p>$$\text{err} = |y^{(5)}_{n+1} - y^{(4)}_{n+1}|$$</p>
+            <p>If $\text{err} > \text{tol}$, the step is rejected and $h$ is reduced. If $\text{err} \ll \text{tol}$, $h$ is increased.</p>
+            <p>For this problem, the adaptive solver takes very small steps ($h \sim 10^{-4}$) during the initial transient $t \in [0, 0.01]$, then rapidly increases to $h \sim 0.01$ once the transient has decayed. A fixed-step RK4 would need $h \lesssim 0.002$ everywhere to remain stable, wasting computation during the smooth phase.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LABS                                     -->
+<!-- ============================================================ -->
+<section id="code-labs">
+    <div class="content-section">
+        <h2>Interactive Code Labs</h2>
+
+        <!-- CODE LAB 1 -->
+        <div class="interactive-highlight">
+            <h3>Code Lab 1: Euler vs RK4 Comparison</h3>
+            <p>Implement both methods from scratch and compare their accuracy on $y' = -2y$, $y(0) = 1$.</p>
+
+            <div class="code-editor-container">
+<pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ── Right-hand side ──────────────────────────────────────────
+def f(t, y):
+    return -2.0 * y
+
+# ── Exact solution ───────────────────────────────────────────
+def exact(t):
+    return np.exp(-2.0 * t)
+
+# ── Forward Euler ────────────────────────────────────────────
+def euler(f, t0, y0, T, h):
+    t_vals = [t0]
+    y_vals = [y0]
+    t, y = t0, y0
+    while t &lt; T - 1e-12:
+        y = y + h * f(t, y)
+        t = t + h
+        t_vals.append(t)
+        y_vals.append(y)
+    return np.array(t_vals), np.array(y_vals)
+
+# ── Classical RK4 ────────────────────────────────────────────
+def rk4(f, t0, y0, T, h):
+    t_vals = [t0]
+    y_vals = [y0]
+    t, y = t0, y0
+    while t &lt; T - 1e-12:
+        k1 = f(t, y)
+        k2 = f(t + h/2, y + h/2 * k1)
+        k3 = f(t + h/2, y + h/2 * k2)
+        k4 = f(t + h, y + h * k3)
+        y = y + (h / 6) * (k1 + 2*k2 + 2*k3 + k4)
+        t = t + h
+        t_vals.append(t)
+        y_vals.append(y)
+    return np.array(t_vals), np.array(y_vals)
+
+# ── Solve with both methods ──────────────────────────────────
+h = 0.1
+T = 2.0
+t_eu, y_eu = euler(f, 0, 1.0, T, h)
+t_rk, y_rk = rk4(f, 0, 1.0, T, h)
+t_ex = np.linspace(0, T, 200)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+# Left: solutions
+axes[0].plot(t_ex, exact(t_ex), 'k-', lw=2, label='Exact')
+axes[0].plot(t_eu, y_eu, 'ro--', ms=4, label=f'Euler h={h}')
+axes[0].plot(t_rk, y_rk, 'bs--', ms=4, label=f'RK4 h={h}')
+axes[0].set_xlabel('t'); axes[0].set_ylabel('y')
+axes[0].legend(); axes[0].set_title('Solutions')
+axes[0].grid(True, alpha=0.3)
+
+# Right: error vs step size (log-log)
+step_sizes = [0.5, 0.25, 0.1, 0.05, 0.025, 0.01]
+euler_errors = []
+rk4_errors = []
+
+for hs in step_sizes:
+    _, ye = euler(f, 0, 1.0, T, hs)
+    _, yr = rk4(f, 0, 1.0, T, hs)
+    euler_errors.append(abs(ye[-1] - exact(T)))
+    rk4_errors.append(abs(yr[-1] - exact(T)))
+
+axes[1].loglog(step_sizes, euler_errors, 'ro-', label='Euler (order 1)')
+axes[1].loglog(step_sizes, rk4_errors, 'bs-', label='RK4 (order 4)')
+# Reference slopes
+h_ref = np.array(step_sizes)
+axes[1].loglog(h_ref, 0.5*h_ref**1, 'r:', alpha=0.5, label='$O(h)$')
+axes[1].loglog(h_ref, 0.5*h_ref**4, 'b:', alpha=0.5, label='$O(h^4)$')
+axes[1].set_xlabel('Step size h'); axes[1].set_ylabel('|Error at t=2|')
+axes[1].legend(); axes[1].set_title('Convergence Order')
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Print numerical convergence rates
+print("Euler convergence rates:")
+for i in range(1, len(step_sizes)):
+    rate = np.log(euler_errors[i-1]/euler_errors[i]) / np.log(step_sizes[i-1]/step_sizes[i])
+    print(f"  h={step_sizes[i]:.3f}: rate = {rate:.2f}")
+print("RK4 convergence rates:")
+for i in range(1, len(step_sizes)):
+    rate = np.log(rk4_errors[i-1]/rk4_errors[i]) / np.log(step_sizes[i-1]/step_sizes[i])
+    print(f"  h={step_sizes[i]:.3f}: rate = {rate:.2f}")
+</code></pre>
+            </div>
+
+            <p><strong>Exploration ideas:</strong></p>
+            <ul>
+                <li>Change the ODE to $y' = -50y$ and observe how Euler becomes unstable for large $h$.</li>
+                <li>Add a midpoint method (order 2) to the comparison and verify its convergence rate.</li>
+                <li>Plot error vs number of function evaluations instead of $h$ to compare cost-efficiency.</li>
+            </ul>
+        </div>
+
+        <!-- CODE LAB 2 -->
+        <div class="interactive-highlight">
+            <h3>Code Lab 2: Adaptive Step-Size Solver</h3>
+            <p>Implement an RK4/5 (Dormand-Prince style) adaptive solver and compare it with fixed-step RK4 on a problem with a fast transient.</p>
+
+            <div class="code-editor-container">
+<pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ── Stiff-ish problem: y' = -1000(y - sin(t)) + cos(t) ──────
+def f_stiff(t, y):
+    return -1000.0 * (y - np.sin(t)) + np.cos(t)
+
+def exact_stiff(t):
+    # Exact: y(t) = sin(t) + C*exp(-1000t), y(0)=0 => C = -sin(0) = 0
+    # Actually y(0)=0, sin(0)=0, so C=0 and y(t)=sin(t) for t>>0.001
+    # More precisely: y(t) = sin(t) - sin(0)*exp(-1000t) = sin(t)
+    return np.sin(t)
+
+# ── Adaptive RK4/5 (simplified Dormand-Prince) ──────────────
+def rk45_adaptive(f, t0, y0, T, tol=1e-6, h_init=0.001,
+                  h_min=1e-8, h_max=0.5):
+    t_vals = [t0]
+    y_vals = [y0]
+    h_vals = []
+    t, y, h = t0, y0, h_init
+    n_reject = 0
+
+    while t &lt; T - 1e-12:
+        if t + h &gt; T:
+            h = T - t
+
+        # RK4 step
+        k1 = f(t, y)
+        k2 = f(t + h/2, y + h/2 * k1)
+        k3 = f(t + h/2, y + h/2 * k2)
+        k4 = f(t + h, y + h * k3)
+        y4 = y + (h/6) * (k1 + 2*k2 + 2*k3 + k4)
+
+        # RK5 step (extra stage for error estimate)
+        k5 = f(t + h/4, y + h/4 * k1)
+        k6 = f(t + 3*h/4, y + h*(3*k1/8 + 9*k3/8 - 3*k2/4 + 3*k4/8))
+        # Simplified 5th-order estimate
+        y5 = y + (h/90) * (7*k1 + 32*k2 + 12*k3 + 32*k5 + 7*k4)
+
+        # Error estimate
+        err = abs(y5 - y4)
+        if err &lt; 1e-16:
+            err = 1e-16
+
+        # Step-size control
+        if err &lt;= tol:
+            # Accept step
+            t = t + h
+            y = y4
+            t_vals.append(t)
+            y_vals.append(y)
+            h_vals.append(h)
+        else:
+            n_reject += 1
+
+        # Compute new step size
+        safety = 0.9
+        h_new = h * safety * (tol / err) ** 0.2
+        h_new = max(h_min, min(h_max, h_new))
+        h = h_new
+
+    print(f"Adaptive: {len(t_vals)-1} steps, {n_reject} rejected")
+    return np.array(t_vals), np.array(y_vals), np.array(h_vals)
+
+# ── Fixed-step RK4 for comparison ────────────────────────────
+def rk4_fixed(f, t0, y0, T, h):
+    t_vals = [t0]
+    y_vals = [y0]
+    t, y = t0, y0
+    while t &lt; T - 1e-12:
+        k1 = f(t, y)
+        k2 = f(t + h/2, y + h/2 * k1)
+        k3 = f(t + h/2, y + h/2 * k2)
+        k4 = f(t + h, y + h * k3)
+        y = y + (h/6) * (k1 + 2*k2 + 2*k3 + k4)
+        t = t + h
+        t_vals.append(t)
+        y_vals.append(y)
+    print(f"Fixed RK4: {len(t_vals)-1} steps (h={h})")
+    return np.array(t_vals), np.array(y_vals)
+
+# ── Run both solvers ─────────────────────────────────────────
+T = 1.0
+ta, ya, ha = rk45_adaptive(f_stiff, 0, 0.0, T, tol=1e-6)
+tf, yf = rk4_fixed(f_stiff, 0, 0.0, T, h=0.001)
+t_ex = np.linspace(0, T, 1000)
+
+fig, axes = plt.subplots(2, 1, figsize=(10, 7))
+
+# Top: solutions
+axes[0].plot(t_ex, exact_stiff(t_ex), 'k-', lw=2, label='Exact')
+axes[0].plot(ta, ya, 'r.-', ms=3, lw=0.8, label=f'Adaptive ({len(ta)-1} steps)')
+axes[0].plot(tf, yf, 'b-', lw=0.5, alpha=0.7, label=f'Fixed ({len(tf)-1} steps)')
+axes[0].set_xlabel('t'); axes[0].set_ylabel('y')
+axes[0].legend(); axes[0].set_title('Solution Comparison')
+axes[0].grid(True, alpha=0.3)
+
+# Bottom: step sizes chosen by adaptive solver
+axes[1].semilogy(ta[:-1], ha, 'r.-', ms=3)
+axes[1].axhline(y=0.001, color='b', ls='--', alpha=0.5, label='Fixed h=0.001')
+axes[1].set_xlabel('t'); axes[1].set_ylabel('Step size h')
+axes[1].set_title('Adaptive Step Sizes')
+axes[1].legend(); axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Error comparison
+err_adapt = abs(ya[-1] - exact_stiff(T))
+err_fixed = abs(yf[-1] - exact_stiff(T))
+print(f"Adaptive error at T={T}: {err_adapt:.2e}")
+print(f"Fixed RK4 error at T={T}: {err_fixed:.2e}")
+</code></pre>
+            </div>
+
+            <p><strong>Exploration ideas:</strong></p>
+            <ul>
+                <li>Increase the stiffness coefficient from 1000 to 10000 and observe how the adaptive solver responds.</li>
+                <li>Change the tolerance from $10^{-6}$ to $10^{-3}$ and compare step counts.</li>
+                <li>Plot error at $t=T$ versus total function evaluations for both methods across multiple tolerances.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <div class="content-section">
+        <h2>Agent Lens: The Solver as an Agent</h2>
+        <p>An adaptive ODE solver can be viewed as a decision-making agent operating in a sequential environment:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>MDP Component</th><th>Solver Interpretation</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>State</strong></td><td>Current time $t_n$, current solution $y_n$, current step size $h_n$, estimated local error $\hat{\tau}_n$</td></tr>
+                <tr><td><strong>Action</strong></td><td>Choose next step size $h_{n+1}$ (increase, decrease, or keep)</td></tr>
+                <tr><td><strong>Reward</strong></td><td>$+1$ for each accepted step within tolerance; $-c$ per function evaluation (cost); $-P$ for rejected steps (wasted work)</td></tr>
+                <tr><td><strong>Transition</strong></td><td>Advance the ODE by one step: $(t_{n+1}, y_{n+1})$ from the numerical method</td></tr>
+                <tr><td><strong>Policy</strong></td><td>The step-size formula $h_{\text{new}} = h \cdot S(\text{tol}/\text{err})^{1/(p+1)}$ is a hand-crafted policy</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Classical controllers as policies.</strong> The standard step-size formula is a proportional (P) controller on the log-error. More sophisticated PI and PID step-size controllers (Gustafsson 1991, Soderlind 2002) use the error history from the previous one or two steps, exactly analogous to PID control in engineering. These hand-crafted policies work well for most problems but are not optimal in any formal sense.</p>
+
+        <p><strong>Could an RL agent do better?</strong> An RL agent could learn a step-size policy that accounts for problem-specific structure: for example, learning that periodic solutions allow aggressive step-size increases between peaks, or that boundary-layer regions require caution. Research (Dellnitz et al. 2021) has explored neural network&ndash;based step-size controllers that outperform classical heuristics on specific problem classes.</p>
+
+        <p><strong>The exploration-exploitation trade-off.</strong> A conservative policy (small $h$) guarantees accuracy but wastes computation. An aggressive policy (large $h$) risks rejected steps. The optimal policy balances these, much like the exploration-exploitation dilemma in reinforcement learning.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <div class="content-section">
+        <h2>Exercises</h2>
+
+        <h3>Analytical</h3>
+
+        <p><strong>Exercise 1.</strong> Show that the local truncation error of the forward Euler method applied to $y' = f(t,y)$ is $\tau_{n+1} = \frac{h^2}{2}y''(\xi_n)$ for some $\xi_n \in [t_n, t_{n+1}]$.</p>
+        <details><summary>Solution</summary>
+            <p>Taylor-expand the exact solution about $t_n$: $y(t_{n+1}) = y(t_n) + hy'(t_n) + \frac{h^2}{2}y''(\xi_n)$ by Taylor&rsquo;s theorem with remainder. Since $y'(t_n) = f(t_n, y(t_n))$, the Euler step gives $y(t_n) + hf(t_n, y(t_n))$. Subtracting: $\tau_{n+1} = y(t_{n+1}) - [y(t_n) + hf(t_n, y(t_n))] = \frac{h^2}{2}y''(\xi_n)$.</p>
+        </details>
+
+        <p><strong>Exercise 2.</strong> For the test equation $y' = \lambda y$ with $\lambda \in \mathbb{C}$, find the stability function $R(z)$ where $z = \lambda h$ for (a) forward Euler, (b) backward Euler, (c) the trapezoidal rule.</p>
+        <details><summary>Solution</summary>
+            <p>(a) $y_{n+1} = y_n + h\lambda y_n = (1+z)y_n$, so $R(z) = 1 + z$. Stable for $|1+z| \le 1$.</p>
+            <p>(b) $y_{n+1} = y_n + h\lambda y_{n+1}$, so $y_{n+1}(1-z) = y_n$ and $R(z) = 1/(1-z)$. Stable for $|1-z| \ge 1$, which includes all $\text{Re}(z) \le 0$ (A-stable).</p>
+            <p>(c) $y_{n+1} = y_n + \frac{h}{2}[\lambda y_n + \lambda y_{n+1}]$, so $R(z) = (1+z/2)/(1-z/2)$. $|R(z)| \le 1$ when $\text{Re}(z) \le 0$ (A-stable).</p>
+        </details>
+
+        <p><strong>Exercise 3.</strong> The Butcher tableau for the midpoint method is: $c = [0, 1/2]^T$, $A = [[0,0],[1/2,0]]$, $b = [0, 1]^T$. Verify that it satisfies the order-2 conditions: $\sum b_i = 1$ and $\sum b_i c_i = 1/2$.</p>
+        <details><summary>Solution</summary>
+            <p>$\sum b_i = 0 + 1 = 1$ &#10004;. $\sum b_i c_i = 0 \cdot 0 + 1 \cdot \frac{1}{2} = \frac{1}{2}$ &#10004;. Both order-2 conditions are satisfied.</p>
+        </details>
+
+        <p><strong>Exercise 4.</strong> Prove that for a method of order $p$, the global error satisfies $|e_N| = O(h^p)$ where $N = (T-t_0)/h$, given that the LTE is $O(h^{p+1})$ and $f$ is Lipschitz in $y$.</p>
+        <details><summary>Solution</summary>
+            <p>The global error satisfies $e_{n+1} = (1 + hL)e_n + \tau_{n+1}$ where $|\tau_{n+1}| \le Ch^{p+1}$. Iterating: $|e_N| \le \sum_{k=0}^{N-1}(1+hL)^k \cdot Ch^{p+1} \le Ch^{p+1} \cdot \frac{(1+hL)^N - 1}{hL} \le Ch^{p+1} \cdot \frac{e^{L(T-t_0)} - 1}{hL} = O(h^p)$ since the sum contributes a factor $O(1/h)$.</p>
+        </details>
+
+        <h3>Computational</h3>
+
+        <p><strong>Exercise 5.</strong> Implement the midpoint method ($y_{n+1} = y_n + hf(t_n + h/2, y_n + \frac{h}{2}f(t_n,y_n))$) and verify that it has order 2 by computing the convergence rate on $y' = -2y$.</p>
+
+        <p><strong>Exercise 6.</strong> Implement backward Euler for $y' = -1000y$, $y(0) = 1$ using Newton&rsquo;s method to solve the implicit equation at each step. Compare with forward Euler for $h = 0.01$ (is forward Euler stable? is backward Euler stable?).</p>
+
+        <p><strong>Exercise 7.</strong> Solve the Lotka-Volterra system $x' = 1.5x - xy$, $y' = -3y + xy$ with both Euler and RK4 for $t \in [0, 15]$. Compare the phase portraits. Does Euler conserve the invariant?</p>
+
+        <p><strong>Exercise 8.</strong> Use SciPy&rsquo;s <code>solve_ivp</code> with method <code>'RK45'</code> and method <code>'Radau'</code> to solve $y' = -1000(y - \cos t) - \sin t$ on $[0, 10]$. Compare the number of function evaluations reported by <code>sol.nfev</code>.</p>
+
+        <h3>Agentic</h3>
+
+        <p><strong>Exercise 9.</strong> Design a reward function for a step-size agent that penalizes (a) rejected steps, (b) excessive function evaluations, and (c) errors above tolerance. Run your adaptive solver on three test problems and compute the total reward. How does your reward function compare to the standard PI controller?</p>
+
+        <p><strong>Exercise 10.</strong> Implement a &ldquo;learning&rdquo; step-size controller: keep a lookup table indexed by $\log_{10}(\text{err}/\text{tol})$ that stores the best step-size multiplier. After each step, update the table entry using exponential moving average. Does this &ldquo;agent&rdquo; learn a better policy than the standard formula over repeated solves of the same problem class?</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <div class="content-section">
+        <h2>Assessment</h2>
+
+        <h3>Quiz</h3>
+        <div class="quiz-container">
+            <p><strong>Q1.</strong> What is the order of the forward Euler method?</p>
+            <details><summary>Answer</summary><p>Order 1. The global error is $O(h)$.</p></details>
+
+            <p><strong>Q2.</strong> How many stages does the classical RK4 method use?</p>
+            <details><summary>Answer</summary><p>4 stages ($k_1, k_2, k_3, k_4$), each requiring one evaluation of $f$.</p></details>
+
+            <p><strong>Q3.</strong> If a method has local truncation error $O(h^5)$, what is its order?</p>
+            <details><summary>Answer</summary><p>Order 4. The order $p$ satisfies LTE $= O(h^{p+1})$, so $p+1=5 \Rightarrow p=4$.</p></details>
+
+            <p><strong>Q4.</strong> Is the forward Euler method A-stable?</p>
+            <details><summary>Answer</summary><p>No. Its stability region is the disk $|1 + \lambda h| \le 1$, which does not contain the entire left half-plane.</p></details>
+
+            <p><strong>Q5.</strong> What is the stability region of backward Euler?</p>
+            <details><summary>Answer</summary><p>$\{z \in \mathbb{C} : |1/(1-z)| \le 1\} = \{z : |1-z| \ge 1\}$, which includes the entire left half-plane. Backward Euler is A-stable.</p></details>
+
+            <p><strong>Q6.</strong> In adaptive step-size control, what does the safety factor $S$ do?</p>
+            <details><summary>Answer</summary><p>$S \approx 0.9$ provides a margin so the next step is likely to be accepted. Without it, the controller would frequently choose step sizes that barely fail the tolerance check.</p></details>
+
+            <p><strong>Q7.</strong> Why does the global error of Euler converge as $O(h)$ even though the LTE is $O(h^2)$?</p>
+            <details><summary>Answer</summary><p>Because errors accumulate over $N = T/h = O(1/h)$ steps, losing one order: $O(h^2) \times O(1/h) = O(h)$.</p></details>
+
+            <p><strong>Q8.</strong> What is a &ldquo;stiff&rdquo; ODE system?</p>
+            <details><summary>Answer</summary><p>A system where the eigenvalues of the Jacobian span many orders of magnitude, so explicit methods require extremely small step sizes for stability even when the solution varies slowly.</p></details>
+
+            <p><strong>Q9.</strong> How does an embedded RK pair (like RK4/5) estimate the local error?</p>
+            <details><summary>Answer</summary><p>It computes two estimates of $y_{n+1}$&mdash;one of order 4 and one of order 5&mdash;using the same set of function evaluations. The difference between these estimates approximates the local error of the lower-order method.</p></details>
+
+            <p><strong>Q10.</strong> In the agent-lens view, what role does the error tolerance play?</p>
+            <details><summary>Answer</summary><p>The tolerance defines the reward boundary: steps within tolerance receive positive reward (accepted), while steps exceeding tolerance receive negative reward (rejected, wasted computation).</p></details>
+        </div>
+
+        <h3>Mini-Project: Solver Benchmark Dashboard</h3>
+        <p>Build a benchmark comparing three solvers on three test problems.</p>
+        <p><strong>Solvers:</strong> Forward Euler, RK4 (fixed step), adaptive RK4/5.</p>
+        <p><strong>Test problems:</strong></p>
+        <ol>
+            <li><strong>Smooth:</strong> $y' = -y$, $y(0) = 1$, $t \in [0, 5]$</li>
+            <li><strong>Oscillatory:</strong> $y'' + 25y = 0$ (rewritten as a 2D system), $y(0) = 1, y'(0) = 0$, $t \in [0, 4\pi]$</li>
+            <li><strong>Near-stiff:</strong> $y' = -500(y - \cos t) - \sin t$, $y(0) = 1$, $t \in [0, 5]$</li>
+        </ol>
+        <p><strong>Deliverables:</strong> For each solver&ndash;problem pair, produce (a) a solution plot, (b) the error at $t = T$, (c) the number of function evaluations. Summarize in a $3 \times 3$ table.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Criterion</th><th>Weight</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Correctness</td><td>30%</td><td>All three solvers produce correct results on all three problems</td></tr>
+                <tr><td>Efficiency analysis</td><td>25%</td><td>Error-vs-cost comparison is computed and discussed</td></tr>
+                <tr><td>Visualization</td><td>20%</td><td>Clear, labelled plots for solutions, errors, and step sizes</td></tr>
+                <tr><td>Stability discussion</td><td>15%</td><td>Identifies which method fails on the stiff problem and explains why</td></tr>
+                <tr><td>Code quality</td><td>10%</td><td>Well-structured, commented, reusable code</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <div class="content-section">
+        <h2>References &amp; Next Steps</h2>
+
+        <h3>References</h3>
+        <ol>
+            <li>Butcher, J. C. (2016). <em>Numerical Methods for Ordinary Differential Equations</em>, 3rd ed. Wiley.</li>
+            <li>Hairer, E., N&oslash;rsett, S. P., &amp; Wanner, G. (1993). <em>Solving Ordinary Differential Equations I: Nonstiff Problems</em>. Springer.</li>
+            <li>Hairer, E. &amp; Wanner, G. (1996). <em>Solving Ordinary Differential Equations II: Stiff and Differential-Algebraic Problems</em>. Springer.</li>
+            <li>Dormand, J. R. &amp; Prince, P. J. (1980). &ldquo;A family of embedded Runge-Kutta formulae.&rdquo; <em>Journal of Computational and Applied Mathematics</em>, 6(1), 19&ndash;26.</li>
+            <li>S&ouml;derlind, G. (2002). &ldquo;Automatic control and adaptive time-stepping.&rdquo; <em>Numerical Algorithms</em>, 31, 281&ndash;310.</li>
+            <li>SciPy <code>solve_ivp</code> documentation: <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html">scipy.integrate.solve_ivp</a></li>
+        </ol>
+
+        <h3>Next Steps</h3>
+        <ul>
+            <li>You now have the tools to solve any ODE numerically. In <strong><a href="../level2/module2-1.html">Module 2.1</a></strong>, we extend these ideas to partial differential equations.</li>
+            <li>The adaptive step-size agent concept reappears in <strong><a href="../level3/module3-4.html">Module 3.4</a></strong>, where we replace hand-crafted policies with learned RL policies.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Bottom navigation -->
+<div style="display:flex; justify-content:space-between; margin-top:3rem; padding:1.5rem 0; border-top:1px solid var(--mf-border);">
+    <a href="module1-3.html" style="color:var(--mf-accent);">&larr; Module 1.3: Systems of Linear ODEs</a>
+    <a href="../level2/module2-1.html" style="color:var(--mf-accent);">Module 2.1: Scalar PDEs &amp; Classification &rarr;</a>
+</div>
+
+</div></div></div></div></div></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+</body>
+</html>

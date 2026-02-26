@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 0.1: Review of Calculus and Linear Algebra — Foundations for Differential Equations">
+    <meta name="author" content="">
+
+    <title>Module 0.1: Review of Calculus &amp; Linear Algebra</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="../css/manifesto-template.css">
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 0 &mdash; Foundations</a>
+    <nav class="lesson-static-links" aria-label="Chapter navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module0-1.html" aria-current="page">0.1 Calculus Review</a>
+      <a href="module0-2.html">0.2 Intro to DEs</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (i) TITLE BLOCK
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="title-block" style="margin-top:2rem;">
+    <p style="font-family:'JetBrains Mono',monospace; color:var(--mf-muted); font-size:0.9rem; margin-bottom:0.25rem;">MODULE 0.1</p>
+    <h1 style="font-family:'Crimson Text',serif; font-size:2.4rem; margin-bottom:0.5rem;">Review of Calculus and Linear Algebra</h1>
+
+    <table class="comparison-table" style="max-width:480px; margin:1.5rem 0;">
+        <tbody>
+            <tr><td style="font-weight:600;">Difficulty</td><td>Beginner</td></tr>
+            <tr><td style="font-weight:600;">Estimated Time</td><td>3&ndash;4 hours</td></tr>
+            <tr><td style="font-weight:600;">Prerequisites</td><td>High school algebra, basic trigonometry</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (ii) WHY THIS MATTERS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="why-this-matters">
+    <h2>Why This Matters</h2>
+    <div class="academic-box">
+        <p>Differential equations are the language of change. Every model in physics, biology, engineering, and economics that describes how a quantity evolves over time or space ultimately rests on two pillars: <strong>calculus</strong> (the machinery of derivatives and integrals) and <strong>linear algebra</strong> (the framework for systems, transformations, and stability analysis).</p>
+        <p>Without fluency in differentiation rules you cannot even write down the equations; without integration techniques you cannot solve them analytically; and without matrix theory you cannot handle systems of equations or analyse stability of equilibria. This module rebuilds those foundations concisely so that every subsequent module can proceed at full speed.</p>
+        <p>If you can already differentiate products, integrate by parts, and compute eigenvalues confidently, skim the definitions and jump to the exercises. If not, work through every example &mdash; the time invested here will repay itself tenfold in Levels 1 through 4.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (iii) LEARNING OBJECTIVES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="learning-objectives">
+    <h2>Learning Objectives</h2>
+    <p>After completing this module you will be able to:</p>
+    <ol>
+        <li><strong>Apply</strong> the product rule, quotient rule, and chain rule to differentiate composite, multi-variable, and implicit expressions.</li>
+        <li><strong>Evaluate</strong> definite and indefinite integrals using substitution, integration by parts, and partial-fraction decomposition.</li>
+        <li><strong>Construct</strong> Taylor and Maclaurin series for elementary functions and determine their radius of convergence.</li>
+        <li><strong>Perform</strong> matrix addition, scalar multiplication, and matrix multiplication, and verify results using dimension analysis.</li>
+        <li><strong>Compute</strong> determinants of \(2\times2\) and \(3\times3\) matrices via cofactor expansion and use Cramer's rule to solve small linear systems.</li>
+        <li><strong>Determine</strong> the inverse of a square matrix using row reduction and the adjugate formula, and identify when the inverse does not exist.</li>
+        <li><strong>Calculate</strong> eigenvalues and eigenvectors of a matrix by solving the characteristic equation and interpreting their geometric meaning.</li>
+        <li><strong>Verify</strong> whether a given set with specified operations satisfies the axioms of a vector space.</li>
+        <li><strong>Implement</strong> matrix operations, eigenvalue computation, and numerical differentiation/integration in Python using NumPy.</li>
+        <li><strong>Diagnose</strong> common calculus and linear algebra errors (sign mistakes, incorrect chain rule application, singular-matrix pitfalls) before they propagate into differential equation solutions.</li>
+    </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (iv) CORE CONCEPTS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ── Definitions ── -->
+    <h3>Definitions</h3>
+
+    <div class="definition-box" id="def-derivative">
+        <h4>Definition 0.1.1 &mdash; Derivative</h4>
+        <p>The <strong>derivative</strong> of a function \(f\) at a point \(x=a\) is defined as</p>
+        $$ f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h}, $$
+        <p>provided the limit exists. When the limit exists for every point in an open interval, we say \(f\) is <em>differentiable</em> on that interval.</p>
+    </div>
+
+    <div class="definition-box" id="def-integral">
+        <h4>Definition 0.1.2 &mdash; Definite Integral (Riemann)</h4>
+        <p>Let \(f\) be bounded on \([a,b]\). Partition the interval into \(n\) subintervals of width \(\Delta x_k\) with sample points \(x_k^*\). The <strong>definite integral</strong> is</p>
+        $$ \int_a^b f(x)\,dx = \lim_{n\to\infty} \sum_{k=1}^{n} f(x_k^*)\,\Delta x_k, $$
+        <p>provided the limit exists and is independent of the choice of partition and sample points.</p>
+    </div>
+
+    <div class="definition-box" id="def-taylor">
+        <h4>Definition 0.1.3 &mdash; Taylor Series</h4>
+        <p>If \(f\) is infinitely differentiable at \(x=a\), its <strong>Taylor series</strong> about \(a\) is</p>
+        $$ f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x-a)^n. $$
+        <p>When \(a=0\) this is called the <strong>Maclaurin series</strong>. The series converges to \(f(x)\) inside the <em>radius of convergence</em> \(R\).</p>
+    </div>
+
+    <div class="definition-box" id="def-matrix">
+        <h4>Definition 0.1.4 &mdash; Matrix and Matrix Multiplication</h4>
+        <p>An \(m \times n\) <strong>matrix</strong> \(A = [a_{ij}]\) is a rectangular array of real (or complex) numbers with \(m\) rows and \(n\) columns. If \(A\) is \(m\times p\) and \(B\) is \(p\times n\), their <strong>product</strong> \(C = AB\) is the \(m\times n\) matrix with entries</p>
+        $$ c_{ij} = \sum_{k=1}^{p} a_{ik}\,b_{kj}. $$
+        <p>Matrix multiplication is associative and distributive but <strong>not commutative</strong> in general.</p>
+    </div>
+
+    <div class="definition-box" id="def-eigenvalue">
+        <h4>Definition 0.1.5 &mdash; Eigenvalue and Eigenvector</h4>
+        <p>Let \(A\) be an \(n\times n\) matrix. A scalar \(\lambda\) is an <strong>eigenvalue</strong> of \(A\) if there exists a nonzero vector \(\mathbf{v}\) such that</p>
+        $$ A\mathbf{v} = \lambda\mathbf{v}. $$
+        <p>The vector \(\mathbf{v}\) is called an <strong>eigenvector</strong> associated with \(\lambda\). Eigenvalues are found by solving the <em>characteristic equation</em> \(\det(A - \lambda I) = 0\).</p>
+    </div>
+
+    <div class="definition-box" id="def-vector-space">
+        <h4>Definition 0.1.6 &mdash; Vector Space</h4>
+        <p>A <strong>vector space</strong> over \(\mathbb{R}\) is a set \(V\) equipped with two operations &mdash; vector addition and scalar multiplication &mdash; satisfying the following axioms for all \(\mathbf{u}, \mathbf{v}, \mathbf{w} \in V\) and all \(\alpha, \beta \in \mathbb{R}\):</p>
+        <ol>
+            <li>Closure under addition: \(\mathbf{u}+\mathbf{v} \in V\).</li>
+            <li>Commutativity: \(\mathbf{u}+\mathbf{v} = \mathbf{v}+\mathbf{u}\).</li>
+            <li>Associativity of addition: \((\mathbf{u}+\mathbf{v})+\mathbf{w} = \mathbf{u}+(\mathbf{v}+\mathbf{w})\).</li>
+            <li>Existence of zero vector: there exists \(\mathbf{0}\in V\) with \(\mathbf{v}+\mathbf{0}=\mathbf{v}\).</li>
+            <li>Existence of additive inverse: for each \(\mathbf{v}\) there exists \(-\mathbf{v}\) with \(\mathbf{v}+(-\mathbf{v})=\mathbf{0}\).</li>
+            <li>Closure under scalar multiplication: \(\alpha\mathbf{v}\in V\).</li>
+            <li>Distributivity: \(\alpha(\mathbf{u}+\mathbf{v})=\alpha\mathbf{u}+\alpha\mathbf{v}\) and \((\alpha+\beta)\mathbf{v}=\alpha\mathbf{v}+\beta\mathbf{v}\).</li>
+            <li>Associativity of scalar multiplication: \(\alpha(\beta\mathbf{v})=(\alpha\beta)\mathbf{v}\).</li>
+            <li>Multiplicative identity: \(1\cdot\mathbf{v}=\mathbf{v}\).</li>
+        </ol>
+    </div>
+
+    <div class="definition-box" id="def-determinant">
+        <h4>Definition 0.1.7 &mdash; Determinant</h4>
+        <p>For a \(2\times 2\) matrix \(A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}\), the <strong>determinant</strong> is \(\det(A) = ad - bc\). For an \(n\times n\) matrix the determinant is defined recursively by cofactor expansion along any row or column:</p>
+        $$ \det(A) = \sum_{j=1}^{n} (-1)^{i+j}\, a_{ij}\, M_{ij}, $$
+        <p>where \(M_{ij}\) is the determinant of the \((n-1)\times(n-1)\) submatrix obtained by deleting row \(i\) and column \(j\). A matrix is <strong>invertible</strong> if and only if \(\det(A)\neq 0\).</p>
+    </div>
+
+    <!-- ── Theorems / Results ── -->
+    <h3>Theorems and Key Results</h3>
+
+    <div class="theorem-box" id="thm-ftc">
+        <h4>Theorem 0.1.1 &mdash; Fundamental Theorem of Calculus</h4>
+        <p><strong>Part I.</strong> If \(f\) is continuous on \([a,b]\) and \(F(x) = \int_a^x f(t)\,dt\), then \(F\) is differentiable on \((a,b)\) and \(F'(x) = f(x)\).</p>
+        <p><strong>Part II.</strong> If \(F\) is any antiderivative of \(f\) on \([a,b]\) (i.e., \(F' = f\)), then</p>
+        $$ \int_a^b f(x)\,dx = F(b) - F(a). $$
+    </div>
+
+    <div class="theorem-box" id="thm-taylor-remainder">
+        <h4>Theorem 0.1.2 &mdash; Taylor's Theorem with Remainder</h4>
+        <p>If \(f\) has \(n+1\) continuous derivatives on an interval containing \(a\) and \(x\), then</p>
+        $$ f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + R_n(x), $$
+        <p>where the <strong>Lagrange remainder</strong> is</p>
+        $$ R_n(x) = \frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1} $$
+        <p>for some \(c\) between \(a\) and \(x\). This provides an explicit error bound for polynomial approximations.</p>
+    </div>
+
+    <div class="theorem-box" id="thm-eigendecomp">
+        <h4>Theorem 0.1.3 &mdash; Spectral Theorem for Real Symmetric Matrices</h4>
+        <p>If \(A\) is a real symmetric \(n\times n\) matrix (\(A = A^T\)), then:</p>
+        <ol>
+            <li>All eigenvalues of \(A\) are real.</li>
+            <li>Eigenvectors corresponding to distinct eigenvalues are orthogonal.</li>
+            <li>There exists an orthogonal matrix \(P\) (with \(P^T P = I\)) such that \(A = P D P^T\), where \(D\) is a diagonal matrix of eigenvalues.</li>
+        </ol>
+    </div>
+
+    <!-- ── Common Failure Modes / Misconceptions ── -->
+    <h3>Common Failure Modes and Misconceptions</h3>
+
+    <div class="important-note" id="misconception-1">
+        <strong>Chain rule omission.</strong> Students often differentiate \(\sin(x^2)\) as \(\cos(x^2)\) instead of \(2x\cos(x^2)\). Always ask: "Is the argument of the outer function something other than plain \(x\)?" If yes, multiply by the derivative of the inner function.
+    </div>
+
+    <div class="important-note" id="misconception-2">
+        <strong>Integration by parts sign errors.</strong> In \(\int u\,dv = uv - \int v\,du\), students frequently write \(uv + \int v\,du\). The formula has a <em>minus</em> sign. A useful mnemonic: "ultraviolet minus the integral of voodoo."
+    </div>
+
+    <div class="important-note" id="misconception-3">
+        <strong>Commutativity of matrix multiplication.</strong> In general \(AB \neq BA\). For example, with \(A=\begin{pmatrix}1&0\\0&0\end{pmatrix}\) and \(B=\begin{pmatrix}0&1\\0&0\end{pmatrix}\), we get \(AB=\begin{pmatrix}0&1\\0&0\end{pmatrix}\) but \(BA=\begin{pmatrix}0&0\\0&0\end{pmatrix}\). Never rearrange matrix products as if they were scalar products.
+    </div>
+
+    <div class="important-note" id="misconception-4">
+        <strong>Eigenvalue zero is still an eigenvalue.</strong> \(\lambda=0\) is an eigenvalue of \(A\) if and only if \(A\) is singular (\(\det A = 0\)). Students sometimes dismiss \(\lambda=0\) as "no eigenvalue." It means the matrix maps some nonzero vector to the zero vector.
+    </div>
+
+    <div class="important-note" id="misconception-5">
+        <strong>Confusing "not differentiable" with "derivative is zero."</strong> A function can be continuous but not differentiable (e.g., \(f(x)=|x|\) at \(x=0\)). Conversely, \(f'(a)=0\) does not mean \(f\) is constant near \(a\); it only means the tangent line is horizontal at that point.
+    </div>
+
+    <div class="important-note" id="misconception-6">
+        <strong>Partial fractions: wrong form for repeated roots.</strong> For \(\frac{1}{(x-1)^2(x+2)}\), the decomposition must be \(\frac{A}{x-1}+\frac{B}{(x-1)^2}+\frac{C}{x+2}\), not \(\frac{A}{x-1}+\frac{B}{x+2}\). Every power of the repeated factor needs its own term.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (v) WORKED EXAMPLES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <!-- Example 1 -->
+    <div class="academic-box" id="example-1">
+        <h4>Example 1: Integration by Parts and Partial Fractions</h4>
+        <p><strong>Problem.</strong> Evaluate \(\displaystyle\int \frac{x}{(x-1)(x+2)}\,dx\).</p>
+
+        <h5>Step 1 &mdash; Partial-Fraction Decomposition</h5>
+        <p>Write</p>
+        $$ \frac{x}{(x-1)(x+2)} = \frac{A}{x-1} + \frac{B}{x+2}. $$
+        <p>Multiply both sides by \((x-1)(x+2)\):</p>
+        $$ x = A(x+2) + B(x-1). $$
+        <p>Set \(x=1\): \(1 = A(3) \Rightarrow A = \frac{1}{3}\).</p>
+        <p>Set \(x=-2\): \(-2 = B(-3) \Rightarrow B = \frac{2}{3}\).</p>
+
+        <h5>Step 2 &mdash; Integrate Each Term</h5>
+        $$ \int \frac{x}{(x-1)(x+2)}\,dx = \frac{1}{3}\int\frac{dx}{x-1} + \frac{2}{3}\int\frac{dx}{x+2} $$
+        $$ = \frac{1}{3}\ln|x-1| + \frac{2}{3}\ln|x+2| + C. $$
+
+        <h5>Interpretation</h5>
+        <p>Partial fractions reduce a complicated rational integrand into a sum of simple logarithmic integrals. This technique will reappear when solving linear ODEs via the Laplace transform (Level 1, Module 5) and when performing inverse Laplace transforms.</p>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="academic-box" id="example-2">
+        <h4>Example 2: Eigenvalues and Eigenvectors of a 2&times;2 Matrix</h4>
+        <p><strong>Problem.</strong> Find all eigenvalues and eigenvectors of \(A = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}\).</p>
+
+        <h5>Step 1 &mdash; Characteristic Equation</h5>
+        $$ \det(A - \lambda I) = \det\begin{pmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{pmatrix} = (4-\lambda)(3-\lambda) - 2 = 0. $$
+        <p>Expanding:</p>
+        $$ \lambda^2 - 7\lambda + 10 = 0 \quad\Rightarrow\quad (\lambda - 5)(\lambda - 2) = 0. $$
+        <p>So \(\lambda_1 = 5\) and \(\lambda_2 = 2\).</p>
+
+        <h5>Step 2 &mdash; Eigenvector for \(\lambda_1 = 5\)</h5>
+        <p>Solve \((A - 5I)\mathbf{v} = \mathbf{0}\):</p>
+        $$ \begin{pmatrix} -1 & 1 \\ 2 & -2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}. $$
+        <p>Both rows give \(-v_1 + v_2 = 0\), so \(v_2 = v_1\). Choosing \(v_1 = 1\):</p>
+        $$ \mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}. $$
+
+        <h5>Step 3 &mdash; Eigenvector for \(\lambda_2 = 2\)</h5>
+        <p>Solve \((A - 2I)\mathbf{v} = \mathbf{0}\):</p>
+        $$ \begin{pmatrix} 2 & 1 \\ 2 & 1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}. $$
+        <p>This gives \(2v_1 + v_2 = 0\), so \(v_2 = -2v_1\). Choosing \(v_1 = 1\):</p>
+        $$ \mathbf{v}_2 = \begin{pmatrix} 1 \\ -2 \end{pmatrix}. $$
+
+        <h5>Interpretation</h5>
+        <p>The matrix \(A\) stretches vectors along the direction \((1,1)^T\) by a factor of 5 and along \((1,-2)^T\) by a factor of 2. In Level 1, eigenvalues of the coefficient matrix will determine the qualitative behaviour (growth, decay, oscillation) of solutions to systems of linear ODEs.</p>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="academic-box" id="example-3">
+        <h4>Example 3: Taylor Series and Error Estimation</h4>
+        <p><strong>Problem.</strong> Find the Maclaurin series for \(e^x\) up to order 4, and bound the error when approximating \(e^{0.5}\).</p>
+
+        <h5>Step 1 &mdash; Build the Series</h5>
+        <p>Since all derivatives of \(e^x\) are \(e^x\), evaluated at \(a=0\) each gives \(f^{(n)}(0) = 1\). Thus:</p>
+        $$ e^x \approx 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24}. $$
+
+        <h5>Step 2 &mdash; Evaluate at \(x = 0.5\)</h5>
+        $$ P_4(0.5) = 1 + 0.5 + 0.125 + 0.02083\overline{3} + 0.00260417 \approx 1.64844. $$
+        <p>The actual value is \(e^{0.5} \approx 1.64872\).</p>
+
+        <h5>Step 3 &mdash; Error Bound</h5>
+        <p>By Taylor's theorem, \(|R_4(0.5)| \le \frac{e^c}{5!}(0.5)^5\) for some \(c\in[0,0.5]\). Since \(e^c \le e^{0.5} < 2\):</p>
+        $$ |R_4(0.5)| \le \frac{2}{120}\cdot\frac{1}{32} = \frac{2}{3840} \approx 0.00052. $$
+        <p>The actual error \(|1.64872 - 1.64844| = 0.00028\) is indeed within this bound.</p>
+
+        <h5>Interpretation</h5>
+        <p>Taylor polynomial approximations are the foundation of series solution methods for differential equations (Level 1, Module 6). Knowing how to bound the remainder tells you how many terms you need for a desired accuracy.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (vi) INTERACTIVE CODE LAB
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+    <p>The following code blocks are designed to run in a Pyodide (browser-based Python) environment or in any standard Python 3 installation with NumPy. Copy each block and experiment with different inputs.</p>
+
+    <!-- Code Lab 1: Matrix Operations & Eigenvalues -->
+    <div class="academic-box" id="lab-1">
+        <h4>Lab 1: NumPy Matrix Operations and Eigenvalue Computation</h4>
+        <p>This lab demonstrates matrix multiplication, determinant computation, matrix inversion, and eigenvalue/eigenvector calculation.</p>
+<pre><code class="language-python">import numpy as np
+
+# Define two matrices
+A = np.array([[4, 1],
+              [2, 3]])
+B = np.array([[1, 0],
+              [0, 2]])
+
+# Matrix multiplication
+print("A @ B =")
+print(A @ B)
+
+print("\nB @ A =")
+print(B @ A)
+
+print("\nNote: A @ B != B @ A  (non-commutativity)")
+
+# Determinant
+det_A = np.linalg.det(A)
+print(f"\ndet(A) = {det_A:.4f}")
+
+# Inverse
+A_inv = np.linalg.inv(A)
+print(f"\nA^(-1) =\n{A_inv}")
+print(f"\nVerification A @ A^(-1) =\n{A @ A_inv}")
+
+# Eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(A)
+print(f"\nEigenvalues: {eigenvalues}")
+print(f"Eigenvectors (as columns):\n{eigenvectors}")
+
+# Verify: A @ v = lambda * v for first eigenpair
+lam1 = eigenvalues[0]
+v1 = eigenvectors[:, 0]
+print(f"\nA @ v1 = {A @ v1}")
+print(f"lambda1 * v1 = {lam1 * v1}")
+print(f"Match: {np.allclose(A @ v1, lam1 * v1)}")
+</code></pre>
+        <p><strong>Expected output highlights:</strong> Eigenvalues are 5.0 and 2.0, matching our hand calculation in Example 2. The product \(A \cdot B\) differs from \(B \cdot A\), confirming non-commutativity.</p>
+    </div>
+
+    <!-- Code Lab 2: Numerical Differentiation & Integration -->
+    <div class="academic-box" id="lab-2">
+        <h4>Lab 2: Numerical Differentiation and Integration</h4>
+        <p>We approximate the derivative of \(f(x) = \sin(x)\) using central differences and the integral of \(f(x) = e^{-x^2}\) using the trapezoidal rule.</p>
+<pre><code class="language-python">import numpy as np
+
+# --- Numerical Differentiation ---
+def central_diff(f, x, h=1e-5):
+    """Central difference approximation of f'(x)."""
+    return (f(x + h) - f(x - h)) / (2 * h)
+
+f = np.sin
+x0 = np.pi / 4
+
+approx_deriv = central_diff(f, x0)
+exact_deriv = np.cos(x0)
+
+print("=== Numerical Differentiation ===")
+print(f"f(x) = sin(x) at x = pi/4")
+print(f"Approximate f'(x) = {approx_deriv:.10f}")
+print(f"Exact f'(x) = cos(pi/4) = {exact_deriv:.10f}")
+print(f"Absolute error = {abs(approx_deriv - exact_deriv):.2e}")
+
+# --- Numerical Integration (Trapezoidal Rule) ---
+def trapezoidal(f, a, b, n):
+    """Composite trapezoidal rule with n subintervals."""
+    x = np.linspace(a, b, n + 1)
+    y = f(x)
+    h = (b - a) / n
+    return h * (0.5 * y[0] + np.sum(y[1:-1]) + 0.5 * y[-1])
+
+g = lambda x: np.exp(-x**2)
+
+print("\n=== Numerical Integration ===")
+print("Integral of exp(-x^2) from 0 to 1")
+for n in [10, 100, 1000]:
+    result = trapezoidal(g, 0, 1, n)
+    print(f"  n = {n:>5d}: I = {result:.10f}")
+
+# Compare with known value: integral = sqrt(pi)/2 * erf(1)
+from math import erf, sqrt, pi
+exact_integral = sqrt(pi) / 2 * erf(1)
+print(f"  Exact:        I = {exact_integral:.10f}")
+</code></pre>
+        <p><strong>Expected output highlights:</strong> The central difference approximation of \(\cos(\pi/4)\) is accurate to about \(10^{-11}\). The trapezoidal rule converges to the exact value \(\frac{\sqrt{\pi}}{2}\,\text{erf}(1) \approx 0.7468241328\) as \(n\) increases.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (vii) AGENT LENS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="agent-lens">
+    <h2>Agent Lens</h2>
+    <div class="application-example">
+        <h5>The Integration-Technique Agent</h5>
+        <p>Imagine a calculus student as a <strong>reinforcement-learning agent</strong> whose task is to evaluate integrals. We can formalise this as follows:</p>
+
+        <table class="comparison-table">
+            <thead><tr><th>RL Concept</th><th>Calculus Analogue</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>State</strong></td>
+                    <td>The current form of the integrand, e.g., \(\frac{x}{(x-1)(x+2)}\). The state encodes the algebraic structure: is it a product, a composition, a rational function, a trigonometric expression?</td>
+                </tr>
+                <tr>
+                    <td><strong>Action</strong></td>
+                    <td>The integration technique selected: substitution (\(u\)-sub), integration by parts, partial fractions, trigonometric identities, or "simplify first." The agent must choose one action per step.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reward / Utility</strong></td>
+                    <td>A positive reward for reaching a closed-form antiderivative. A small negative cost for each step taken (penalising inefficient strategies). A large negative penalty for an incorrect manipulation (sign error, wrong decomposition form).</td>
+                </tr>
+                <tr>
+                    <td><strong>Learning / Policy Update</strong></td>
+                    <td>After many practice problems the student internalises a <em>policy</em>: "If I see a rational function with distinct linear factors, apply partial fractions. If I see a product of a polynomial and an exponential, use integration by parts." This policy maps states to actions and improves with experience &mdash; exactly like Q-learning or policy gradient.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>This framing reveals why practice is effective: each solved integral updates the student's internal policy, strengthening the association between structural features of the integrand (state) and the technique that leads most efficiently to a solution (optimal action). It also explains why students who memorise formulas without practising (no exploration) develop brittle policies that fail on novel integrands.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (viii) EXERCISES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise A1.</strong> Differentiate \(f(x) = x^2\,e^{3x}\,\sin(x)\) using the product rule (treat as a product of three functions).</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Using the product rule for three functions \((uvw)' = u'vw + uv'w + uvw'\):</p>
+            <p>Let \(u = x^2\), \(v = e^{3x}\), \(w = \sin(x)\).</p>
+            $$ f'(x) = 2x\,e^{3x}\sin(x) + 3x^2\,e^{3x}\sin(x) + x^2\,e^{3x}\cos(x). $$
+            <p>Factor out \(x\,e^{3x}\):</p>
+            $$ f'(x) = x\,e^{3x}\bigl[2\sin(x) + 3x\sin(x) + x\cos(x)\bigr]. $$
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A2.</strong> Evaluate \(\displaystyle\int x^2\,e^{-x}\,dx\) using integration by parts (you will need to apply it twice).</p>
+        <details>
+            <summary>Solution</summary>
+            <p>First application: let \(u = x^2\), \(dv = e^{-x}\,dx\), so \(du = 2x\,dx\), \(v = -e^{-x}\).</p>
+            $$ \int x^2 e^{-x}\,dx = -x^2 e^{-x} + 2\int x\,e^{-x}\,dx. $$
+            <p>Second application: let \(u = x\), \(dv = e^{-x}\,dx\), so \(du = dx\), \(v = -e^{-x}\).</p>
+            $$ \int x\,e^{-x}\,dx = -x\,e^{-x} + \int e^{-x}\,dx = -x\,e^{-x} - e^{-x}. $$
+            <p>Combining:</p>
+            $$ \int x^2 e^{-x}\,dx = -x^2 e^{-x} + 2\bigl(-x\,e^{-x} - e^{-x}\bigr) + C = -e^{-x}(x^2 + 2x + 2) + C. $$
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A3.</strong> Compute the determinant and inverse of \(A = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 3 & 1 \\ 0 & 1 & 2 \end{pmatrix}\).</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Cofactor expansion along the first row:</p>
+            $$ \det(A) = 2(3\cdot2 - 1\cdot1) - 1(1\cdot2 - 1\cdot0) + 0 = 2(5) - 1(2) = 8. $$
+            <p>Since \(\det(A) = 8 \neq 0\), \(A\) is invertible. The matrix of cofactors is:</p>
+            $$ C = \begin{pmatrix} 5 & -2 & 1 \\ -2 & 4 & -2 \\ 1 & -2 & 5 \end{pmatrix}. $$
+            <p>The adjugate is \(\text{adj}(A) = C^T = \begin{pmatrix} 5 & -2 & 1 \\ -2 & 4 & -2 \\ 1 & -2 & 5 \end{pmatrix}\) (symmetric in this case). Therefore:</p>
+            $$ A^{-1} = \frac{1}{8}\begin{pmatrix} 5 & -2 & 1 \\ -2 & 4 & -2 \\ 1 & -2 & 5 \end{pmatrix}. $$
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise A4.</strong> Find the eigenvalues and eigenvectors of \(B = \begin{pmatrix} 3 & -1 \\ -1 & 3 \end{pmatrix}\). Verify that the eigenvectors are orthogonal.</p>
+        <details>
+            <summary>Solution</summary>
+            <p>Characteristic equation: \((3-\lambda)^2 - 1 = 0 \Rightarrow \lambda^2 - 6\lambda + 8 = 0 \Rightarrow (\lambda-4)(\lambda-2) = 0\).</p>
+            <p>So \(\lambda_1 = 4\), \(\lambda_2 = 2\).</p>
+            <p>For \(\lambda_1 = 4\): \((B - 4I)\mathbf{v} = \mathbf{0}\) gives \(-v_1 - v_2 = 0\), so \(\mathbf{v}_1 = \begin{pmatrix}1\\-1\end{pmatrix}\).</p>
+            <p>For \(\lambda_2 = 2\): \((B - 2I)\mathbf{v} = \mathbf{0}\) gives \(v_1 - v_2 = 0\), so \(\mathbf{v}_2 = \begin{pmatrix}1\\1\end{pmatrix}\).</p>
+            <p>Orthogonality check: \(\mathbf{v}_1 \cdot \mathbf{v}_2 = 1\cdot1 + (-1)\cdot1 = 0\). Confirmed (as expected by the Spectral Theorem, since \(B\) is symmetric).</p>
+        </details>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise C1.</strong> Using NumPy, verify that the inverse of \(A = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 3 & 1 \\ 0 & 1 & 2 \end{pmatrix}\) is \(\frac{1}{8}\begin{pmatrix} 5 & -2 & 1 \\ -2 & 4 & -2 \\ 1 & -2 & 5 \end{pmatrix}\) by computing <code>np.linalg.inv(A)</code> and checking that <code>A @ A_inv</code> is close to the identity.</p>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C2.</strong> Write a Python function that uses the central difference formula to approximate the second derivative \(f''(x)\) via</p>
+        $$ f''(x) \approx \frac{f(x+h) - 2f(x) + f(x-h)}{h^2}. $$
+        <p>Test it on \(f(x)=\sin(x)\) at \(x=\pi/3\) and compare with the exact value \(f''(\pi/3) = -\sin(\pi/3) = -\frac{\sqrt{3}}{2}\).</p>
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+def second_derivative(f, x, h=1e-4):
+    return (f(x + h) - 2*f(x) + f(x - h)) / h**2
+
+x0 = np.pi / 3
+approx = second_derivative(np.sin, x0)
+exact = -np.sin(x0)
+print(f"Approximate: {approx:.10f}")
+print(f"Exact:       {exact:.10f}")
+print(f"Error:       {abs(approx - exact):.2e}")
+# Error should be on the order of h^2 = 1e-8
+</code></pre>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C3.</strong> Implement Simpson's rule in Python:</p>
+        $$ \int_a^b f(x)\,dx \approx \frac{h}{3}\bigl[f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \cdots + 4f(x_{n-1}) + f(x_n)\bigr], $$
+        <p>where \(n\) is even and \(h = (b-a)/n\). Use it to compute \(\int_0^1 \frac{4}{1+x^2}\,dx\) (which equals \(\pi\)). How many subintervals are needed to get 8 correct decimal digits?</p>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise C4.</strong> Use <code>np.linalg.eig</code> to find the eigenvalues of the \(4\times4\) matrix</p>
+        $$ M = \begin{pmatrix} 2 & -1 & 0 & 0 \\ -1 & 2 & -1 & 0 \\ 0 & -1 & 2 & -1 \\ 0 & 0 & -1 & 2 \end{pmatrix}. $$
+        <p>This tridiagonal matrix arises in finite-difference discretisations of second-order ODEs. The exact eigenvalues are \(\lambda_k = 2 - 2\cos\!\bigl(\frac{k\pi}{5}\bigr)\) for \(k=1,2,3,4\). Compare the numerical output with these exact values.</p>
+        <details>
+            <summary>Solution</summary>
+<pre><code class="language-python">import numpy as np
+
+M = np.array([[2, -1,  0,  0],
+              [-1, 2, -1,  0],
+              [0, -1,  2, -1],
+              [0,  0, -1,  2]], dtype=float)
+
+evals_num = np.sort(np.linalg.eig(M)[0].real)
+evals_exact = np.sort([2 - 2*np.cos(k*np.pi/5) for k in range(1, 5)])
+
+print("Numerical eigenvalues: ", evals_num)
+print("Exact eigenvalues:     ", evals_exact)
+print("Max difference:        ", np.max(np.abs(evals_num - evals_exact)))
+</code></pre>
+        </details>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="academic-box">
+        <p><strong>Exercise G1.</strong> <em>(Decision-making under uncertainty.)</em> You are given the integral \(\int_0^{\infty} x^3\,e^{-2x}\,dx\). An agent must decide between two strategies: (a) integration by parts (applied repeatedly), or (b) recognising that this is a Gamma function \(\Gamma(4)/2^4\). Compute the integral both ways. Which strategy is more efficient? Design a heuristic rule that an integration-technique agent could use to detect when a Gamma function shortcut is available.</p>
+        <details>
+            <summary>Solution</summary>
+            <p><strong>Method (b):</strong> Recognise \(\int_0^\infty x^{n-1} e^{-\alpha x}\,dx = \frac{\Gamma(n)}{\alpha^n}\). Here \(n=4\), \(\alpha=2\):</p>
+            $$ \int_0^\infty x^3 e^{-2x}\,dx = \frac{\Gamma(4)}{2^4} = \frac{3!}{16} = \frac{6}{16} = \frac{3}{8}. $$
+            <p><strong>Method (a):</strong> Three rounds of integration by parts yield the same answer \(\frac{3}{8}\) but take considerably longer.</p>
+            <p><strong>Heuristic rule:</strong> "If the integrand has the form \(x^n e^{-\alpha x}\) on \([0,\infty)\) with \(n\) a positive integer and \(\alpha > 0\), use the Gamma function shortcut."</p>
+        </details>
+    </div>
+
+    <div class="academic-box">
+        <p><strong>Exercise G2.</strong> <em>(Exploration vs. exploitation.)</em> When computing eigenvalues, an agent could (a) use the characteristic polynomial approach (exact but expensive for large \(n\)) or (b) use iterative numerical methods (approximate but scalable). For the matrix from Exercise C4, time both approaches in Python (use <code>numpy.linalg.eig</code> for the numerical method and <code>numpy.polynomial</code> for the characteristic polynomial). Plot computation time vs. matrix size for tridiagonal matrices of dimension \(n = 4, 8, 16, 32, 64, 128\). At what size does the numerical approach become clearly preferable? Frame this as an explore/exploit trade-off.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (ix) ASSESSMENT
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <!-- Quiz -->
+    <h3>Quiz: 10 Questions</h3>
+
+    <div class="academic-box">
+        <ol>
+            <li>What is \(\frac{d}{dx}\bigl[\ln(\sin(x))\bigr]\)?
+                <br>(a) \(\frac{1}{\sin(x)}\) &emsp; (b) \(\cot(x)\) &emsp; (c) \(\tan(x)\) &emsp; (d) \(\frac{\cos(x)}{\sin^2(x)}\)</li>
+
+            <li>\(\int_0^1 x\,e^x\,dx\) equals:
+                <br>(a) \(e-1\) &emsp; (b) \(1\) &emsp; (c) \(e\) &emsp; (d) \(e-2\)</li>
+
+            <li>The Maclaurin series for \(\cos(x)\) begins:
+                <br>(a) \(1 + x + \frac{x^2}{2}+\cdots\) &emsp; (b) \(x - \frac{x^3}{6}+\cdots\) &emsp; (c) \(1 - \frac{x^2}{2} + \frac{x^4}{24}-\cdots\) &emsp; (d) \(1 - x + \frac{x^2}{2}-\cdots\)</li>
+
+            <li>If \(A\) is \(3\times 2\) and \(B\) is \(2\times 4\), the dimensions of \(AB\) are:
+                <br>(a) \(3\times 4\) &emsp; (b) \(2\times 2\) &emsp; (c) \(3\times 2\) &emsp; (d) \(4\times 3\)</li>
+
+            <li>The determinant of \(\begin{pmatrix} 5 & 3 \\ 2 & 4 \end{pmatrix}\) is:
+                <br>(a) 26 &emsp; (b) 14 &emsp; (c) 23 &emsp; (d) 17</li>
+
+            <li>Which of the following is NOT an axiom of a vector space?
+                <br>(a) Closure under addition &emsp; (b) Existence of multiplicative inverse for every vector &emsp; (c) Existence of additive identity &emsp; (d) Distributivity of scalar multiplication</li>
+
+            <li>If \(\lambda = 3\) is an eigenvalue of \(A\), then \(\lambda^2 = 9\) is an eigenvalue of:
+                <br>(a) \(2A\) &emsp; (b) \(A^2\) &emsp; (c) \(A + I\) &emsp; (d) \(A^T\)</li>
+
+            <li>The correct partial fraction form for \(\frac{1}{x(x-1)^2}\) is:
+                <br>(a) \(\frac{A}{x}+\frac{B}{x-1}\) &emsp; (b) \(\frac{A}{x}+\frac{B}{x-1}+\frac{C}{(x-1)^2}\) &emsp; (c) \(\frac{A}{x}+\frac{Bx+C}{(x-1)^2}\) &emsp; (d) \(\frac{Ax+B}{x(x-1)^2}\)</li>
+
+            <li>The chain rule states that \(\frac{d}{dx}[f(g(x))]\) equals:
+                <br>(a) \(f'(x)\cdot g'(x)\) &emsp; (b) \(f'(g(x))\cdot g'(x)\) &emsp; (c) \(f(g'(x))\) &emsp; (d) \(f'(g(x))+g'(x)\)</li>
+
+            <li>A \(3\times3\) matrix with \(\det(A)=0\):
+                <br>(a) has exactly three eigenvalues &emsp; (b) is symmetric &emsp; (c) has 0 as an eigenvalue &emsp; (d) cannot be multiplied by a vector</li>
+        </ol>
+
+        <h5>Answer Key</h5>
+        <p>1: (b) &emsp; 2: (b) &mdash; by parts, \([xe^x]_0^1 - \int_0^1 e^x\,dx = e - (e-1) = 1\) &emsp; 3: (c) &emsp; 4: (a) &emsp; 5: (b) &mdash; \(5\cdot4-3\cdot2=14\) &emsp; 6: (b) &emsp; 7: (b) &emsp; 8: (b) &emsp; 9: (b) &emsp; 10: (c)</p>
+    </div>
+
+    <!-- Mini-Project -->
+    <h3>Mini-Project: Matrix Decomposition Explorer</h3>
+
+    <div class="academic-box">
+        <h4>Project Description</h4>
+        <p>Build a Python script (or Jupyter notebook) that takes a real symmetric \(n\times n\) matrix as input and produces:</p>
+        <ol>
+            <li>Its eigenvalues and an orthonormal set of eigenvectors.</li>
+            <li>The spectral decomposition \(A = PDP^T\), with verification that \(PDP^T\) reconstructs \(A\) to machine precision.</li>
+            <li>A bar chart of the eigenvalues.</li>
+            <li>For \(n=2\), a plot showing the unit circle and its image under the linear transformation \(A\) (an ellipse whose semi-axes align with the eigenvectors).</li>
+        </ol>
+        <p>Test your script on:</p>
+        <ul>
+            <li>The \(2\times2\) matrix from Example 2 &mdash; but note it is not symmetric, so first try \(B = \frac{1}{2}(A + A^T)\).</li>
+            <li>The \(3\times3\) matrix from Exercise A3.</li>
+            <li>A random \(5\times5\) symmetric matrix generated by <code>M = np.random.randn(5,5); A = (M + M.T)/2</code>.</li>
+        </ul>
+
+        <h4>Rubric (30 points)</h4>
+        <table class="comparison-table">
+            <thead><tr><th>Criterion</th><th>Points</th><th>Expectations</th></tr></thead>
+            <tbody>
+                <tr><td>Correctness of eigendecomposition</td><td>8</td><td>Eigenvalues and eigenvectors match NumPy output; \(PDP^T\) reconstruction error &lt; \(10^{-12}\).</td></tr>
+                <tr><td>Code quality and documentation</td><td>6</td><td>Functions have docstrings; variable names are descriptive; no unnecessary global state.</td></tr>
+                <tr><td>Spectral decomposition verification</td><td>5</td><td>Explicit numerical check of \(A = PDP^T\) printed for each test matrix.</td></tr>
+                <tr><td>Visualisation: eigenvalue bar chart</td><td>4</td><td>Clear labels, appropriate axis scaling, title.</td></tr>
+                <tr><td>Visualisation: ellipse plot (2D case)</td><td>5</td><td>Unit circle and its image shown; eigenvector directions annotated.</td></tr>
+                <tr><td>Testing on all three required matrices</td><td>2</td><td>Output shown for each test case.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     (x) REFERENCES & NEXT STEPS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <h3>References</h3>
+    <ol class="reference-list">
+        <li>Stewart, J. <em>Calculus: Early Transcendentals</em>, 9th ed. Cengage, 2020. &mdash; Comprehensive coverage of single-variable calculus.</li>
+        <li>Strang, G. <em>Introduction to Linear Algebra</em>, 6th ed. Wellesley-Cambridge Press, 2023. &mdash; Clear, intuition-driven treatment of matrices, eigenvalues, and vector spaces.</li>
+        <li>Anton, H., Rorres, C. <em>Elementary Linear Algebra: Applications Version</em>, 12th ed. Wiley, 2019. &mdash; Strong on worked examples and computational techniques.</li>
+        <li>Apostol, T. <em>Calculus, Vol. 1</em>, 2nd ed. Wiley, 1967. &mdash; Rigorous proofs of the Fundamental Theorem of Calculus and Taylor's Theorem.</li>
+        <li>NumPy Documentation: <a href="https://numpy.org/doc/stable/reference/routines.linalg.html" target="_blank">Linear Algebra (numpy.linalg)</a>. &mdash; Reference for all matrix operations used in the code labs.</li>
+    </ol>
+
+    <h3>Next Steps</h3>
+    <div class="summary-box">
+        <p>You now have the calculus and linear algebra toolkit required for the rest of the course. In the next module you will learn what a differential equation actually is, how to classify them, and what it means for a function to be a solution.</p>
+        <p style="margin-top:1rem;">
+            <a href="module0-2.html" style="font-weight:600;">Next Module: 0.2 &mdash; Introduction to Differential Equations &rarr;</a>
+        </p>
+        <p>
+            <a href="index.html">Back to Level 0 Overview</a>
+        </p>
+    </div>
+</section>
+
+</div><!-- col -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<!-- KaTeX JS -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="Module 2.3: Stochastic and Complex Models — Brownian motion, Ito calculus, Euler-Maruyama method, geometric Brownian motion, Monte Carlo for SDEs, reaction-diffusion systems">
+    <title>Module 2.3 — Stochastic and Complex Models</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/interactive.css" rel="stylesheet">
+    <link href="../css/modern-content.css" rel="stylesheet">
+    <link href="../css/academic-styles.css" rel="stylesheet">
+    <link href="../css/manifesto-template.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+
+<body class="has-static-header">
+<header class="lesson-static-header" role="banner">
+  <div class="lesson-static-header-inner">
+    <a class="lesson-static-brand" href="index.html">Level 2 — PDEs</a>
+    <nav class="lesson-static-links" aria-label="Module navigation">
+      <a href="../index.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="module2-1.html">2.1</a>
+      <a href="module2-2.html">2.2</a>
+      <a href="module2-3.html" aria-current="page">2.3</a>
+    </nav>
+  </div>
+</header>
+
+<div id="wrapper">
+<div class="row row-offcanvas row-offcanvas-left">
+<div id="page-content-wrapper">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+
+<!-- ============================================================ -->
+<!-- (i) TITLE BLOCK                                               -->
+<!-- ============================================================ -->
+<section id="title-block">
+    <div class="page-title">
+        <p style="font-size:1rem;color:var(--mf-muted);margin-bottom:0.25rem;">Module 2.3</p>
+        <h1>Stochastic and Complex Models</h1>
+    </div>
+
+    <div class="content-section" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+        <div>
+            <strong>Difficulty:</strong> Advanced<br>
+            <strong>Estimated Time:</strong> 4 -- 5 hours<br>
+        </div>
+        <div>
+            <strong>Prerequisites:</strong>
+            <ul style="margin:0.25rem 0 0 1.25rem;">
+                <li><a href="module2-1.html">Module 2.1 — Scalar PDEs and Classification</a></li>
+                <li>Basic probability (expected value, variance, normal distribution)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ii) WHY THIS MATTERS                                         -->
+<!-- ============================================================ -->
+<section id="why-this-matters">
+    <div class="intro-box">
+        <h2>Why This Matters</h2>
+        <p>
+            Deterministic differential equations assume that the future is completely determined by the present state. Reality is rarely so obliging. Financial markets fluctuate under the influence of countless unpredictable agents; molecules in a fluid are buffeted by thermal noise; gene expression in a single cell is driven by random encounters between transcription factors and DNA. Stochastic differential equations (SDEs) extend the framework of ordinary and partial differential equations to incorporate randomness as a first-class modelling ingredient. The Ito calculus that underpins SDEs differs from ordinary calculus in a fundamental way: the chain rule acquires an extra correction term (Ito's lemma) because the Wiener process has infinite variation. Mastering this calculus opens the door to mathematical finance (the Black-Scholes formula is a direct consequence), computational biology (Langevin dynamics), and statistical physics. Beyond SDEs, reaction-diffusion systems couple local chemical kinetics with spatial diffusion and can spontaneously generate spatial patterns from homogeneity, a mechanism proposed by Alan Turing in 1952 and now understood to drive pigmentation patterns in animals, vegetation stripes in arid ecosystems, and morphogen gradients in embryonic development. This module equips you with the mathematical foundations and computational tools for both stochastic and pattern-forming models.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iii) LEARNING OBJECTIVES                                     -->
+<!-- ============================================================ -->
+<section id="learning-objectives">
+    <div class="learning-objectives">
+        <h4>Learning Objectives</h4>
+        <p>After completing this module you will be able to:</p>
+        <ol>
+            <li>Define Brownian motion (Wiener process) and state its key properties: continuous paths, independent increments, and \(W(t)-W(s) \sim \mathcal{N}(0,t-s)\).</li>
+            <li>Write the general Ito SDE form \(dX = a(X,t)\,dt + b(X,t)\,dW\) and identify the drift and diffusion coefficients.</li>
+            <li>State and apply Ito's lemma to compute \(d\!\left[f(X_t)\right]\) for a twice-differentiable function \(f\).</li>
+            <li>Derive the Black-Scholes PDE from the geometric Brownian motion model of stock prices.</li>
+            <li>Implement the Euler-Maruyama method for numerically solving an Ito SDE.</li>
+            <li>Distinguish between strong convergence (pathwise accuracy) and weak convergence (accuracy of expectations) of numerical SDE schemes.</li>
+            <li>Design and execute a Monte Carlo simulation to estimate expected values and confidence intervals for SDE solutions.</li>
+            <li>Formulate a two-species reaction-diffusion system and identify conditions for Turing instability.</li>
+            <li>Simulate a reaction-diffusion system numerically and observe spontaneous pattern formation.</li>
+            <li>Explain how an adaptive Monte Carlo agent can allocate computational resources to minimise estimator variance within a fixed budget.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (iv) CORE CONCEPTS                                            -->
+<!-- ============================================================ -->
+<section id="core-concepts">
+    <h2>Core Concepts</h2>
+
+    <!-- ---- Definitions ---- -->
+    <h3>Key Definitions</h3>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.1 — Brownian Motion (Wiener Process)</h4>
+        <p>A <strong>standard Brownian motion</strong> (or Wiener process) is a continuous-time stochastic process \(\{W(t)\}_{t \geq 0}\) satisfying:</p>
+        <ol>
+            <li>\(W(0) = 0\) almost surely.</li>
+            <li>For \(0 \leq s < t\), the increment \(W(t) - W(s)\) is normally distributed with mean zero and variance \(t - s\): \(W(t) - W(s) \sim \mathcal{N}(0, t - s)\).</li>
+            <li>For non-overlapping time intervals, the increments are independent.</li>
+            <li>The sample paths \(t \mapsto W(t)\) are continuous with probability one.</li>
+        </ol>
+        <p>A crucial property is that Brownian paths are <strong>nowhere differentiable</strong> almost surely, and the quadratic variation satisfies \([W,W](t) = t\). This prevents the use of ordinary calculus and necessitates the Ito calculus.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.2 — Ito Stochastic Differential Equation</h4>
+        <p>An <strong>Ito SDE</strong> is a stochastic differential equation of the form</p>
+        $$ dX_t = a(X_t, t)\,dt + b(X_t, t)\,dW_t, $$
+        <p>where \(a(x,t)\) is the <strong>drift</strong> coefficient and \(b(x,t)\) is the <strong>diffusion</strong> coefficient. The rigorous meaning is the integral equation</p>
+        $$ X_t = X_0 + \int_0^t a(X_s, s)\,ds + \int_0^t b(X_s, s)\,dW_s, $$
+        <p>where the second integral is the Ito stochastic integral, defined as the \(L^2\)-limit of sums \(\sum b(X_{t_i}, t_i)(W_{t_{i+1}} - W_{t_i})\) with the integrand evaluated at the <strong>left</strong> endpoint of each subinterval.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.3 — Geometric Brownian Motion</h4>
+        <p><strong>Geometric Brownian motion</strong> (GBM) is the process satisfying the SDE</p>
+        $$ dS_t = \mu\,S_t\,dt + \sigma\,S_t\,dW_t, $$
+        <p>where \(\mu \in \mathbb{R}\) is the drift rate and \(\sigma > 0\) is the volatility. Applying Ito's lemma to \(\ln S_t\) yields the exact solution</p>
+        $$ S_t = S_0 \exp\!\left[\left(\mu - \tfrac{1}{2}\sigma^2\right)t + \sigma\,W_t\right]. $$
+        <p>GBM is the foundational model of the Black-Scholes option pricing theory because it keeps \(S_t > 0\) and produces log-normal returns.</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.4 — Euler-Maruyama Method</h4>
+        <p>The <strong>Euler-Maruyama method</strong> discretises the Ito SDE \(dX = a\,dt + b\,dW\) on a uniform time grid \(t_n = n\Delta t\) as</p>
+        $$ X_{n+1} = X_n + a(X_n, t_n)\,\Delta t + b(X_n, t_n)\,\Delta W_n, $$
+        <p>where \(\Delta W_n = W(t_{n+1}) - W(t_n) \sim \mathcal{N}(0, \Delta t)\). In practice, each \(\Delta W_n\) is sampled as \(\sqrt{\Delta t}\;\xi_n\) with \(\xi_n \sim \mathcal{N}(0,1)\).</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.5 — Strong and Weak Convergence</h4>
+        <p>A numerical scheme \(\hat{X}\) for an SDE has <strong>strong order of convergence</strong> \(\gamma\) if</p>
+        $$ \mathbb{E}\!\left[\left|X_T - \hat{X}_T\right|\right] \leq C\,(\Delta t)^{\gamma}. $$
+        <p>It has <strong>weak order of convergence</strong> \(\beta\) if, for every sufficiently smooth test function \(g\),</p>
+        $$ \left|\mathbb{E}\!\left[g(X_T)\right] - \mathbb{E}\!\left[g(\hat{X}_T)\right]\right| \leq C\,(\Delta t)^{\beta}. $$
+        <p>Strong convergence demands pathwise accuracy; weak convergence demands only that expectations (and hence probability distributions) are approximated well. The Euler-Maruyama method has strong order \(\gamma = \frac{1}{2}\) and weak order \(\beta = 1\).</p>
+    </div>
+
+    <div class="definition-box">
+        <h4>Definition 2.3.6 — Reaction-Diffusion System</h4>
+        <p>A <strong>reaction-diffusion system</strong> for two species \(u(x,t)\) and \(v(x,t)\) takes the form</p>
+        $$ \frac{\partial u}{\partial t} = D_u\,\nabla^2 u + f(u,v), \qquad \frac{\partial v}{\partial t} = D_v\,\nabla^2 v + g(u,v), $$
+        <p>where \(D_u, D_v > 0\) are diffusion coefficients and \(f,g\) describe the local reaction kinetics. The homogeneous steady state \((u^*,v^*)\) satisfying \(f(u^*,v^*) = g(u^*,v^*) = 0\) may be stable to spatially uniform perturbations yet <strong>unstable</strong> to spatially varying perturbations when the diffusion coefficients are sufficiently different. This is a <strong>Turing instability</strong>.</p>
+    </div>
+
+    <!-- ---- Theorems ---- -->
+    <h3>Key Theorems</h3>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.3.1 — Ito's Lemma</h4>
+        <p>Let \(X_t\) satisfy the Ito SDE \(dX_t = a\,dt + b\,dW_t\), and let \(f(x,t) \in C^{2,1}(\mathbb{R}\times[0,\infty))\). Then the process \(Y_t = f(X_t, t)\) satisfies</p>
+        $$ df = \left(\frac{\partial f}{\partial t} + a\,\frac{\partial f}{\partial x} + \frac{1}{2}\,b^2\,\frac{\partial^2 f}{\partial x^2}\right)dt + b\,\frac{\partial f}{\partial x}\,dW_t. $$
+        <div class="proof-box">
+            <p><strong>Proof sketch.</strong> Expand \(f(X_{t+dt}, t+dt)\) in a Taylor series to second order. In ordinary calculus, the \((dX)^2\) term is negligible. For an Ito process, however, \((dX)^2 = b^2\,(dW)^2 + \text{higher order}\), and the key identity \((dW)^2 = dt\) (in the mean-square sense) yields a non-vanishing second-order contribution. Specifically:</p>
+            $$ df = \frac{\partial f}{\partial t}\,dt + \frac{\partial f}{\partial x}\,dX + \frac{1}{2}\frac{\partial^2 f}{\partial x^2}(dX)^2. $$
+            <p>Substituting \(dX = a\,dt + b\,dW\) and applying the Ito multiplication rules \((dt)^2 = 0\), \(dt\,dW = 0\), \((dW)^2 = dt\), we obtain the result. The term \(\frac{1}{2}b^2 f_{xx}\,dt\) is the Ito correction, absent in ordinary calculus.</p>
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h4>Theorem 2.3.2 — Convergence of the Euler-Maruyama Method</h4>
+        <p>Consider the Ito SDE \(dX_t = a(X_t,t)\,dt + b(X_t,t)\,dW_t\) on \([0,T]\) with Lipschitz-continuous coefficients \(a\) and \(b\). Let \(\hat{X}\) denote the Euler-Maruyama approximation with step size \(\Delta t\). Then:</p>
+        <ol>
+            <li><strong>Strong convergence:</strong> \(\mathbb{E}\!\left[\sup_{0 \leq t \leq T}|X_t - \hat{X}_t|\right] \leq C\,(\Delta t)^{1/2}\).</li>
+            <li><strong>Weak convergence:</strong> For every polynomial-growth \(g \in C^{4}\), \(\left|\mathbb{E}[g(X_T)] - \mathbb{E}[g(\hat{X}_T)]\right| \leq C\,(\Delta t)\).</li>
+        </ol>
+        <div class="proof-box">
+            <p><strong>Proof sketch (strong convergence).</strong> Define the local error \(e_n = X_{t_n} - \hat{X}_{t_n}\). Using the Lipschitz conditions on \(a\) and \(b\), one shows that the expected squared error satisfies a discrete Gronwall inequality:</p>
+            $$ \mathbb{E}[|e_{n+1}|^2] \leq (1 + C\Delta t)\,\mathbb{E}[|e_n|^2] + C\,(\Delta t)^2. $$
+            <p>Iterating and applying the discrete Gronwall lemma yields \(\mathbb{E}[|e_N|^2] \leq C\,\Delta t\), so \(\left(\mathbb{E}[|e_N|^2]\right)^{1/2} \leq C\,(\Delta t)^{1/2}\). The weak convergence proof uses a backward Kolmogorov PDE argument: define \(u(x,t) = \mathbb{E}[g(X_T) \mid X_t = x]\), show that \(u\) satisfies a PDE, then apply a Taylor expansion of the scheme within this PDE framework to extract the additional half-order of accuracy.</p>
+        </div>
+    </div>
+
+    <!-- ---- Misconceptions ---- -->
+    <h3>Common Misconceptions</h3>
+
+    <div class="warning-box">
+        <h4>Misconception 1: "Ito's lemma is just the chain rule."</h4>
+        <p>The classical chain rule gives \(d[f(X)] = f'(X)\,dX\). Ito's lemma adds the correction term \(\frac{1}{2}b^2 f''(X)\,dt\), which arises because Brownian motion has non-zero quadratic variation. Forgetting this term leads to incorrect drift computations. For example, applying the ordinary chain rule to \(\ln S_t\) under GBM gives drift \(\mu\), whereas Ito's lemma gives the correct drift \(\mu - \frac{1}{2}\sigma^2\).</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 2: "Halving the time step halves the error, as with Euler for ODEs."</h4>
+        <p>The Euler-Maruyama method has strong order \(\frac{1}{2}\), not 1. Halving \(\Delta t\) reduces the strong error by a factor of \(\sqrt{2} \approx 1.41\), not 2. To reduce the strong error by half, you must quarter the step size. For weak convergence the order is 1, so halving the step size does halve the error in expectations.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 3: "More Monte Carlo paths always improve accuracy proportionally."</h4>
+        <p>The Monte Carlo standard error scales as \(\sigma / \sqrt{M}\) where \(M\) is the number of paths. Doubling \(M\) reduces the standard error by a factor of \(\sqrt{2}\), not 2. To halve the error, you need four times as many paths. Variance reduction techniques (antithetic variates, control variates, importance sampling) can dramatically improve efficiency beyond brute-force sampling.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 4: "Diffusion always stabilises a system."</h4>
+        <p>In reaction-diffusion systems, diffusion can <em>destabilise</em> a spatially homogeneous equilibrium. Turing's insight was precisely that an activator-inhibitor system stable without diffusion can become unstable when the inhibitor diffuses faster than the activator. The resulting patterns emerge from the interplay between local reaction and non-local diffusion, not from any external template.</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Misconception 5: "The Black-Scholes model produces realistic option prices."</h4>
+        <p>Black-Scholes assumes constant volatility and log-normal returns. Real markets exhibit heavy tails, volatility smiles, jumps, and stochastic volatility. The model remains foundational as a benchmark and pedagogical tool, but practitioners use extensions (Heston model, SABR, local volatility) to capture observed market behaviour.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (v) WORKED EXAMPLES                                           -->
+<!-- ============================================================ -->
+<section id="worked-examples">
+    <h2>Worked Examples</h2>
+
+    <div class="example-box">
+        <h4>Example 2.3.1 — Applying Ito's Lemma to Geometric Brownian Motion</h4>
+        <p><strong>Problem.</strong> Given the GBM SDE \(dS = \mu S\,dt + \sigma S\,dW\), find the SDE for \(Y_t = \ln S_t\).</p>
+
+        <p><strong>Step 1 — Identify the ingredients.</strong> Here \(a(S,t) = \mu S\), \(b(S,t) = \sigma S\), and \(f(S) = \ln S\). We compute</p>
+        $$ f'(S) = \frac{1}{S}, \qquad f''(S) = -\frac{1}{S^2}. $$
+
+        <p><strong>Step 2 — Apply Ito's lemma.</strong></p>
+        $$ d(\ln S) = \frac{1}{S}\,dS + \frac{1}{2}\left(-\frac{1}{S^2}\right)(\sigma S)^2\,dt = \frac{1}{S}\,dS - \frac{1}{2}\sigma^2\,dt. $$
+
+        <p><strong>Step 3 — Substitute \(dS\):</strong></p>
+        $$ d(\ln S) = \frac{1}{S}\bigl(\mu S\,dt + \sigma S\,dW\bigr) - \frac{1}{2}\sigma^2\,dt = \left(\mu - \frac{1}{2}\sigma^2\right)dt + \sigma\,dW. $$
+
+        <p><strong>Step 4 — Integrate:</strong></p>
+        $$ \ln S_t - \ln S_0 = \left(\mu - \frac{1}{2}\sigma^2\right)t + \sigma\,W_t. $$
+
+        <p><strong>Final solution:</strong></p>
+        $$ S_t = S_0\,\exp\!\left[\left(\mu - \frac{1}{2}\sigma^2\right)t + \sigma\,W_t\right]. $$
+        <p>Note the Ito correction \(-\frac{1}{2}\sigma^2\) in the drift of \(\ln S\). Without it, we would incorrectly predict \(\mathbb{E}[S_t] = S_0 e^{(\mu + \frac{1}{2}\sigma^2)t}\) instead of the correct \(\mathbb{E}[S_t] = S_0 e^{\mu t}\).</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example 2.3.2 — Euler-Maruyama for the Ornstein-Uhlenbeck Process</h4>
+        <p><strong>Problem.</strong> Simulate the Ornstein-Uhlenbeck (OU) process</p>
+        $$ dX_t = \theta(\mu - X_t)\,dt + \sigma\,dW_t, \qquad X_0 = x_0, $$
+        <p>with mean-reversion speed \(\theta = 1\), long-run mean \(\mu = 0\), volatility \(\sigma = 0.3\), and \(x_0 = 1\), on \([0,5]\).</p>
+
+        <p><strong>Step 1 — Identify drift and diffusion:</strong> \(a(x,t) = \theta(\mu - x) = -x\), \(b(x,t) = \sigma = 0.3\).</p>
+
+        <p><strong>Step 2 — Discretise.</strong> With step size \(\Delta t\):</p>
+        $$ X_{n+1} = X_n + (-X_n)\,\Delta t + 0.3\,\sqrt{\Delta t}\;\xi_n, \qquad \xi_n \sim \mathcal{N}(0,1). $$
+        $$ X_{n+1} = X_n(1 - \Delta t) + 0.3\,\sqrt{\Delta t}\;\xi_n. $$
+
+        <p><strong>Step 3 — Verify against the exact distribution.</strong> The OU process has the exact solution</p>
+        $$ X_t = x_0 e^{-\theta t} + \sigma\int_0^t e^{-\theta(t-s)}\,dW_s, $$
+        <p>which is normally distributed with mean \(x_0 e^{-t}\) and variance \(\frac{\sigma^2}{2\theta}(1 - e^{-2\theta t}) = \frac{0.09}{2}(1-e^{-2t})\). At \(t = 5\), the mean is \(e^{-5} \approx 0.0067\) and the variance is \(\approx 0.045\). Running 10000 Euler-Maruyama paths with \(\Delta t = 0.01\) and computing the sample mean and variance at \(t=5\) should closely match these values.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example 2.3.3 — Turing Instability in a Reaction-Diffusion System</h4>
+        <p><strong>Problem.</strong> Consider the Schnakenberg model:</p>
+        $$ \frac{\partial u}{\partial t} = D_u\,u_{xx} + a - u + u^2 v, \qquad \frac{\partial v}{\partial t} = D_v\,v_{xx} + b - u^2 v, $$
+        <p>with \(a = 0.1\), \(b = 0.9\). Find the homogeneous steady state and determine when Turing instability occurs.</p>
+
+        <p><strong>Step 1 — Homogeneous steady state.</strong> Set the reaction terms to zero:</p>
+        $$ a - u^* + (u^*)^2 v^* = 0, \qquad b - (u^*)^2 v^* = 0. $$
+        <p>From the second equation, \((u^*)^2 v^* = b\). Substituting into the first: \(a - u^* + b = 0\), so \(u^* = a + b = 1\) and \(v^* = b/(u^*)^2 = 0.9\).</p>
+
+        <p><strong>Step 2 — Linearise.</strong> The Jacobian of the reaction terms at \((u^*, v^*)\) is</p>
+        $$ J = \begin{pmatrix} f_u & f_v \\ g_u & g_v \end{pmatrix} = \begin{pmatrix} -1 + 2u^*v^* & (u^*)^2 \\ -2u^*v^* & -(u^*)^2 \end{pmatrix} = \begin{pmatrix} 0.8 & 1 \\ -1.8 & -1 \end{pmatrix}. $$
+
+        <p><strong>Step 3 — Check stability without diffusion.</strong> \(\text{tr}(J) = 0.8 - 1 = -0.2 < 0\) and \(\det(J) = (0.8)(-1) - (1)(-1.8) = -0.8 + 1.8 = 1.0 > 0\). Both eigenvalues have negative real part, so the steady state is stable without diffusion.</p>
+
+        <p><strong>Step 4 — Turing condition.</strong> For a perturbation with wavenumber \(k\), the dispersion relation requires</p>
+        $$ D_v f_u + D_u g_v < 0 \quad \text{and} \quad (D_v f_u + D_u g_v)^2 > 4 D_u D_v \det(J). $$
+        <p>Since \(f_u = 0.8 > 0\) and \(g_v = -1 < 0\), we need \(D_v\) sufficiently larger than \(D_u\). Taking \(D_u = 0.05\) and \(D_v = 1\):</p>
+        $$ D_v f_u + D_u g_v = 1(0.8) + 0.05(-1) = 0.75. $$
+        <p>This is positive, so the first condition fails. We need \(D_v f_u + D_u g_v < 0\), which requires a larger ratio. Setting \(D_u = 1\), \(D_v = 20\):</p>
+        $$ D_v f_u + D_u g_v = 20(0.8) + 1(-1) = 15. $$
+        <p>Still positive. In fact, since \(f_u > 0\) and \(|f_u/g_v| = 0.8\), the condition becomes \(D_v/D_u < |g_v/f_u| = 1.25\). So we need the <em>inhibitor</em> to diffuse faster. With \(u\) as the activator (\(f_u > 0\)) and \(v\) as the inhibitor, set \(D_u = 0.01\), \(D_v = 1\):</p>
+        $$ D_v f_u + D_u g_v = 0.8 + 0.01(-1) = 0.79 > 0. $$
+        <p>Re-examining: the standard Turing condition requires \(D_v f_u + D_u g_v > 2\sqrt{D_u D_v \det(J)}\). With \(D_u = 0.01\), \(D_v = 1\):</p>
+        $$ 0.79 > 2\sqrt{0.01 \cdot 1 \cdot 1.0} = 0.2. $$
+        <p>This is satisfied. Hence there exists a band of wavenumbers \(k\) for which the homogeneous steady state is linearly unstable. The most unstable wavenumber determines the spatial wavelength of the emerging Turing pattern.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vi) INTERACTIVE CODE LAB                                     -->
+<!-- ============================================================ -->
+<section id="code-lab">
+    <h2>Interactive Code Lab</h2>
+
+    <div class="interactive-highlight">
+        <h4>Lab: Geometric Brownian Motion via Euler-Maruyama</h4>
+        <p>We simulate the GBM SDE \(dS = \mu S\,dt + \sigma S\,dW\) using the Euler-Maruyama method, plot multiple sample paths, and compare the Monte Carlo estimate of \(\mathbb{E}[S_T]\) against the exact value \(S_0 e^{\mu T}\).</p>
+
+        <div class="code-editor-container">
+            <textarea class="code-editor" id="gbm-code" rows="52">
+import numpy as np
+import matplotlib.pyplot as plt
+
+# --- Parameters ---
+S0    = 100.0    # initial stock price
+mu    = 0.05     # drift (5% annual return)
+sigma = 0.2      # volatility (20% annual)
+T     = 1.0      # time horizon (1 year)
+N     = 1000     # number of time steps
+M     = 500      # number of sample paths
+dt    = T / N
+
+np.random.seed(42)
+
+# --- Euler-Maruyama simulation ---
+S = np.zeros((M, N + 1))
+S[:, 0] = S0
+
+for n in range(N):
+    dW = np.sqrt(dt) * np.random.randn(M)
+    S[:, n+1] = S[:, n] + mu * S[:, n] * dt + sigma * S[:, n] * dW
+
+t = np.linspace(0, T, N + 1)
+
+# --- Plot sample paths ---
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+ax = axes[0]
+for i in range(20):
+    ax.plot(t, S[i, :], alpha=0.6, linewidth=0.8)
+ax.set_xlabel('Time (years)')
+ax.set_ylabel('S(t)')
+ax.set_title(f'Geometric Brownian Motion: {20} sample paths')
+ax.axhline(y=S0 * np.exp(mu * T), color='k', linestyle='--',
+           linewidth=2, label=f'E[S(T)] = {S0*np.exp(mu*T):.2f}')
+ax.legend()
+ax.grid(True, alpha=0.3)
+
+# --- Monte Carlo estimate of E[S(T)] ---
+mc_estimate = np.mean(S[:, -1])
+mc_stderr   = np.std(S[:, -1]) / np.sqrt(M)
+exact_mean  = S0 * np.exp(mu * T)
+
+ax = axes[1]
+ax.hist(S[:, -1], bins=40, density=True, alpha=0.7, color='steelblue',
+        edgecolor='white', label='Simulated S(T)')
+ax.axvline(exact_mean, color='red', linewidth=2, linestyle='--',
+           label=f'Exact E[S(T)] = {exact_mean:.2f}')
+ax.axvline(mc_estimate, color='green', linewidth=2, linestyle=':',
+           label=f'MC estimate = {mc_estimate:.2f}')
+ax.set_xlabel('S(T)')
+ax.set_ylabel('Density')
+ax.set_title(f'Distribution of S(T) at T = {T}')
+ax.legend()
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('gbm_euler_maruyama.png', dpi=120)
+plt.show()
+
+print(f"Exact E[S(T)]    = {exact_mean:.4f}")
+print(f"MC estimate       = {mc_estimate:.4f}")
+print(f"MC standard error = {mc_stderr:.4f}")
+print(f"95% CI: [{mc_estimate - 1.96*mc_stderr:.4f}, "
+      f"{mc_estimate + 1.96*mc_stderr:.4f}]")
+
+# --- Convergence check: exact vs Euler-Maruyama ---
+# The exact solution is S_T = S0 * exp((mu - 0.5*sigma^2)*T + sigma*W_T)
+# We stored the cumulative dW implicitly. Recompute for comparison:
+W_T = np.cumsum(np.sqrt(dt) * np.random.randn(M, N), axis=1)
+S_exact_T = S0 * np.exp((mu - 0.5*sigma**2)*T + sigma*W_T[:, -1])
+S_em_T_new = np.zeros(M)
+S_em_T_new[:] = S0
+for n in range(N):
+    dW_n = W_T[:, n] if n == 0 else W_T[:, n] - W_T[:, n-1]
+    S_em_T_new = S_em_T_new + mu * S_em_T_new * dt + sigma * S_em_T_new * dW_n
+
+strong_error = np.mean(np.abs(S_exact_T - S_em_T_new))
+print(f"\nStrong error |S_exact - S_EM| at T = {T}: {strong_error:.4f}")
+            </textarea>
+            <div class="code-buttons">
+                <button class="btn btn-success" onclick="alert('Copy this code into a Python environment (Jupyter, Colab, or local) to run it.')">Run Code</button>
+                <button class="btn btn-default" onclick="document.getElementById('gbm-code').value=document.getElementById('gbm-code').defaultValue">Reset</button>
+            </div>
+            <div class="code-output">
+                <p class="output-info">Output will display: (left) 20 GBM sample paths with the exact expected value marked, (right) histogram of terminal values S(T) compared with the exact and Monte Carlo means.</p>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <h4>Exploration Ideas</h4>
+            <ul>
+                <li>Increase \(\sigma\) to 0.5 and observe how the distribution of \(S(T)\) becomes more right-skewed (heavier upper tail).</li>
+                <li>Decrease \(\Delta t\) by a factor of 4 and check that the strong error decreases by roughly a factor of 2 (confirming order \(\frac{1}{2}\)).</li>
+                <li>Implement antithetic variates (for each path driven by \(\xi_n\), also simulate the path driven by \(-\xi_n\)) and compare the Monte Carlo standard error with and without variance reduction.</li>
+                <li>Replace GBM with the mean-reverting OU process \(dX = \theta(\mu-X)\,dt + \sigma\,dW\) and observe how paths cluster around \(\mu\) for large \(t\).</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (vii) AGENT LENS                                              -->
+<!-- ============================================================ -->
+<section id="agent-lens">
+    <h2>Agent Lens: Adaptive Monte Carlo Sampling Agent</h2>
+
+    <div class="content-section" style="border-left:4px solid var(--secondary-color);">
+        <p>We frame Monte Carlo simulation as a sequential decision problem. An autonomous agent observes the running estimator variance and dynamically adapts the number of sample paths to minimise estimation error within a fixed computational budget.</p>
+
+        <h4>State</h4>
+        <p>The agent's state at decision step \(k\) is a tuple:</p>
+        <ul>
+            <li>\(\hat{\mu}_k\): the current Monte Carlo estimate of \(\mathbb{E}[g(X_T)]\), computed from \(M_k\) paths so far.</li>
+            <li>\(\hat{\sigma}_k^2\): the current sample variance of \(g(X_T)\) across the \(M_k\) paths.</li>
+            <li>\(B_k\): the remaining computational budget (measured in units of single-path simulations).</li>
+            <li>\(\Delta t_k\): the current time-step size used in the Euler-Maruyama discretisation.</li>
+        </ul>
+
+        <h4>Action</h4>
+        <p>At each decision step the agent chooses from a discrete action space:</p>
+        <ul>
+            <li><strong>Add more paths</strong> at the current \(\Delta t\): allocate a batch of \(m\) additional paths to reduce the Monte Carlo variance \(\hat{\sigma}_k^2 / M_k\).</li>
+            <li><strong>Refine the time step:</strong> halve \(\Delta t\) and re-simulate a smaller batch of paths. This reduces the bias from temporal discretisation at higher per-path cost.</li>
+            <li><strong>Apply variance reduction:</strong> switch to antithetic variates or control variates for the remaining budget, trading implementation overhead for reduced variance per path.</li>
+            <li><strong>Stop:</strong> declare the current estimate \(\hat{\mu}_k\) as the final answer and return the remaining budget.</li>
+        </ul>
+
+        <h4>Reward</h4>
+        <ul>
+            <li><strong>Primary reward:</strong> \(-(\hat{\mu}_k - \mu_{\text{true}})^2\), the negative squared error. In practice, \(\mu_{\text{true}}\) is unknown, so the agent uses a proxy: the negative estimated mean-squared error \(-(\hat{\sigma}_k^2/M_k + \text{bias}^2)\).</li>
+            <li><strong>Budget penalty:</strong> \(-\lambda \cdot \max(0, C_k - B_0)\) where \(C_k\) is total computation consumed and \(B_0\) is the initial budget. This penalises exceeding the budget.</li>
+            <li><strong>Bonus:</strong> \(+\epsilon\) for each unit of budget returned unused (incentivises efficiency).</li>
+        </ul>
+
+        <h4>Learning</h4>
+        <p>Over many episodes with different SDEs and parameter regimes, the agent learns several non-trivial policies:</p>
+        <ul>
+            <li>When the sample variance is high and the budget is large, the agent prioritises adding paths because the \(1/\sqrt{M}\) reduction in standard error is cheap per unit of improvement.</li>
+            <li>When the variance is already low but a convergence test reveals significant bias (the estimate shifts systematically as \(\Delta t\) decreases), the agent refines the time step.</li>
+            <li>The agent learns to apply antithetic variates early when the payoff function \(g\) is monotone in \(X_T\) (which makes the antithetic pair negatively correlated, yielding large variance reduction).</li>
+            <li>The agent discovers a near-optimal balance: roughly allocate 70-80% of the budget to sampling at a moderate \(\Delta t\) and 20-30% to a refinement check, consistent with the theoretical optimal allocation derived from the bias-variance trade-off.</li>
+        </ul>
+        <p>The converged policy outperforms both the naive strategy (fixed \(\Delta t\), all budget on paths) and the overly cautious strategy (very small \(\Delta t\), too few paths) by a significant margin across a variety of SDE models.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (viii) EXERCISES                                               -->
+<!-- ============================================================ -->
+<section id="exercises">
+    <h2>Exercises</h2>
+
+    <h3>Analytical Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.1.</strong> Let \(W_t\) be a standard Brownian motion. Compute \(\mathbb{E}[W_t^2]\) and \(\mathbb{E}[W_t^4]\) using the moment-generating function of the normal distribution.</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Since \(W_t \sim \mathcal{N}(0,t)\), the even moments of a centred normal with variance \(t\) are:</p>
+            $$ \mathbb{E}[W_t^2] = t, \qquad \mathbb{E}[W_t^4] = 3t^2. $$
+            <p>The fourth moment uses the fact that for \(Z \sim \mathcal{N}(0,1)\), \(\mathbb{E}[Z^4] = 3\). Since \(W_t = \sqrt{t}\,Z\), \(\mathbb{E}[W_t^4] = t^2 \cdot 3\).</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.2.</strong> Apply Ito's lemma to find the SDE satisfied by \(Y_t = e^{X_t}\) where \(dX_t = -\alpha X_t\,dt + \sigma\,dW_t\) (the Ornstein-Uhlenbeck process).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>With \(f(x) = e^x\), we have \(f'(x) = e^x\), \(f''(x) = e^x\). Here \(a = -\alpha x\), \(b = \sigma\). By Ito's lemma:</p>
+            $$ dY = e^{X}\!\left(-\alpha X\,dt + \sigma\,dW\right) + \frac{1}{2}\sigma^2 e^{X}\,dt = Y\!\left(-\alpha X + \frac{1}{2}\sigma^2\right)dt + \sigma Y\,dW. $$
+            <p>Note that this SDE for \(Y\) involves \(X_t = \ln Y_t\), so the system is not closed in \(Y\) alone (unlike GBM). One must track both \(X\) and \(Y\) simultaneously.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.3.</strong> Derive the Black-Scholes PDE. Let \(V(S,t)\) be the price of a European option on an asset following GBM \(dS = \mu S\,dt + \sigma S\,dW\). By constructing a delta-hedged portfolio \(\Pi = V - \frac{\partial V}{\partial S}S\) and requiring it to earn the risk-free rate \(r\), show that</p>
+        $$ \frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0. $$
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>Apply Ito's lemma to \(V(S,t)\):</p>
+            $$ dV = \left(\frac{\partial V}{\partial t} + \mu S\frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2\frac{\partial^2 V}{\partial S^2}\right)dt + \sigma S\frac{\partial V}{\partial S}\,dW. $$
+            <p>Form the portfolio \(\Pi = V - \Delta S\) with \(\Delta = \frac{\partial V}{\partial S}\):</p>
+            $$ d\Pi = dV - \Delta\,dS = \left(\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2\frac{\partial^2 V}{\partial S^2}\right)dt. $$
+            <p>The \(dW\) term cancels, so \(\Pi\) is locally riskless. No-arbitrage requires \(d\Pi = r\Pi\,dt\):</p>
+            $$ \frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2\frac{\partial^2 V}{\partial S^2} = r\!\left(V - S\frac{\partial V}{\partial S}\right). $$
+            <p>Rearranging gives the Black-Scholes PDE.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.4.</strong> For the Schnakenberg reaction-diffusion system with \(a = 0.1\), \(b = 0.9\), \(D_u = 0.01\), \(D_v = 1\), find the most unstable wavenumber \(k^*\) by maximising the largest eigenvalue of the matrix \(J - Dk^2\) where \(D = \text{diag}(D_u, D_v)\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+            <p>The dispersion matrix is</p>
+            $$ A(k) = J - k^2 D = \begin{pmatrix} 0.8 - 0.01k^2 & 1 \\ -1.8 & -1 - k^2 \end{pmatrix}. $$
+            <p>The eigenvalues \(\lambda(k)\) satisfy \(\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0\). Instability occurs when \(\det(A(k)) < 0\):</p>
+            $$ \det(A) = (0.8 - 0.01k^2)(-1 - k^2) - (1)(-1.8) = -0.8 - 0.8k^2 + 0.01k^2 + 0.01k^4 + 1.8 = 0.01k^4 - 0.79k^2 + 1. $$
+            <p>Setting \(\det(A) = 0\): \(0.01\kappa^2 - 0.79\kappa + 1 = 0\) where \(\kappa = k^2\). By the quadratic formula:</p>
+            $$ \kappa = \frac{0.79 \pm \sqrt{0.79^2 - 0.04}}{0.02} = \frac{0.79 \pm \sqrt{0.5841}}{0.02} = \frac{0.79 \pm 0.7643}{0.02}. $$
+            <p>So \(\kappa_1 \approx 1.285\) and \(\kappa_2 \approx 77.72\). Unstable modes exist for \(k^2 \in (1.285, 77.72)\). The most unstable wavenumber minimises \(\det(A)\), occurring at \(\kappa^* = 0.79/(2 \times 0.01) = 39.5\), i.e., \(k^* = \sqrt{39.5} \approx 6.28\).</p>
+        </div>
+    </div>
+
+    <h3>Computational Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.5.</strong> Implement the Euler-Maruyama method for the OU process \(dX = -(X-\mu)\,dt + \sigma\,dW\). Run 10000 paths, compute the sample mean and variance at \(t = 3\), and compare with the exact values.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.6.</strong> Verify the strong convergence order of Euler-Maruyama for GBM. For step sizes \(\Delta t \in \{0.1, 0.05, 0.025, 0.0125\}\), compute the mean absolute pathwise error \(\mathbb{E}[|S_T^{\text{exact}} - S_T^{\text{EM}}|]\) using 5000 paths. Plot the error vs. \(\Delta t\) on a log-log scale and fit a line. Confirm the slope is approximately \(0.5\).</p>
+        <button class="collapsible">Show Solution</button>
+        <div class="collapsible-content">
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+S0, mu, sigma, T = 100.0, 0.05, 0.2, 1.0
+M = 5000
+dt_values = [0.1, 0.05, 0.025, 0.0125]
+errors = []
+
+np.random.seed(123)
+
+for dt in dt_values:
+    N = int(T / dt)
+    # Generate Brownian increments at finest resolution
+    dW = np.sqrt(dt) * np.random.randn(M, N)
+    W = np.cumsum(dW, axis=1)
+    W_T = W[:, -1]
+
+    # Exact solution
+    S_exact = S0 * np.exp((mu - 0.5*sigma**2)*T + sigma*W_T)
+
+    # Euler-Maruyama
+    S_em = np.full(M, S0)
+    for n in range(N):
+        S_em = S_em + mu*S_em*dt + sigma*S_em*dW[:, n]
+
+    errors.append(np.mean(np.abs(S_exact - S_em)))
+
+# Log-log fit
+log_dt = np.log(dt_values)
+log_err = np.log(errors)
+slope, intercept = np.polyfit(log_dt, log_err, 1)
+
+plt.figure(figsize=(7, 5))
+plt.loglog(dt_values, errors, 'bo-', markersize=8, label='Strong error')
+dt_fit = np.array([0.01, 0.15])
+plt.loglog(dt_fit, np.exp(intercept)*dt_fit**slope, 'r--',
+           label=f'Fit: slope = {slope:.3f}')
+plt.xlabel(r'$\Delta t$')
+plt.ylabel('Mean absolute error')
+plt.title('Strong Convergence of Euler-Maruyama for GBM')
+plt.legend()
+plt.grid(True, alpha=0.3, which='both')
+plt.tight_layout()
+plt.savefig('em_strong_convergence.png', dpi=120)
+plt.show()
+print(f"Fitted strong order: {slope:.3f} (expected ~0.5)")</code></pre>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.7.</strong> Simulate the Schnakenberg reaction-diffusion system in 1D using the method of lines: discretise space with finite differences and advance in time with explicit Euler. Use \(a = 0.1\), \(b = 0.9\), \(D_u = 0.01\), \(D_v = 1.0\), domain \([0, 10]\) with periodic boundary conditions, and random initial perturbations around the steady state \((1, 0.9)\). Produce a space-time plot showing the emergence of Turing patterns.</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.8.</strong> Implement a Monte Carlo pricer for a European call option under GBM. Use parameters \(S_0 = 100\), \(K = 105\) (strike), \(r = 0.03\), \(\sigma = 0.2\), \(T = 1\). Compare your Monte Carlo price with the exact Black-Scholes formula. How many paths are needed to achieve a 95% confidence interval of width less than 0.10?</p>
+    </div>
+
+    <h3>Agentic Exercises</h3>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.9 (Agentic).</strong> Implement the adaptive Monte Carlo agent described in the Agent Lens section. The agent maintains a budget of \(B = 10{,}000\) path-simulations. At each step it observes the running mean, variance, and remaining budget, then chooses one of: (a) simulate 100 more paths at the current \(\Delta t\), (b) halve \(\Delta t\) and simulate 50 paths, (c) activate antithetic variates for all subsequent paths, or (d) stop. Use a simple epsilon-greedy Q-learning strategy. Test on GBM with known \(\mathbb{E}[S_T]\) over 500 episodes and plot the final estimation error over time. Compare with a static baseline that uses all 10000 paths at a single fixed \(\Delta t = 0.01\).</p>
+    </div>
+
+    <div class="content-section">
+        <p><strong>Exercise 2.3.10 (Agentic).</strong> Build a parameter-exploration agent for the Schnakenberg reaction-diffusion system. The agent's action space is the pair \((D_u, D_v)\) drawn from a grid. Its reward is \(+1\) if the simulation produces spatially non-uniform patterns (detected by thresholding the spatial variance of \(u\) at the final time) and \(0\) otherwise. Over 200 episodes, the agent should learn the region of \((D_u, D_v)\) space that produces Turing patterns. Visualise the learned reward map as a heatmap and overlay the analytically computed Turing boundary from Exercise 2.3.4.</p>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (ix) ASSESSMENT                                               -->
+<!-- ============================================================ -->
+<section id="assessment">
+    <h2>Assessment</h2>
+
+    <h3>Quiz (10 Questions)</h3>
+
+    <div class="quiz-container">
+        <p><strong>Q1.</strong> The quadratic variation of a standard Brownian motion \(W_t\) over \([0,t]\) is:</p>
+        <p>(a) \(0\) &emsp; (b) \(\sqrt{t}\) &emsp; (c) \(t\) &emsp; (d) \(t^2\)</p>
+
+        <p><strong>Q2.</strong> In the Ito SDE \(dX = a\,dt + b\,dW\), the Ito correction term in the formula for \(d[f(X)]\) is:</p>
+        <p>(a) \(f'(X)\,b\,dW\) &emsp; (b) \(\frac{1}{2}b^2 f''(X)\,dt\) &emsp; (c) \(a\,f'(X)\,dt\) &emsp; (d) \(b^2 f'(X)\,dt\)</p>
+
+        <p><strong>Q3.</strong> The exact solution of geometric Brownian motion \(dS = \mu S\,dt + \sigma S\,dW\) is:</p>
+        <p>(a) \(S_0 e^{\mu t + \sigma W_t}\) &emsp; (b) \(S_0 e^{(\mu - \sigma^2/2)t + \sigma W_t}\) &emsp; (c) \(S_0(1 + \mu t + \sigma W_t)\) &emsp; (d) \(S_0 e^{\mu t}\)</p>
+
+        <p><strong>Q4.</strong> The strong order of convergence of the Euler-Maruyama method is:</p>
+        <p>(a) \(1\) &emsp; (b) \(2\) &emsp; (c) \(\frac{1}{2}\) &emsp; (d) \(\frac{3}{2}\)</p>
+
+        <p><strong>Q5.</strong> The weak order of convergence of the Euler-Maruyama method is:</p>
+        <p>(a) \(\frac{1}{2}\) &emsp; (b) \(1\) &emsp; (c) \(2\) &emsp; (d) \(\frac{1}{4}\)</p>
+
+        <p><strong>Q6.</strong> In a Monte Carlo simulation with \(M\) independent paths, the standard error of the mean estimator scales as:</p>
+        <p>(a) \(1/M\) &emsp; (b) \(1/M^2\) &emsp; (c) \(1/\sqrt{M}\) &emsp; (d) \(\sqrt{M}\)</p>
+
+        <p><strong>Q7.</strong> A Turing instability in a reaction-diffusion system occurs when:</p>
+        <p>(a) Both species have equal diffusion coefficients</p>
+        <p>(b) The homogeneous steady state is unstable without diffusion</p>
+        <p>(c) The homogeneous steady state is stable without diffusion but unstable to spatial perturbations with diffusion</p>
+        <p>(d) The diffusion coefficients are both zero</p>
+
+        <p><strong>Q8.</strong> In the Black-Scholes PDE, the drift rate \(\mu\) of the underlying asset:</p>
+        <p>(a) Appears explicitly in the PDE &emsp; (b) Is replaced by the risk-free rate \(r\) &emsp; (c) Equals zero &emsp; (d) Equals \(\sigma^2\)</p>
+
+        <p><strong>Q9.</strong> An Ornstein-Uhlenbeck process is characterised by:</p>
+        <p>(a) Exponential growth &emsp; (b) Mean reversion &emsp; (c) Constant paths &emsp; (d) Jump discontinuities</p>
+
+        <p><strong>Q10.</strong> Which variance reduction technique pairs each random path with a path using the negated random variates?</p>
+        <p>(a) Importance sampling &emsp; (b) Control variates &emsp; (c) Antithetic variates &emsp; (d) Stratified sampling</p>
+    </div>
+
+    <button class="collapsible">Show Answer Key</button>
+    <div class="collapsible-content">
+        <p><strong>Q1:</strong> (c) &emsp; <strong>Q2:</strong> (b) &emsp; <strong>Q3:</strong> (b) &emsp; <strong>Q4:</strong> (c) &emsp; <strong>Q5:</strong> (b)</p>
+        <p><strong>Q6:</strong> (c) &emsp; <strong>Q7:</strong> (c) &emsp; <strong>Q8:</strong> (b) &emsp; <strong>Q9:</strong> (b) &emsp; <strong>Q10:</strong> (c)</p>
+    </div>
+
+    <h3>Mini-Project: Stochastic Simulation and Pattern Formation Dashboard</h3>
+
+    <div class="content-section">
+        <p><strong>Objective:</strong> Build a Python program with two modes: (1) SDE mode, which simulates a user-chosen SDE (GBM, OU, or custom) via Euler-Maruyama, runs Monte Carlo estimation, and reports confidence intervals; (2) PDE mode, which simulates a 1D or 2D reaction-diffusion system and visualises pattern formation.</p>
+
+        <h4>Requirements</h4>
+        <ol>
+            <li>SDE mode: accept user-specified drift \(a(x,t)\) and diffusion \(b(x,t)\), simulate \(M\) paths, plot sample paths and terminal distribution.</li>
+            <li>For GBM specifically: compare the Monte Carlo estimate of \(\mathbb{E}[S_T]\) with the exact value and report the relative error.</li>
+            <li>Implement at least one variance reduction technique (antithetic or control variates) and demonstrate the reduction in standard error.</li>
+            <li>Reaction-diffusion mode: simulate the Schnakenberg model in 1D with user-specified parameters and produce a space-time heatmap showing pattern emergence.</li>
+            <li>Include a convergence study: vary \(\Delta t\) and plot strong/weak errors on a log-log scale with fitted slopes.</li>
+        </ol>
+
+        <h4>Rubric</h4>
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Criterion</th><th>Excellent (90--100%)</th><th>Good (70--89%)</th><th>Needs Improvement (&lt;70%)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Correctness</strong></td>
+                    <td>GBM Monte Carlo matches exact \(\mathbb{E}[S_T]\) within 2 standard errors; convergence slopes match theoretical orders \(\gamma = 0.5\), \(\beta = 1.0\) to within 0.1; Turing patterns emerge for analytically predicted parameters.</td>
+                    <td>Monte Carlo estimates reasonable; convergence slopes within 0.2 of theoretical; patterns visible but parameters not fully justified.</td>
+                    <td>Incorrect SDE discretisation or no visible pattern formation.</td>
+                </tr>
+                <tr>
+                    <td><strong>Variance Reduction</strong></td>
+                    <td>Antithetic variates implemented and shown to reduce standard error by at least 30% for GBM; control variates explored as a bonus.</td>
+                    <td>One variance reduction technique attempted with measurable improvement.</td>
+                    <td>No variance reduction implemented.</td>
+                </tr>
+                <tr>
+                    <td><strong>Visualisation</strong></td>
+                    <td>Publication-quality figures: sample paths, histograms with CI shading, log-log convergence plots with fitted lines, space-time heatmaps with colorbars and axis labels.</td>
+                    <td>All required plots present; minor formatting issues.</td>
+                    <td>Missing plots or misleading axis scales.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reproducibility</strong></td>
+                    <td>Includes <code>requirements.txt</code>, docstrings, fixed random seeds, and a README with sample outputs. Results reproducible on a fresh environment.</td>
+                    <td>Code runs but lacks documentation or seeds.</td>
+                    <td>Missing dependencies or non-reproducible results.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- (x) REFERENCES & NEXT STEPS                                   -->
+<!-- ============================================================ -->
+<section id="references">
+    <h2>References &amp; Next Steps</h2>
+
+    <div class="reference-list">
+        <ol>
+            <li>Oksendal, B. (2003). <em>Stochastic Differential Equations: An Introduction with Applications</em>, 6th ed. Springer.</li>
+            <li>Kloeden, P. E. and Platen, E. (1992). <em>Numerical Solution of Stochastic Differential Equations</em>. Springer.</li>
+            <li>Higham, D. J. (2001). "An Algorithmic Introduction to Numerical Simulation of Stochastic Differential Equations." <em>SIAM Review</em>, 43(3), 525--546.</li>
+            <li>Black, F. and Scholes, M. (1973). "The Pricing of Options and Corporate Liabilities." <em>Journal of Political Economy</em>, 81(3), 637--654.</li>
+            <li>Murray, J. D. (2003). <em>Mathematical Biology II: Spatial Models and Biomedical Applications</em>, 3rd ed. Springer.</li>
+            <li>Turing, A. M. (1952). "The Chemical Basis of Morphogenesis." <em>Philosophical Transactions of the Royal Society B</em>, 237(641), 37--72.</li>
+            <li>Glasserman, P. (2003). <em>Monte Carlo Methods in Financial Engineering</em>. Springer.</li>
+        </ol>
+    </div>
+
+    <div class="section-nav">
+        <a href="index.html">&larr; Back to Level 2 Overview</a>
+        <a href="../level3/module3-1.html">Next: Module 3.1 &rarr;</a>
+    </div>
+</section>
+
+</div><!-- col -->
+</div><!-- row -->
+</div><!-- container-fluid -->
+</div><!-- page-content-wrapper -->
+</div><!-- row-offcanvas -->
+</div><!-- wrapper -->
+
+<script>
+// Collapsible sections
+document.querySelectorAll('.collapsible').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        if(content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        }
+    });
+});
+</script>
+</body>
+</html>
