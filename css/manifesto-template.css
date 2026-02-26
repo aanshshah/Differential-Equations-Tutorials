@@ -53,9 +53,15 @@ pre, code {
 
 pre {
   background: #ebe6de !important;
+  color: var(--mf-text) !important;
   border: 1px solid var(--mf-border) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+}
+
+pre code {
+  color: var(--mf-text) !important;
+  background: transparent !important;
 }
 
 /* ── Lesson static header (content pages) ── */
@@ -136,10 +142,17 @@ body.has-static-header .navbar.navbar-fixed-top {
 @media (max-width: 600px) {
   .lesson-static-links a {
     font-size: 0.78rem;
+    padding: 0.3rem 0;
   }
   .lesson-static-header-inner {
     flex-wrap: wrap;
     padding: 0.5rem 1rem;
     min-height: auto;
+  }
+  .lesson-static-brand {
+    font-size: 1rem;
+  }
+  .lesson-static-links {
+    gap: 0.6rem;
   }
 }

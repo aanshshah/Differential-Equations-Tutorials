@@ -228,12 +228,55 @@
         width: 100%;
         margin-bottom: 20px;
     }
-    
+
     .code-editor {
         font-size: 12px;
+        min-height: 100px;
     }
-    
+
     .plot-controls input[type="range"] {
         width: 150px;
+    }
+
+    .plot-container {
+        padding: 12px;
+    }
+
+    .plot-controls {
+        padding: 10px;
+    }
+
+    .plot-controls label {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .quiz-container {
+        padding: 12px;
+    }
+
+    .collapsible {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .code-editor {
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    .code-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .plot-controls input[type="range"] {
+        width: 120px;
+    }
+
+    .quiz-question {
+        font-size: 0.95rem;
     }
 }
